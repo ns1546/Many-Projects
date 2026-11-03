@@ -1,0 +1,2145 @@
+/* ================================================================
+   EVORISE — mobile-app.css  v2
+   ALL styles are STRICTLY inside @media (max-width: 768px).
+   PC/Desktop UI is 100% untouched.
+   ================================================================ */
+
+@media (max-width: 768px) {
+
+  /* ── 1. GLOBAL BODY ────────────────────────────────────────── */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  body {
+    background: #F2F2F7 !important; /* iOS Native App Background */
+    background-attachment: scroll !important;
+  }
+  body::before, body::after { display: none !important; }
+
+  /* ── 2. APP CONTAINER — stack column, fill screen ─────────── */
+  .app-container {
+    flex-direction: column !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    height: 100dvh !important;
+    overflow: hidden !important;
+  }
+
+  /* ── 3. SIDEBAR — completely hidden on mobile ──────────────── */
+  .sidebar {
+    display: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+  }
+
+  /* ── 4. MAIN COLUMN — full width flex column ───────────────── */
+  .main-col {
+    flex: 1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    overflow: hidden !important;
+    height: 100% !important;
+  }
+
+  /* ── 5. PC TOP NAV — hidden, replaced by mobile-app-bar ────── */
+  .top-nav {
+    display: none !important;
+  }
+
+  /* ── 6. MOBILE APP BAR ─────────────────────────────────────── */
+  .mobile-app-bar {
+    width: 100%;
+    flex-shrink: 0;
+    height: 44px; /* Native iOS Navigation Bar Height */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.15);
+    box-shadow: none;
+    position: relative;
+    z-index: 50;
+  }
+
+  .mobile-app-bar__left {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .mobile-app-bar__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff7040, #cc4400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+    overflow: hidden;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-app-bar__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .mobile-app-bar__center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 2;
+  }
+
+  .mobile-app-bar__title {
+    font-size: 17px;
+    font-weight: 600; /* iOS uses Semibold 17pt for nav bar title */
+    color: #000000;
+    letter-spacing: -0.4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  }
+
+  .mobile-app-bar__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex: 1;
+    flex-shrink: 0;
+  }
+
+  .mobile-icon-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--blue); /* Native tint color */
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-icon-btn:active {
+    opacity: 0.6;
+  }
+
+  .notif-dot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 8px;
+    height: 8px;
+    background: var(--orange);
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+  }
+
+  /* ── 7. MAIN CONTENT AREA ──────────────────────────────────── */
+  .main-content {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 0px 0px 90px 0px !important; /* Native apps have 0 margin, cells handle padding */
+    gap: 0px !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Full-height pages: WhatsApp, EvoNotes, MyDay get zero padding */
+  .main-content[style*="padding: 0"],
+  .main-content[style*="padding:0"],
+  .main-content[style*="padding: '0'"] {
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+
+  .main-content > * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* ── 8. BOTTOM NAVIGATION BAR ──────────────────────────────── */
+  .mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    height: 83px; /* Standard iOS Tab Bar Height */
+    display: flex;
+    align-items: stretch;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-top: 0.5px solid rgba(0, 0, 0, 0.15); /* Native thin border */
+    box-shadow: none;
+    padding-bottom: env(safe-area-inset-bottom, 34px);
+  }
+
+  .mobile-nav-tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 4px 0 0 0;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+  }
+
+  .mobile-nav-tab:active {
+    opacity: 0.7; /* Native simple tap opacity feedback */
+    transform: none;
+  }
+
+  .mobile-nav-tab__icon-wrap {
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    transition: none;
+    background: transparent !important;
+    transform: none !important;
+  }
+
+  .mobile-nav-tab.active .mobile-nav-tab__icon-wrap {
+    background: transparent !important;
+    transform: none !important;
+  }
+
+  .mobile-nav-tab__label {
+    font-size: 10px;
+    font-weight: 500;
+    color: #8E8E93; /* iOS inactive color */
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    letter-spacing: 0;
+  }
+
+  .mobile-nav-tab.active .mobile-nav-tab__label {
+    color: var(--blue);
+    font-weight: 500;
+  }
+
+  .mobile-nav-tab__badge {
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    margin-left: 6px;
+    min-width: 16px;
+    height: 16px;
+    background: var(--orange);
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.95);
+    font-size: 9px;
+    font-weight: 800;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+  }
+
+  /* ── 9. "MORE" BOTTOM SHEET ────────────────────────────────── */
+  .mobile-more-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: rgba(10, 20, 50, 0.4);
+    animation: mob-fade 0.2s ease;
+  }
+
+  .mobile-more-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 301;
+    background: rgba(240, 245, 252, 0.97);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
+    border-radius: 24px 24px 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 -8px 40px rgba(10, 30, 80, 0.18);
+    max-height: 80vh;
+    overflow-y: auto;
+    padding-bottom: max(env(safe-area-inset-bottom), 16px);
+    animation: mob-sheet-up 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .mobile-more-sheet__handle {
+    width: 36px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.16);
+    border-radius: 2px;
+    margin: 12px auto 0;
+  }
+
+  .mobile-more-sheet__header {
+    padding: 12px 20px 10px;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.03em;
+  }
+
+  .mobile-more-section {
+    padding: 2px 0;
+  }
+
+  .mobile-more-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-hint);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 8px 20px 4px;
+  }
+
+  .mobile-more-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-more-item:active {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .mobile-more-item__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .mobile-more-item__label {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: left;
+    flex: 1;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .mobile-more-item__chevron {
+    color: var(--text-hint);
+    flex-shrink: 0;
+  }
+
+  .mobile-more-item__badge {
+    min-width: 20px;
+    height: 20px;
+    background: var(--orange);
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 800;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+    flex-shrink: 0;
+  }
+
+  /* ── 10. GLASS & 3D CARD ADJUSTMENTS ───────────────────────── */
+  .glass-panel {
+    border-radius: 16px !important;
+    box-shadow: 0 2px 12px rgba(10, 30, 80, 0.09), 0 1px 0 rgba(255, 255, 255, 0.9) inset !important;
+  }
+
+  .matte-3d {
+    border-radius: 14px !important;
+    box-shadow: 0 2px 8px rgba(10, 30, 80, 0.07) !important;
+  }
+
+  .matte-3d:hover { transform: none !important; }
+
+  /* ── 11. BUTTONS — minimum 44px touch target ────────────────── */
+  .btn-primary, .btn-secondary, .btn-teal, .btn-danger {
+    min-height: 46px;
+    padding: 11px 20px;
+    font-size: 14px;
+    border-radius: 13px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-primary:hover, .btn-teal:hover, .btn-danger:hover { transform: none !important; }
+  .btn-primary:active, .btn-teal:active, .btn-danger:active {
+    opacity: 0.82;
+    transform: scale(0.97) !important;
+  }
+
+  /* ── 12. INPUTS — font-size ≥16px prevents iOS auto-zoom ────── */
+  input, select, textarea {
+    font-size: 16px !important;
+    min-height: 44px;
+    border-radius: 12px;
+  }
+
+  /* ── 13. STAT CARDS — horizontal swipe carousel ─────────────── */
+  .dashboard-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    gap: 12px !important;
+    padding-bottom: 6px !important;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .dashboard-grid::-webkit-scrollbar { display: none; }
+
+  .stat-card {
+    min-width: 155px !important;
+    width: 155px !important;
+    flex-shrink: 0 !important;
+    scroll-snap-align: start;
+    padding: 14px 16px !important;
+  }
+
+  .stat-value { font-size: 28px !important; }
+
+  /* ── 14. TABLES → MOBILE CARD LIST ─────────────────────────── */
+  .table-wrapper {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    overflow-x: visible !important;
+    padding: 0 !important;
+  }
+
+  .evo-table { display: block !important; width: 100% !important; }
+  .evo-table thead { display: none !important; }
+  .evo-table tbody {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .evo-table tr {
+    display: flex !important;
+    flex-direction: column !important;
+    background: rgba(255, 255, 255, 0.85) !important;
+    border-radius: 16px !important;
+    padding: 14px 16px !important;
+    box-shadow: 0 2px 10px rgba(10, 30, 80, 0.07) !important;
+    border: 1px solid rgba(255, 255, 255, 0.88) !important;
+    gap: 6px !important;
+    margin: 0 !important;
+  }
+
+  .evo-table td {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 6px 0 !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+    font-size: 13px !important;
+    min-height: 0 !important;
+  }
+
+  .evo-table td:last-child { border-bottom: none !important; }
+
+  .evo-table td::before {
+    content: attr(data-label);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--teal-deep);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    flex-shrink: 0;
+    margin-right: 12px;
+  }
+
+  /* ── 15. FLOATING ACTION BUTTON ────────────────────────────── */
+  .mobile-fab {
+    position: fixed;
+    right: 18px;
+    bottom: 80px;
+    z-index: 150;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1a7aff, #0050cc);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0, 96, 223, 0.42), 0 2px 6px rgba(0, 0, 0, 0.14);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .mobile-fab:active { transform: scale(0.88); }
+
+  /* ── 16. BOTTOM SHEET (for modals) ─────────────────────────── */
+  .mobile-bottom-sheet-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    background: rgba(10, 20, 50, 0.40);
+    animation: mob-fade 0.2s ease;
+  }
+
+  .mobile-bottom-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 401;
+    background: rgba(245, 248, 254, 0.98);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-radius: 24px 24px 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 -8px 40px rgba(10, 30, 80, 0.18);
+    padding-bottom: max(env(safe-area-inset-bottom), 16px);
+    max-height: 92vh;
+    overflow-y: auto;
+    animation: mob-sheet-up 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .mobile-bottom-sheet__handle {
+    width: 36px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.16);
+    border-radius: 2px;
+    margin: 12px auto 0;
+  }
+
+  .mobile-bottom-sheet__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px 12px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .mobile-bottom-sheet__title {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.025em;
+  }
+
+  .mobile-bottom-sheet__close {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.08);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-secondary);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-bottom-sheet__body {
+    padding: 16px 20px;
+  }
+
+  /* ── 17. NATIVE LIST ITEM ───────────────────────────────────── */
+  .mobile-list-item {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 14px;
+    box-shadow: 0 1px 6px rgba(10, 30, 80, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.82);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-list-item:active {
+    background: rgba(0, 96, 223, 0.04);
+    transform: scale(0.98);
+  }
+
+  .mobile-list-item__leading {
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 700;
+    font-size: 16px;
+    color: white;
+  }
+
+  .mobile-list-item__content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .mobile-list-item__title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mobile-list-item__subtitle {
+    font-size: 12px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mobile-list-item__trailing {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  /* ── 18. SECTION HEADER ────────────────────────────────────── */
+  .section-header {
+    padding: 8px 12px !important;
+    border-radius: 10px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .section-header h2, .section-header h3 { font-size: 13px !important; }
+
+  /* ── 19. BADGES ─────────────────────────────────────────────── */
+  .badge { font-size: 10px !important; padding: 2px 7px !important; }
+
+  /* ── 20. ACTIVE TOUCH FEEDBACK ──────────────────────────────── */
+  button:active, [role="button"]:active { opacity: 0.78; }
+
+  /* ── 21. MOBILE SCROLL CAROUSEL UTILITY ────────────────────── */
+  .mobile-carousel {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 4px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .mobile-carousel::-webkit-scrollbar { display: none; }
+  .mobile-carousel > * { scroll-snap-align: start; flex-shrink: 0; }
+
+  /* ── 22. ANIMATIONS ─────────────────────────────────────────── */
+  @keyframes mob-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes mob-sheet-up {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     SECTION 23 — WHATSAPP: hide sidebar panel, full-width chat
+     ══════════════════════════════════════════════════════════════ */
+
+  /* The outer whatsapp-root is display:flex row — kill that */
+  #whatsapp-root {
+    flex-direction: column !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  /* Hide the left thread-list sidebar on mobile (the 340px panel) */
+  #whatsapp-root > div:first-child {
+    display: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+  }
+
+  /* Chat area takes full width */
+  #whatsapp-root > div:nth-child(2) {
+    flex: 1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* Starred / info side panels — full width overlay on mobile */
+  #whatsapp-root > div:nth-child(3) {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    z-index: 50 !important;
+  }
+
+  /* Pinned message text — prevent overflow */
+  #whatsapp-root [style*="maxWidth: '500px'"] {
+    max-width: 100% !important;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     SECTION 24 — NOVA ASSISTANT: reposition above bottom nav
+     ══════════════════════════════════════════════════════════════ */
+
+  /* Nova floating button — above the 64px bottom nav bar */
+  .nova-fab {
+    display: none !important;
+  }
+
+  /* Nova chat window — full-width bottom sheet on mobile */
+  .nova-window {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    border-radius: 24px 24px 0 0 !important;
+    height: 85vh !important;
+    max-height: 85vh !important;
+    z-index: 9998 !important;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     SECTION 25 — GLOBAL OVERFLOW GUARD
+     Prevents any component from breaking the page width
+     ══════════════════════════════════════════════════════════════ */
+
+  .main-content > *,
+  .main-content > * > *,
+  .main-content > * > * > * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Kill horizontal overflow from fixed-width containers */
+  [style*="minWidth: '340px'"],
+  [style*="minWidth: '400px'"],
+  [style*="width: '400px'"],
+  [style*="width: '420px'"] {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     SECTION 26 — WHATSAPP MAIN-CONTENT PADDING OVERRIDE
+     Chat component uses padding:0, so the bottom nav spacing is
+     handled differently here
+     ══════════════════════════════════════════════════════════════ */
+  .main-content[style*="padding: '0'"],
+  .main-content[style*="padding:0"] {
+    padding: 0 !important;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     SECTION 27 — EVOBOARD / TABLE PAGES
+     ══════════════════════════════════════════════════════════════ */
+
+  /* Any inline-styled table wrapper with overflow-x:auto */
+  [style*="overflowX: 'auto'"] {
+    overflow-x: hidden !important;
+    width: 100% !important;
+  }
+
+  /* Kill fixed column widths in inline-styled tables */
+  table[style], thead[style], tbody[style], tr[style], td[style], th[style] {
+    min-width: 0 !important;
+    width: auto !important;
+    max-width: 100% !important;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     SECTION 28 — MODALS: force to bottom sheet layout
+     ══════════════════════════════════════════════════════════════ */
+
+  /* Any fixed-position modal overlay */
+  [style*="position: 'fixed'"][style*="inset: '0'"],
+  [style*="position:'fixed'"][style*="inset:0"] {
+    align-items: flex-end !important;
+  }
+
+  /* Modal content panels that are center-screen on desktop */
+  [style*="position: 'fixed'"][style*="borderRadius: '20px'"],
+  [style*="position: 'fixed'"][style*="borderRadius: '16px'"] {
+    border-radius: 24px 24px 0 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    transform: none !important;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     SECTION 29 — DASHBOARD IMPROVEMENTS
+     ══════════════════════════════════════════════════════════════ */
+
+  /* Chart containers — constrain width */
+  .recharts-wrapper,
+  .recharts-responsive-container {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Grid layouts → single column */
+  [style*="display: 'grid'"],
+  [style*="display:'grid'"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  /* Two-column flex rows → stack */
+  [style*="display: 'flex'"][style*="gap: '24px'"],
+  [style*="display: 'flex'"][style*="gap: '20px'"] {
+    flex-wrap: wrap !important;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     SECTION 30 — MISC QUALITY IMPROVEMENTS
+     ══════════════════════════════════════════════════════════════ */
+
+  /* Hide desktop-only tooltips */
+  [title]:hover::after { display: none !important; }
+
+  /* Scrollbar hide globally on mobile */
+  * { scrollbar-width: none; }
+  *::-webkit-scrollbar { display: none; }
+
+  /* Smooth scroll everywhere */
+  * { -webkit-overflow-scrolling: touch; }
+
+  /* Tab indicator on bottom nav — active line */
+  .mobile-nav-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background: var(--blue);
+    border-radius: 1px;
+  }
+}
+
+/* ================================================================
+   PHASE 3 — HIGH-TRAFFIC PAGE OVERHAULS
+   Dashboard · InstantWork · EvoBoard · Client Management
+   All inside @media (max-width: 768px)
+   ================================================================ */
+
+@media (max-width: 768px) {
+
+  /* ══════════════════════════════════════
+     DASHBOARD — Phase 3
+     ══════════════════════════════════════ */
+
+  /* Sub-nav tab row → horizontal scroll */
+  .glass-panel[style*="display: 'flex'"][style*="gap: '12px'"][style*="padding: '12px'"] {
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    padding: 10px !important;
+    border-radius: 16px !important;
+    gap: 8px !important;
+    scrollbar-width: none;
+  }
+
+  /* Dashboard sub-nav buttons — compact */
+  .glass-panel[style*="gap: '12px'"][style*="padding: '12px'"] button {
+    padding: 10px 16px !important;
+    font-size: 13px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    border-radius: 12px !important;
+  }
+
+  /* Stat cards grid → horizontal carousel */
+  .dashboard-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    gap: 12px !important;
+    padding: 4px 0 10px 0 !important;
+    scroll-snap-type: x mandatory !important;
+    scrollbar-width: none !important;
+  }
+
+  .dashboard-grid .stat-card,
+  .dashboard-grid .glass-panel {
+    min-width: 150px !important;
+    max-width: 170px !important;
+    flex-shrink: 0 !important;
+    scroll-snap-align: start !important;
+  }
+
+  /* Chart containers — responsive width */
+  .recharts-wrapper { width: 100% !important; }
+  .recharts-surface { width: 100% !important; }
+
+  /* Chart parent panels — remove fixed heights */
+  [style*="height: '220px'"],
+  [style*="height: '250px'"],
+  [style*="height: '300px'"] {
+    height: 200px !important;
+  }
+
+  /* Recent activity rows → stack */
+  [style*="display: 'grid'"][style*="gridTemplateColumns"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  /* ══════════════════════════════════════
+     INSTANTWORK ENGINE — Phase 3
+     ══════════════════════════════════════ */
+
+  /* Page header — stack title and button */
+  [style*="justifyContent: 'space-between'"][style*="alignItems: 'center'"] {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+  }
+
+  /* Launch form — remove side-by-side inputs */
+  .animated-inline-form {
+    padding: 20px 16px !important;
+    border-radius: 24px !important;
+  }
+
+  .animated-inline-form form [style*="display: 'flex'"][style*="gap: '20px'"] {
+    flex-direction: column !important;
+    gap: 14px !important;
+  }
+
+  /* Time strategy section — stack */
+  .animated-inline-form [style*="display: 'flex'"][style*="gap: '24px'"][style*="alignItems: 'flex-start'"] {
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  /* Remove left border divider on mobile */
+  .animated-inline-form [style*="borderLeft"] {
+    border-left: none !important;
+    padding-left: 0 !important;
+    border-top: 1px solid rgba(255,255,255,0.2) !important;
+    padding-top: 16px !important;
+  }
+
+  /* Tabs row — scroll */
+  .glass-panel[style*="gap: '8px'"] {
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Countdown cards grid → single column */
+  [style*="gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))'"],
+  [style*="gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))'"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  /* Completion & task detail modal → bottom sheet */
+  .animated-overlay {
+    align-items: flex-end !important;
+  }
+
+  .animated-modal {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 24px 24px 0 0 !important;
+    margin: 0 !important;
+    padding: 24px 20px !important;
+    max-height: 92vh !important;
+    overflow-y: auto !important;
+  }
+
+  /* Status log toolbar → stack */
+  .matte-3d[style*="justifyContent: 'space-between'"][style*="padding: '16px'"] {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  .matte-3d[style*="justifyContent: 'space-between'"][style*="padding: '16px'"] > div {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    border-left: none !important;
+    padding-left: 0 !important;
+  }
+
+  .matte-3d[style*="justifyContent: 'space-between'"][style*="padding: '16px'"] input[type="text"],
+  .matte-3d[style*="justifyContent: 'space-between'"][style*="padding: '16px'"] input[type="date"] {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Status log table → native card list */
+  .matte-3d-inset[style*="overflowX: 'auto'"] {
+    overflow-x: visible !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
+
+  .matte-3d-inset table,
+  .matte-3d-inset thead,
+  .matte-3d-inset tbody,
+  .matte-3d-inset tr,
+  .matte-3d-inset td,
+  .matte-3d-inset th {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .matte-3d-inset thead { display: none !important; }
+
+  .matte-3d-inset tbody {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .matte-3d-inset tr {
+    background: rgba(255, 255, 255, 0.88) !important;
+    border-radius: 16px !important;
+    padding: 14px 16px !important;
+    box-shadow: 0 2px 10px rgba(10, 30, 80, 0.07) !important;
+    border: 1px solid rgba(255, 255, 255, 0.88) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+
+  .matte-3d-inset td {
+    padding: 5px 0 !important;
+    border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+    font-size: 13px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+
+  .matte-3d-inset td:last-child { border-bottom: none !important; }
+
+  .matte-3d-inset td::before {
+    content: attr(data-label);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--teal-deep);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    flex-shrink: 0;
+    margin-right: 10px;
+  }
+
+  /* Hide checkbox column on mobile */
+  .matte-3d-inset td:first-child { display: none !important; }
+
+  /* ══════════════════════════════════════
+     COUNTDOWN CARDS — Phase 3
+     ══════════════════════════════════════ */
+
+  /* Each countdown card — compact mobile version */
+  [style*="animation: flashLate"],
+  [style*="borderRadius: '30px'"][style*="padding: '24px'"],
+  [style*="borderRadius: '24px'"][style*="padding: '24px'"] {
+    border-radius: 18px !important;
+    padding: 16px !important;
+  }
+
+  /* Timer display — smaller on mobile */
+  [style*="fontSize: '64px'"],
+  [style*="fontSize: '72px'"] {
+    font-size: 42px !important;
+  }
+
+  /* Countdown action buttons → full width row */
+  [style*="display: 'flex'"][style*="gap: '12px'"][style*="justifyContent: 'center'"] {
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+  }
+
+  [style*="display: 'flex'"][style*="gap: '12px'"][style*="justifyContent: 'center'"] button {
+    flex: 1 !important;
+    min-width: 0 !important;
+    font-size: 13px !important;
+    padding: 10px 12px !important;
+  }
+
+  /* ══════════════════════════════════════
+     EVOBOARD — Phase 3
+     ══════════════════════════════════════ */
+
+  /* EvoBoard header — stack */
+  [style*="display: 'flex'"][style*="justifyContent: 'space-between'"][style*="marginBottom"] {
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+
+  /* Filter/toolbar rows → wrap */
+  [style*="display: 'flex'"][style*="gap: '8px'"][style*="flexWrap: 'wrap'"] {
+    gap: 6px !important;
+  }
+
+  /* Column selector / filter dropdowns → full width */
+  [style*="display: 'flex'"][style*="gap: '8px'"] select,
+  [style*="display: 'flex'"][style*="gap: '8px'"] input[type="text"] {
+    font-size: 16px !important;
+  }
+
+  /* Kanban-style board → single column scroll */
+  [style*="display: 'flex'"][style*="gap: '16px'"][style*="overflowX: 'auto'"],
+  [style*="overflowX: 'auto'"][style*="gap: '16px'"] {
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* ══════════════════════════════════════
+     CLIENT MANAGEMENT — Phase 3
+     ══════════════════════════════════════ */
+
+  /* Client cards grid → single column */
+  [style*="gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))'"],
+  [style*="gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))'"],
+  [style*="gridTemplateColumns: 'repeat(2, 1fr)'"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  /* Client card — remove fixed widths */
+  [style*="minWidth: '350px'"],
+  [style*="minWidth: '300px'"] {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  /* ══════════════════════════════════════
+     TEAM DIRECTORY — Phase 3
+     ══════════════════════════════════════ */
+
+  /* Team member cards → stack */
+  [style*="gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))'"],
+  [style*="gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))'"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  /* Member detail two-column panels → stack */
+  [style*="display: 'grid'"][style*="gridTemplateColumns: '1fr 1fr'"],
+  [style*="gridTemplateColumns: '1fr 1fr'"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  /* ══════════════════════════════════════
+     CALENDAR — Phase 3
+     ══════════════════════════════════════ */
+
+  /* Calendar grid cells — touch-friendly */
+  [style*="display: 'grid'"][style*="gridTemplateColumns: 'repeat(7, 1fr)'"] > * {
+    min-height: 44px !important;
+    font-size: 12px !important;
+    padding: 4px !important;
+  }
+
+  /* Calendar event popover → bottom sheet */
+  [style*="position: 'absolute'"][style*="zIndex: 1000"],
+  [style*="position: 'absolute'"][style*="zIndex: '1000'"] {
+    position: fixed !important;
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    border-radius: 24px 24px 0 0 !important;
+    max-height: 70vh !important;
+    overflow-y: auto !important;
+    z-index: 500 !important;
+  }
+
+  /* ══════════════════════════════════════
+     MAILBOX — Phase 3
+     ══════════════════════════════════════ */
+
+  /* Mail sidebar + content → single panel */
+  [style*="display: 'flex'"][style*="height: '100%'"][style*="overflow: 'hidden'"] {
+    flex-direction: column !important;
+  }
+
+  /* Mail sidebar width → full on mobile */
+  [style*="width: '280px'"][style*="borderRight"],
+  [style*="width: '300px'"][style*="borderRight"] {
+    width: 100% !important;
+    max-height: 50vh !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+  }
+
+  /* ══════════════════════════════════════
+     QUICK WINS — Misc components Phase 3
+     ══════════════════════════════════════ */
+
+  /* Pagination — center and wrap */
+  .pagination-container,
+  [class*="pagination"] {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    padding: 8px 0 !important;
+  }
+
+  /* Notice board cards → full width */
+  [style*="gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))'"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  /* Reports / Analytics page — chart overflow fix */
+  [style*="minWidth: '600px'"],
+  [style*="minWidth: '700px'"],
+  [style*="minWidth: '800px'"] {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Section dividers → smaller */
+  [style*="padding: '20px 0'"][style*="borderBottom"] {
+    padding: 12px 0 !important;
+  }
+
+  /* Empty state placeholders — compact */
+  [style*="padding: '60px'"][style*="textAlign: 'center'"] {
+    padding: 32px 16px !important;
+    font-size: 15px !important;
+  }
+
+  /* Performance page timeline → stacked */
+  [style*="display: 'flex'"][style*="gap: '32px'"] {
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  /* Settings page two-column → one column */
+  [style*="display: 'grid'"][style*="gridTemplateColumns: '1fr 2fr'"],
+  [style*="gridTemplateColumns: '1fr 2fr'"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+}
+
+/* ================================================================
+   PHASE 4 — POLISH · ANIMATIONS · MICRO-INTERACTIONS
+   ================================================================ */
+
+@media (max-width: 768px) {
+
+  /* ── PAGE TRANSITION ─────────────────────────────────── */
+  /* Wraps GlobalErrorBoundary content — gives page-switch feel */
+  .main-content > * {
+    animation: page-enter 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes page-enter {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── FAB ENTRANCE ANIMATION ──────────────────────────── */
+  .mobile-fab {
+    animation: fab-pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    will-change: transform;
+  }
+
+  @keyframes fab-pop {
+    from { transform: scale(0) rotate(-45deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg);  opacity: 1; }
+  }
+
+  /* FAB ripple on active press */
+  .mobile-fab:active::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.28);
+    animation: fab-ripple 0.4s ease-out;
+  }
+
+  @keyframes fab-ripple {
+    from { transform: scale(0.5); opacity: 1; }
+    to   { transform: scale(2.5); opacity: 0; }
+  }
+
+  /* ── BOTTOM NAV ANIMATION ────────────────────────────── */
+  .mobile-bottom-nav {
+    animation: nav-slide-up 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes nav-slide-up {
+    from { transform: translateY(100%); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  /* Active tab icon bounce */
+  .mobile-nav-tab.active .mobile-nav-tab__icon-wrap {
+    animation: tab-bounce 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes tab-bounce {
+    0%   { transform: translateY(0) scale(1); }
+    50%  { transform: translateY(-4px) scale(1.1); }
+    100% { transform: translateY(-1px) scale(1); }
+  }
+
+  /* ── APP BAR SLIDE DOWN ──────────────────────────────── */
+  .mobile-app-bar {
+    animation: bar-slide-down 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes bar-slide-down {
+    from { transform: translateY(-100%); opacity: 0; }
+    to   { transform: translateY(0);     opacity: 1; }
+  }
+
+  /* ── SKELETON LOADER ─────────────────────────────────── */
+  .skeleton {
+    background: linear-gradient(90deg,
+      rgba(200,210,230,0.5) 25%,
+      rgba(220,228,242,0.8) 50%,
+      rgba(200,210,230,0.5) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.4s ease-in-out infinite;
+    border-radius: 8px;
+  }
+
+  .skeleton-text  { height: 14px; margin-bottom: 8px; }
+  .skeleton-title { height: 20px; margin-bottom: 12px; width: 60%; }
+  .skeleton-card  { height: 80px; border-radius: 14px; margin-bottom: 10px; }
+
+  @keyframes skeleton-shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* ── SWIPE HINT (first-time carousel indicator) ──────── */
+  .mobile-carousel::after,
+  .dashboard-grid::after {
+    content: '';
+    display: block;
+    width: 20px;
+    flex-shrink: 0;
+  }
+
+  /* Scroll dots indicator for carousels */
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    padding: 6px 0 2px;
+  }
+
+  .carousel-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(0, 96, 223, 0.18);
+    transition: all 0.2s;
+  }
+
+  .carousel-dot.active {
+    width: 16px;
+    border-radius: 3px;
+    background: var(--blue);
+  }
+
+  /* ── PULL-TO-REFRESH HINT ────────────────────────────── */
+  .pull-refresh-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    font-size: 12px;
+    color: var(--text-hint);
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .pull-refresh-hint.visible { opacity: 1; }
+
+  /* ── MOBILE LIST ITEM SWIPE HINT (visual) ────────────── */
+  /* Shows a subtle colored shadow on right side to imply swipeability */
+  .mobile-list-item::after {
+    content: '›';
+    font-size: 18px;
+    color: var(--text-hint);
+    flex-shrink: 0;
+    margin-left: auto;
+    padding-left: 8px;
+    opacity: 0.5;
+  }
+
+  /* ── MOBILE EMPTY STATE ──────────────────────────────── */
+  .mobile-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .mobile-empty-state__icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 20px;
+    background: rgba(0, 96, 223, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+  }
+
+  .mobile-empty-state__title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+  }
+
+  .mobile-empty-state__subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    max-width: 260px;
+    line-height: 1.5;
+  }
+
+  /* ── STATUS BADGE CHIPS ──────────────────────────────── */
+  .mobile-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .mobile-chip--green  { background: rgba(16,185,129,0.12); color: #059669; }
+  .mobile-chip--red    { background: rgba(239,68,68,0.12);  color: #dc2626; }
+  .mobile-chip--orange { background: rgba(245,158,11,0.12); color: #d97706; }
+  .mobile-chip--blue   { background: rgba(0,96,223,0.10);   color: #0050cc; }
+  .mobile-chip--purple { background: rgba(139,92,246,0.12); color: #7c3aed; }
+  .mobile-chip--grey   { background: rgba(0,0,0,0.06);      color: var(--text-secondary); }
+
+  /* ── TYPOGRAPHY IMPROVEMENTS ─────────────────────────── */
+  h1, h2 {
+    letter-spacing: -0.03em !important;
+    line-height: 1.15 !important;
+  }
+
+  h3, h4 {
+    letter-spacing: -0.02em !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Large display titles on page headers */
+  [style*="fontSize: '26px'"][style*="fontWeight: 800"],
+  [style*="fontSize: '28px'"][style*="fontWeight: 800"] {
+    font-size: 22px !important;
+    letter-spacing: -0.03em !important;
+  }
+
+  /* Sub-headlines */
+  [style*="fontSize: '22px'"][style*="fontWeight: 800"] {
+    font-size: 18px !important;
+  }
+
+  /* Paragraph text — comfortable reading */
+  [style*="fontSize: '14px'"][style*="fontWeight: 500"] {
+    font-size: 14px !important;
+    line-height: 1.55 !important;
+  }
+
+  /* ── SEARCH BAR MOBILE IMPROVEMENT ──────────────────── */
+  [style*="width: '270px'"],
+  [style*="width: '200px'"],
+  [style*="width: '250px'"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* ── MOBILE TOAST / NOTIFICATION ────────────────────── */
+  /* Any toast positioned at top — keep it below app bar */
+  [style*="position: 'fixed'"][style*="top: '0'"],
+  [style*="position: 'fixed'"][style*="top: 0"] {
+    top: 60px !important;
+  }
+
+  /* Toast pills */
+  [style*="position: 'fixed'"][style*="borderRadius: '50px'"],
+  [style*="position: 'fixed'"][style*="borderRadius: '999px'"] {
+    left: 16px !important;
+    right: 16px !important;
+    width: auto !important;
+    max-width: none !important;
+    text-align: center !important;
+  }
+
+  /* ── SAFE AREA FINE-TUNING ───────────────────────────── */
+  /* Extra padding at the bottom of scrollable content  */
+  .main-content {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;
+  }
+
+  /* WhatsApp message input area — above bottom nav */
+  #whatsapp-root [style*="background: '#202c33'"][style*="borderTop"] {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;
+  }
+
+  /* ── LOADING SPINNER ─────────────────────────────────── */
+  .mobile-spinner {
+    width: 28px;
+    height: 28px;
+    border: 3px solid rgba(0, 96, 223, 0.15);
+    border-top-color: var(--blue);
+    border-radius: 50%;
+    animation: mobile-spin 0.7s linear infinite;
+    margin: 24px auto;
+  }
+
+  @keyframes mobile-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ── SECTION LABEL STYLE ─────────────────────────────── */
+  .mobile-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-hint);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 4px 0 8px;
+    display: block;
+  }
+
+  /* ── DIVIDER ─────────────────────────────────────────── */
+  .mobile-divider {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.06);
+    margin: 4px 0;
+    border: none;
+  }
+
+  /* ── CARD PRESS STATES ───────────────────────────────── */
+  .glass-panel:active,
+  .matte-3d:active {
+    transform: scale(0.98) !important;
+    transition: transform 0.1s !important;
+  }
+
+  /* ── BUTTON ROW — full width on mobile ───────────────── */
+  [style*="display: 'flex'"][style*="justifyContent: 'flex-end'"][style*="gap: '12px'"] {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  [style*="justifyContent: 'flex-end'"][style*="gap: '12px'"] button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* ── NO HOVER EFFECTS ON TOUCH ───────────────────────── */
+  @media (hover: none) {
+    .matte-3d:hover { transform: none !important; box-shadow: inherit !important; }
+    .glass-panel:hover { transform: none !important; }
+    button:hover { background: inherit; }
+  }
+
+  /* ── OVERSCROLL COLOR ────────────────────────────────── */
+  /* Fills the overscroll area on iOS with the app bg color */
+  html {
+    background: #dce8f5;
+  }
+
+  /* ── FOCUS RING — visible for accessibility ──────────── */
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--blue) !important;
+    outline-offset: 2px !important;
+  }
+
+  /* ── SMOOTH TRANSITIONS ON STATE CHANGES ────────────── */
+  .mobile-nav-tab,
+  .mobile-more-item,
+  .mobile-list-item,
+  .mobile-fab,
+  .mobile-icon-btn {
+    transition: transform 0.15s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity  0.15s ease,
+                background 0.15s ease !important;
+  }
+}
+
+/* ================================================================
+   PHASE 5 — PER-PAGE NATIVE APP DESIGN
+   ================================================================ */
+@media (max-width: 768px) {
+
+  /* ══ MY DAY — Split master-detail → single panel with back nav ══ */
+  /* Header: compact strip */
+  [style*="justifyContent: 'space-between'"][style*="alignItems: 'center'"][style*="padding: '12px 20px'"] {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    padding: 10px 12px !important;
+  }
+  /* Controls row → scroll */
+  [style*="justifyContent: 'space-between'"][style*="alignItems: 'center'"][style*="padding: '12px 20px'"] > div:last-child {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    gap: 8px !important;
+    width: 100% !important;
+    scrollbar-width: none !important;
+  }
+  /* Progress bar → full width */
+  [style*="width: '120px'"][style*="height: '6px'"] {
+    width: 80px !important;
+  }
+  /* Master-detail layout → stacked column */
+  [style*="display: 'flex'"][style*="gap: '20px'"][style*="flex: 1"][style*="minHeight: '0'"] {
+    flex-direction: column !important;
+    gap: 0 !important;
+    overflow: hidden !important;
+  }
+  /* Queue sidebar → fixed height horizontal list */
+  [style*="width: '320px'"][style*="display: 'flex'"][style*="flexDirection: 'column'"][style*="borderRadius: '16px'"] {
+    width: 100% !important;
+    max-height: 220px !important;
+    flex-shrink: 0 !important;
+    border-radius: 12px !important;
+  }
+  /* Queue list → horizontal swipe */
+  [style*="width: '320px'"] > [style*="flex: 1"][style*="overflowY: 'auto'"][style*="flexDirection: 'column'"][style*="gap: '4px'"] {
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: 8px !important;
+    gap: 8px !important;
+    scroll-snap-type: x mandatory !important;
+  }
+  /* Each queue task item → fixed width chip */
+  [style*="width: '320px'"] [style*="padding: '6px 8px'"][style*="borderRadius: '6px'"] {
+    min-width: 160px !important;
+    flex-shrink: 0 !important;
+    scroll-snap-align: start !important;
+    border-radius: 10px !important;
+  }
+  /* Detail panel → fills remaining space */
+  [style*="flex: 1"][style*="display: 'flex'"][style*="flexDirection: 'column'"][style*="borderRadius: '16px'"][style*="overflow: 'hidden'"] {
+    flex: 1 !important;
+    min-height: 0 !important;
+    border-radius: 12px !important;
+  }
+  /* Task footer buttons → full width */
+  [style*="padding: '12px 20px'"][style*="borderTop"][style*="justifyContent: 'space-between'"] {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    padding: 10px 12px !important;
+  }
+  [style*="padding: '12px 20px'"][style*="borderTop"][style*="justifyContent: 'space-between'"] > div {
+    width: 100% !important;
+    display: flex !important;
+    gap: 8px !important;
+  }
+  [style*="padding: '12px 20px'"][style*="borderTop"][style*="justifyContent: 'space-between'"] button {
+    flex: 1 !important;
+    justify-content: center !important;
+  }
+
+  /* ══ EVOBOARD — Toolbar + Table native cards ══ */
+  /* Column selector pills → scrollable row */
+  [style*="display: 'flex'"][style*="gap: '6px'"][style*="overflowX: 'auto'"] {
+    padding-bottom: 4px !important;
+    scrollbar-width: none !important;
+  }
+  /* Each column pill → compact */
+  [style*="display: 'flex'"][style*="gap: '6px'"][style*="overflowX: 'auto'"] button {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    font-size: 12px !important;
+    padding: 7px 12px !important;
+  }
+  /* Assignee avatar group → wrap */
+  [style*="display: 'flex'"][style*="gap: '4px'"][style*="flexWrap: 'wrap'"] {
+    gap: 4px !important;
+  }
+
+  /* ══ EVONOTES — Note grid → single column ══ */
+  [style*="gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))'"],
+  [style*="gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))'"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  /* Note editor — full height */
+  [style*="display: 'flex'"][style*="gap: '20px'"][style*="height: '100%'"] {
+    flex-direction: column !important;
+    height: auto !important;
+    gap: 0 !important;
+  }
+  /* Note sidebar → compact list on top */
+  [style*="width: '280px'"][style*="flexDirection: 'column'"],
+  [style*="width: '260px'"][style*="flexDirection: 'column'"] {
+    width: 100% !important;
+    max-height: 240px !important;
+    flex-shrink: 0 !important;
+  }
+  /* Note editor area → fills below */
+  [style*="flex: 1"][style*="flexDirection: 'column'"][style*="borderRadius: '16px'"][style*="overflow: 'hidden'"] {
+    flex: 1 !important;
+    min-height: 300px !important;
+  }
+  /* Note toolbar → wrap */
+  [style*="display: 'flex'"][style*="gap: '4px'"][style*="padding: '8px'"][style*="borderBottom"] {
+    flex-wrap: wrap !important;
+  }
+
+  /* ══ CLIENT MANAGEMENT — Action-first design ══ */
+  /* Client table wrapper */
+  [style*="borderRadius: '20px'"][style*="overflow: 'hidden'"][style*="background: 'white'"] {
+    border-radius: 16px !important;
+  }
+  /* Client row → native card */
+  .evo-table tr,
+  [style*="display: 'flex'"][style*="padding: '16px'"][style*="borderBottom"][style*="alignItems: 'center'"] {
+    padding: 14px 16px !important;
+  }
+  /* Client name → larger touch target */
+  [style*="fontSize: '15px'"][style*="fontWeight: 700"] {
+    font-size: 15px !important;
+  }
+  /* Action buttons in client row → icon-only on mobile */
+  [style*="display: 'flex'"][style*="gap: '8px'"][style*="flexShrink: '0'"] button {
+    min-width: 36px !important;
+    min-height: 36px !important;
+    padding: 6px !important;
+    border-radius: 10px !important;
+  }
+
+  /* ══ TEAM DIRECTORY — Card-first layout ══ */
+  /* Search + filter bar → column */
+  [style*="display: 'flex'"][style*="justifyContent: 'space-between'"][style*="padding: '20px'"] {
+    flex-direction: column !important;
+    gap: 10px !important;
+    padding: 12px 16px !important;
+  }
+  /* Member card → full width clean card */
+  [style*="padding: '20px'"][style*="borderRadius: '20px'"][style*="background: 'white'"] {
+    border-radius: 16px !important;
+    padding: 16px !important;
+  }
+  /* Member avatar → bigger */
+  [style*="width: '64px'"][style*="height: '64px'"][style*="borderRadius: '50%'"] {
+    width: 52px !important;
+    height: 52px !important;
+    font-size: 20px !important;
+  }
+  /* Member detail pills → wrap */
+  [style*="display: 'flex'"][style*="flexWrap: 'wrap'"][style*="gap: '6px'"] {
+    gap: 5px !important;
+  }
+
+  /* ══ CALENDAR — Touch-optimized cells ══ */
+  /* Month navigation → full width */
+  [style*="display: 'flex'"][style*="justifyContent: 'space-between'"][style*="alignItems: 'center'"][style*="marginBottom: '16px'"] {
+    padding: 0 4px !important;
+  }
+  /* Day headers → smaller */
+  [style*="gridTemplateColumns: 'repeat(7, 1fr)'"] > div:first-child,
+  [style*="gridTemplateColumns: 'repeat(7, 1fr)'"] span {
+    font-size: 11px !important;
+    padding: 4px 2px !important;
+  }
+  /* Event dots → visible */
+  [style*="width: '6px'"][style*="height: '6px'"][style*="borderRadius: '50%'"] {
+    width: 5px !important;
+    height: 5px !important;
+  }
+  /* Add event button → full width */
+  [style*="padding: '12px 24px'"][style*="background: 'linear-gradient(135deg, #0b57d0"] {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* ══ MAILBOX — Single panel with list above detail ══ */
+  /* Mail list items → native row */
+  [style*="padding: '12px 16px'"][style*="borderBottom"][style*="cursor: 'pointer'"] {
+    padding: 12px 14px !important;
+  }
+  /* Mail subject → truncate */
+  [style*="fontSize: '14px'"][style*="fontWeight: '600'"][style*="overflow: 'hidden'"] {
+    font-size: 14px !important;
+  }
+  /* Compose button → FAB on mobile, hide original */
+  [style*="position: 'fixed'"][style*="bottom: '80px'"][style*="right: '24px'"] {
+    bottom: 80px !important;
+  }
+
+  /* ══ SETTINGS — Grouped native sections ══ */
+  /* Settings layout → full column */
+  [style*="display: 'grid'"][style*="gridTemplateColumns: '240px 1fr'"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
+  /* Settings sidebar → horizontal tab strip */
+  [style*="width: '240px'"][style*="borderRight: '1px solid'"] {
+    width: 100% !important;
+    max-height: none !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    display: flex !important;
+    padding: 8px !important;
+    gap: 4px !important;
+  }
+  /* Settings sidebar nav items → pills */
+  [style*="width: '240px'"] button,
+  [style*="width: '240px'"] [style*="cursor: 'pointer'"] {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    border-radius: 10px !important;
+    padding: 8px 14px !important;
+    font-size: 12px !important;
+  }
+  /* Settings content → padded */
+  [style*="flex: 1"][style*="padding: '32px'"] {
+    padding: 16px !important;
+  }
+  [style*="padding: '24px'"][style*="borderRadius: '16px'"][style*="background: 'white'"] {
+    padding: 16px !important;
+    border-radius: 14px !important;
+  }
+
+  /* ══ NOTICE BOARD — App-like card feed ══ */
+  /* Notice card → full width */
+  [style*="borderRadius: '20px'"][style*="padding: '24px'"][style*="background: 'white'"] {
+    padding: 16px !important;
+    border-radius: 16px !important;
+  }
+  /* Notice title → correct size */
+  [style*="fontSize: '18px'"][style*="fontWeight: 800"] {
+    font-size: 16px !important;
+  }
+  /* Notice meta row → wrap */
+  [style*="display: 'flex'"][style*="gap: '16px'"][style*="alignItems: 'center'"][style*="color: 'var(--text-secondary)'"] {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  /* ══ NOTIFICATIONS CENTER ══ */
+  /* Notif item → full width native row */
+  [style*="padding: '14px 16px'"][style*="borderBottom"][style*="display: 'flex'"] {
+    padding: 12px 14px !important;
+    gap: 10px !important;
+  }
+  /* Notif icon badge → correct size */
+  [style*="width: '44px'"][style*="height: '44px'"][style*="borderRadius: '14px'"] {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 12px !important;
+    flex-shrink: 0 !important;
+  }
+  /* Mark all read button → full width */
+  [style*="padding: '10px 20px'"][style*="borderRadius: '10px'"][style*="fontWeight: 700"] {
+    padding: 10px 16px !important;
+  }
+
+  /* ══ PERFORMANCE PAGE ══ */
+  /* Stat row → 2 col grid */
+  [style*="display: 'grid'"][style*="gridTemplateColumns: 'repeat(4, 1fr)'"] {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  [style*="display: 'grid'"][style*="gridTemplateColumns: 'repeat(3, 1fr)'"] {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  /* Timeline entries → compact */
+  [style*="display: 'flex'"][style*="gap: '16px'"][style*="padding: '12px'"] {
+    padding: 10px 12px !important;
+    gap: 10px !important;
+  }
+
+  /* ══ REPORTS & ANALYTICS ══ */
+  /* Chart card title row */
+  [style*="display: 'flex'"][style*="justifyContent: 'space-between'"][style*="marginBottom: '20px'"] {
+    margin-bottom: 12px !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  /* Chart select dropdowns → full width */
+  [style*="display: 'flex'"][style*="justifyContent: 'space-between'"][style*="marginBottom: '20px'"] select {
+    width: auto !important;
+    font-size: 13px !important;
+  }
+
+  /* ══ ERROR LOGS / SESSION LOGS ══ */
+  /* Log table row badge column → wrap */
+  [style*="padding: '12px 16px'"][style*="borderBottom"][style*="fontFamily"] {
+    font-size: 12px !important;
+    word-break: break-all !important;
+  }
+  /* Resolve button → touch target */
+  [style*="padding: '4px 10px'"][style*="borderRadius: '6px'"] {
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+  }
+
+  /* ══ DATABASE VIEW ══ */
+  /* Collection card → full width */
+  [style*="gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))'"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  /* ══ ARCHIVE / TRASH ══ */
+  [style*="gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))'"],
+  [style*="gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))'"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  /* Trash action buttons → icon size */
+  [style*="display: 'flex'"][style*="gap: '8px'"][style*="marginTop: '16px'"] button {
+    flex: 1 !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+    padding: 8px 10px !important;
+  }
+
+  /* ══ GLOBAL COMMAND PALETTE ══ */
+  [style*="position: 'fixed'"][style*="top: '20%'"][style*="left: '50%'"] {
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    transform: none !important;
+    border-radius: 24px 24px 0 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* ══ GLOBAL DATA INSPECTOR (Side Drawer) ══ */
+  /* Inspector panel → bottom sheet */
+  [style*="position: 'fixed'"][style*="right: '0'"][style*="top: '0'"][style*="width: '480px'"],
+  [style*="position: 'fixed'"][style*="right: '0'"][style*="top: '0'"][style*="width: '440px'"],
+  [style*="position: 'fixed'"][style*="right: '0'"][style*="top: '0'"][style*="width: '420px'"] {
+    width: 100% !important;
+    top: auto !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    left: 0 !important;
+    height: 85vh !important;
+    border-radius: 24px 24px 0 0 !important;
+    overflow-y: auto !important;
+  }
+
+  /* ══ SIDE DRAWER (reusable) ══ */
+  .side-drawer,
+  [class*="side-drawer"] {
+    width: 100% !important;
+    right: 0 !important;
+    left: 0 !important;
+    top: auto !important;
+    bottom: 0 !important;
+    height: 90vh !important;
+    border-radius: 24px 24px 0 0 !important;
+  }
+
+  /* ══ MEETINGS PAGE ══ */
+  [style*="gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))'"] {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  /* Meeting card action row → wrap */
+  [style*="display: 'flex'"][style*="justifyContent: 'flex-end'"][style*="gap: '8px'"] {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  [style*="justifyContent: 'flex-end'"][style*="gap: '8px'"] button {
+    flex: 1 !important;
+    min-width: 80px !important;
+    justify-content: center !important;
+  }
+
+  /* ══ UNIVERSAL: search+filter bars always full width ══ */
+  input[type="text"][style*="width"],
+  input[type="search"][style*="width"] {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* ══ UNIVERSAL: any fixed right panel → bottom sheet ══ */
+  [style*="position: 'fixed'"][style*="right: '0'"][style*="bottom: '0'"][style*="top: '0'"] {
+    left: 0 !important;
+    width: 100% !important;
+    top: 20% !important;
+    border-radius: 24px 24px 0 0 !important;
+  }
+
+  /* ── MOBILE BOTTOM SHEET MODAL ───────────────────────── */
+  .mobile-bottom-sheet-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    display: flex !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+    z-index: 99999 !important;
+  }
+
+  .mobile-bottom-sheet {
+    width: 100% !important;
+    max-width: 100vw !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    background: white !important;
+    border-radius: 24px 24px 0 0 !important;
+    padding: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    animation: sheet-slide-up 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+    overflow: hidden !important;
+  }
+
+  /* For nested inputs inside bottom sheets to ensure they are visible on mobile keyboard popups */
+  .mobile-bottom-sheet input, .mobile-bottom-sheet textarea, .mobile-bottom-sheet select {
+    font-size: 16px !important; /* Prevents auto-zoom on iOS */
+  }
+  
+  /* ── GLOBAL MOBILE INPUT HYGIENE ─────────────────────────── */
+  .main-content input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]),
+  .main-content select,
+  .main-content textarea,
+  .mobile-bottom-sheet input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]),
+  .mobile-bottom-sheet select,
+  .mobile-bottom-sheet textarea,
+  .side-drawer input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]),
+  .side-drawer select,
+  .side-drawer textarea {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    font-size: 16px !important; /* Prevent iOS zoom */
+    line-height: 1.5 !important;
+    color: var(--text-primary) !important;
+    outline: none !important;
+    transition: all 0.2s ease !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .main-content input:focus,
+  .main-content select:focus,
+  .main-content textarea:focus,
+  .mobile-bottom-sheet input:focus,
+  .mobile-bottom-sheet select:focus,
+  .mobile-bottom-sheet textarea:focus,
+  .side-drawer input:focus,
+  .side-drawer select:focus,
+  .side-drawer textarea:focus {
+    background: #ffffff !important;
+    border-color: var(--color-ocean-blue) !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05), 0 0 0 3px rgba(11, 87, 208, 0.15) !important;
+  }
+
+  @keyframes sheet-slide-up {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+}

@@ -1,0 +1,2385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J.A.R.V.I.S. | Executive Holographic Command Center</title>
+    <!-- Google Fonts for High-End Stark Aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-obsidian: #030712;
+            --bg-card: rgba(8, 18, 36, 0.85);
+            --bg-card-hover: rgba(12, 26, 52, 0.95);
+            --cyan: #00f0ff;
+            --cyan-dim: #00a8b3;
+            --cyan-glow: rgba(0, 240, 255, 0.4);
+            --cyan-subtle: rgba(0, 240, 255, 0.08);
+            --gold: #ffb700;
+            --gold-glow: rgba(255, 183, 0, 0.4);
+            --emerald: #00ff9d;
+            --crimson: #ff3366;
+            --text-main: #e0f2fe;
+            --text-muted: #64748b;
+            --text-accent: #38bdf8;
+            --border-glow: rgba(0, 240, 255, 0.25);
+            --font-head: 'Orbitron', -apple-system, sans-serif;
+            --font-body: 'Rajdhani', -apple-system, sans-serif;
+            --font-mono: 'Share Tech Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-obsidian);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.12) 0%, transparent 60%),
+                radial-gradient(circle at 100% 100%, rgba(255, 183, 0, 0.05) 0%, transparent 50%),
+                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+            color: var(--text-main);
+            font-family: var(--font-body);
+            font-size: 16px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Scanline Overlay Effect */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15) 0px,
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* Header & Vitals HUD */
+        header {
+            background: rgba(3, 7, 18, 0.92);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-glow);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* Animated Arc Reactor SVG */
+        .arc-reactor {
+            width: 48px;
+            height: 48px;
+            position: relative;
+            filter: drop-shadow(0 0 10px var(--cyan-glow));
+        }
+
+        .arc-reactor svg {
+            width: 100%;
+            height: 100%;
+            animation: spin 14s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .brand-title h1 {
+            font-family: var(--font-head);
+            font-size: 24px;
+            letter-spacing: 3px;
+            color: var(--cyan);
+            text-shadow: 0 0 12px var(--cyan-glow);
+            line-height: 1;
+        }
+
+        .brand-title p {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+            margin-top: 3px;
+        }
+
+        /* Telemetry Ticker */
+        .telemetry-ticker {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(0, 240, 255, 0.04);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            padding: 6px 16px;
+            border-radius: 6px;
+        }
+
+        .metric-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .metric-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .metric-value {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--cyan);
+        }
+
+        .metric-value.good { color: var(--emerald); }
+        .metric-value.warn { color: var(--gold); }
+        .metric-value.danger { color: var(--crimson); }
+
+        /* Top Action Controls */
+        .top-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-hud {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 14px;
+            background: rgba(0, 240, 255, 0.08);
+            border: 1px solid var(--border-glow);
+            color: var(--cyan);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-hud:hover {
+            background: rgba(0, 240, 255, 0.25);
+            box-shadow: 0 0 14px var(--cyan-glow);
+            transform: translateY(-1px);
+        }
+
+        .btn-hud.danger {
+            background: rgba(255, 51, 102, 0.12);
+            border-color: rgba(255, 51, 102, 0.4);
+            color: var(--crimson);
+        }
+
+        .btn-hud.danger:hover {
+            background: rgba(255, 51, 102, 0.3);
+            box-shadow: 0 0 14px rgba(255, 51, 102, 0.5);
+        }
+
+        .btn-hud.active {
+            background: var(--cyan);
+            color: var(--bg-obsidian);
+            font-weight: bold;
+        }
+
+        .btn-hud.mic-active {
+            background: rgba(0, 255, 157, 0.25) !important;
+            border-color: var(--emerald) !important;
+            color: var(--emerald) !important;
+            box-shadow: 0 0 16px rgba(0, 255, 157, 0.6) !important;
+            animation: micPulse 1.2s infinite ease-in-out;
+        }
+
+        @keyframes micPulse {
+            0% { transform: scale(1); box-shadow: 0 0 8px rgba(0, 255, 157, 0.4); }
+            50% { transform: scale(1.04); box-shadow: 0 0 20px rgba(0, 255, 157, 0.8); }
+            100% { transform: scale(1); box-shadow: 0 0 8px rgba(0, 255, 157, 0.4); }
+        }
+
+        .btn-hud.handsfree-active {
+            background: rgba(255, 183, 0, 0.2) !important;
+            border-color: var(--gold) !important;
+            color: var(--gold) !important;
+            box-shadow: 0 0 14px var(--gold-glow) !important;
+        }
+
+        /* Navigation Bar Tabs */
+        nav.hud-tabs {
+            background: rgba(5, 12, 24, 0.95);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+            display: flex;
+            gap: 2px;
+            padding: 0 24px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            font-family: var(--font-head);
+            font-size: 13px;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            padding: 14px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            background: rgba(0, 240, 255, 0.04);
+        }
+
+        .tab-btn.active {
+            color: var(--cyan);
+            border-bottom-color: var(--cyan);
+            background: rgba(0, 240, 255, 0.08);
+            text-shadow: 0 0 8px var(--cyan-glow);
+        }
+
+        /* Main Workspace Container */
+        main {
+            flex: 1;
+            padding: 24px;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .tab-pane {
+            display: none;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* HUD Glassmorphic Cards */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 40px; height: 2px;
+            background: var(--cyan);
+            box-shadow: 0 0 8px var(--cyan);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+        }
+
+        .card-header h2, .card-header h3 {
+            font-family: var(--font-head);
+            font-size: 16px;
+            letter-spacing: 1.5px;
+            color: var(--cyan);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--cyan);
+            border: 1px solid rgba(0, 240, 255, 0.25);
+        }
+
+        .badge.gold {
+            background: rgba(255, 183, 0, 0.1);
+            color: var(--gold);
+            border-color: rgba(255, 183, 0, 0.3);
+        }
+
+        .badge.emerald {
+            background: rgba(0, 255, 157, 0.1);
+            color: var(--emerald);
+            border-color: rgba(0, 255, 157, 0.3);
+        }
+
+        .badge.crimson {
+            background: rgba(255, 51, 102, 0.1);
+            color: var(--crimson);
+            border-color: rgba(255, 51, 102, 0.3);
+        }
+
+        /* Audio Radar / Visualizer Canvas */
+        .visualizer-container {
+            width: 100%;
+            height: 70px;
+            background: rgba(2, 6, 14, 0.8);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            border-radius: 6px;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        canvas#audio-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Dialogue & Terminal Feed */
+        .dialogue-terminal {
+            flex: 1;
+            min-height: 380px;
+            max-height: 480px;
+            overflow-y: auto;
+            background: rgba(2, 6, 14, 0.7);
+            border: 1px solid rgba(0, 240, 255, 0.12);
+            border-radius: 6px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-family: var(--font-mono);
+            font-size: 13px;
+        }
+
+        .terminal-msg {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 10px 14px;
+            border-radius: 6px;
+            max-width: 90%;
+            line-height: 1.5;
+            position: relative;
+            animation: msgPop 0.2s ease;
+        }
+
+        @keyframes msgPop {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .terminal-msg.user {
+            align-self: flex-end;
+            background: rgba(0, 240, 255, 0.08);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            color: #bae6fd;
+        }
+
+        .terminal-msg.jarvis {
+            align-self: flex-start;
+            background: rgba(14, 165, 233, 0.08);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            border-left: 3px solid var(--cyan);
+            color: #f0f9ff;
+        }
+
+        .terminal-msg.peer {
+            align-self: flex-start;
+            background: rgba(148, 163, 184, 0.08);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-left: 3px solid #94a3b8;
+            color: #cbd5e1;
+        }
+
+        .terminal-msg-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .msg-speaker {
+            font-weight: bold;
+            color: var(--cyan);
+        }
+
+        .terminal-msg.user .msg-speaker { color: var(--gold); }
+
+        /* Quick Command Chips */
+        .chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .chip {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            color: var(--text-accent);
+            padding: 4px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .chip:hover {
+            background: rgba(0, 240, 255, 0.2);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        /* Input Bar */
+        .input-bar {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .select-speaker {
+            background: rgba(2, 6, 14, 0.8);
+            border: 1px solid var(--border-glow);
+            color: var(--cyan);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .input-hud {
+            flex: 1;
+            background: rgba(2, 6, 14, 0.8);
+            border: 1px solid var(--border-glow);
+            color: #fff;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            padding: 10px 16px;
+            border-radius: 6px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .input-hud:focus {
+            border-color: var(--cyan);
+            box-shadow: 0 0 12px var(--cyan-glow);
+        }
+
+        /* Branch Cards in Fleet Hub */
+        .branch-card {
+            background: rgba(10, 22, 44, 0.7);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 6px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: all 0.25s ease;
+        }
+
+        .branch-card:hover {
+            border-color: var(--cyan);
+            box-shadow: 0 6px 20px rgba(0, 240, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .branch-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .branch-title {
+            font-family: var(--font-head);
+            font-size: 14px;
+            color: var(--cyan);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .branch-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .branch-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        .btn-branch {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            padding: 6px 10px;
+            background: rgba(0, 240, 255, 0.08);
+            border: 1px solid rgba(0, 240, 255, 0.25);
+            color: var(--text-main);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .btn-branch:hover {
+            background: rgba(0, 240, 255, 0.3);
+            color: #fff;
+            box-shadow: 0 0 10px var(--cyan-glow);
+        }
+
+        /* Table Design */
+        .hud-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .hud-table th {
+            text-align: left;
+            padding: 8px 12px;
+            background: rgba(0, 240, 255, 0.08);
+            color: var(--cyan);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hud-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #cbd5e1;
+        }
+
+        .hud-table tr:hover td {
+            background: rgba(0, 240, 255, 0.04);
+        }
+
+        /* Toast Notifications */
+        #toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: rgba(8, 18, 36, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--cyan);
+            color: #fff;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            padding: 12px 18px;
+            border-radius: 6px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8), 0 0 16px var(--cyan-glow);
+            animation: slideIn 0.3s ease;
+            min-width: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1100px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .telemetry-ticker { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- HUD Header -->
+    <header>
+        <div class="brand-container">
+            <div class="arc-reactor">
+                <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#00f0ff" stroke-width="2" stroke-dasharray="10 5" opacity="0.6" />
+                    <circle cx="50" cy="50" r="35" fill="none" stroke="#ffb700" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.8" />
+                    <circle cx="50" cy="50" r="24" fill="none" stroke="#00f0ff" stroke-width="3" />
+                    <circle cx="50" cy="50" r="14" fill="#00f0ff" opacity="0.9" filter="drop-shadow(0 0 6px #00f0ff)" />
+                </svg>
+            </div>
+            <div class="brand-title">
+                <h1>J.A.R.V.I.S.</h1>
+                <p>JUST A RATHER VERY INTELLIGENT SYSTEM // MARK 85 COGNITIVE CORE</p>
+            </div>
+        </div>
+
+        <!-- Telemetry Ticker -->
+        <div class="telemetry-ticker" id="telemetry-ticker">
+            <div class="metric-badge">
+                <span class="metric-label">CPU Load</span>
+                <span class="metric-value" id="val-cpu">-- %</span>
+            </div>
+            <div class="metric-badge">
+                <span class="metric-label">RAM Active</span>
+                <span class="metric-value" id="val-ram">-- GB</span>
+            </div>
+            <div class="metric-badge">
+                <span class="metric-label">Sub-Branches</span>
+                <span class="metric-value good" id="val-branches">6/6 ACTIVE</span>
+            </div>
+            <div class="metric-badge">
+                <span class="metric-label">LifeGraph</span>
+                <span class="metric-value" id="val-nodes">5,958 NODES</span>
+            </div>
+            <div class="metric-badge">
+                <span class="metric-label">Safety Gate</span>
+                <span class="metric-value good" id="val-safety">ARMED</span>
+            </div>
+            <div class="metric-badge" style="cursor:pointer;" onclick="openBrainSpeedModal()" title="Click to supercharge brain with 250ms Groq / Gemini LPU">
+                <span class="metric-label">AI Inference</span>
+                <span class="metric-value good" id="val-ai-speed">⚡ REFLEX &lt;5MS</span>
+            </div>
+        </div>
+
+        <!-- Top Header Action Controls -->
+        <div class="top-controls">
+            <button class="btn-hud" id="btn-speed-boost" onclick="openBrainSpeedModal()" style="border-color:var(--gold);color:var(--gold);" title="Activate 250ms Groq or Gemini Free Cloud LPU">
+                ⚡ 250MS BRAIN BOOST
+            </button>
+            <button class="btn-hud" id="btn-sound-toggle" onclick="toggleAudioFX()">
+                <span id="sound-icon">🔊</span> AUDIO FX: ON
+            </button>
+            <button class="btn-hud" id="btn-tts-toggle" onclick="toggleAudioMode()" title="Toggle Single Voice Output: PC Speakers vs Browser vs Muted">
+                <span id="tts-icon">🔊</span> AUDIO: PC SPEAKERS (NEURAL)
+            </button>
+            <button class="btn-hud danger" onclick="triggerEmergencyLockdown()">
+                🔒 LOCKDOWN PC
+            </button>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="hud-tabs">
+        <button class="tab-btn active" onclick="switchTab('tab-neural')">🎙️ NEURAL CONSOLE</button>
+        <button class="tab-btn" onclick="switchTab('tab-fleet')">🏛️ SUB-BRANCHES FLEET</button>
+        <button class="tab-btn" onclick="switchTab('tab-meeting')">👥 MEETING CO-PILOT</button>
+        <button class="tab-btn" onclick="switchTab('tab-whatsapp')">💬 WHATSAPP CUSTOMER CARE</button>
+        <button class="tab-btn" onclick="switchTab('tab-vip')">👑 HYPER-PERSONALIZATION VIP</button>
+        <button class="tab-btn" onclick="switchTab('tab-lifegraph')">🧠 LIFEGRAPH EXPLORER</button>
+        <button class="tab-btn" onclick="switchTab('tab-tasks')">⚡ TASK MANAGER</button>
+    </nav>
+
+    <!-- Main Workspace -->
+    <main>
+        <!-- ================================================================= -->
+        <!-- TAB 1: NEURAL CONSOLE & VOICE MATRIX -->
+        <!-- ================================================================= -->
+        <section id="tab-neural" class="tab-pane active">
+            <div class="grid-2">
+                <!-- Left: Terminal & Voice Interaction -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><span>📡</span> EXECUTIVE NEURAL CONSOLE</h2>
+                        <span class="badge emerald" id="console-status-badge">STANDBY // LISTENING</span>
+                    </div>
+
+                    <!-- Audio Frequency Oscilloscope Canvas -->
+                    <div class="visualizer-container">
+                        <canvas id="audio-canvas"></canvas>
+                    </div>
+
+                    <!-- Terminal Transcript -->
+                    <div class="dialogue-terminal" id="dialogue-feed">
+                        <div class="terminal-msg jarvis">
+                            <div class="terminal-msg-meta">
+                                <span class="msg-speaker">J.A.R.V.I.S.</span>
+                                <span>[00:00:00]</span>
+                                <span class="badge">SYSTEM READY</span>
+                            </div>
+                            <p>Good evening, sir. All sub-branches, meeting co-pilot systems, and cognitive life nodes are synchronized and awaiting your command.</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Command Chips -->
+                    <div class="chips-container">
+                        <span class="chip" onclick="quickSend('give me a sit-rep')">📋 Sit-Rep Briefing</span>
+                        <span class="chip" onclick="quickSend('what are my urgent topics')">🔥 Urgent Topics</span>
+                        <span class="chip" onclick="quickSend('check vitals')">🩺 System Vitals</span>
+                        <span class="chip" onclick="quickSend('explain Mark 85 architecture')">🛡️ Mark 85 Architecture</span>
+                        <span class="chip" onclick="quickSend('how well do you know me')">👑 Personalization Audit</span>
+                        <span class="chip" onclick="quickSend('enroll my voice as boss')">🎙️ Enroll Voice</span>
+                    </div>
+
+                    <!-- Input Bar with Web Speech & Hands-Free Matrix -->
+                    <div class="input-bar">
+                        <select id="speaker-select" class="select-speaker" title="Speaker Persona Attribution">
+                            <option value="Boss" selected>👑 Boss (Tony Stark)</option>
+                            <option value="Sarah">👩‍💼 Sarah (Colleague)</option>
+                            <option value="David">👨‍💻 David (Lead Engineer)</option>
+                            <option value="Guest">👤 Guest (Restricted)</option>
+                        </select>
+                        <input type="text" id="command-input" class="input-hud" placeholder="Speak or enter directive for J.A.R.V.I.S...." onkeydown="if(event.key==='Enter') sendCommand()">
+                        <button class="btn-hud" id="btn-mic-toggle" onclick="toggleWebMic()" title="Toggle Web Speech Microphone Input">
+                            <span id="mic-icon">🎙️</span> <span id="mic-btn-label">SPEAK</span>
+                        </button>
+                        <button class="btn-hud handsfree-active" id="btn-handsfree-toggle" onclick="toggleHandsFree()" title="Continuous Conversational Loop">
+                            <span id="hf-icon">🔁</span> <span id="hf-btn-label">HANDS-FREE: ON</span>
+                        </button>
+                        <button class="btn-hud active" onclick="sendCommand()">TRANSMIT</button>
+                    </div>
+                </div>
+
+                <!-- Right: Live System Radar & Biometrics -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><span>📊</span> REAL-TIME HARDWARE & ACOUSTIC TELEMETRY</h3>
+                        <span class="badge gold">LIVE FEED</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                        <div style="background: rgba(0, 240, 255, 0.05); border: 1px solid rgba(0, 240, 255, 0.15); padding: 14px; border-radius: 6px;">
+                            <div style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">ACOUSTIC NOISE SUPPRESSION</div>
+                            <div style="font-size: 20px; font-weight: bold; color: var(--cyan); margin-top: 4px;" id="val-snr">54.2 dB SNR</div>
+                            <div style="font-size: 11px; color: var(--emerald); margin-top: 2px;">Adaptive Spectral Subtraction: ACTIVE</div>
+                        </div>
+
+                        <div style="background: rgba(0, 240, 255, 0.05); border: 1px solid rgba(0, 240, 255, 0.15); padding: 14px; border-radius: 6px;">
+                            <div style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">SPEAKER DIARIZATION RADAR</div>
+                            <div style="font-size: 20px; font-weight: bold; color: var(--gold); margin-top: 4px;" id="val-diarization">1 ACTIVE SPEAKER</div>
+                            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Zero Cross-Talk Overlap Detected</div>
+                        </div>
+                    </div>
+
+                    <h4 style="font-family: var(--font-head); font-size: 13px; color: var(--cyan); margin-bottom: 8px;">ACTIVE HARDWARE SPECIFICATIONS</h4>
+                    <table class="hud-table">
+                        <tbody>
+                            <tr>
+                                <td>CPU Core Architecture</td>
+                                <td id="tbl-cpu">Scanning...</td>
+                            </tr>
+                            <tr>
+                                <td>System Memory Utilization</td>
+                                <td id="tbl-ram">Scanning...</td>
+                            </tr>
+                            <tr>
+                                <td>System Primary Disk (C:)</td>
+                                <td id="tbl-disk">Scanning...</td>
+                            </tr>
+                            <tr>
+                                <td>Power Battery Bus</td>
+                                <td id="tbl-battery">Scanning...</td>
+                            </tr>
+                            <tr>
+                                <td>Workstation Session Duration</td>
+                                <td id="tbl-session">0h 14m</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4 style="font-family: var(--font-head); font-size: 13px; color: var(--cyan); margin: 20px 0 8px;">SECURITY & SAFETY GATE AUDIT</h4>
+                    <div style="background: rgba(2, 6, 14, 0.7); border: 1px solid rgba(0, 240, 255, 0.12); padding: 12px; border-radius: 6px; font-family: var(--font-mono); font-size: 12px; color: var(--text-muted);" id="safety-audit-log">
+                        <div>[TIER 1] Autonomous Read & Telemetry: UNRESTRICTED</div>
+                        <div>[TIER 2] File Modification & App Launch: AUTHORIZED FOR BOSS</div>
+                        <div>[TIER 3] System Deletion & Emergency Lockdown: 3-TIER GATE ACTIVE</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- TAB 2: SUB-BRANCHES FLEET HUB -->
+        <!-- ================================================================= -->
+        <section id="tab-fleet" class="tab-pane">
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="card-header">
+                    <h2><span>🏛️</span> AUTONOMOUS SUB-BRANCHES FLEET MATRIX</h2>
+                    <span class="badge emerald">6 / 6 DEPARTMENTS OPERATIONAL</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 14px;">
+                    J.A.R.V.I.S. is partitioned into six fully autonomous, specialized operational sub-branches. Each branch possesses dedicated specialist roles, capabilities, and execution governors.
+                </p>
+            </div>
+
+            <div class="grid-3" id="fleet-branches-grid">
+                <!-- Branch 1: Personal Ops -->
+                <div class="branch-card">
+                    <div class="branch-card-header">
+                        <div class="branch-title"><span>👑</span> Personal Ops Branch</div>
+                        <span class="badge gold">Chief of Staff</span>
+                    </div>
+                    <p class="branch-desc">Executive sit-rep briefings, Eisenhower priority matrix, strategic opinions, and calendar oversight.</p>
+                    <div class="branch-actions">
+                        <button class="btn-branch" onclick="quickSend('personal ops: brief me on urgent topics')">Urgent Briefing</button>
+                        <button class="btn-branch" onclick="quickSend('personal ops: give me a sit-rep')">Sit-Rep</button>
+                        <button class="btn-branch" onclick="quickSend('personal ops: categorize my priorities with eisenhower matrix')">Eisenhower Matrix</button>
+                    </div>
+                </div>
+
+                <!-- Branch 2: Engineering -->
+                <div class="branch-card">
+                    <div class="branch-card-header">
+                        <div class="branch-title"><span>⚙️</span> Engineering Branch</div>
+                        <span class="badge">460+ Skills</span>
+                    </div>
+                    <p class="branch-desc">AST code verification, file & script synthesis, agent skill discovery, and Hermes CLI execution.</p>
+                    <div class="branch-actions">
+                        <button class="btn-branch" onclick="quickSend('engineering branch: verify syntax for x = 100')">AST Syntax Audit</button>
+                        <button class="btn-branch" onclick="quickSend('engineering branch: search skills for weather')">Search Skills</button>
+                    </div>
+                </div>
+
+                <!-- Branch 3: Cyber Sentinel -->
+                <div class="branch-card">
+                    <div class="branch-card-header">
+                        <div class="branch-title"><span>🛡️</span> Cyber Sentinel Branch</div>
+                        <span class="badge crimson">3-Tier Gates</span>
+                    </div>
+                    <p class="branch-desc">Hardware telemetry watchdog, process anomaly scanner, safety verification gates, and PC lockdown.</p>
+                    <div class="branch-actions">
+                        <button class="btn-branch" onclick="quickSend('sentinel branch: check vitals')">Check Vitals</button>
+                        <button class="btn-branch" onclick="quickSend('sentinel branch: check anomalies')">Threat Scan</button>
+                        <button class="btn-branch" onclick="triggerEmergencyLockdown()">Lockdown</button>
+                    </div>
+                </div>
+
+                <!-- Branch 4: Communications -->
+                <div class="branch-card">
+                    <div class="branch-card-header">
+                        <div class="branch-title"><span>💬</span> Communications Branch</div>
+                        <span class="badge emerald">24/7 Daemon</span>
+                    </div>
+                    <p class="branch-desc">Bilingual WhatsApp customer care (Bengali & English), phone receptionist, and neural voice notes.</p>
+                    <div class="branch-actions">
+                        <button class="btn-branch" onclick="quickSend('communications branch: whatsapp daemon status')">Daemon Status</button>
+                        <button class="btn-branch" onclick="toggleReceptionistMode()">Toggle Receptionist</button>
+                    </div>
+                </div>
+
+                <!-- Branch 5: Daily Life Systems -->
+                <div class="branch-card">
+                    <div class="branch-card-header">
+                        <div class="branch-title"><span>🌱</span> Daily Life Branch</div>
+                        <span class="badge">5,958 Nodes</span>
+                    </div>
+                    <p class="branch-desc">Cognitive LifeGraph integration, hydration tracking, expense ledgers, and circadian rhythms.</p>
+                    <div class="branch-actions">
+                        <button class="btn-branch" onclick="quickSend('daily life: how is my hydration today?')">Hydration Check</button>
+                        <button class="btn-branch" onclick="quickSend('daily life: log expense 25.00 for coffee')">Log $25 Expense</button>
+                    </div>
+                </div>
+
+                <!-- Branch 6: Perception -->
+                <div class="branch-card">
+                    <div class="branch-card-header">
+                        <div class="branch-title"><span>👁️</span> Perception Branch</div>
+                        <span class="badge gold">Vision Array</span>
+                    </div>
+                    <p class="branch-desc">Active screen inspection, OCR visual capture, focused window geometry, and PyAutoGUI control.</p>
+                    <div class="branch-actions">
+                        <button class="btn-branch" onclick="quickSend('perception branch: inspect active screen')">Screen Vision</button>
+                        <button class="btn-branch" onclick="quickSend('perception branch: what window is currently focused?')">Active Window</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- TAB 3: GROUP MEETING INTELLIGENCE CO-PILOT -->
+        <!-- ================================================================= -->
+        <section id="tab-meeting" class="tab-pane">
+            <div class="grid-2">
+                <!-- Left: Meeting Controls & Dialogue Feed -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><span>👥</span> SILENT SCRIBE MEETING CO-PILOT</h2>
+                        <span class="badge" id="meeting-state-badge">INACTIVE</span>
+                    </div>
+
+                    <div style="background: rgba(0, 240, 255, 0.04); border: 1px solid rgba(0, 240, 255, 0.15); padding: 12px; border-radius: 6px; margin-bottom: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);">ACTIVE SESSION TITLE:</span>
+                                <div style="font-family: var(--font-head); font-size: 15px; color: var(--cyan);" id="mtg-title">No Meeting In Progress</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);">DURATION:</span>
+                                <div style="font-family: var(--font-mono); font-size: 15px; color: var(--gold);" id="mtg-duration">0.0 m</div>
+                            </div>
+                        </div>
+
+                        <!-- Session Control Buttons -->
+                        <div style="display: flex; gap: 8px; margin-top: 12px;">
+                            <input type="text" id="new-meeting-title" class="input-hud" style="padding: 6px 10px; font-size: 12px;" placeholder="New Meeting Title (e.g. Q4 Cloud Roadmap)">
+                            <button class="btn-hud active" onclick="startMeetingSession()">START</button>
+                            <button class="btn-hud" onclick="pauseResumeMeeting()" id="btn-pause-mtg">PAUSE</button>
+                            <button class="btn-hud danger" onclick="concludeMeetingSession()">END &amp; MINUTES</button>
+                        </div>
+                    </div>
+
+                    <h4 style="font-family: var(--font-head); font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">FEED SPOKEN UTTERANCES (SILENT SCRIBE TESTER)</h4>
+                    <div class="input-bar" style="margin-bottom: 12px;">
+                        <input type="text" id="mtg-speaker-input" class="input-hud" style="max-width: 130px;" placeholder="Speaker (e.g. Sarah)">
+                        <input type="text" id="mtg-utterance-input" class="input-hud" placeholder="Participant speech (e.g. David will finish PostgreSQL migration by Friday)..." onkeydown="if(event.key==='Enter') feedMeetingUtterance()">
+                        <button class="btn-hud" onclick="feedMeetingUtterance()">FEED</button>
+                    </div>
+
+                    <!-- Meeting Dialogue Log -->
+                    <div class="dialogue-terminal" id="meeting-dialogue-feed" style="max-height: 280px; min-height: 200px;">
+                        <div style="color: var(--text-muted); font-size: 12px;">Meeting transcript will appear here. J.A.R.V.I.S. will quietly extract decisions and commitments while remaining silent.</div>
+                    </div>
+                </div>
+
+                <!-- Right: Decisions & SMART Action Items -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><span>⚡</span> EXTRACTED DECISIONS &amp; SMART ACTIONS</h3>
+                        <span class="badge emerald" id="mtg-actions-count">0 COMMITMENTS</span>
+                    </div>
+
+                    <h4 style="font-family: var(--font-head); font-size: 12px; color: var(--gold); margin-bottom: 6px;">🎯 STRATEGIC DECISIONS AGREED</h4>
+                    <div style="background: rgba(2, 6, 14, 0.7); border: 1px solid rgba(0, 240, 255, 0.12); padding: 10px; border-radius: 6px; min-height: 80px; max-height: 120px; overflow-y: auto; font-family: var(--font-mono); font-size: 12px;" id="mtg-decisions-list">
+                        <div style="color: var(--text-muted);">No decisions noted yet. (Say: "We agreed to deploy the new API by Monday")</div>
+                    </div>
+
+                    <h4 style="font-family: var(--font-head); font-size: 12px; color: var(--cyan); margin: 16px 0 6px;">📋 SMART ACTION ITEM ACCOUNTABILITY TABLE</h4>
+                    <div style="overflow-x: auto; flex: 1;">
+                        <table class="hud-table" id="mtg-actions-table">
+                            <thead>
+                                <tr>
+                                    <th>Task / Commitment</th>
+                                    <th>Owner</th>
+                                    <th>Deadline</th>
+                                    <th>Priority</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" style="color: var(--text-muted); text-align: center;">No action items recorded yet.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="margin-top: 14px;">
+                        <button class="btn-hud" style="width: 100%; justify-content: center;" onclick="viewLatestMinutes()">
+                            📄 VIEW LATEST EXECUTIVE MINUTES (.MD)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- TAB 4: WHATSAPP CUSTOMER CARE & RECEPTIONIST -->
+        <!-- ================================================================= -->
+        <section id="tab-whatsapp" class="tab-pane">
+            <div class="grid-2">
+                <!-- Left: Live Customer Chat Simulator -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><span>💬</span> WHATSAPP INCOMING TESTER (BILINGUAL)</h2>
+                        <span class="badge emerald" id="wa-daemon-badge">24/7 DAEMON ONLINE</span>
+                    </div>
+
+                    <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px;">
+                        Test J.A.R.V.I.S.'s child-like conversational customer care responses. Full support for English, Bangla (বাংলা), and Banglish.
+                    </p>
+
+                    <!-- Pre-filled Test Inquiries -->
+                    <div class="chips-container">
+                        <span class="chip" onclick="simulateWAChat('আপনার ডেলিভারি চার্জ কত?', 'কামাল', '+8801711223344')">🇧🇩 ডেলিভারি চার্জ কত?</span>
+                        <span class="chip" onclick="simulateWAChat('আপনার শপের রিটার্ন পলিসি কি?', 'রহিম', '+8801811556677')">🇧🇩 রিটার্ন পলিসি কি?</span>
+                        <span class="chip" onclick="simulateWAChat('What are your store hours?', 'John Doe', '+14155552671')">🇺🇸 Store Hours?</span>
+                        <span class="chip" onclick="simulateWAChat('Do you offer warranty on products?', 'Emily', '+447911123456')">🇺🇸 Product Warranty?</span>
+                    </div>
+
+                    <!-- Simulation Form -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                        <input type="text" id="wa-cust-name" class="input-hud" placeholder="Customer Name (e.g. Rahim)">
+                        <input type="text" id="wa-cust-phone" class="input-hud" placeholder="Phone (e.g. +8801700000000)">
+                    </div>
+                    <textarea id="wa-cust-msg" class="input-hud" style="width: 100%; height: 75px; resize: none; margin-bottom: 10px;" placeholder="Customer message in English or Bengali (e.g. আপনাদের পণ্য কি পরিবর্তন করা যায়?)..."></textarea>
+                    
+                    <button class="btn-hud active" style="width: 100%; justify-content: center;" onclick="sendSimulatedWAMessage()">
+                        SIMULATE INCOMING WHATSAPP MESSAGE
+                    </button>
+
+                    <!-- Simulation Response Box -->
+                    <div style="background: rgba(2, 6, 14, 0.7); border: 1px solid rgba(0, 240, 255, 0.15); border-radius: 6px; padding: 14px; margin-top: 14px;">
+                        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); display: flex; justify-content: space-between;">
+                            <span>AUTONOMOUS J.A.R.V.I.S. REPLY:</span>
+                            <span class="badge" id="wa-reply-lang">READY</span>
+                        </div>
+                        <div style="font-family: var(--font-mono); font-size: 13px; color: #bae6fd; margin-top: 8px; line-height: 1.5;" id="wa-sim-response">
+                            Awaiting simulated customer inquiry...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Child Learning Engine & Rules Studio -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><span>🧠</span> CHILD LEARNING RULE STUDIO</h3>
+                        <span class="badge gold" id="wa-rules-count">0 RULES LEARNED</span>
+                    </div>
+
+                    <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px;">
+                        Train J.A.R.V.I.S. in real-time just like a human child. Teach new policies, discounts, or business rules in plain English or Bengali.
+                    </p>
+
+                    <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px;">
+                        <input type="text" id="wa-teach-topic" class="input-hud" placeholder="Topic Tag (optional, e.g. international_shipping)">
+                        <textarea id="wa-teach-instruction" class="input-hud" style="height: 70px; resize: none;" placeholder="Rule instruction (e.g. If customer asks about international shipping, tell them we ship globally within 5 business days)..."></textarea>
+                        <button class="btn-hud" onclick="teachCustomerCareRule()">TEACH RULE TO J.A.R.V.I.S.</button>
+                    </div>
+
+                    <h4 style="font-family: var(--font-head); font-size: 12px; color: var(--cyan); margin-bottom: 6px;">ACTIVE LEARNED KNOWLEDGE BASE</h4>
+                    <div style="overflow-y: auto; max-height: 220px; flex: 1;">
+                        <table class="hud-table" id="wa-rules-table">
+                            <thead>
+                                <tr>
+                                    <th>Topic</th>
+                                    <th>Response / Policy</th>
+                                    <th>Confidence</th>
+                                </tr>
+                            </thead>
+                            <tbody id="wa-rules-tbody">
+                                <tr>
+                                    <td colspan="3" style="text-align: center; color: var(--text-muted);">Loading learned rules...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- TAB 5: HYPER-PERSONALIZATION VIP -->
+        <!-- ================================================================= -->
+        <section id="tab-vip" class="tab-pane">
+            <div class="grid-2">
+                <!-- Left: Boss Profile & Circadian Rhythm -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><span>👑</span> COMMANDER EXECUTIVE PROFILE</h2>
+                        <span class="badge gold">ULTRA-CONFIDENTIAL</span>
+                    </div>
+
+                    <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 16px;">
+                        <div style="width: 56px; height: 56px; border-radius: 50%; border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; font-size: 26px; background: rgba(255, 183, 0, 0.1);">
+                            🕶️
+                        </div>
+                        <div>
+                            <div style="font-family: var(--font-head); font-size: 18px; color: var(--gold);" id="vip-boss-name">Commander Tony Stark</div>
+                            <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted);" id="vip-boss-role">Master Architect &amp; Sovereign Authority</div>
+                        </div>
+                    </div>
+
+                    <h4 style="font-family: var(--font-head); font-size: 13px; color: var(--cyan); margin-bottom: 6px;">CORE STRATEGIC PRIORITIES</h4>
+                    <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px;" id="vip-priorities-list">
+                        <!-- Loaded dynamically -->
+                    </div>
+
+                    <div class="input-bar" style="margin-bottom: 16px;">
+                        <input type="text" id="new-priority-input" class="input-hud" placeholder="Add top priority (e.g. Autonomous Swarm Protocol)...">
+                        <button class="btn-hud" onclick="addNewPriority()">ADD PRIORITY</button>
+                    </div>
+
+                    <h4 style="font-family: var(--font-head); font-size: 13px; color: var(--cyan); margin-bottom: 6px;">CIRCADIAN FOCUS RHYTHM</h4>
+                    <table class="hud-table">
+                        <tbody>
+                            <tr>
+                                <td>Deep Focus Block</td>
+                                <td>90 minutes (Ultradian Cycle)</td>
+                            </tr>
+                            <tr>
+                                <td>Cognitive Break Window</td>
+                                <td>15 minutes active recovery</td>
+                            </tr>
+                            <tr>
+                                <td>Beverage Preference</td>
+                                <td>Black Double Espresso</td>
+                            </tr>
+                            <tr>
+                                <td>Vocal Timbre Standard</td>
+                                <td>Refined British Cadence (en-GB-RyanNeural)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Right: VIP Inner Circle CRM -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><span>👥</span> INNER CIRCLE VIP CRM</h3>
+                        <span class="badge">TRUSTED NETWORK</span>
+                    </div>
+
+                    <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px;">
+                        Trusted contacts authorized for high-priority bypass and diplomatic receptionist routing.
+                    </p>
+
+                    <div style="overflow-y: auto; max-height: 260px; margin-bottom: 16px;">
+                        <table class="hud-table" id="vip-contacts-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Role / Relationship</th>
+                                    <th>Priority</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vip-contacts-tbody">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4 style="font-family: var(--font-head); font-size: 12px; color: var(--cyan); margin-bottom: 6px;">ENROLL NEW VIP CONTACT</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                        <input type="text" id="new-vip-name" class="input-hud" placeholder="Contact Name (e.g. Rhodey)">
+                        <input type="text" id="new-vip-relation" class="input-hud" placeholder="Relation (e.g. Military Liaison)">
+                    </div>
+                    <button class="btn-hud" style="width: 100%; justify-content: center;" onclick="addNewVIPContact()">ENROLL VIP CONTACT</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- TAB 6: 5,958-NODE LIFEGRAPH EXPLORER -->
+        <!-- ================================================================= -->
+        <section id="tab-lifegraph" class="tab-pane">
+            <div class="card">
+                <div class="card-header">
+                    <h2><span>🧠</span> 5,958-NODE COGNITIVE LIFEGRAPH EXPLORER</h2>
+                    <span class="badge emerald" id="lg-total-nodes">5,958 NODES // 3,500 EDGES</span>
+                </div>
+
+                <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px;">
+                    J.A.R.V.I.S.'s neural semantic LifeGraph interlinks 460+ agent skills, 50+ executable daily tools, 150+ action verbs, and everyday life entities with sub-millisecond spreading activation.
+                </p>
+
+                <!-- Search & Activation Bar -->
+                <div class="input-bar" style="margin-bottom: 16px;">
+                    <input type="text" id="lifegraph-search-input" class="input-hud" placeholder="Search LifeGraph or test spreading activation (e.g. hydration, weather, coffee, stock, ast)..." onkeydown="if(event.key==='Enter') searchLifeGraph()">
+                    <button class="btn-hud active" onclick="searchLifeGraph()">SPREAD ACTIVATION</button>
+                </div>
+
+                <!-- Category Filters -->
+                <div class="chips-container" style="margin-bottom: 16px;">
+                    <span class="chip" onclick="quickSearchLG('tool')">🔧 Executable Tools</span>
+                    <span class="chip" onclick="quickSearchLG('skill')">📜 Agent Skills</span>
+                    <span class="chip" onclick="quickSearchLG('health')">❤️ Health &amp; Bio-Wellness</span>
+                    <span class="chip" onclick="quickSearchLG('finance')">💰 Finance &amp; Budget</span>
+                    <span class="chip" onclick="quickSearchLG('weather')">⛅ Weather &amp; Climate</span>
+                    <span class="chip" onclick="quickSearchLG('calendar')">📅 Calendar &amp; Time</span>
+                </div>
+
+                <!-- LifeGraph Search Results -->
+                <div style="overflow-y: auto; max-height: 400px;">
+                    <table class="hud-table" id="lifegraph-results-table">
+                        <thead>
+                            <tr>
+                                <th>Node ID</th>
+                                <th>Label / Name</th>
+                                <th>Type</th>
+                                <th>Category</th>
+                                <th>Description / Capabilities</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lifegraph-results-tbody">
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: var(--text-muted);">Enter a search query to explore semantic nodes...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- TAB 7: TASK QUEUE & WORKING CAPACITY -->
+        <!-- ================================================================= -->
+        <section id="tab-tasks" class="tab-pane">
+            <div class="grid-2">
+                <!-- Left: Concurrency & Queue Status -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><span>⚡</span> HIGH-CAPACITY TASK QUEUE</h2>
+                        <span class="badge emerald" id="task-capacity-badge">WORKING CAPACITY: OPTIMAL</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                        <div style="background: rgba(0, 240, 255, 0.05); border: 1px solid rgba(0, 240, 255, 0.15); padding: 12px; border-radius: 6px;">
+                            <div style="font-size: 11px; color: var(--text-muted);">CONCURRENT WORKERS</div>
+                            <div style="font-size: 20px; font-weight: bold; color: var(--cyan); margin-top: 4px;" id="val-workers">8 THREADS</div>
+                        </div>
+                        <div style="background: rgba(0, 240, 255, 0.05); border: 1px solid rgba(0, 240, 255, 0.15); padding: 12px; border-radius: 6px;">
+                            <div style="font-size: 11px; color: var(--text-muted);">PENDING IN QUEUE</div>
+                            <div style="font-size: 20px; font-weight: bold; color: var(--gold); margin-top: 4px;" id="val-pending-tasks">0 TASKS</div>
+                        </div>
+                        <div style="background: rgba(0, 240, 255, 0.05); border: 1px solid rgba(0, 240, 255, 0.15); padding: 12px; border-radius: 6px;">
+                            <div style="font-size: 11px; color: var(--text-muted);">COMPLETED TOTAL</div>
+                            <div style="font-size: 20px; font-weight: bold; color: var(--emerald); margin-top: 4px;" id="val-completed-tasks">0 TASKS</div>
+                        </div>
+                    </div>
+
+                    <div class="input-bar" style="margin-bottom: 16px;">
+                        <input type="text" id="manual-task-input" class="input-hud" placeholder="Enqueue new autonomous task description...">
+                        <button class="btn-hud" onclick="enqueueManualTask()">ENQUEUE</button>
+                    </div>
+
+                    <!-- Live Task List -->
+                    <h4 style="font-family: var(--font-head); font-size: 12px; color: var(--cyan); margin-bottom: 6px;">ACTIVE QUEUE ITEMS</h4>
+                    <div style="overflow-y: auto; max-height: 280px;">
+                        <table class="hud-table" id="tasks-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Description</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tasks-tbody">
+                                <tr>
+                                    <td colspan="4" style="text-align: center; color: var(--text-muted);">Task queue is currently clear.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Right: Compound Directives & Decomposer -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><span>🧩</span> MULTI-STEP DIRECTIVE DECOMPOSER</h3>
+                        <span class="badge">PARALLEL WORKER POOL</span>
+                    </div>
+
+                    <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px;">
+                        J.A.R.V.I.S. automatically decomposes complex multi-phase user commands ("First X, then Y, and finally Z") into independent atomic execution units.
+                    </p>
+
+                    <div class="chips-container" style="margin-bottom: 12px;">
+                        <span class="chip" onclick="quickSend('Jarvis, do these tasks: 1. check vitals, 2. audit code syntax for y=200, 3. give me a sit-rep')">
+                            ▶️ Run 3-Step Compound Directive
+                        </span>
+                    </div>
+
+                    <div style="background: rgba(2, 6, 14, 0.7); border: 1px solid rgba(0, 240, 255, 0.12); padding: 14px; border-radius: 6px; font-family: var(--font-mono); font-size: 12px; color: #bae6fd; line-height: 1.6;" id="decomposer-preview">
+                        Decomposition Engine ready. Enter a numbered or chained command in the Neural Console to trigger parallel worker dispatch.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Frontend Audio & State Script -->
+    <script>
+        // Global State & Settings
+        let audioFXEnabled = true;
+        let browserTTSEnabled = true;
+        let activeTab = 'tab-neural';
+        let audioCtx = null;
+        const renderedTurnIds = new Set();
+
+        // Initialize Web Audio API on first user gesture
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) {
+                    audioCtx = new AudioContext();
+                }
+            }
+        }
+
+        // High-Tech Cyber Sound Synthesizer
+        function playSound(type) {
+            if (!audioFXEnabled) return;
+            initAudio();
+            if (!audioCtx) return;
+
+            try {
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800, now);
+                    osc.frequency.exponentialRampToValueAtTime(1400, now + 0.04);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+                    osc.start(now);
+                    osc.stop(now + 0.04);
+                } else if (type === 'confirm') {
+                    // Stark Harmonic Chime
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+                    osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+                    osc.start(now);
+                    osc.stop(now + 0.32);
+                } else if (type === 'alert') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(320, now);
+                    osc.frequency.linearRampToValueAtTime(200, now + 0.2);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                    osc.start(now);
+                    osc.stop(now + 0.2);
+                }
+            } catch (e) {
+                console.warn('Audio synthesis warning:', e);
+            }
+        }
+
+        function toggleAudioFX() {
+            audioFXEnabled = !audioFXEnabled;
+            document.getElementById('sound-icon').textContent = audioFXEnabled ? '🔊' : '🔇';
+            document.getElementById('btn-sound-toggle').innerHTML = `<span id="sound-icon">${audioFXEnabled ? '🔊' : '🔇'}</span> AUDIO FX: ${audioFXEnabled ? 'ON' : 'OFF'}`;
+            showToast(`Audio FX ${audioFXEnabled ? 'Enabled' : 'Muted'}`);
+        }
+
+        // Audio Output Routing Matrix: 'host' (PC Speakers via Neural Edge-TTS) | 'browser' (SpeechSynthesis) | 'muted'
+        let audioMode = 'host';
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+        }
+
+        function toggleAudioMode() {
+            playSound('click');
+            const btn = document.getElementById('btn-tts-toggle');
+            if (audioMode === 'host') {
+                audioMode = 'browser';
+                btn.innerHTML = `<span id="tts-icon">🎙️</span> AUDIO: BROWSER SYNTHESIS`;
+                showToast('Audio routed to Browser SpeechSynthesis');
+            } else if (audioMode === 'browser') {
+                audioMode = 'muted';
+                btn.innerHTML = `<span id="tts-icon">🔇</span> AUDIO: MUTED`;
+                showToast('Audio vocalization muted');
+            } else {
+                audioMode = 'host';
+                btn.innerHTML = `<span id="tts-icon">🔊</span> AUDIO: PC SPEAKERS (NEURAL)`;
+                showToast('Audio routed to PC Speakers (Authentic Neural RyanVoice)');
+            }
+        }
+
+        // Spoken Output Handler (Guarantees Single Voice - Eliminates Male + Female Overlap)
+        function speakBrowser(text) {
+            // If audio is routed to Host PC Speakers, Host Python TTS already vocalizes out of the PC.
+            // Do NOT synthesize in browser to prevent overlapping dual-voice echo.
+            if (audioMode !== 'browser' || !('speechSynthesis' in window) || !text) {
+                // If in hands-free mode, restart web microphone after J.A.R.V.I.S. finishes talking on host
+                if (handsFreeMode && shouldRestartHandsFree && audioMode === 'host') {
+                    const estDuration = Math.min(Math.max((text.length / 14) * 1000, 1600), 8000);
+                    setTimeout(() => {
+                        if (handsFreeMode && shouldRestartHandsFree && !isRecognizing) {
+                            startWebMic();
+                        }
+                    }, estDuration);
+                }
+                return;
+            }
+
+            try {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                const voices = window.speechSynthesis.getVoices();
+                // Strictly select authentic Male British/English voice (David, George, Ryan, Guy) - never female (Zira/Hazel)
+                const maleVoice = voices.find(v => 
+                    (v.lang.includes('en-GB') && !v.name.toLowerCase().includes('hazel') && !v.name.toLowerCase().includes('female')) ||
+                    v.name.toLowerCase().includes('david') ||
+                    v.name.toLowerCase().includes('george') ||
+                    v.name.toLowerCase().includes('ryan') ||
+                    (v.name.toLowerCase().includes('male') && !v.name.toLowerCase().includes('female'))
+                );
+                if (maleVoice) utterance.voice = maleVoice;
+                utterance.pitch = 0.95;
+                utterance.rate = 1.05;
+
+                // When speech concludes, resume listening if in hands-free mode
+                utterance.onend = function() {
+                    if (handsFreeMode && shouldRestartHandsFree) {
+                        setTimeout(() => {
+                            if (handsFreeMode && shouldRestartHandsFree && !isRecognizing) {
+                                startWebMic();
+                            }
+                        }, 500);
+                    }
+                };
+
+                window.speechSynthesis.speak(utterance);
+            } catch (e) {
+                console.warn('TTS error:', e);
+            }
+        }
+
+        // =====================================================================
+        // WEB SPEECH RECOGNITION & HANDS-FREE CONTINUOUS LOOP
+        // =====================================================================
+        let speechRecognition = null;
+        let isRecognizing = false;
+        let handsFreeMode = true;
+        let shouldRestartHandsFree = true;
+
+        function initWebSpeech() {
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRec) {
+                return false;
+            }
+
+            try {
+                speechRecognition = new SpeechRec();
+                speechRecognition.continuous = false;
+                speechRecognition.interimResults = true;
+                speechRecognition.lang = 'en-US';
+
+                speechRecognition.onstart = function() {
+                    isRecognizing = true;
+                    const micBtn = document.getElementById('btn-mic-toggle');
+                    if (micBtn) micBtn.classList.add('mic-active');
+                    document.getElementById('mic-btn-label').textContent = 'LISTENING...';
+                    document.getElementById('console-status-badge').textContent = '🎙️ LISTENING TO YOUR VOICE...';
+                    document.getElementById('console-status-badge').className = 'badge emerald';
+                    playSound('click');
+                };
+
+                let speechDebounceTimer = null;
+                let activeInterimTranscript = '';
+
+                function dispatchSpeechDirective(transcriptText) {
+                    if (speechDebounceTimer) {
+                        clearTimeout(speechDebounceTimer);
+                        speechDebounceTimer = null;
+                    }
+                    if (!transcriptText || !transcriptText.trim()) return;
+
+                    const inputField = document.getElementById('command-input');
+                    inputField.value = transcriptText.trim();
+                    isRecognizing = false;
+                    const micBtn = document.getElementById('btn-mic-toggle');
+                    if (micBtn) micBtn.classList.remove('mic-active');
+                    document.getElementById('mic-btn-label').textContent = 'SPEAK';
+                    document.getElementById('console-status-badge').textContent = '⚡ DIRECTIVE ENGAGED // PROCESSING';
+                    document.getElementById('console-status-badge').className = 'badge gold';
+
+                    // Stop current recognition turn to prevent duplicate utterances
+                    if (speechRecognition) {
+                        try { speechRecognition.stop(); } catch(e) {}
+                    }
+
+                    sendCommand();
+                }
+
+                speechRecognition.onresult = function(event) {
+                    let interim = '';
+                    let finalTranscript = '';
+
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) {
+                            finalTranscript += event.results[i][0].transcript;
+                        } else {
+                            interim += event.results[i][0].transcript;
+                        }
+                    }
+
+                    // 1. If Google Web Speech returned isFinal immediately, dispatch right away
+                    if (finalTranscript && finalTranscript.trim()) {
+                        activeInterimTranscript = '';
+                        dispatchSpeechDirective(finalTranscript);
+                        return;
+                    }
+
+                    // 2. High-Speed Interim Silence Debouncer:
+                    // Chrome waits 2.5s for isFinal, so we debounce interim speech after 500ms of pause!
+                    const inputField = document.getElementById('command-input');
+                    if (interim && interim.trim()) {
+                        activeInterimTranscript = interim.trim();
+                        inputField.value = activeInterimTranscript;
+
+                        if (speechDebounceTimer) clearTimeout(speechDebounceTimer);
+                        speechDebounceTimer = setTimeout(() => {
+                            if (activeInterimTranscript && activeInterimTranscript.length > 1) {
+                                const textToSend = activeInterimTranscript;
+                                activeInterimTranscript = '';
+                                dispatchSpeechDirective(textToSend);
+                            }
+                        }, 500);
+                    }
+                };
+
+                speechRecognition.onerror = function(event) {
+                    console.warn('Web Speech error:', event.error);
+                    isRecognizing = false;
+                    const micBtn = document.getElementById('btn-mic-toggle');
+                    if (micBtn) micBtn.classList.remove('mic-active');
+                    document.getElementById('mic-btn-label').textContent = 'SPEAK';
+
+                    if (event.error === 'not-allowed') {
+                        showToast('Microphone access blocked. Please allow mic permissions in browser.', true);
+                    } else if (event.error === 'no-speech') {
+                        if (handsFreeMode && shouldRestartHandsFree) {
+                            setTimeout(() => { if (handsFreeMode && shouldRestartHandsFree && !isRecognizing) startWebMic(); }, 600);
+                        }
+                    }
+                };
+
+                speechRecognition.onend = function() {
+                    isRecognizing = false;
+                    const micBtn = document.getElementById('btn-mic-toggle');
+                    if (micBtn) micBtn.classList.remove('mic-active');
+                    document.getElementById('mic-btn-label').textContent = 'SPEAK';
+
+                    if (handsFreeMode && shouldRestartHandsFree && !window.speechSynthesis.speaking) {
+                        setTimeout(() => { if (handsFreeMode && shouldRestartHandsFree && !isRecognizing) startWebMic(); }, 600);
+                    }
+                };
+                return true;
+            } catch (e) {
+                console.error('Failed to initialize speech recognition:', e);
+                return false;
+            }
+        }
+
+        function startWebMic() {
+            if (!speechRecognition && !initWebSpeech()) {
+                showToast('Web Speech API is not supported in this browser. Please use Chrome or Edge.', true);
+                return;
+            }
+            if (isRecognizing) return;
+            try {
+                unlockAudio();
+                speechRecognition.start();
+            } catch (e) {
+                console.warn('SpeechRecognition start notice:', e);
+            }
+        }
+
+        function stopWebMic() {
+            if (speechRecognition && isRecognizing) {
+                try { speechRecognition.stop(); } catch (e) {}
+            }
+            isRecognizing = false;
+            const micBtn = document.getElementById('btn-mic-toggle');
+            if (micBtn) micBtn.classList.remove('mic-active');
+            document.getElementById('mic-btn-label').textContent = 'SPEAK';
+        }
+
+        function toggleWebMic() {
+            playSound('click');
+            if (isRecognizing) {
+                shouldRestartHandsFree = false;
+                stopWebMic();
+                showToast('Microphone deactivated');
+            } else {
+                shouldRestartHandsFree = true;
+                startWebMic();
+                showToast('Microphone active — speak to J.A.R.V.I.S.');
+            }
+        }
+
+        function toggleHandsFree() {
+            playSound('click');
+            handsFreeMode = !handsFreeMode;
+            const btn = document.getElementById('btn-handsfree-toggle');
+            const label = document.getElementById('hf-btn-label');
+
+            if (handsFreeMode) {
+                btn.classList.add('handsfree-active');
+                label.textContent = 'HANDS-FREE: ON';
+                shouldRestartHandsFree = true;
+                showToast('Hands-Free Continuous Conversation: ACTIVE');
+                if (!isRecognizing) startWebMic();
+            } else {
+                btn.classList.remove('handsfree-active');
+                label.textContent = 'HANDS-FREE: OFF';
+                shouldRestartHandsFree = false;
+                stopWebMic();
+                showToast('Hands-Free Conversation: DISABLED');
+            }
+        }
+
+        // Global User Interaction Audio Unlocker & Ambient Voice Engager
+        function unlockAudio() {
+            initAudio();
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            if (handsFreeMode && shouldRestartHandsFree && !isRecognizing) {
+                startWebMic();
+            }
+        }
+        document.addEventListener('click', unlockAudio, { once: false });
+        document.addEventListener('keydown', unlockAudio, { once: false });
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                if (handsFreeMode && !isRecognizing) {
+                    startWebMic();
+                }
+            }, 800);
+        });
+
+        // Tab Navigation
+        function switchTab(tabId) {
+            playSound('click');
+            activeTab = tabId;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+            const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+            if (btn) btn.classList.add('active');
+
+            const pane = document.getElementById(tabId);
+            if (pane) pane.classList.add('active');
+        }
+
+        // Toast Notifications
+        function showToast(msg, isError = false) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            if (isError) toast.style.borderColor = 'var(--crimson)';
+            toast.innerHTML = `<span>${msg}</span><span style="cursor:pointer;margin-left:12px;" onclick="this.parentElement.remove()">✕</span>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 4000);
+        }
+
+        // Real-Time Audio Canvas Oscilloscope Simulation
+        const canvas = document.getElementById('audio-canvas');
+        const ctx = canvas.getContext('2d');
+        let animPhase = 0;
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function drawVisualizer() {
+            requestAnimationFrame(drawVisualizer);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const w = canvas.width;
+            const h = canvas.height;
+            const mid = h / 2;
+
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#00f0ff';
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = '#00f0ff';
+
+            ctx.beginPath();
+            for (let x = 0; x < w; x++) {
+                const freq = 0.02;
+                const y = mid + Math.sin(x * freq + animPhase) * (h * 0.22) * Math.sin(animPhase * 0.5);
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Auxiliary gold harmonic wave
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'rgba(255, 183, 0, 0.4)';
+            ctx.shadowColor = '#ffb700';
+            ctx.beginPath();
+            for (let x = 0; x < w; x++) {
+                const freq = 0.04;
+                const y = mid + Math.cos(x * freq - animPhase * 1.5) * (h * 0.14);
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            animPhase += 0.06;
+        }
+        drawVisualizer();
+
+        // =====================================================================
+        // REST API DISPATCHERS & COMMAND INTERACTION
+        // =====================================================================
+
+        async function sendCommand() {
+            const input = document.getElementById('command-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const speaker = document.getElementById('speaker-select').value;
+            const isBoss = (speaker === 'Boss');
+
+            playSound('click');
+            input.value = '';
+
+            // Add user message to terminal
+            appendMessage(speaker, text, isBoss ? 'user' : 'peer');
+
+            document.getElementById('console-status-badge').textContent = 'PROCESSING DIRECTIVE...';
+            document.getElementById('console-status-badge').className = 'badge gold';
+
+            try {
+                const res = await fetch('/api/command', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text, speaker, is_boss: isBoss })
+                });
+                const data = await res.json();
+                if (data.turn_id) renderedTurnIds.add(data.turn_id);
+
+                playSound('confirm');
+                appendMessage('J.A.R.V.I.S.', data.speech || 'Directive executed, sir.', 'jarvis', data.action_taken);
+
+                speakBrowser(data.speech);
+                document.getElementById('console-status-badge').textContent = 'STANDBY // LISTENING';
+                document.getElementById('console-status-badge').className = 'badge emerald';
+
+                // Refresh telemetry
+                fetchSystemStatus();
+            } catch (err) {
+                console.error(err);
+                playSound('alert');
+                appendMessage('SYSTEM ERROR', 'Subsystem communication fault: ' + err.message, 'jarvis');
+                document.getElementById('console-status-badge').textContent = 'COMMUNICATION ERROR';
+                document.getElementById('console-status-badge').className = 'badge crimson';
+            }
+        }
+
+        function quickSend(cmd) {
+            document.getElementById('command-input').value = cmd;
+            sendCommand();
+        }
+
+        function appendMessage(speaker, text, type, action = null) {
+            const feed = document.getElementById('dialogue-feed');
+            const timeStr = new Date().toLocaleTimeString();
+            const msg = document.createElement('div');
+            msg.className = `terminal-msg ${type}`;
+            
+            let actionBadge = action ? `<span class="badge" style="font-size:10px;">ACTION: ${action}</span>` : '';
+            msg.innerHTML = `
+                <div class="terminal-msg-meta">
+                    <span class="msg-speaker">${speaker}</span>
+                    <span>[${timeStr}]</span>
+                    ${actionBadge}
+                </div>
+                <p>${escapeHTML(text)}</p>
+            `;
+            feed.appendChild(msg);
+            feed.scrollTop = feed.scrollHeight;
+        }
+
+        function escapeHTML(str) {
+            return str ? str.replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+            }[tag] || tag)) : '';
+        }
+
+        // =====================================================================
+        // MEETING CO-PILOT FUNCTIONS
+        // =====================================================================
+
+        async function startMeetingSession() {
+            const titleInput = document.getElementById('new-meeting-title');
+            const title = titleInput.value.trim() || 'Executive Strategic Briefing';
+            playSound('click');
+
+            try {
+                const res = await fetch('/api/meeting', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'start', title })
+                });
+                const data = await res.json();
+                playSound('confirm');
+                titleInput.value = '';
+                showToast(`Meeting initiated: ${title}`);
+                speakBrowser(data.speech);
+                fetchSystemStatus();
+            } catch (e) {
+                showToast('Failed to start meeting: ' + e.message, true);
+            }
+        }
+
+        async function pauseResumeMeeting() {
+            playSound('click');
+            const btn = document.getElementById('btn-pause-mtg');
+            const isPaused = btn.textContent === 'RESUME';
+            const action = isPaused ? 'resume' : 'pause';
+
+            try {
+                const res = await fetch('/api/meeting', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action })
+                });
+                const data = await res.json();
+                showToast(data.message || `Meeting ${action}d`);
+                fetchSystemStatus();
+            } catch (e) {
+                showToast(`Meeting ${action} failed`, true);
+            }
+        }
+
+        async function concludeMeetingSession() {
+            playSound('alert');
+            try {
+                const res = await fetch('/api/meeting', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'end', speaker: 'Boss', is_boss: true })
+                });
+                const data = await res.json();
+                playSound('confirm');
+                showToast('Meeting concluded! Executive minutes generated.');
+                speakBrowser(data.speech);
+                fetchSystemStatus();
+            } catch (e) {
+                showToast('Failed to conclude meeting: ' + e.message, true);
+            }
+        }
+
+        async function feedMeetingUtterance() {
+            const spkInput = document.getElementById('mtg-speaker-input');
+            const uttInput = document.getElementById('mtg-utterance-input');
+            const speaker = spkInput.value.trim() || 'David';
+            const text = uttInput.value.trim();
+            if (!text) return;
+
+            playSound('click');
+            uttInput.value = '';
+
+            try {
+                const res = await fetch('/api/meeting', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'utterance', speaker, text, is_boss: (speaker === 'Boss') })
+                });
+                const data = await res.json();
+
+                // Append to meeting feed
+                const feed = document.getElementById('meeting-dialogue-feed');
+                const p = document.createElement('div');
+                p.style.padding = '6px 0';
+                p.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                p.innerHTML = `<span style="color:var(--cyan);font-weight:bold;">[${speaker}]:</span> ${escapeHTML(text)}`;
+                feed.appendChild(p);
+                feed.scrollTop = feed.scrollHeight;
+
+                if (data.extracted_decision) {
+                    showToast(`Decision captured: ${data.extracted_decision}`);
+                }
+                if (data.extracted_action) {
+                    showToast(`Action item assigned to ${data.extracted_action.owner}`);
+                }
+
+                fetchSystemStatus();
+            } catch (e) {
+                showToast('Utterance feed error: ' + e.message, true);
+            }
+        }
+
+        async function viewLatestMinutes() {
+            try {
+                const res = await fetch('/api/meetings/history');
+                const data = await res.json();
+                if (data.latest_minutes) {
+                    const win = window.open('', '_blank');
+                    win.document.write(`<pre style="background:#0a1224;color:#e0f2fe;padding:24px;font-family:monospace;white-space:pre-wrap;">${escapeHTML(data.latest_minutes)}</pre>`);
+                } else {
+                    showToast('No saved meeting minutes artifacts found yet.');
+                }
+            } catch (e) {
+                showToast('Error loading minutes: ' + e.message, true);
+            }
+        }
+
+        // =====================================================================
+        // WHATSAPP CUSTOMER CARE FUNCTIONS
+        // =====================================================================
+
+        async function sendSimulatedWAMessage() {
+            const name = document.getElementById('wa-cust-name').value.trim() || 'Valued Customer';
+            const phone = document.getElementById('wa-cust-phone').value.trim() || '+8801700000000';
+            const message = document.getElementById('wa-cust-msg').value.trim();
+            if (!message) return;
+
+            playSound('click');
+            document.getElementById('wa-sim-response').textContent = 'Synthesizing autonomous customer response...';
+
+            try {
+                const res = await fetch('/api/whatsapp/simulate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, phone, message })
+                });
+                const data = await res.json();
+                playSound('confirm');
+
+                document.getElementById('wa-sim-response').textContent = data.reply_text || data.message;
+                document.getElementById('wa-reply-lang').textContent = data.is_bengali ? '🇧🇩 BENGALI (বাংলা)' : '🇺🇸 ENGLISH';
+                document.getElementById('wa-reply-lang').className = data.is_bengali ? 'badge gold' : 'badge emerald';
+
+                speakBrowser(data.reply_text);
+            } catch (e) {
+                document.getElementById('wa-sim-response').textContent = 'Error: ' + e.message;
+                showToast('WhatsApp simulation error', true);
+            }
+        }
+
+        function simulateWAChat(msg, name, phone) {
+            document.getElementById('wa-cust-msg').value = msg;
+            document.getElementById('wa-cust-name').value = name;
+            document.getElementById('wa-cust-phone').value = phone;
+            sendSimulatedWAMessage();
+        }
+
+        async function teachCustomerCareRule() {
+            const topic = document.getElementById('wa-teach-topic').value.trim();
+            const instruction = document.getElementById('wa-teach-instruction').value.trim();
+            if (!instruction) return;
+
+            playSound('click');
+            try {
+                const res = await fetch('/api/whatsapp/teach', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ topic, instruction })
+                });
+                const data = await res.json();
+                playSound('confirm');
+                showToast(`Rule learned: ${data.topic || 'Rule registered'}`);
+                document.getElementById('wa-teach-instruction').value = '';
+                document.getElementById('wa-teach-topic').value = '';
+                fetchSystemStatus();
+            } catch (e) {
+                showToast('Teaching rule failed: ' + e.message, true);
+            }
+        }
+
+        async function toggleReceptionistMode() {
+            playSound('click');
+            try {
+                const res = await fetch('/api/whatsapp/toggle_receptionist', { method: 'POST' });
+                const data = await res.json();
+                showToast(`Receptionist Mode: ${data.receptionist_mode_enabled ? 'ENABLED' : 'DISABLED'}`);
+                fetchSystemStatus();
+            } catch (e) {
+                showToast('Error toggling receptionist mode', true);
+            }
+        }
+
+        // =====================================================================
+        // PERSONALIZATION & VIP FUNCTIONS
+        // =====================================================================
+
+        async function addNewPriority() {
+            const pInput = document.getElementById('new-priority-input');
+            const priority = pInput.value.trim();
+            if (!priority) return;
+
+            playSound('click');
+            try {
+                const res = await fetch('/api/personalization', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'set_priority', priority })
+                });
+                const data = await res.json();
+                playSound('confirm');
+                showToast(data.message);
+                pInput.value = '';
+                fetchSystemStatus();
+            } catch (e) {
+                showToast('Failed to add priority', true);
+            }
+        }
+
+        async function addNewVIPContact() {
+            const name = document.getElementById('new-vip-name').value.trim();
+            const relation = document.getElementById('new-vip-relation').value.trim();
+            if (!name || !relation) return;
+
+            playSound('click');
+            try {
+                const res = await fetch('/api/personalization', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'add_vip', name, relation })
+                });
+                const data = await res.json();
+                playSound('confirm');
+                showToast(data.message);
+                document.getElementById('new-vip-name').value = '';
+                document.getElementById('new-vip-relation').value = '';
+                fetchSystemStatus();
+            } catch (e) {
+                showToast('Failed to add VIP contact', true);
+            }
+        }
+
+        // =====================================================================
+        // LIFEGRAPH EXPLORER FUNCTIONS
+        // =====================================================================
+
+        async function searchLifeGraph() {
+            const query = document.getElementById('lifegraph-search-input').value.trim();
+            if (!query) return;
+
+            playSound('click');
+            try {
+                const res = await fetch('/api/lifegraph/search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query })
+                });
+                const data = await res.json();
+                playSound('confirm');
+
+                const tbody = document.getElementById('lifegraph-results-tbody');
+                tbody.innerHTML = '';
+
+                if (!data.nodes || data.nodes.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);">No matching nodes located.</td></tr>';
+                    return;
+                }
+
+                data.nodes.forEach(n => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td style="color:var(--cyan);font-family:var(--font-mono);">${escapeHTML(n.id)}</td>
+                        <td><strong>${escapeHTML(n.label)}</strong></td>
+                        <td><span class="badge">${escapeHTML(n.node_type)}</span></td>
+                        <td>${escapeHTML(n.category)}</td>
+                        <td style="color:var(--text-muted);">${escapeHTML(n.description)}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (e) {
+                showToast('LifeGraph search failed: ' + e.message, true);
+            }
+        }
+
+        function quickSearchLG(term) {
+            document.getElementById('lifegraph-search-input').value = term;
+            searchLifeGraph();
+        }
+
+        // =====================================================================
+        // TASK QUEUE FUNCTIONS
+        // =====================================================================
+
+        async function enqueueManualTask() {
+            const input = document.getElementById('manual-task-input');
+            const desc = input.value.trim();
+            if (!desc) return;
+
+            playSound('click');
+            try {
+                const res = await fetch('/api/tasks/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ description: desc })
+                });
+                const data = await res.json();
+                playSound('confirm');
+                input.value = '';
+                showToast(`Task #${data.task_id} queued successfully`);
+                fetchSystemStatus();
+            } catch (e) {
+                showToast('Failed to enqueue task', true);
+            }
+        }
+
+        async function triggerEmergencyLockdown() {
+            if (!confirm('CONFIRMATION REQUIRED: Engage Emergency Workstation Lockdown Protocol?')) return;
+            playSound('alert');
+            try {
+                const res = await fetch('/api/sentinel/lockdown', { method: 'POST' });
+                const data = await res.json();
+                showToast('Workstation locked successfully');
+            } catch (e) {
+                showToast('Lockdown failed', true);
+            }
+        }
+
+        // =====================================================================
+        // SYSTEM TELEMETRY POLLING
+        // =====================================================================
+
+        async function fetchSystemStatus() {
+            try {
+                const res = await fetch('/api/status');
+                const data = await res.json();
+                if (!data.success) return;
+
+                // Update Vitals Ticker
+                if (data.vitals) {
+                    document.getElementById('val-cpu').textContent = `${data.vitals.cpu_percent}%`;
+                    document.getElementById('val-ram').textContent = `${data.vitals.ram_used_gb}/${data.vitals.ram_total_gb} GB`;
+                    document.getElementById('tbl-cpu').textContent = `${data.vitals.cpu_percent}% utilization`;
+                    document.getElementById('tbl-ram').textContent = `${data.vitals.ram_percent}% (${data.vitals.ram_used_gb} GB / ${data.vitals.ram_total_gb} GB)`;
+                    document.getElementById('tbl-disk').textContent = `${data.vitals.disk_free_gb} GB Free / ${data.vitals.disk_total_gb} GB Total`;
+                    document.getElementById('tbl-battery').textContent = data.vitals.battery || 'AC Main Power';
+                }
+
+                // Update Meeting Intelligence
+                if (data.meeting) {
+                    const badge = document.getElementById('meeting-state-badge');
+                    badge.textContent = data.meeting.status;
+                    badge.className = data.meeting.active ? 'badge emerald' : 'badge';
+
+                    document.getElementById('mtg-title').textContent = data.meeting.title || 'No Meeting In Progress';
+                    document.getElementById('mtg-duration').textContent = `${data.meeting.elapsed_minutes || 0.0} m`;
+
+                    document.getElementById('btn-pause-mtg').textContent = (data.meeting.status === 'PAUSED') ? 'RESUME' : 'PAUSE';
+
+                    // Update decisions list
+                    const decBox = document.getElementById('mtg-decisions-list');
+                    if (data.meeting.decisions && data.meeting.decisions.length > 0) {
+                        decBox.innerHTML = data.meeting.decisions.map((d, i) => `<div>${i+1}. ${escapeHTML(d)}</div>`).join('');
+                    }
+
+                    // Update actions table
+                    const actCountBadge = document.getElementById('mtg-actions-count');
+                    const actTable = document.getElementById('mtg-actions-table').querySelector('tbody');
+                    if (data.meeting.action_items && data.meeting.action_items.length > 0) {
+                        actCountBadge.textContent = `${data.meeting.action_items.length} COMMITMENTS`;
+                        actTable.innerHTML = data.meeting.action_items.map(a => `
+                            <tr>
+                                <td>${escapeHTML(a.task_description)}</td>
+                                <td><span class="badge gold">${escapeHTML(a.owner)}</span></td>
+                                <td>${escapeHTML(a.deadline)}</td>
+                                <td><span class="badge ${a.priority === 'High' ? 'crimson' : ''}">${escapeHTML(a.priority)}</span></td>
+                            </tr>
+                        `).join('');
+                    }
+                }
+
+                // Update WhatsApp Rules & Daemon
+                if (data.whatsapp) {
+                    document.getElementById('wa-rules-count').textContent = `${data.whatsapp.total_rules} RULES LEARNED`;
+                    if (data.whatsapp.rules) {
+                        const rBody = document.getElementById('wa-rules-tbody');
+                        rBody.innerHTML = data.whatsapp.rules.map(r => `
+                            <tr>
+                                <td style="color:var(--cyan);font-family:var(--font-mono);">${escapeHTML(r.topic)}</td>
+                                <td>${escapeHTML(r.response_content || r.learned_instruction)}</td>
+                                <td><span class="badge">${r.confidence || 1.0}</span></td>
+                            </tr>
+                        `).join('');
+                    }
+                }
+
+                // Update Personalization
+                if (data.personalization) {
+                    if (data.personalization.name) {
+                        document.getElementById('vip-boss-name').textContent = `Commander ${data.personalization.name}`;
+                    }
+                    if (data.personalization.priorities) {
+                        const prioBox = document.getElementById('vip-priorities-list');
+                        prioBox.innerHTML = data.personalization.priorities.map((p, i) => `
+                            <div style="background:rgba(0,240,255,0.06);border:1px solid rgba(0,240,255,0.2);padding:8px 12px;border-radius:4px;font-family:var(--font-mono);font-size:12px;display:flex;justify-content:space-between;">
+                                <span>#${i+1}. ${escapeHTML(p)}</span>
+                                <span class="badge">ACTIVE</span>
+                            </div>
+                        `).join('');
+                    }
+                    if (data.personalization.vip_network) {
+                        const vBody = document.getElementById('vip-contacts-tbody');
+                        vBody.innerHTML = data.personalization.vip_network.map(v => `
+                            <tr>
+                                <td><strong>${escapeHTML(v.name)}</strong></td>
+                                <td>${escapeHTML(v.relation)}</td>
+                                <td><span class="badge ${v.priority === 'highest' ? 'crimson' : 'gold'}">${escapeHTML(v.priority)}</span></td>
+                            </tr>
+                        `).join('');
+                    }
+                }
+
+                // Update Task Capacity
+                if (data.task_capacity) {
+                    document.getElementById('val-workers').textContent = `${data.task_capacity.max_concurrent_workers} THREADS`;
+                    document.getElementById('val-pending-tasks').textContent = `${data.task_capacity.pending_tasks} TASKS`;
+                    document.getElementById('val-completed-tasks').textContent = `${data.task_capacity.completed_tasks} TASKS`;
+                    document.getElementById('task-capacity-badge').textContent = `CAPACITY: ${data.task_capacity.working_capacity_status.toUpperCase()}`;
+                }
+
+                // Update LifeGraph counts
+                if (data.lifegraph) {
+                    document.getElementById('val-nodes').textContent = `${data.lifegraph.total_nodes.toLocaleString()} NODES`;
+                    document.getElementById('lg-total-nodes').textContent = `${data.lifegraph.total_nodes.toLocaleString()} NODES // ${data.lifegraph.total_edges.toLocaleString()} EDGES`;
+                }
+
+                // Update AI Cognitive Speed Mode
+                if (data.ai_speed_mode) {
+                    const spdElem = document.getElementById('val-ai-speed');
+                    if (spdElem) spdElem.textContent = data.ai_speed_mode.toUpperCase();
+                }
+
+                // Synchronize Physical PC Mic & Host Turns to Terminal
+                if (data.recent_turns && Array.isArray(data.recent_turns)) {
+                    data.recent_turns.forEach(turn => {
+                        if (!renderedTurnIds.has(turn.id)) {
+                            renderedTurnIds.add(turn.id);
+                            appendMessage(turn.speaker || 'User', turn.text, (turn.speaker === 'Boss' ? 'user' : 'peer'));
+                            appendMessage('J.A.R.V.I.S.', turn.reply || 'Directive executed, sir.', 'jarvis', turn.action);
+                        }
+                    });
+                }
+
+            } catch (e) {
+                console.warn('Telemetry fetch error:', e);
+            }
+        }
+
+        // =====================================================================
+        // BRAIN SPEED MODAL CONTROLLER
+        // =====================================================================
+        function openBrainSpeedModal() {
+            playSound('click');
+            document.getElementById('modal-brain-speed').style.display = 'flex';
+        }
+
+        function closeBrainSpeedModal() {
+            document.getElementById('modal-brain-speed').style.display = 'none';
+        }
+
+        async function saveBrainSpeedKey() {
+            const provider = document.getElementById('modal-key-provider').value;
+            const key = document.getElementById('modal-key-input').value.trim();
+            if (!key) {
+                showToast('Please enter an API key', true);
+                return;
+            }
+            playSound('click');
+            try {
+                const res = await fetch('/api/config/ai_keys', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ provider, key })
+                });
+                const d = await res.json();
+                if (d.success) {
+                    playSound('confirm');
+                    showToast(`⚡ ${d.message}`);
+                    closeBrainSpeedModal();
+                    fetchSystemStatus();
+                } else {
+                    showToast(d.error || 'Failed to save key', true);
+                }
+            } catch(e) {
+                showToast('Error saving API key: ' + e.message, true);
+            }
+        }
+
+        // Poll telemetry every 2.5 seconds
+        setInterval(fetchSystemStatus, 2500);
+        // Initial fetch on page load
+        fetchSystemStatus();
+    </script>
+
+    <!-- Brain Speed Boost Modal Dialog -->
+    <div id="modal-brain-speed" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:9999;align-items:center;justify-content:center;">
+        <div style="background:var(--bg-card);border:1px solid var(--cyan);box-shadow:0 0 30px var(--cyan-glow);padding:28px;border-radius:10px;width:90%;max-width:540px;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                <h3 style="font-family:var(--font-head);color:var(--cyan);font-size:18px;">⚡ SUPERCHARGE J.A.R.V.I.S. VOCAL SPEED</h3>
+                <span style="cursor:pointer;color:var(--text-muted);font-size:20px;" onclick="closeBrainSpeedModal()">✕</span>
+            </div>
+            <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px;line-height:1.5;">
+                Local CPU generation takes ~8–12s on Intel i5. Enter a <strong style="color:var(--gold);">100% free</strong> API key below to unlock <strong style="color:var(--emerald);">250ms instant vocal replies</strong> powered by cloud LPUs.
+            </p>
+            <div style="margin-bottom:14px;">
+                <label style="display:block;font-family:var(--font-mono);font-size:12px;color:var(--cyan);margin-bottom:6px;">PROVIDER</label>
+                <select id="modal-key-provider" class="select-hud" style="width:100%;">
+                    <option value="groq">Groq Cloud (Llama 3.1 8B Instant — 250ms / Free 14,400 req/day)</option>
+                    <option value="gemini">Google Gemini 2.0 Flash (350ms / Free tier)</option>
+                    <option value="openrouter">OpenRouter API Key</option>
+                </select>
+            </div>
+            <div style="margin-bottom:20px;">
+                <label style="display:block;font-family:var(--font-mono);font-size:12px;color:var(--cyan);margin-bottom:6px;">API KEY</label>
+                <input type="password" id="modal-key-input" class="input-hud" style="width:100%;" placeholder="gsk_... or AIzaSy... or sk-or-v1-...">
+                <div style="font-size:11px;color:var(--text-muted);margin-top:6px;font-family:var(--font-mono);">
+                    Free Groq keys (30s setup, no credit card): <a href="https://console.groq.com/keys" target="_blank" style="color:var(--gold);">console.groq.com/keys</a>
+                </div>
+            </div>
+            <div style="display:flex;justify-content:flex-end;gap:12px;">
+                <button class="btn-hud" onclick="closeBrainSpeedModal()">CANCEL</button>
+                <button class="btn-hud" style="background:var(--cyan);color:#000;font-weight:bold;" onclick="saveBrainSpeedKey()">ACTIVATE 250MS SPEED</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

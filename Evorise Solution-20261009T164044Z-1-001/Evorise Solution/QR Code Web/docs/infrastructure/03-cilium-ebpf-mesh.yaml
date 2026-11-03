@@ -1,0 +1,64 @@
+# FAANG-TIER: eBPF KERNEL NETWORKING (CILIUM)
+# Replaces standard iptables with Extended Berkeley Packet Filter (eBPF)
+# Used by Google, Netflix, and Facebook for hyperscale network performance.
+
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: cilium
+  namespace: kube-system
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: cilium
+      version: "1.14.2"
+      sourceRef:
+        kind: HelmRepository
+        name: cilium
+        namespace: flux-system
+  values:
+    # 1. KUBE-PROXY REPLACEMENT
+    # Bypasses the Linux networking stack entirely for 40% lower latency
+    kubeProxyReplacement: strict
+    
+    # 2. eBPF HOST ROUTING
+    # Packets are routed in the kernel space directly to the socket
+    bpf:
+      masquerade: true
+      tproxy: true
+      hostRouting: true
+
+    # 3. HUBBLE OBSERVABILITY
+    # Network flow logs at massive scale with L7 (HTTP/gRPC) visibility
+    hubble:
+      enabled: true
+      metrics:
+        enabled:
+          - dns
+          - drop
+          - tcp
+          - flow
+          - port-distribution
+          - icmp
+          - httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction
+      relay:
+        enabled: true
+
+    # 4. MUTUAL TLS (STRICT MODE) & ZERO TRUST
+    authentication:
+      mutual:
+        spire:
+          enabled: true
+          install:
+            enabled: true
+
+    # 5. IPAM (IP Address Management)
+    # Optimized for tens of thousands of pods spinning up/down per minute
+    ipam:
+      mode: "kubernetes"
+    
+    # 6. BGP (Border Gateway Protocol)
+    # Announce Pod IPs directly to physical data center routers
+    bgpControlPlane:
+      enabled: true

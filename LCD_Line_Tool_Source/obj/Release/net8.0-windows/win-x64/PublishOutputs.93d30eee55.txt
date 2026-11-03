@@ -1,0 +1,2 @@
+G:\Download Official\LCD_Line_Tool_Source\bin\Release\net8.0-windows\win-x64\publish\LCDLineTool.pdb
+G:\Download Official\LCD_Line_Tool_Source\bin\Release\net8.0-windows\win-x64\publish\LCDLineTool.exe

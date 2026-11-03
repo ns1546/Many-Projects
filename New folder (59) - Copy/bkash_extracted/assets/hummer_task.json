@@ -1,0 +1,107 @@
+{
+  "hummer_version": "1.0.0",
+  "tasks": [
+    {
+      "type": "webTask",
+      "dispatchConfig": {
+        "jumpTo": -1
+      },
+      "renderConfig": {
+        "name": "selectDocType",
+        "exitAfterFail": true,
+        "retryAfterCancel": false,
+        "url": "http://zc-face.assets.alipay.net/gcashapp/gcash-zoloz-ekyc/docselect.html",
+        "urlPattern": "URL_DOC_SELECT"
+      }
+    },
+    {
+      "type": "nativeTask",
+      "dispatchConfig": {
+        "jumpTo": 0
+      },
+      "renderConfig": {
+        "name": "ZDoc",
+        "exitAfterFail": true,
+        "retryAfterCancel": true,
+        "zimIdKey": "DOC_ZIM_ID",
+        "bizDataKey": [
+          "clientDocType"
+        ]
+      }
+    },
+    {
+      "type": "webTask",
+      "dispatchConfig": {
+        "jumpTo": 0
+      },
+      "renderConfig": {
+        "name": "faceGuide",
+        "exitAfterFail": true,
+        "retryAfterCancel": true,
+        "url": "http://zc-face.assets.alipay.net/gcashapp/gcash-zoloz-ekyc/faceguide.html",
+        "urlPattern": "URL_FACE_GUIDE"
+      }
+    },
+    {
+      "type": "nativeTask",
+      "dispatchConfig": {
+        "jumpTo": 2
+      },
+      "renderConfig": {
+        "name": "ZFace",
+        "exitAfterFail": true,
+        "retryAfterCancel": true,
+        "zimIdKey": "FACE_ZIM_ID"
+      }
+    },
+    {
+      "type": "webTask",
+      "dispatchConfig": {
+        "jumpTo": 2
+      },
+      "renderConfig": {
+        "name": "inputInfo",
+        "exitAfterFail": true,
+        "retryAfterCancel": true,
+        "urlPattern": "URL_DOC_USER_INPUT"
+      }
+    },
+    {
+      "type": "webTask",
+      "dispatchConfig": {
+        "jumpTo": 4
+      },
+      "renderConfig": {
+        "name": "infoReview",
+        "exitAfterFail": true,
+        "retryAfterCancel": true,
+        "urlPattern": "URL_DOC_USER_CONFIRM"
+      }
+    },
+    {
+      "type": "webTask",
+      "dispatchConfig": {
+        "jumpTo": 5
+      },
+      "renderConfig": {
+        "name": "signature",
+        "exitAfterFail": true,
+        "retryAfterCancel": true,
+        "landscape": "landscape",
+        "urlPattern": "URL_SIGNATURE"
+      }
+    },
+    {
+      "type": "webTask",
+      "dispatchConfig": {
+        "jumpTo": 6
+      },
+      "renderConfig": {
+        "name": "T&C",
+        "exitAfterFail": true,
+        "retryAfterCancel": true,
+        "urlPattern": "URL_TERMS_AND_CONDITIONS"
+      }
+    }
+  ]
+}

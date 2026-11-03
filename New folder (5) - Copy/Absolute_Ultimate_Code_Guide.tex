@@ -1,0 +1,163 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{tcolorbox}
+\usepackage{parskip}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+\title{\Huge \textbf{The Absolute Ultimate Code \& System Architecture Guide} \\ \vspace{0.5cm} \Large Exhaustive Technical Reference for Smart Air Guardian}
+\author{Complete Subsystem Deep-Dive}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+This document has been expanded to cover \textbf{every single intricate detail} of the Smart Air Guardian system. It explains the exact math for all three ML models, the exact microsecond delays used for sensor polling, the full string-parsing logic for Firebase commands, the exact EPA AQI calculations, and the advanced PWA features including Leaflet maps, Chart.js, the Gemini LLM integration, and the Android back-button state engine.
+
+\section{Part 1: The Edge Device Firmware (\texttt{ESP32\_Air\_Quality.ino})}
+
+\subsection{Pin Definitions and Hardware Constants}
+The ESP32 uses specific pins to prevent I2C and ADC collisions:
+\begin{itemize}
+    \item \texttt{MQ135\_PIN = 34} (ADC1\_CH6)
+    \item \texttt{MQ7\_PIN = 35} (ADC1\_CH7)
+    \item \texttt{DUST\_AOUT\_PIN = 32} (ADC1\_CH4)
+    \item \texttt{DUST\_ILED\_PIN = 14} (Controls the IR LED on the Sharp dust sensor)
+    \item \texttt{DHT\_PIN = 4} (Digital Temp/Hum)
+    \item Actuators: \texttt{BUZZER\_PIN = 26}, \texttt{LED\_RED = 25}, \texttt{LED\_GREEN = 27}, \texttt{LED\_BLUE = 12}.
+    \item I2C Pins 21 (SDA) and 22 (SCL) address \texttt{0x3C} for the 1.3" SH1106 OLED.
+\end{itemize}
+
+\subsection{Microsecond-Level Hardware Oversampling}
+To remove extreme noise from the MQ sensors, the ESP32 performs oversampling:
+\begin{lstlisting}[language=C++]
+long sumMQ135 = 0;
+long sumMQ7 = 0;
+for (int i = 0; i < 24; i++) {
+    sumMQ135 += analogRead(MQ135_PIN);
+    sumMQ7   += analogRead(MQ7_PIN);
+    delayMicroseconds(250); // Crucial wait state to let ADC recover
+}
+liveRawMQ135 = sumMQ135 / 24;
+\end{lstlisting}
+
+For the GP2Y1010 Optical Dust Sensor, the IR LED must be pulsed precisely:
+\begin{lstlisting}[language=C++]
+digitalWrite(DUST_ILED_PIN, LOW); // Turn on IR LED
+delayMicroseconds(280);           // Wait exactly 280us for particle illumination
+dustSum += analogRead(DUST_AOUT_PIN); // Read ADC
+delayMicroseconds(40);            // Wait 40us
+digitalWrite(DUST_ILED_PIN, HIGH); // Turn off IR LED
+delayMicroseconds(1000);          // Recovery period before next pulse
+\end{lstlisting}
+
+\subsection{Exponential Smoothing and EPA AQI}
+Once oversampled, an exponential moving average is applied: \texttt{live = (live * 0.85) + (new * 0.15)}. 
+The system calculates AQI using the exact piecewise formula from the US EPA:
+\begin{lstlisting}[language=C++]
+int calculateAQI_PM25(float pm) {
+    if (pm <= 12.0f)   return (int)(((50 - 0)    / (12.0f - 0.0f))   * (pm - 0.0f)   + 0);
+    if (pm <= 35.4f)   return (int)(((100 - 51)  / (35.4f - 12.1f))  * (pm - 12.1f)  + 51);
+    // ... continues up to 500 AQI
+}
+\end{lstlisting}
+
+\subsection{Machine Learning Equations (C++ Translations)}
+\textbf{Model 1: Multivariate Linear Regression}
+\begin{lstlisting}[language=C++]
+float s_pm25  = constrain((raw_pm25 - 0.40f) / (302.70f - 0.40f), 0.0f, 1.0f);
+// Math: Y = W1*X1 + W2*X2 ... + B
+float future_aqi = (284.2261f * s_pm25) + (82.0077f * s_co) + (0.0337f * s_temp) + (-0.0661f * s_humid) + 59.7454f;
+\end{lstlisting}
+
+\textbf{Model 2: Logistic Regression (Sigmoid Activation)}
+\begin{lstlisting}[language=C++]
+float z = (23.5640f * s_pm25) + (-0.3901f * s_co) + (-0.0083f * s_temp) + (-0.0110f * s_humid) - 4.4767f;
+float prob = 1.0f / (1.0f + exp(-z)); // Sigmoid bounds output between 0.0 and 1.0
+\end{lstlisting}
+
+\textbf{Model 3: Decision Tree Classifier}
+\begin{lstlisting}[language=C++]
+if (s_pm25 <= 0.15f) {
+    if (s_co <= 0.05f) return 1; // Moderate
+    else return 2;               // Unhealthy
+}
+\end{lstlisting}
+
+\subsection{Bidirectional Command Parser (\texttt{handleCommand})}
+The ESP32 parses commands dynamically. If it receives a string from Firebase or Serial:
+\begin{itemize}
+    \item \texttt{buzzer\_on} / \texttt{buzzer\_pulse} triggers GPIO 26.
+    \item \texttt{oled\_off} disables the \texttt{oledPoweredOn} boolean, clearing the I2C screen.
+    \item \texttt{set\_page\_1} forces \texttt{currentOLEDPage = 0} and disables \texttt{oledAutoScroll}.
+    \item \texttt{test\_red\_on} forces a manual LED override.
+    \item \texttt{tare\_pm25} recalculates the \texttt{dustOffsetVoltage} based on the current ADC value.
+    \item \texttt{reboot} executes \texttt{ESP.restart()}.
+\end{itemize}
+
+\subsection{Firebase Cloud Sync (No ArduinoJson)}
+To save memory, the ESP32 manually parses the Firebase JSON response using \texttt{String.indexOf()}:
+\begin{lstlisting}[language=C++]
+int cmdStart = response.indexOf("\"cmd\":\"");
+cmdStart += 7;
+int cmdEnd = response.indexOf("\"", cmdStart);
+String cmd = response.substring(cmdStart, cmdEnd);
+\end{lstlisting}
+It also extracts the \texttt{timestamp} and compares it to \texttt{lastExecutedTimestamp} to ensure commands are not executed in a loop.
+
+\section{Part 2: The Progressive Web App (\texttt{frontend\_dashboard.html})}
+The massive 4000+ line frontend file is a complete offline-capable PWA.
+
+\subsection{PWA Infrastructure}
+\begin{itemize}
+    \item \textbf{Service Worker (\texttt{sw.js}):} Caches the HTML, CSS, and JS so the dashboard works fully offline.
+    \item \textbf{Manifest (\texttt{manifest.json}):} Defines the app icon, theme color (\#060b18), and sets \texttt{display: standalone} to hide the browser URL bar on Android/iOS.
+\end{itemize}
+
+\subsection{UI Features and Engines}
+\begin{itemize}
+    \item \textbf{Android Back Button Engine:} A custom state machine manipulates the \texttt{window.history.pushState} API. If a user presses the hardware back button, it closes open accordion menus (Level 3), navigates to the previous tab (Level 2), shows a "Press again to exit" toast (Level 1), and finally exits (Level 0).
+    \item \textbf{Leaflet GPS Sensor Map:} Uses \texttt{leaflet.js} to render a map of sensor nodes globally.
+    \item \textbf{Chart.js Telemetry Graphing:} Live graphs plot historical trends for PM2.5, CO, and AQI over time.
+    \item \textbf{Gemini / Groq LLM Clinical Studio:} The dashboard packages the raw JSON telemetry and makes a REST call to a Large Language Model API. The LLM generates a plain-English, medical-grade diagnostic report that is displayed in the UI using \texttt{marked.min.js} for Markdown rendering.
+    \item \textbf{3D Particle Canvas:} A custom HTML5 Canvas element runs a particle physics simulation matching the density of the live PM2.5 reading.
+    \item \textbf{Haptic Feedback:} Native \texttt{navigator.vibrate([30, 50, 30])} is called when users toggle switches (e.g., turning on the buzzer).
+\end{itemize}
+
+\end{document}

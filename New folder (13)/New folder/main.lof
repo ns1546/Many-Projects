@@ -1,0 +1,7 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Proposed FEDMED-X methodological workflow showing data partitioning, local training, privacy accounting, compression, server aggregation, evaluation, and edge-oriented benchmarking. The dashed arrow represents the recurring global-model broadcast at every federated round.}}{15}{figure.caption.11}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Module-level architecture of the FEDMED-X software pipeline.}}{23}{figure.caption.16}%
+\contentsline {figure}{\numberline {A.1}{\ignorespaces Placeholder image a.png}}{27}{figure.caption.20}%
+\contentsline {figure}{\numberline {B.1}{\ignorespaces Placeholder image b.png}}{28}{figure.caption.22}%

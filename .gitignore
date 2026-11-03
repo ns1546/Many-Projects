@@ -1,0 +1,84 @@
+# Ignore all loose files in the root of Download Official
+/*.*
+!/.gitignore
+!/README.md
+
+# Ignore all movies, videos, audio dumps
+*.mkv
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.webm
+*.flv
+*.mp3
+*.wav
+*.ogg
+Lockwood and Co*
+New folder (18)/
+
+# Ignore large datasets & machine learning dumps
+**/ML_Project/*.csv
+**/ML_Project/
+*Master_AQI_Weather.csv
+*AQI Bangladesh.csv
+**/dataset/
+**/datasets/
+
+# Ignore external cloned open-source repos & extracted vendor frameworks
+**/cloned_repos/
+**/foundation_extract/
+New folder (23)/bagisto/
+New folder (23)/saleor/
+New folder (23)/saleor-*/
+New folder (59) - Copy/rea/
+**/.git_submodule_backup/
+
+# Ignore all archives and installers
+*.zip
+*.rar
+*.7z
+*.tar.gz
+*.iso
+*.exe
+*.msi
+*.apk
+*.dmg
+
+# Ignore browser saved page asset dumps
+*_files/
+
+# Ignore large documents
+*.pdf
+*.docx
+*.doc
+*.pptx
+*.xlsx
+
+# Ignore package dependencies & caches across all projects
+**/node_modules/
+**/.next/
+**/.cache/
+**/dist/
+**/build/
+**/package-lock.json.bak
+**/*.pack
+**/*.idx
+
+# Python virtualenvs & cache
+**/.venv/
+**/venv/
+**/__pycache__/
+**/*.pyc
+
+# Database binaries
+**/*.db
+**/*.db-shm
+**/*.db-wal
+**/*.sqlite
+**/*.sqlite3
+
+# OS files
+**/.DS_Store
+**/Thumbs.db
+**/desktop.ini

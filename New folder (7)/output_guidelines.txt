@@ -1,0 +1,332 @@
+Writing Steps of a Journal Paper
+Ahmed Shafkat
+Assistant Professor, Dept. of CSE,
+Bangladesh University of Business & Technology.
+Lead Researcher, Peer Research Lab.
+CEO, BookShelf 365.
+a.shafkat@gmail.com
+8/23/2025 Peer Research Lab 1
+
+Outlines
+• Basic Instructions
+• Easy & Necessary Tools
+• Writing Abstract
+• Writing Introduction
+• Writing Literature Review
+• Writing Methodology
+• Writing Result and Discussion
+• Writing Conclusion and References
+8/23/2025 Peer Research Lab 2
+
+Basic Instructions 
+• This guideline focuses on writing technical papers, particularly those related to 
+artificial intelligence. 
+• A well-written journal paper should be between 15 and 25 pages of standard 
+formatting. 
+• Plagiarism must be kept below 15%, with no single source contributing more than 
+1% of similarity. 
+• Formal language is required. The paper should use clear and precise language that 
+is accessible to a broad audience. 
+• Minimize the use of AI-generated writing as much as possible. 
+• Start writing, before thinking.
+8/23/2025 Peer Research Lab 3
+
+Easy & Necessary Tools
+• Access the resource 
+a) Scholar: https://scholar.google.com 
+b) Scihub : https://sci-hub.se 
+• Template writing
+a) Word / Docs : https://docs.google.com 
+b) Latex: https://www.overleaf.com 
+• Grammar checker
+a) Grammarly: https://www.grammarly.com 
+b) Quillbot: https://quillbot.com 
+• Draw the diagram or chart
+a) Drawio : https://app.diagrams.net 
+b) Canva: https://www.canva.com 
+8/23/2025 Peer Research Lab 4
+
+Easy & Necessary Tools (continued)
+• Plagiarism Check
+a) Turnitin: https://www.turnitin.com (paid)
+b) Duplichecker: https://www.duplichecker.com
+• AI help
+a) ChatGPT : https://chatgpt.com/  
+b) DeepSeek: https://www.deepseek.com/ 
+• AI image generator
+a) Leonardo: http://leonardo.ai/ 
+b) Copilot: https://copilot.microsoft.com/  
+• Paraphrase 
+a) Ahrefs : https://ahrefs.com/writing-tools/paraphrasing-tool  
+b) ZeroGPT:  https://www.zerogpt.com/paraphraser 
+8/23/2025 Peer Research Lab 5
+
+Easy & Necessary Tools (continued)
+• AI text fixer
+a) Humanize AI: https://www.humanizeai.pro 
+b) AI to Human Converter: https://aitohumantextconverter.com 
+• Collect or upload dataset 
+a) Kaggle : https://www.kaggle.com 
+b) Github Datasets: https://github.com 
+• Learn the code
+a) Tensorflow: https://www.tensorflow.org 
+b) PyTorch: https://pytorch.org 
+• Run the code 
+a) Colab : https://colab.research.google.com 
+b) Jupyter Notebook/Lab: https://jupyter.org 
+8/23/2025 Peer Research Lab 6
+
+Structure of a Paper
+Various chapters appear in different types of papers. Topics are not limited. We 
+suggest including the following chapters.
+1. Abstract
+2. Introduction / Overview
+3. Related Works / Literature Review/ Background Study
+4. Methodology/ Approach/ Design
+5. Result and Discussion / Analysis
+6. Conclusion 
+7. References 
+8/23/2025 Peer Research Lab 7
+
+Formulating the Title of Your Article
+The title of your research is the very first point of contact for readers, reviewers, 
+and search engines. Here's how to ensure your title is impactful:
+• Ensure clarity and brevity: The title should be informative, directly aligned with 
+the research question, and free from unnecessary length or fluff.
+• Avoid overused adjectives and generic phrases: Words like “novel,” “robust,” or 
+“state-of-the-art” should only be used when the contribution is genuinely 
+groundbreaking. Otherwise, they may come off as promotional.
+• Keep it simple and meaningful: Avoid jargon or abbreviations unless they are 
+universally known.
+• Author section should be clean: Do not include honorifics or degrees such as 
+“Dr.,” “Prof.,” or “Ph.D.” This information will appear elsewhere.
+• Use relevant and specific keywords: Select 4–5 keywords that truly reflect the 
+essence of your work and make it easier to index and retrieve.
+8/23/2025 Peer Research Lab 8
+
+Examples of Effective Titles
+1. Clear and Targeted Titles
+• “Deep Learning Models for Early Alzheimer’s Detection Using MRI Scans”
+→ Immediately informs readers of the method (deep learning), goal (early detection), and 
+domain (medical imaging).
+• “Enhancing Self-Driving Vehicle Navigation through Reinforcement Learning”
+→ Straightforward and tells the audience about a specific application and technique.
+2. Engaging Titles that Spark Interest
+• “Transforming Healthcare Outcomes Using AI: Predictive Insights through Machine Learning”
+→ Strong verbs like “transforming” and application-focused wording attract attention.
+• “Harnessing Artificial Intelligence to Revolutionize Supply Chain Optimization”
+→ Bold and engaging, shows impact and relevance.
+3. Concise and Keyword-Oriented
+• “AI-Based Predictive Analytics for Detecting Fraud in Financial Transactions”
+→ Includes strong search terms such as “AI,” “fraud detection,” and “predictive analytics.”
+8/23/2025 Peer Research Lab 9
+
+Examples of Effective Titles (continued)
+4. Deep Learning Application Focus
+• “Progress in Deep Learning for Real-Time Image Classification in Autonomous Driving”
+→ Communicates method and real-time application.
+• “Using CNNs to Identify Early Signs of Cancer from Radiological Images”
+→ Clear use of convolutional networks in a life-critical domain.
+5. Algorithm-Oriented Titles
+• “Boosting Market Forecast Accuracy via Ensemble Machine Learning Models”
+→ Suggests method (ensemble models) and domain (financial markets).
+• “Reinforcement Learning Techniques to Minimize Energy Usage in Smart Grids”
+→ Domain-specific and technically descriptive.
+6. Leveraging Pretrained Models
+• “Enhancing Image-Based Medical Diagnostics with Fine-Tuned CNN Architectures”
+→ Indicates methodology (fine-tuning CNNs) and domain.
+• “Sentiment Analysis on Social Media Using Pretrained Transformers”
+→ A great fit for NLP applications involving BERT, GPT, etc.
+8/23/2025 Peer Research Lab 10
+
+Writing the Abstract
+The abstract is a miniature version of your paper. It provides a quick snapshot of 
+the entire research project, enabling readers to decide whether the paper is 
+worth reading. A well-crafted abstract should include:
+• Research Area and Significance: Why is this topic important?
+• Problem Statement and Gap: What issue are you addressing that hasn’t been 
+fully resolved?
+• Objective: What does your work aim to achieve?
+• Method Overview: What approach or techniques were used?
+• Key Findings: What are the primary results or discoveries?
+• Broader Implications: Why do these results matter, and what could be their 
+impact?
+Keep the abstract between 150–200 words. Make every sentence count, each 
+should convey critical information in a clear and concise manner.
+8/23/2025 Peer Research Lab 11
+
+Abstract Example
+8/23/2025 Peer Research Lab 12
+
+Writing a Strong Introduction
+A powerful introduction hooks the reader, sets the research in context, and builds 
+up logically to the central problem. Here’s how to do it effectively:
+Step 1: Open with a Broad Context
+Begin with an overview of the general domain (e.g., AI, healthcare, sustainability) 
+and explain its relevance.
+Example: “Artificial Intelligence has rapidly evolved over recent years, influencing 
+a broad spectrum of industries from finance to autonomous systems.”
+Step 2: Narrow Down the Problem
+Zoom into the specific issue that your research tackles.
+Example: “Despite significant progress in deep learning, existing models still 
+struggle when applied to domains with limited labeled data.”
+8/23/2025 Peer Research Lab 13
+
+Writing a Strong Introduction (continued)
+Step 3: State Your Research Objectives
+Clearly outline what your study intends to achieve and how.
+Example: “This paper explores transfer learning as a means of improving 
+diagnostic accuracy in under-resourced healthcare environments.”
+Step 4: Emphasize Significance
+Explain why your work matters and who it benefits.
+Example: “By adapting existing models to data-scarce settings, we aim to make AI 
+solutions more accessible in rural medical clinics.”
+8/23/2025 Peer Research Lab 14
+
+Writing a Strong Introduction (continued)
+Step 5: Briefly Describe the Method
+Offer a one-sentence summary of your approach.
+Example: “We fine-tuned ResNet-50 using medical X-ray data and compared its 
+performance with a traditional CNN model.”
+Step 6: Outline the Paper
+• Provide a roadmap of what follows in the paper.
+Example: “Section 2 surveys related work, Section 3 outlines the methodology, 
+Section 4 presents results, and Section 5 discusses implications.”
+8/23/2025 Peer Research Lab 15
+
+Conducting a Literature Review
+An effective literature review demonstrates your familiarity with the field and 
+highlights gaps that your work addresses.
+Key Steps:
+1. Define the Scope:
+Focus only on literature that supports your study’s goals. For example, if you're 
+working on deep learning in healthcare, avoid unrelated AI literature.
+2. Search Extensively:
+Use scholarly databases like Google Scholar, IEEE Xplore, PubMed. Prioritize recent 
+papers and well-cited reviews.
+8/23/2025 Peer Research Lab 16
+
+Conducting a Literature Review
+3. Categorize by Themes:
+Group literature into themes such as “Transfer Learning Applications,” “Low-
+Resource Environments,” or “Pretrained CNNs in Healthcare.”
+4. Summarize and Synthesize:
+Discuss trends, consistencies, and contradictions in the findings. Highlight what 
+others have done and where their work falls short.
+5. Highlight Gaps:
+Show what hasn’t been explored or where methodologies fall short. This justifies 
+the need for your study.
+8/23/2025 Peer Research Lab 17
+
+Conducting a Literature Review
+6. Discuss Common Methods:
+Note what tools, datasets, and evaluation techniques are commonly used. Mention 
+weaknesses in these approaches if relevant.
+7. End with Your Research Gap:
+Conclude the section by stating what specific issue your study is designed to solve.
+8/23/2025 Peer Research Lab 18
+
+Methodology Section
+The methodology section should be precise and transparent so that others can 
+replicate your work. It should include:
+1. Research Design: 
+Describe whether it’s experimental, descriptive, or analytical.
+Example: “This is a quantitative study evaluating the performance of CNN models 
+on X-ray image classification.”
+2. Data Collection: 
+Mention dataset source, size, and how data was cleaned or preprocessed. 
+Example: “We used 5,000 images from ChestX-ray14, resized to 224x224 for model 
+compatibility.”
+8/23/2025 Peer Research Lab 19
+
+Methodology Section (continued)
+3. Data Preprocessing: 
+Describe how raw data was prepared for model input, including normalization, 
+encoding, augmentation, or splitting.
+4. Experimental Procedures: 
+Detail the algorithms, training processes, and performance evaluation. Include 
+hyperparameters like learning rate, epochs, batch size, etc.
+5. Evaluation Metrics: 
+Mention which metrics were used (accuracy, F1-score, AUC, etc.) and how 
+performance was statistically validated.
+8/23/2025 Peer Research Lab 20
+
+Methodology Section (continued)
+6. Justification for Choices: 
+Explain why certain models or frameworks were used.
+Example: “ResNet50 was selected for its robustness in image recognition tasks.”
+7. Ethical Considerations: 
+Address how privacy and ethical issues were managed, particularly with human 
+data.
+8. Tools and Libraries Used: 
+Example: “We used Python with Keras and TensorFlow, leveraging OpenCV and 
+NumPy for data preprocessing.”
+8/23/2025 Peer Research Lab 21
+
+Sample of Dataset
+8/23/2025 Peer Research Lab 22
+
+Examples of Architecture
+8/23/2025 Peer Research Lab 23
+
+Representing and Analyzing Results
+1.  Highlight Key Findings First:
+Start with the headline results—did your approach work? By how much did it 
+outperform the baseline?
+2.  Use Tables and Visuals:
+Support findings with comparison tables, accuracy curves, confusion matrices, 
+etc.
+3.  Report All Metrics:
+Include precision, recall, F1, AUC, standard deviation, p-values—whatever is 
+relevant to support statistical significance.
+8/23/2025 Peer Research Lab 24
+
+Representing and Analyzing Results (continued)
+4. Discuss Statistical Tests:
+If you did hypothesis testing (e.g., t-tests), report values clearly and state what 
+they imply.
+5. Compare Methods:
+Benchmark your model against existing solutions.
+Example: “ResNet50 achieved 87.5% accuracy, outperforming VGG16 and 
+baseline CNNs.”
+6. Stay Neutral and Objective:
+Let the results speak for themselves. Avoid exaggerations and remain factual.
+8/23/2025 Peer Research Lab 25
+
+Examples of Result
+8/23/2025 Peer Research Lab 26
+
+Examples of Table
+8/23/2025 Peer Research Lab 27
+
+Conclusions
+Summarize the key insights, restate the value of your findings, and point toward 
+future work. 
+8/23/2025 Peer Research Lab 28
+
+Referencing in article
+• Cite to credit sources & avoid plagiarism
+• Use IEEE, APA, MLA, or Chicago as required
+• Tools: Zotero, Mendeley, EndNote, BibTeX
+• Prefer recent, peer-reviewed, and original works
+• Double-check citation accuracy & formatting
+8/23/2025 Peer Research Lab 29
+
+Example of References 
+1. Progga, Nagifa Ilma, et al. "Emotion detection using deep learning approach." 2023 
+International conference on information and communication technology for sustainable 
+development (ICICT4SD). IEEE, 2023.
+2. Rahman, Md Mahbubur, et al. "A deep CNN approach to detect and classify local fruits through 
+a web interface." Smart Agricultural Technology 5 (2023): 100321.
+3. Mallik, Bijon & Rahim, Md & Miah, Abu Saleh Musa & Yun, Keun & Shin, Jungpil. “Virtual 
+Keyboard: A Real-Time Hand Gesture Recognition-Based Character Input System Using LSTM 
+and Mediapipe Holistic.” Computer Systems Science and Engineering(2023). 48. 1-10. 
+10.32604/csse.2023.045981. 
+4. Dr. M. Firoz Mridha. “Mastering Research Methodology for High Impact Publications”. AMIR 
+Lab. 2025. Available at: https://www.linkedin.com/posts/dr-m-f-mridha-2a73b143_amir-lab-
+activity-7311017742864719872-2d98. Last accessed: 25 May 2025, 11:03 GTM +6.
+8/23/2025 Peer Research Lab 30
+
+Thank You
+8/23/2025 Peer Research Lab 31
+

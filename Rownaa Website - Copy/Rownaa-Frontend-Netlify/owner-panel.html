@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Rownaa® — Partner Dashboard</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <!-- Premium Font Stack -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  
+  <!-- Professional Icon Library (Phosphor Icons) -->
+  <script type="module" src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script>
+    // FAANG Enterprise Security: Strict RBAC at Entry Point
+    async function enforceOwnerRBAC() {
+        if (!window.AppState.user) {
+            await window.hydrateStatePromise; // wait for hydration if needed
+        }
+        // Poll for state if it is not ready yet
+        let attempts = 0;
+        while (!window.AppState.user && attempts < 10) {
+            await new Promise(r => setTimeout(r, 100));
+            attempts++;
+        }
+        const user = window.AppState.user;
+        if (!user || (user.role !== 'owner' && user.role !== 'admin')) {
+            console.error('Security Exception: Unauthorized Role. Redirecting.');
+            window.location.replace('index.html');
+        }
+    }
+    enforceOwnerRBAC();
+  
+// Auto-injected to fix Vite module scoping
+window.enforceOwnerRBAC = enforceOwnerRBAC;
+</script>
+  
+  <style>*,:before,:after{box-sizing:border-box;margin:0;padding:0}:root{--bg-base:#050505;--bg-panel:#0c0c0c;--bg-elevated:#141414;--bg-hover:#1a1a1a;--border-subtle:#ffffff14;--border-strong:#ffffff26;--accent:#d4ff00;--accent-dim:#d4ff0014;--accent-glow:#d4ff0033;--text-primary:#fff;--text-secondary:#fff9;--text-tertiary:#fff6;--success:#10b981;--success-bg:#10b9811a;--warning:#f59e0b;--warning-bg:#f59e0b1a;--danger:#ef4444;--danger-bg:#ef44441a;--info:#3b82f6;--info-bg:#3b82f61a;--font-display:"Syne", sans-serif;--font-ui:"Inter", sans-serif;--sidebar-w:280px;--header-h:80px;--border-rad:12px;--ease:cubic-bezier(.16, 1, .3, 1)}html{scroll-behavior:smooth;font-size:15px}body{font-family:var(--font-ui);background-color:var(--bg-base);color:var(--text-primary);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;min-height:100vh;line-height:1.5}a{color:inherit;text-decoration:none}button{cursor:pointer;color:inherit;background:0 0;border:none;font-family:inherit}input,select,textarea{color:inherit;font-family:inherit}ul{list-style:none}@keyframes fadeIn{0%{opacity:0}to{opacity:1}}@keyframes slideUp{0%{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}.animate-slide{animation:slideUp .6s var(--ease) both}.d-1{animation-delay:50ms}.d-2{animation-delay:.1s}.d-3{animation-delay:.15s}.app-layout{min-height:100vh;display:flex}.sidebar{width:var(--sidebar-w);background:var(--bg-panel);border-right:1px solid var(--border-subtle);z-index:100;flex-direction:column;flex-shrink:0;height:100vh;display:flex;position:sticky;top:0}.brand{height:var(--header-h);border-bottom:1px solid var(--border-subtle);align-items:center;padding:0 20px;display:flex;overflow:hidden}.brand-logo{font-family:var(--font-display);letter-spacing:-.03em;color:var(--text-primary);white-space:nowrap;align-items:center;gap:8px;font-size:1.1rem;font-weight:800;display:flex}.brand-logo span{color:var(--accent);font-weight:500}.brand-icon{color:var(--accent);flex-shrink:0;font-size:1.4rem}.nav-section{flex-direction:column;flex:1;gap:8px;padding:32px;display:flex}.nav-label{text-transform:uppercase;letter-spacing:.1em;color:var(--text-tertiary);margin-top:16px;margin-bottom:8px;font-size:.7rem;font-weight:700}.nav-label:first-child{margin-top:0}.nav-item{color:var(--text-secondary);border-radius:8px;align-items:center;gap:14px;padding:12px 16px;font-size:.95rem;font-weight:500;transition:all .2s;display:flex}.nav-item i{font-size:1.2rem}.nav-item:hover{color:var(--text-primary);background:var(--bg-elevated)}.nav-item.active{color:var(--accent);background:var(--accent-dim)}.user-profile{border-top:1px solid var(--border-subtle);align-items:center;gap:16px;padding:24px 32px;display:flex}.avatar{background:var(--bg-elevated);border:1px solid var(--border-strong);width:44px;height:44px;font-family:var(--font-display);color:var(--accent);border-radius:50%;justify-content:center;align-items:center;font-size:.9rem;font-weight:700;display:flex}.user-info{flex-direction:column;display:flex}.user-name{font-size:.9rem;font-weight:600}.user-tier{color:var(--text-tertiary);align-items:center;gap:4px;margin-top:2px;font-size:.75rem;display:flex}.mobile-nav{background:var(--bg-panel);border-top:1px solid var(--border-subtle);z-index:200;height:64px;padding:0 16px;padding-bottom:env(safe-area-inset-bottom);display:none;position:fixed;bottom:0;left:0;right:0}.mn-item{color:var(--text-secondary);flex-direction:column;flex:1;justify-content:center;align-items:center;gap:4px;transition:all .2s;display:flex}.mn-item.active{color:var(--accent)}.mn-icon{font-size:1.4rem}.mn-label{font-size:.65rem;font-weight:600}.main-wrapper{flex-direction:column;flex:1;min-width:0;padding-bottom:64px;display:flex}@media (width>=769px){.main-wrapper{padding-bottom:0}}.top-header{height:var(--header-h);border-bottom:1px solid var(--border-subtle);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);z-index:90;background:#050505e6;justify-content:space-between;align-items:center;padding:0 48px;display:flex;position:sticky;top:0}.header-title{font-family:var(--font-display);font-size:1.2rem;font-weight:700}.header-actions{align-items:center;gap:16px;display:flex}.btn-icon{border:1px solid var(--border-subtle);width:40px;height:40px;color:var(--text-secondary);border-radius:50%;justify-content:center;align-items:center;font-size:1.2rem;transition:all .2s;display:flex}.btn-icon:hover{color:var(--text-primary);border-color:var(--border-strong);background:var(--bg-elevated)}.badge-dot{position:relative}.badge-dot:after{content:"";background:var(--danger);border:2px solid var(--bg-base);border-radius:50%;width:8px;height:8px;position:absolute;top:8px;right:8px}.panel{padding:48px;display:none}.panel.active{animation:.4s fadeIn;display:block}.page-heading{margin-bottom:40px}.ph-title{font-family:var(--font-display);letter-spacing:-.02em;margin-bottom:8px;font-size:2rem;font-weight:800}.ph-subtitle{color:var(--text-secondary);font-size:1rem}.btn{cursor:pointer;border-radius:6px;justify-content:center;align-items:center;gap:8px;padding:10px 20px;font-size:.9rem;font-weight:600;transition:all .2s;display:inline-flex}.btn-primary{background:var(--text-primary);color:#000}.btn-primary:hover{background:var(--accent)}.btn-accent{background:var(--accent);color:#000}.btn-accent:hover{opacity:.9}.btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{opacity:.9}.btn-outline{border:1px solid var(--border-strong);color:var(--text-primary)}.btn-outline:hover{background:var(--bg-elevated)}.btn-outline-danger{border:1px solid var(--danger);color:var(--danger)}.btn-outline-danger:hover{background:var(--danger-bg)}.btn-outline-success{border:1px solid var(--success);color:var(--success)}.btn-outline-success:hover{background:var(--success-bg)}.status-badge{text-transform:uppercase;letter-spacing:.05em;border-radius:4px;align-items:center;gap:4px;padding:4px 10px;font-size:.7rem;font-weight:700;display:inline-flex}.status-badge.active{background:var(--success-bg);color:var(--success);border:1px solid #10b98133}.status-badge.pending{background:var(--warning-bg);color:var(--warning);border:1px solid #f59e0b33}.status-badge.ongoing{background:var(--info-bg);color:var(--info);border:1px solid #3b82f633}.status-badge.alert{background:var(--danger-bg);color:var(--danger);border:1px solid #ef444433}.tabs{border-bottom:1px solid var(--border-subtle);gap:12px;margin-bottom:32px;padding-bottom:16px;display:flex;overflow-x:auto}.tabs::-webkit-scrollbar{display:none}.tab-item{color:var(--text-secondary);cursor:pointer;white-space:nowrap;border-radius:6px;padding:8px 12px;font-size:.95rem;font-weight:500;transition:all .2s}.tab-item:hover{color:var(--text-primary)}.tab-item.active{background:var(--bg-elevated);color:var(--text-primary);font-weight:600}.list-container{flex-direction:column;gap:16px;display:flex}.data-card{background:var(--bg-panel);border:1px solid var(--border-subtle);border-radius:var(--border-rad);gap:24px;padding:24px;transition:all .2s;display:flex}.data-card:hover{border-color:var(--border-strong);background:var(--bg-hover)}.toggle-switch{background:var(--bg-elevated);border:1px solid var(--border-strong);cursor:pointer;border-radius:12px;width:44px;height:24px;transition:all .3s;position:relative}.toggle-switch:after{content:"";background:var(--text-secondary);border-radius:50%;width:18px;height:18px;transition:all .3s;position:absolute;top:2px;left:2px}.toggle-switch.on{background:var(--success);border-color:var(--success)}.toggle-switch.on:after{background:#fff;transform:translate(20px)}.kpi-grid{grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:48px;display:grid}.kpi-box{background:var(--bg-panel);border:1px solid var(--border-subtle);border-radius:var(--border-rad);padding:24px}.kpi-head{color:var(--text-secondary);justify-content:space-between;align-items:center;margin-bottom:16px;display:flex}.kpi-head i{font-size:1.4rem}.kpi-val{font-family:var(--font-display);margin-bottom:8px;font-size:2rem;font-weight:700;line-height:1}.kpi-lbl{color:var(--text-tertiary);font-size:.85rem;font-weight:500}.alert-banner{background:var(--danger-bg);border-radius:var(--border-rad);border:1px solid #ef44444d;justify-content:space-between;align-items:center;gap:16px;margin-bottom:32px;padding:16px 24px;display:flex}.ab-content{color:var(--danger);align-items:center;gap:12px;font-weight:500;display:flex}.ab-content i{font-size:1.4rem}.b-card{flex-direction:column;display:flex}.bc-head{border-bottom:1px solid var(--border-subtle);justify-content:space-between;align-items:flex-start;margin-bottom:16px;padding-bottom:16px;display:flex}.bc-service{font-family:var(--font-display);align-items:center;gap:10px;font-size:1.2rem;font-weight:700;display:flex}.bc-service i{color:var(--text-secondary)}.bc-price{font-family:var(--font-display);color:var(--accent);font-size:1.4rem;font-weight:700}.bc-price span{font-size:.8rem;font-family:var(--font-ui);color:var(--text-tertiary);font-weight:400}.bc-grid{grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;display:grid}.bc-info-col{flex-direction:column;gap:12px;display:flex}.bc-item{align-items:flex-start;gap:12px;display:flex}.bc-item i{color:var(--text-secondary);margin-top:2px;font-size:1.2rem}.bc-val{font-size:.95rem;font-weight:500}.bc-lbl{color:var(--text-tertiary);margin-top:2px;font-size:.75rem}.bc-actions{justify-content:flex-end;gap:12px;display:flex}.car-card{align-items:stretch}.cc-img{background:var(--bg-elevated);border-radius:8px;flex-shrink:0;width:200px;position:relative;overflow:hidden}.cc-img img{object-fit:cover;opacity:.8;mix-blend-mode:luminosity;width:100%;height:100%}.cc-plate{background:#000c;border:1px solid #fff3;border-radius:4px;padding:4px 10px;font-family:monospace;font-size:.85rem;font-weight:700;position:absolute;bottom:12px;left:12px}.cc-body{flex-direction:column;flex:1;display:flex}.cc-head{justify-content:space-between;align-items:flex-start;margin-bottom:16px;display:flex}.cc-title{font-family:var(--font-display);font-size:1.3rem;font-weight:700}.cc-meta{color:var(--text-secondary);gap:16px;margin-bottom:24px;font-size:.85rem;display:flex}.cc-meta span{align-items:center;gap:6px;display:flex}.cc-docs{gap:16px;margin-bottom:auto;display:flex}.cc-doc{background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:6px;align-items:center;gap:8px;padding:8px 12px;font-size:.75rem;font-weight:600;display:flex}.cc-doc.expiring{border-color:var(--warning);color:var(--warning)}.cc-doc.expired{border-color:var(--danger);color:var(--danger)}.cc-footer{border-top:1px solid var(--border-subtle);justify-content:space-between;align-items:center;margin-top:24px;padding-top:16px;display:flex}.cc-avail{align-items:center;gap:12px;font-size:.85rem;font-weight:600;display:flex}.table-wrapper{background:var(--bg-panel);border:1px solid var(--border-subtle);border-radius:var(--border-rad);overflow-x:auto}.table{border-collapse:collapse;text-align:left;width:100%}.table th,.table td{border-bottom:1px solid var(--border-subtle);padding:16px 24px}.table th{text-transform:uppercase;letter-spacing:.05em;color:var(--text-secondary);font-size:.75rem;font-weight:600}.table td{font-size:.9rem;font-weight:500}.table tr:hover td{background:var(--bg-hover)}.table tr:last-child td{border-bottom:none}.t-amt{font-family:var(--font-display);font-weight:700}@media (width<=1024px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.car-card{flex-direction:column}.cc-img{width:100%;height:200px}}@media (width<=768px){.sidebar{display:none}.mobile-nav{display:flex}.top-header{padding:0 24px}.panel{padding:24px}.kpi-grid,.bc-grid{grid-template-columns:1fr}.bc-head,.cc-head{flex-direction:column;gap:12px}.cc-footer{flex-direction:column;align-items:flex-start;gap:20px}.cc-avail{justify-content:space-between;width:100%}}</style>
+  <script type="module" crossorigin src="/assets/state.UGnDgq6e.js"></script>
+  <script type="module" crossorigin src="/assets/auth.NDAxA9_W.js"></script>
+  <script type="module" crossorigin src="/assets/bookings.0jYaY2WZ.js"></script>
+  <script type="module" crossorigin src="/assets/inventory.CBSSTRH8.js"></script>
+  <script type="module" crossorigin src="/assets/notifications.D0LQKTh9.js"></script>
+</head>
+<body>
+
+<div class="app-layout">
+  
+  <!-- ===================== SIDEBAR (DESKTOP) ===================== -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo"><i class="ph-fill ph-steering-wheel brand-icon"></i> ROWNAA <span>Partner</span></div>
+    </div>
+    
+    <nav class="nav-section">
+      <div class="nav-label">Dashboard</div>
+      <a href="#" class="nav-item active" onclick="switchTab('home', this)">
+        <i class="ph ph-squares-four"></i> Home
+      </a>
+      <a href="#" class="nav-item" onclick="switchTab('bookings', this)">
+        <i class="ph ph-calendar-check"></i> Bookings
+        <span style="margin-left:auto; background:var(--danger); color:#fff; font-size:0.7rem; padding:2px 8px; border-radius:10px; font-weight:700">2</span>
+      </a>
+      <a href="#" class="nav-item" onclick="switchTab('cars', this)">
+        <i class="ph ph-car-profile"></i> My Cars
+      </a>
+      <a href="#" class="nav-item" onclick="switchTab('earnings', this)">
+        <i class="ph ph-wallet"></i> Earnings
+      </a>
+      
+      <div class="nav-label">Settings</div>
+      <a href="#" class="nav-item" onclick="switchTab('profile', this)">
+        <i class="ph ph-user"></i> Profile & Docs
+      </a>
+      
+      <div style="margin-top:auto"></div>
+      <a href="index.html" class="nav-item">
+        <i class="ph ph-sign-out"></i> Log Out
+      </a>
+    </nav>
+    
+    <div class="user-profile">
+      <div class="avatar">R&H</div>
+      <div class="user-info">
+        <div class="user-name">Rahim & Sons Rentals</div>
+        <div class="user-tier"><i class="ph-fill ph-seal-check" style="color:var(--accent)"></i> Verified Agency</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===================== BOTTOM NAV (MOBILE) ===================== -->
+  <nav class="mobile-nav">
+    <div class="mn-item active" onclick="switchTab('home', null, this)"><i class="ph ph-squares-four mn-icon"></i><span class="mn-label">Home</span></div>
+    <div class="mn-item" onclick="switchTab('bookings', null, this)"><i class="ph ph-calendar-check mn-icon"></i><span class="mn-label">Bookings</span></div>
+    <div class="mn-item" onclick="switchTab('cars', null, this)"><i class="ph ph-car-profile mn-icon"></i><span class="mn-label">Cars</span></div>
+    <div class="mn-item" onclick="switchTab('earnings', null, this)"><i class="ph ph-wallet mn-icon"></i><span class="mn-label">Earnings</span></div>
+    <div class="mn-item" onclick="switchTab('profile', null, this)"><i class="ph ph-user mn-icon"></i><span class="mn-label">Profile</span></div>
+  </nav>
+
+  <!-- ===================== MAIN WRAPPER ===================== -->
+  <main class="main-wrapper">
+    
+    <header class="top-header">
+      <div class="header-title" id="head-title">Home</div>
+      <div class="header-actions">
+        <button class="btn-icon badge-dot"><i class="ph ph-bell"></i></button>
+      </div>
+    </header>
+
+    <!-- ===================== PANEL: HOME ===================== -->
+    <div class="panel active" id="pnl-home">
+      <div class="page-heading animate-slide">
+        <h1 class="ph-title">Hello, Rahim.</h1>
+        <p class="ph-subtitle">Your account is Active. You have new booking requests.</p>
+      </div>
+
+      <!-- Expiry Alert -->
+      <div class="alert-banner animate-slide d-1">
+        <div class="ab-content">
+          <i class="ph-fill ph-warning-circle"></i>
+          <div>
+            <div style="font-size:1rem; font-weight:700">Action Required: Document Expiring</div>
+            <div style="font-size:0.85rem; font-weight:400; margin-top:2px">The Fitness Certificate for Toyota Hiace (DM-GA-11-2233) expires in 12 days.</div>
+          </div>
+        </div>
+        <button class="btn btn-outline" style="border-color:var(--danger); color:var(--danger)">Update Now</button>
+      </div>
+      
+      <div class="kpi-grid animate-slide d-1">
+        <div class="kpi-box">
+          <div class="kpi-head"><i class="ph ph-bell-ringing"></i><span class="status-badge pending">Action Needed</span></div>
+          <div class="kpi-val">2</div>
+          <div class="kpi-lbl">New Requests</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-head"><i class="ph ph-car"></i><span class="status-badge active">Online</span></div>
+          <div class="kpi-val">3 / 4</div>
+          <div class="kpi-lbl">Cars Available Today</div>
+        </div>
+        <div class="kpi-box" style="border-color:var(--accent-glow); background:var(--bg-elevated)">
+          <div class="kpi-head" style="color:var(--accent)"><i class="ph ph-wallet"></i></div>
+          <div class="kpi-val">৳ 24,500</div>
+          <div class="kpi-lbl">Net Earnings (This Month)</div>
+        </div>
+      </div>
+
+      <div class="animate-slide d-2">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <h3 style="font-family:var(--font-display);font-size:1.2rem;font-weight:700">Urgent Requests</h3>
+          <a href="#" style="color:var(--accent);font-size:0.85rem;font-weight:600" onclick="switchTab('bookings')">View All →</a>
+        </div>
+        
+        <div class="list-container">
+          <!-- Request Card -->
+          <div class="data-card b-card">
+            <div class="bc-head">
+              <div>
+                <div class="bc-service"><i class="ph-fill ph-airplane-tilt"></i> Airport Transfer <span class="status-badge pending">Pending</span></div>
+                <div style="font-family:monospace;font-size:0.75rem;color:var(--text-tertiary);margin-top:4px">ID: RW-2044-AIR</div>
+              </div>
+              <div style="text-align:right">
+                <div class="bc-price">৳ 2,500</div>
+                <div><span>Total Payout</span></div>
+              </div>
+            </div>
+            <div class="bc-grid">
+              <div class="bc-info-col">
+                <div class="bc-item">
+                  <i class="ph-fill ph-map-pin"></i>
+                  <div><div class="bc-val">Uttara Sector 4 → HSIA</div><div class="bc-lbl">Route</div></div>
+                </div>
+                <div class="bc-item">
+                  <i class="ph-fill ph-calendar-blank"></i>
+                  <div><div class="bc-val">Tomorrow, 08:00 AM</div><div class="bc-lbl">Pickup Time</div></div>
+                </div>
+              </div>
+              <div class="bc-info-col">
+                <div class="bc-item">
+                  <i class="ph-fill ph-car-profile"></i>
+                  <div><div class="bc-val">Sedan (4 Seats)</div><div class="bc-lbl">Requested Car Type</div></div>
+                </div>
+                <div class="bc-item">
+                  <i class="ph-fill ph-user"></i>
+                  <div><div class="bc-val">Samiul Haque</div><div class="bc-lbl">Customer</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="bc-actions">
+              <button class="btn btn-outline-danger">Reject</button>
+              <button class="btn btn-outline-success">Accept Booking</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PANEL: BOOKINGS ===================== -->
+    <div class="panel" id="pnl-bookings">
+      <div class="page-heading animate-slide">
+        <h1 class="ph-title">Bookings.</h1>
+        <p class="ph-subtitle">Manage requests and active trips.</p>
+      </div>
+
+      <div class="tabs animate-slide d-1">
+        <div class="tab-item active" onclick="setBTab(this, 'b-new')">New Requests <span style="background:var(--danger);color:#fff;padding:2px 6px;border-radius:10px;font-size:0.6rem;margin-left:4px">2</span></div>
+        <div class="tab-item" onclick="setBTab(this, 'b-upcoming')">Upcoming</div>
+        <div class="tab-item" onclick="setBTab(this, 'b-ongoing')">Ongoing</div>
+        <div class="tab-item" onclick="setBTab(this, 'b-history')">History</div>
+      </div>
+
+      <div class="list-container animate-slide d-2" id="b-new">
+        <!-- Request Card -->
+        <div class="data-card b-card">
+          <div class="bc-head">
+            <div>
+              <div class="bc-service"><i class="ph-fill ph-airplane-tilt"></i> Airport Transfer <span class="status-badge pending">Pending</span></div>
+              <div style="font-family:monospace;font-size:0.75rem;color:var(--text-tertiary);margin-top:4px">ID: RW-2044-AIR</div>
+            </div>
+            <div style="text-align:right">
+              <div class="bc-price">৳ 2,500</div>
+            </div>
+          </div>
+          <div class="bc-grid">
+            <div class="bc-info-col">
+              <div class="bc-item"><i class="ph-fill ph-map-pin"></i><div><div class="bc-val">Uttara → HSIA</div></div></div>
+              <div class="bc-item"><i class="ph-fill ph-calendar-blank"></i><div><div class="bc-val">Tomorrow, 08:00 AM</div></div></div>
+            </div>
+            <div class="bc-info-col">
+              <div class="bc-item"><i class="ph-fill ph-car-profile"></i><div><div class="bc-val">Assign to: Toyota Axio</div></div></div>
+            </div>
+          </div>
+          <div class="bc-actions">
+            <button class="btn btn-outline-danger">Reject</button>
+            <button class="btn btn-outline-success">Accept</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="list-container animate-slide d-2" id="b-upcoming" style="display:none">
+        <div class="data-card b-card">
+          <div class="bc-head">
+            <div>
+              <div class="bc-service"><i class="ph-fill ph-buildings"></i> Corporate Transport <span class="status-badge active">Confirmed</span></div>
+              <div style="font-family:monospace;font-size:0.75rem;color:var(--text-tertiary);margin-top:4px">ID: RW-2021-COR</div>
+            </div>
+          </div>
+          <div class="bc-grid">
+            <div class="bc-info-col">
+              <div class="bc-item"><i class="ph-fill ph-map-pin"></i><div><div class="bc-val">Dhanmondi → Tejgaon</div></div></div>
+              <div class="bc-item"><i class="ph-fill ph-calendar-blank"></i><div><div class="bc-val">Sep 15, 09:00 AM</div></div></div>
+            </div>
+            <div class="bc-info-col">
+              <div class="bc-item"><i class="ph-fill ph-car-profile"></i><div><div class="bc-val">Assigned: Toyota Fortuner</div><div class="bc-lbl">Driver: Owner</div></div></div>
+            </div>
+          </div>
+          <div class="bc-actions">
+            <button class="btn btn-accent" onclick="this.innerHTML='<i class=\'ph ph-spinner\' style=\'animation:spin 1s infinite\'></i> Starting...'; setTimeout(()=>{this.className='btn btn-outline-success';this.innerHTML='Trip Ongoing'},1000)">Start Trip <i class="ph ph-arrow-right"></i></button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="list-container animate-slide d-2" id="b-ongoing" style="display:none">
+         <div style="padding:40px; text-align:center; color:var(--text-tertiary); background:var(--bg-panel); border-radius:var(--border-rad); border:1px dashed var(--border-strong)">
+            <i class="ph ph-car" style="font-size:3rem; margin-bottom:16px"></i>
+            <div>No ongoing trips right now.</div>
+         </div>
+      </div>
+
+      <div class="list-container animate-slide d-2" id="b-history" style="display:none">
+         <div class="data-card b-card">
+          <div class="bc-head">
+            <div>
+              <div class="bc-service"><i class="ph-fill ph-path"></i> Intercity Travel <span class="status-badge" style="background:var(--bg-elevated);color:var(--text-secondary);border:1px solid var(--border-subtle)">Completed</span></div>
+              <div style="font-family:monospace;font-size:0.75rem;color:var(--text-tertiary);margin-top:4px">ID: RW-1988-INT</div>
+            </div>
+            <div style="text-align:right">
+              <div class="bc-price" style="color:var(--text-primary)">৳ 12,000</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PANEL: MY CARS ===================== -->
+    <div class="panel" id="pnl-cars">
+      <div class="page-heading animate-slide">
+        <h1 class="ph-title">My Fleet.</h1>
+        <p class="ph-subtitle">Manage your registered vehicles and documents.</p>
+      </div>
+
+      <div class="list-container animate-slide d-1" id="owner-fleet-list">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- ===================== PANEL: EARNINGS ===================== -->
+    <div class="panel" id="pnl-earnings">
+      <div class="page-heading animate-slide">
+        <h1 class="ph-title">Earnings.</h1>
+        <p class="ph-subtitle">Track your revenue and payouts.</p>
+      </div>
+
+      <div class="kpi-grid animate-slide d-1" style="grid-template-columns: repeat(4, 1fr);">
+        <div class="kpi-box">
+          <div class="kpi-head"><i class="ph ph-money"></i></div>
+          <div class="kpi-val" id="kpi-total-earned">৳ 0</div>
+          <div class="kpi-lbl">Total Earned (All Time)</div>
+        </div>
+        <div class="kpi-box" style="border-color:var(--accent-glow); background:var(--bg-elevated)">
+          <div class="kpi-head" style="color:var(--accent)"><i class="ph ph-wallet"></i></div>
+          <div class="kpi-val" id="kpi-net-earned">৳ 0</div>
+          <div class="kpi-lbl">Net Earned (All Time)</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-head"><i class="ph ph-chart-line-down" style="color:var(--warning)"></i></div>
+          <div class="kpi-val" id="kpi-commission">৳ 0</div>
+          <div class="kpi-lbl">Platform Commission (10%)</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-head"><i class="ph ph-bank"></i></div>
+          <div class="kpi-val" id="kpi-pending">৳ 0</div>
+          <div class="kpi-lbl">Pending Payout</div>
+        </div>
+      </div>
+
+      <div class="animate-slide d-2">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <h3 style="font-family:var(--font-display);font-size:1.2rem;font-weight:700">Transaction History</h3>
+          <div style="display:flex; gap:12px">
+            <input type="text" id="owner-search" class="f-input" placeholder="Search ID..." onkeyup="handleOwnerSearch(event)">
+            <select class="f-input" onchange="setOwnerDateFilter(this.value)">
+              <option value="">All Time</option><option value="Completed">Completed Only</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Booking ID</th>
+                <th>Service</th>
+                <th>Total Fare</th>
+                <th>Fee (10%)</th>
+                <th>Net Payout</th>
+                <th>Status</th>
+                <th>Invoice</th>
+              </tr>
+            </thead>
+            <tbody id="owner-payouts">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+          <div id="owner-pagination" style="padding:16px; display:flex; justify-content:space-between; align-items:center; color:var(--text-secondary); font-size:0.9rem;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PANEL: PROFILE ===================== -->
+    <div class="panel" id="pnl-profile">
+      <div class="page-heading animate-slide">
+        <h1 class="ph-title">Profile & Settings.</h1>
+        <p class="ph-subtitle">Manage your business details and payout methods.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px" class="animate-slide d-1">
+        
+        <div style="background:var(--bg-panel);border:1px solid var(--border-subtle);border-radius:var(--border-rad);padding:32px">
+          <h3 style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px"><i class="ph-fill ph-buildings"></i> Business Details</h3>
+          
+          <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:32px">
+            <div>
+              <div style="font-size:0.75rem;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.05em;font-weight:600;margin-bottom:4px">Business Name</div>
+              <div style="font-weight:500">Rahim & Sons Rentals</div>
+            </div>
+            <div>
+              <div style="font-size:0.75rem;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.05em;font-weight:600;margin-bottom:4px">Phone Number</div>
+              <div style="font-weight:500">+880 1711 000000 <span class="status-badge active" style="margin-left:8px">Verified</span></div>
+            </div>
+            <div>
+              <div style="font-size:0.75rem;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.05em;font-weight:600;margin-bottom:4px">Operating Zones</div>
+              <div style="font-weight:500">Dhaka, Chittagong</div>
+            </div>
+          </div>
+          
+          <button class="btn btn-outline">Edit Details</button>
+        </div>
+
+        <div style="background:var(--bg-panel);border:1px solid var(--border-subtle);border-radius:var(--border-rad);padding:32px">
+          <h3 style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px"><i class="ph-fill ph-bank"></i> Payout Methods</h3>
+          
+          <div style="background:var(--bg-base);border:1px solid var(--border-strong);border-radius:8px;padding:16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:40px;height:40px;background:#e2136e;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff"><i class="ph-fill ph-device-mobile"></i></div>
+              <div>
+                <div style="font-weight:600">bKash (Primary)</div>
+                <div style="font-size:0.8rem;color:var(--text-secondary)">01711***000</div>
+              </div>
+            </div>
+            <button class="btn-icon" style="border:none"><i class="ph ph-pencil-simple"></i></button>
+          </div>
+
+          <div style="background:var(--bg-base);border:1px solid var(--border-strong);border-radius:8px;padding:16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:40px;height:40px;background:var(--bg-elevated);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text-secondary)"><i class="ph-fill ph-bank"></i></div>
+              <div>
+                <div style="font-weight:600">City Bank</div>
+                <div style="font-size:0.8rem;color:var(--text-secondary)">Acc: ****5678</div>
+              </div>
+            </div>
+            <button class="btn-icon" style="border:none"><i class="ph ph-pencil-simple"></i></button>
+          </div>
+
+          <button class="btn btn-outline" style="width:100%;border-style:dashed"><i class="ph ph-plus"></i> Add Payment Method</button>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// Navigation Logic
+const titles = { home: 'Partner Home', bookings: 'Bookings', cars: 'My Fleet', earnings: 'Earnings', profile: 'Settings' };
+function switchTab(id, elDesktop, elMobile) {
+  // Desktop Nav
+  if(elDesktop) {
+    document.querySelectorAll('.sidebar .nav-item').forEach(n => n.classList.remove('active'));
+    elDesktop.classList.add('active');
+  } else {
+    document.querySelectorAll('.sidebar .nav-item').forEach(n => {
+      n.classList.remove('active');
+      if(n.getAttribute('onclick') && n.getAttribute('onclick').includes(`'${id}'`)) n.classList.add('active');
+    });
+  }
+  
+  // Mobile Nav
+  if(elMobile) {
+    document.querySelectorAll('.mn-item').forEach(n => n.classList.remove('active'));
+    elMobile.classList.add('active');
+  } else {
+    document.querySelectorAll('.mn-item').forEach(n => {
+      n.classList.remove('active');
+      if(n.getAttribute('onclick') && n.getAttribute('onclick').includes(`'${id}'`)) n.classList.add('active');
+    });
+  }
+  
+  document.getElementById('head-title').textContent = titles[id];
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('pnl-' + id).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// Bookings Tabs
+function setBTab(el, targetId) {
+  el.parentElement.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  
+  document.getElementById('pnl-bookings').querySelectorAll('.list-container').forEach(c => c.style.display = 'none');
+  document.getElementById(targetId).style.display = 'flex';
+}
+
+// Toggles
+function toggleAvail(el) {
+  el.classList.toggle('on');
+  const txt = el.parentElement;
+  if(el.classList.contains('on')) {
+    txt.firstChild.textContent = 'Status: Available for Booking ';
+  } else {
+    txt.firstChild.textContent = 'Status: Unavailable / Offline ';
+  }
+}
+
+// Auto-injected to fix Vite module scoping
+window.switchTab = switchTab;
+window.setBTab = setBTab;
+window.toggleAvail = toggleAvail;
+</script>
+<script>
+  const ownerState = {
+    ownerId: '', 
+    bookings: { page: 1, limit: 10, search: '', status: '', includeDeleted: false, ownerId: '' },
+    inventory: { page: 1, limit: 10, search: '', category: '', includeDeleted: false, ownerId: '' }
+  };
+  
+  // Set owner ID from HttpOnly session
+  async function initializeOwnerState() {
+      await window.hydrateStatePromise;
+      if (window.AppState && window.AppState.user) {
+          ownerState.ownerId = window.AppState.user.id;
+          ownerState.bookings.ownerId = window.AppState.user.id;
+          ownerState.inventory.ownerId = window.AppState.user.id;
+      }
+  }
+
+  async function renderOwnerBookings() {
+    if(!window.BookingsManager) return;
+    
+    // Calculate KPIs for this specific owner
+    const allBooks = (await window.BookingsManager.getAll()).filter(b => b.ownerId === ownerState.ownerId);
+    let totalEarned = 0;
+    let pendingPayout = 0;
+    
+    allBooks.forEach(b => {
+      const val = parseInt((b.price || '0').replace(/[^0-9]/g, '')) || 0;
+      if (b.status === 'Completed') {
+        totalEarned += val;
+      } else if (b.status === 'Confirmed') {
+        pendingPayout += val;
+      }
+    });
+    
+    const commission = Math.round(totalEarned * 0.10);
+    const net = totalEarned - commission;
+    const pendingNet = Math.round(pendingPayout * 0.90);
+    
+    const fmt = num => '৳ ' + num.toLocaleString();
+    if(document.getElementById('kpi-total-earned')) document.getElementById('kpi-total-earned').textContent = fmt(totalEarned);
+    if(document.getElementById('kpi-net-earned')) document.getElementById('kpi-net-earned').textContent = fmt(net);
+    if(document.getElementById('kpi-commission')) document.getElementById('kpi-commission').textContent = fmt(commission);
+    if(document.getElementById('kpi-pending')) document.getElementById('kpi-pending').textContent = fmt(pendingNet);
+
+    // We treat this user as an owner who sees all bookings for MVP.
+    const res = await window.BookingsManager.getPaginated(ownerState.bookings);
+    const tbody = document.getElementById('owner-payouts');
+    const pag = document.getElementById('owner-pagination');
+    if(!tbody || !pag) return;
+
+    if(res.data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--text-tertiary)">No transaction history.</td></tr>';
+      pag.innerHTML = '';
+      return;
+    }
+
+    let html = '';
+    res.data.forEach(b => {
+      // Fake a fee calculation
+      const val = parseInt((b.price || '0').replace(/[^0-9]/g, '')) || 0;
+      const fee = Math.round(val * 0.1);
+      const net = val - fee;
+      
+      html += `
+        <tr>
+          <td>${(b.dateTime || '').split(' ')[0]}</td>
+          <td style="font-family:monospace;color:var(--text-secondary)">${b.id}</td>
+          <td>${b.service ? b.service.toUpperCase() : ''}</td>
+          <td>${b.price || '৳0'}</td>
+          <td style="color:var(--warning)">-৳ ${fee}</td>
+          <td class="t-amt" style="color:var(--success)">৳ ${net}</td>
+          <td><span class="status-badge ${b.status === 'Completed' ? 'active' : 'st-pending'}">${b.status === 'Completed' ? 'Paid to Bank' : 'Pending'}</span></td>
+          <td><a href="invoice.html?id=${b.id}" target="_blank" class="btn btn-outline btn-sm" style="text-decoration:none" title="View Invoice"><i class="ph ph-receipt"></i></a></td>
+        </tr>
+      `;
+    });
+    tbody.innerHTML = html;
+
+    pag.innerHTML = `
+      <div>Showing ${((res.page-1)*res.limit)+1} to ${Math.min(res.page*res.limit, res.total)} of ${res.total}</div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-outline btn-sm" ${res.page === 1 ? 'disabled' : ''} onclick="changeOwnerPage(${res.page - 1})">Prev</button>
+        <button class="btn btn-outline btn-sm" ${res.page === res.totalPages ? 'disabled' : ''} onclick="changeOwnerPage(${res.page + 1})">Next</button>
+      </div>
+    `;
+  }
+
+  function changeOwnerPage(p) { ownerState.bookings.page = p; renderOwnerBookings(); }
+
+  function handleOwnerSearch(e) {
+    if(e.key === 'Enter') {
+      ownerState.bookings.search = e.target.value;
+      ownerState.bookings.page = 1;
+      renderOwnerBookings();
+    }
+  }
+
+  function setOwnerDateFilter(val) {
+    ownerState.bookings.status = val;
+    ownerState.bookings.page = 1;
+    renderOwnerBookings();
+  }
+
+  async function renderOwnerFleet() {
+    if(!window.InventoryManager) return;
+    const res = await window.InventoryManager.getPaginated(ownerState.inventory);
+    const container = document.getElementById('owner-fleet-list');
+    if(!container) return;
+
+    if(res.data.length === 0) {
+      container.innerHTML = '<div style="text-align:center; padding:32px; color:var(--text-tertiary)">No vehicles registered yet.</div>';
+      return;
+    }
+
+    let html = '';
+    res.data.forEach(car => {
+      // Dummy logic: display all cars to this owner for MVP purposes
+      const brand = car.brand || 'Unknown';
+      const model = car.model || 'Car';
+      const type = car.type || 'Sedan';
+      
+      html += `
+        <div class="data-card car-card">
+          <div class="cc-img">
+            <img src="${car.image || 'assets/placeholder.jpg'}" alt="${brand}" onerror="this.style.display='none'"/>
+            <div class="cc-plate">${car.registration || 'UNREGISTERED'}</div>
+          </div>
+          <div class="cc-body">
+            <div class="cc-head">
+              <div>
+                <div class="cc-title">${brand} ${model}</div>
+                <div class="cc-meta">
+                  <span><i class="ph-fill ph-car-profile"></i> ${type}</span>
+                  <span><i class="ph-fill ph-users"></i> ${car.seats || 4} Seats</span>
+                  <span><i class="ph-fill ph-paint-bucket"></i> ${car.color || 'White'}</span>
+                </div>
+              </div>
+              <span class="status-badge ${car.status === 'Verified' ? 'active' : 'st-pending'}">${car.status || 'Pending'}</span>
+            </div>
+            
+            <div class="cc-docs">
+              <div class="cc-doc"><i class="ph-fill ph-check-circle"></i> Reg. Paper</div>
+              <div class="cc-doc"><i class="ph-fill ph-check-circle"></i> Tax Token</div>
+              <div class="cc-doc"><i class="ph-fill ph-check-circle"></i> Fitness</div>
+            </div>
+
+            <div class="cc-footer">
+              <div class="cc-avail">
+                Status: Available for Booking
+                <div class="toggle-switch on" onclick="toggleAvail(this)"></div>
+              </div>
+              <div style="display:flex;gap:12px">
+                <button class="btn btn-outline" onclick="alert('Feature coming soon!')">Edit Details</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    
+    container.innerHTML = html;
+  }
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    await initializeOwnerState();
+    renderOwnerBookings();
+    renderOwnerFleet();
+    if(window.renderNotifications) window.renderNotifications(ownerState.ownerId || 'biz-001', 'notif-list', 'notif-badge');
+  });
+
+// Auto-injected to fix Vite module scoping
+window.initializeOwnerState = initializeOwnerState;
+window.renderOwnerBookings = renderOwnerBookings;
+window.changeOwnerPage = changeOwnerPage;
+window.handleOwnerSearch = handleOwnerSearch;
+window.setOwnerDateFilter = setOwnerDateFilter;
+window.renderOwnerFleet = renderOwnerFleet;
+</script>
+<script>(function() {
+    const originalFetch = window.fetch;
+    window.fetch = async function(...args) {
+        let url = args[0];
+        if (url instanceof Request) {
+            url = url.url;
+        }
+
+        if (typeof url === 'string' && url.includes('/api/')) {
+            // DEMO AUTH MOCKS
+            if (url.includes('/api/login')) {
+                let role = 'customer';
+                try {
+                    const options = args[1];
+                    const body = options && options.body ? JSON.parse(options.body) : {};
+                    if (body.username === 'admin') role = 'admin';
+                    if (body.username === 'owner') role = 'owner';
+                } catch(e) {}
+                
+                const fakeUser = { userId: 'demo', role, name: 'Demo User' };
+                localStorage.setItem('demo_user', JSON.stringify(fakeUser));
+                
+                return new Response(JSON.stringify({ success: true, role, name: 'Demo User' }), { status: 200 });
+            }
+            if (url.includes('/api/logout')) {
+                localStorage.removeItem('demo_user');
+                return new Response(JSON.stringify({ success: true }), { status: 200 });
+            }
+            if (url.includes('/api/me')) {
+                const demoUser = localStorage.getItem('demo_user');
+                if (demoUser) {
+                    return new Response(JSON.stringify({ success: true, user: JSON.parse(demoUser) }), { status: 200 });
+                }
+                return new Response(JSON.stringify({ error: 'No active session' }), { status: 401 });
+            }
+
+            try {
+                const response = await originalFetch(...args);
+                if (!response.ok) {
+                    showUnderConstruction();
+                }
+                return response;
+            } catch (e) {
+                showUnderConstruction();
+                return Promise.reject(e);
+            }
+        }
+        return originalFetch(...args);
+    };
+
+    function showUnderConstruction() {
+        if (document.getElementById('under-construction-overlay')) return;
+
+        const overlay = document.createElement('div');
+        overlay.id = 'under-construction-overlay';
+        Object.assign(overlay.style, {
+            position: 'fixed',
+            top: '0', left: '0', width: '100vw', height: '100vh',
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            backdropFilter: 'blur(10px)',
+            zIndex: '999999',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            color: '#fff',
+            fontFamily: 'Inter, sans-serif'
+        });
+
+        overlay.innerHTML = `
+            <div style="background: #1a1a1a; padding: 3rem; border-radius: 1rem; border: 1px solid #333; text-align: center; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d4ff00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem;">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <h2 style="margin: 0 0 1rem 0; font-size: 1.5rem; color: #fff;">Under Construction</h2>
+                <p style="margin: 0 0 2rem 0; color: #aaa; font-size: 0.9rem; line-height: 1.5;">This backend feature is currently under development. The live demo is showcasing the frontend interface.</p>
+                <button id="close-uc-btn" style="background: #d4ff00; color: #000; border: none; padding: 0.75rem 2rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: transform 0.2s;">Got it</button>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        document.getElementById('close-uc-btn').addEventListener('click', () => {
+            overlay.remove();
+        });
+    }
+})();
+</script></body>
+</html>
+

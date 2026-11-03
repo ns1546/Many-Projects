@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Rownaa — Premium Car Rental, Bangladesh</title>
+  <meta name="description"
+    content="Bangladesh's first premium car rental marketplace. Airport transfers, corporate transport, intercity travel. Book with verified drivers." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/design.css?v=3" />
+  <script src="js/auth.js"></script>
+</head>
+
+<body>
+
+  <div id="cursor-light"></div>
+
+  <!-- NAV -->
+  <header class="site-nav" id="site-nav">
+    <div class="nav-wrap">
+      <a href="index.html" class="wordmark">Rownaa<sup>®</sup></a>
+      <nav class="nav-center" id="nav-center">
+        <a href="#services">Services</a>
+        <a href="find-cars.html">Book Now</a>
+        <a href="owner-register.html">For Owners</a>
+        <a href="#about">About</a>
+      </nav>
+      <div class="nav-right">
+        <a href="login-sliding.html" class="nav-text-link">Sign in</a>
+        <a href="register.html" class="nav-cta">Get Started</a>
+        <button class="nav-burger" id="nav-burger" aria-label="Menu">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO — Full bleed editorial layout -->
+  <section class="hero-editorial" id="hero">
+    <div class="hero-bg-image">
+      <img src="assets/hero-car.png" alt="" class="hero-bg-img" id="hero-parallax-img"
+        onerror="this.parentElement.style.background='linear-gradient(160deg,#0a0a0a 0%,#111 60%,#0d1f0d 100%)'" />
+      <div class="hero-scrim"></div>
+    </div>
+
+    <div class="hero-top-strip">
+      <span class="hero-kicker">Bangladesh's Premier Car Rental Marketplace</span>
+      <span class="hero-year">Est. 2024</span>
+    </div>
+
+    <div class="hero-text-block">
+      <h1 class="hero-display">
+        <span class="hd-line" data-speed="0.1">Book</span>
+        <span class="hd-line hd-line--indent" data-speed="0.15">a car.</span>
+        <span class="hd-line hd-line--em" data-speed="0.2" style="position: relative;">
+          Anywhere.
+          <!-- MOVING CAR ANIMATION -->
+          <div class="hero-car-anim">
+            <div class="hc-wind hc-wind-1"></div>
+            <div class="hc-wind hc-wind-2"></div>
+            <div class="hc-wind hc-wind-3"></div>
+            <img src="assets/hero-car.png" alt="Driving Car" class="hc-img" />
+          </div>
+        </span>
+      </h1>
+    </div>
+  </section>
+
+  <!-- BOOKING CONSOLE — Detached, below hero -->
+  <section class="booking-section" id="booking-section">
+    <div class="bs-inner">
+      <div class="bs-label">
+        <span class="bs-label-text">What are you booking?</span>
+      </div>
+      <div class="bs-console">
+        <div class="bs-tabs" id="bs-tabs">
+          <button class="bs-tab active" data-svc="airport">✈ Airport</button>
+          <button class="bs-tab" data-svc="hourly">◷ Hourly</button>
+          <button class="bs-tab" data-svc="intercity">⇌ Intercity</button>
+          <button class="bs-tab" data-svc="tour">◎ Tour</button>
+          <button class="bs-tab" data-svc="event">◈ Event</button>
+          <button class="bs-tab" data-svc="corporate">⊞ Corporate</button>
+        </div>
+        <div class="bs-forms">
+
+          <div class="bs-form active" id="bsf-airport">
+            <div class="bf-row">
+              <div class="bf-field">
+                <label>Pickup Type</label>
+                <select id="af-type">
+                  <option>From Airport</option>
+                  <option>To Airport</option>
+                </select>
+              </div>
+              <div class="bf-field">
+                <label>Trip</label>
+                <select id="af-trip">
+                  <option>One Way</option>
+                  <option>Round Trip</option>
+                </select>
+              </div>
+              <div class="bf-field bf-wide">
+                <label>Location</label>
+                <input type="text" id="af-loc" placeholder="Area or address in Bangladesh" />
+              </div>
+              <div class="bf-field">
+                <label>Date</label>
+                <input type="date" id="af-date" />
+              </div>
+              <div class="bf-field">
+                <label>Time</label>
+                <input type="time" id="af-time" />
+              </div>
+              <div class="bf-field bf-counter">
+                <label>Passengers</label>
+                <div class="counter"><button onclick="cnt('af-pax',-1)">−</button><span id="af-pax">1</span><button
+                    onclick="cnt('af-pax',1)">+</button></div>
+              </div>
+            </div>
+            <div class="seat-msg" id="sm-airport"></div>
+            <button class="bf-submit" onclick="goBook('airport')">Find Available Cars <span>→</span></button>
+          </div>
+
+          <div class="bs-form" id="bsf-hourly">
+            <div class="bf-row">
+              <div class="bf-field bf-wide">
+                <label>Pickup Location</label>
+                <input type="text" id="hf-loc" placeholder="Enter area or address" />
+              </div>
+              <div class="bf-field">
+                <label>Start Date & Time</label>
+                <input type="datetime-local" id="hf-start" />
+              </div>
+              <div class="bf-field">
+                <label>Duration</label>
+                <select id="hf-duration">
+                  <option>2 Hours</option>
+                  <option>4 Hours</option>
+                  <option>6 Hours</option>
+                  <option>8 Hours</option>
+                  <option>Full Day</option>
+                </select>
+              </div>
+              <div class="bf-field">
+                <label>Trip Scope</label>
+                <select id="hf-scope">
+                  <option>Within City</option>
+                  <option>Outside City</option>
+                </select>
+              </div>
+              <div class="bf-field bf-counter">
+                <label>Passengers</label>
+                <div class="counter"><button onclick="cnt('hf-pax',-1)">−</button><span id="hf-pax">1</span><button
+                    onclick="cnt('hf-pax',1)">+</button></div>
+              </div>
+            </div>
+            <div class="seat-msg" id="sm-hourly"></div>
+            <button class="bf-submit" onclick="goBook('hourly')">Find Available Cars <span>→</span></button>
+          </div>
+
+          <div class="bs-form" id="bsf-intercity">
+            <div class="bf-row">
+              <div class="bf-field">
+                <label>From</label>
+                <select id="ic-from">
+                  <option>Dhaka</option>
+                  <option>Chittagong</option>
+                  <option>Sylhet</option>
+                  <option>Rajshahi</option>
+                  <option>Khulna</option>
+                  <option>Barisal</option>
+                  <option>Cox's Bazar</option>
+                </select>
+              </div>
+              <div class="bf-field">
+                <label>To</label>
+                <select id="ic-to">
+                  <option>Chittagong</option>
+                  <option>Dhaka</option>
+                  <option>Sylhet</option>
+                  <option>Rajshahi</option>
+                  <option>Khulna</option>
+                  <option>Barisal</option>
+                  <option>Cox's Bazar</option>
+                </select>
+              </div>
+              <div class="bf-field">
+                <label>Date</label>
+                <input type="date" id="ic-date" />
+              </div>
+              <div class="bf-field">
+                <label>Trip</label>
+                <select id="ic-trip">
+                  <option>One Way</option>
+                  <option>Round Trip</option>
+                </select>
+              </div>
+              <div class="bf-field bf-counter">
+                <label>Passengers</label>
+                <div class="counter"><button onclick="cnt('ic-pax',-1)">−</button><span id="ic-pax">1</span><button
+                    onclick="cnt('ic-pax',1)">+</button></div>
+              </div>
+            </div>
+            <div class="seat-msg" id="sm-intercity"></div>
+            <button class="bf-submit" onclick="goBook('intercity')">Find Available Cars <span>→</span></button>
+          </div>
+
+          <div class="bs-form" id="bsf-tour">
+            <div class="bf-row">
+              <div class="bf-field">
+                <label>From</label>
+                <select id="tf-from">
+                  <option>Dhaka</option>
+                  <option>Chittagong</option>
+                  <option>Sylhet</option>
+                </select>
+              </div>
+              <div class="bf-field bf-wide">
+                <label>Destinations</label>
+                <input type="text" id="tf-dest" placeholder="e.g. Cox's Bazar, Bandarban, Sajek" />
+              </div>
+              <div class="bf-field">
+                <label>Start Date</label>
+                <input type="date" id="tf-date" />
+              </div>
+              <div class="bf-field">
+                <label>Duration</label>
+                <select id="tf-duration">
+                  <option>1 Day</option>
+                  <option>2 Days</option>
+                  <option>3 Days</option>
+                  <option>4 Days</option>
+                  <option>5+ Days</option>
+                </select>
+              </div>
+              <div class="bf-field bf-counter">
+                <label>Passengers</label>
+                <div class="counter"><button onclick="cnt('tf-pax',-1)">−</button><span id="tf-pax">1</span><button
+                    onclick="cnt('tf-pax',1)">+</button></div>
+              </div>
+            </div>
+            <div class="seat-msg" id="sm-tour"></div>
+            <button class="bf-submit" onclick="goBook('tour')">Find Available Cars <span>→</span></button>
+          </div>
+
+          <div class="bs-form" id="bsf-event">
+            <div class="bf-row">
+              <div class="bf-field">
+                <label>Event Type</label>
+                <select id="ef-type">
+                  <option>Wedding</option>
+                  <option>Corporate Event</option>
+                  <option>Function</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="bf-field">
+                <label>Event Date</label>
+                <input type="date" id="ef-date" />
+              </div>
+              <div class="bf-field bf-wide">
+                <label>Venue Location</label>
+                <input type="text" id="ef-venue" placeholder="Venue address or area" />
+              </div>
+              <div class="bf-field">
+                <label>Duration</label>
+                <select id="ef-duration">
+                  <option>2 Hours</option>
+                  <option>4 Hours</option>
+                  <option>6 Hours</option>
+                  <option>Full Day</option>
+                </select>
+              </div>
+              <div class="bf-field bf-counter">
+                <label>Cars Needed</label>
+                <div class="counter"><button onclick="cnt('ef-cars',-1)">−</button><span id="ef-cars">1</span><button
+                    onclick="cnt('ef-cars',1)">+</button></div>
+              </div>
+            </div>
+            <button class="bf-submit" onclick="goBook('event')">Find Available Cars <span>→</span></button>
+          </div>
+
+          <div class="bs-form" id="bsf-corporate">
+            <div class="bf-row">
+              <div class="bf-field">
+                <label>Company Name</label>
+                <input type="text" id="cf-co" placeholder="Your company" />
+              </div>
+              <div class="bf-field">
+                <label>Office Pickup</label>
+                <input type="text" id="cf-pick" placeholder="Office location" />
+              </div>
+              <div class="bf-field">
+                <label>Drop Location</label>
+                <input type="text" id="cf-drop" placeholder="Destination" />
+              </div>
+              <div class="bf-field">
+                <label>Contract Type</label>
+                <select id="cf-contract">
+                  <option>One-Time</option>
+                  <option>Daily</option>
+                  <option>Weekly</option>
+                  <option>Monthly</option>
+                </select>
+              </div>
+              <div class="bf-field bf-counter">
+                <label>Passengers</label>
+                <div class="counter"><button onclick="cnt('cf-pax',-1)">−</button><span id="cf-pax">1</span><button
+                    onclick="cnt('cf-pax',1)">+</button></div>
+              </div>
+            </div>
+            <div class="seat-msg" id="sm-corporate"></div>
+            <button class="bf-submit" onclick="goBook('corporate')">Find Available Cars <span>→</span></button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES — Horizontal editorial list -->
+  <section class="services-editorial" id="services">
+    <div class="se-head">
+      <h2 class="se-title">Six services.<br />One platform.</h2>
+      <p class="se-sub">Every type of journey across Bangladesh — handled with precision.</p>
+    </div>
+    <div class="se-list">
+      <div class="se-item" onclick="selectSvc('airport')">
+        <div class="se-num">01</div>
+        <div class="se-body">
+          <div class="se-name">Airport Transfer</div>
+          <div class="se-desc">Seamless pickups and drops. From airport or to airport. One-way or return.</div>
+        </div>
+        <div class="se-arrow">↗</div>
+      </div>
+      <div class="se-item" onclick="selectSvc('hourly')">
+        <div class="se-num">02</div>
+        <div class="se-body">
+          <div class="se-name">Hourly Rental</div>
+          <div class="se-desc">Your schedule, your car. By the hour or full day. City or beyond.</div>
+        </div>
+        <div class="se-arrow">↗</div>
+      </div>
+      <div class="se-item" onclick="selectSvc('intercity')">
+        <div class="se-num">03</div>
+        <div class="se-body">
+          <div class="se-name">Intercity Travel</div>
+          <div class="se-desc">Point-to-point across Bangladesh. Comfortable rides. Verified drivers.</div>
+        </div>
+        <div class="se-arrow">↗</div>
+      </div>
+      <div class="se-item" onclick="selectSvc('tour')">
+        <div class="se-num">04</div>
+        <div class="se-body">
+          <div class="se-name">Travel & Tour</div>
+          <div class="se-desc">Multi-destination tour packages. Itinerary-ready. Driver included.</div>
+        </div>
+        <div class="se-arrow">↗</div>
+      </div>
+      <div class="se-item" onclick="selectSvc('event')">
+        <div class="se-num">05</div>
+        <div class="se-body">
+          <div class="se-name">Event & Wedding</div>
+          <div class="se-desc">Premium transport for your biggest days. Multiple cars. On-time guaranteed.</div>
+        </div>
+        <div class="se-arrow">↗</div>
+      </div>
+      <div class="se-item" onclick="selectSvc('corporate')">
+        <div class="se-num">06</div>
+        <div class="se-body">
+          <div class="se-name">Corporate Transport</div>
+          <div class="se-desc">Daily, weekly, or monthly contracts. Professional. Reliable. Scalable.</div>
+        </div>
+        <div class="se-arrow">↗</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS — Cinematic numbered steps -->
+  <section class="process-section" id="how-it-works">
+    <div class="ps-inner">
+      <div class="ps-header">
+        <p class="ps-overline">The process</p>
+        <h2 class="ps-title">Four steps<br />to your ride.</h2>
+      </div>
+      <div class="ps-steps">
+        <div class="ps-step" data-reveal>
+          <div class="pss-num">01</div>
+          <div class="pss-content">
+            <h3>Choose your service</h3>
+            <p>Six tailored services for every kind of journey — from airport runs to week-long tours. Pick exactly what
+              you need.</p>
+          </div>
+        </div>
+        <div class="ps-step" data-reveal>
+          <div class="pss-num">02</div>
+          <div class="pss-content">
+            <h3>Browse verified cars</h3>
+            <p>Every car and driver is manually approved by our team. Location-matched. Documents verified. No
+              compromises.</p>
+          </div>
+        </div>
+        <div class="ps-step" data-reveal>
+          <div class="pss-num">03</div>
+          <div class="pss-content">
+            <h3>Pay 20% to confirm</h3>
+            <p>Secure your booking with just 20% advance via bKash or SSLCommerz. The rest is paid directly to your
+              driver.</p>
+          </div>
+        </div>
+        <div class="ps-step" data-reveal>
+          <div class="pss-num">04</div>
+          <div class="pss-content">
+            <h3>Ride & review</h3>
+            <p>Your driver arrives on time. After the trip, rate your experience. Your feedback keeps the platform
+              trustworthy.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE — Full dark strip -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <span>Airport Transfer</span><em>—</em>
+      <span>Intercity Travel</span><em>—</em>
+      <span>Wedding Transport</span><em>—</em>
+      <span>Corporate Fleet</span><em>—</em>
+      <span>Tour Packages</span><em>—</em>
+      <span>Hourly Rental</span><em>—</em>
+      <span>Airport Transfer</span><em>—</em>
+      <span>Intercity Travel</span><em>—</em>
+      <span>Wedding Transport</span><em>—</em>
+      <span>Corporate Fleet</span><em>—</em>
+      <span>Tour Packages</span><em>—</em>
+      <span>Hourly Rental</span><em>—</em>
+    </div>
+  </div>
+
+  <!-- OWNER SECTION — Split full-bleed -->
+  <section class="owner-section" id="about">
+    <div class="os-image">
+      <img src="assets/driver.png" alt="Car owner" class="os-img"
+        onerror="this.parentElement.style.background='#111'" />
+      <div class="os-image-overlay"></div>
+    </div>
+    <div class="os-content">
+      <p class="os-overline">For car owners & drivers</p>
+      <h2 class="os-title">Your car.<br />Your income.<br />Your schedule.</h2>
+      <p class="os-body">Register your vehicle on Rownaa. Once verified, you receive daily booking requests from
+        customers near your area. Accept what works for you. Earn what you deserve.</p>
+      <ul class="os-list">
+        <li>Verified onboarding — trusted by customers</li>
+        <li>Accept or reject bookings on your terms</li>
+        <li>Manage multiple cars under one account</li>
+        <li>Instant payouts via bKash or bank transfer</li>
+      </ul>
+      <div class="os-actions">
+        <a href="owner-register.html" class="os-cta">Register Your Car</a>
+        <a href="driver-register.html" class="os-cta" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.2); color:#fff; margin-left:10px;">Drive with Us →</a>
+        <div class="os-earn-badge">
+          <span class="oeb-label">Avg. monthly</span>
+          <span class="oeb-val">৳ 38,000+</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST — Minimal dark section -->
+  <section class="trust-strip" id="trust">
+    <div class="ts-inner">
+      <h2 class="ts-title" data-reveal>Built on<br />trust.</h2>
+      <div class="ts-pillars">
+        <div class="ts-pillar" data-reveal>
+          <div class="tsp-num" data-count="500">0</div>
+          <div class="tsp-unit">+</div>
+          <div class="tsp-label">Verified<br />Cars</div>
+        </div>
+        <div class="ts-pillar" data-reveal>
+          <div class="tsp-num" data-count="12">0</div>
+          <div class="tsp-unit">K+</div>
+          <div class="tsp-label">Trips<br />Completed</div>
+        </div>
+        <div class="ts-pillar" data-reveal>
+          <div class="tsp-num" data-count="98">0</div>
+          <div class="tsp-unit">%</div>
+          <div class="tsp-label">On-Time<br />Rate</div>
+        </div>
+        <div class="ts-pillar" data-reveal>
+          <div class="tsp-num" data-count="4.9">0</div>
+          <div class="tsp-unit">★</div>
+          <div class="tsp-label">Average<br />Rating</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="final-cta">
+    <div class="fc-inner">
+      <h2 class="fc-title" data-reveal>Ready to go?</h2>
+      <p class="fc-sub">No hidden fees. Verified cars. Trusted drivers. Your journey starts here.</p>
+      <div class="fc-actions">
+        <a href="find-cars.html" class="fc-btn-main">Book a Car Now</a>
+        <a href="owner-register.html" class="fc-btn-ghost">List Your Car →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="sf-top">
+      <div class="sf-brand">
+        <div class="sf-wordmark">Rownaa<sup>®</sup></div>
+        <p>Book a car, anywhere you're headed.<br />Bangladesh's premier car rental marketplace.</p>
+      </div>
+      <div class="sf-nav-groups">
+        <div class="sf-group">
+          <h5>Services</h5>
+          <a href="#booking-section" onclick="window.selectSvc('airport'); return false;">Airport Transfer</a>
+          <a href="#booking-section" onclick="window.selectSvc('hourly'); return false;">Hourly Rental</a>
+          <a href="#booking-section" onclick="window.selectSvc('intercity'); return false;">Intercity Travel</a>
+          <a href="#booking-section" onclick="window.selectSvc('tour'); return false;">Travel & Tour</a>
+          <a href="#booking-section" onclick="window.selectSvc('event'); return false;">Event & Wedding</a>
+          <a href="#booking-section" onclick="window.selectSvc('corporate'); return false;">Corporate</a>
+        </div>
+        <div class="sf-group">
+          <h5>Platform</h5>
+          <a href="find-cars.html">Book a Car</a>
+          <a href="owner-register.html">List Your Car</a>
+          <a href="driver-register.html">Apply as Chauffeur</a>
+          <a href="login-sliding.html">Sign In</a>
+          <a href="register.html">Create Account</a>
+        </div>
+        <div class="sf-group">
+          <h5>Company</h5>
+          <a href="#trust">About Rownaa</a>
+          <a href="#services">How It Works</a>
+          <a href="mailto:support@rownaa.com">Help & Support</a>
+          <a href="javascript:void(0)" onclick="openLegalModal('privacy'); return false;">Privacy Policy</a>
+          <a href="javascript:void(0)" onclick="openLegalModal('terms'); return false;">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+    <div class="sf-bottom">
+      <span>© 2025 Rownaa. All rights reserved.</span>
+      <span>Made with precision in Bangladesh 🇧🇩</span>
+    </div>
+  </footer>
+
+  <!-- LEGAL & POLICIES MODAL -->
+  <div id="legalModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:#111114; border:1px solid rgba(255,255,255,0.15); border-radius:16px; width:100%; max-width:600px; padding:32px; box-shadow:0 20px 50px rgba(0,0,0,0.8); max-height:85vh; overflow-y:auto; color:#fff;">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:16px; margin-bottom:20px;">
+        <h3 id="legal-modal-title" style="font-family:'Plus Jakarta Sans',sans-serif; font-size:1.3rem; font-weight:700;">Rownaa Terms & Trust Standards</h3>
+        <button type="button" onclick="closeLegalModal()" style="background:none; border:none; color:#aaa; font-size:1.4rem; cursor:pointer;">✕</button>
+      </div>
+      <div id="legal-modal-content" style="font-size:0.9rem; line-height:1.7; color:rgba(255,255,255,0.8);">
+        <!-- Injected by openLegalModal() -->
+      </div>
+      <div style="margin-top:24px; text-align:right;">
+        <button type="button" onclick="closeLegalModal()" style="background:var(--accent); color:#000; font-weight:700; border:none; padding:10px 24px; border-radius:8px; cursor:pointer;">Understood</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.openLegalModal = function(type) {
+      const modal = document.getElementById('legalModal');
+      const title = document.getElementById('legal-modal-title');
+      const content = document.getElementById('legal-modal-content');
+      if (!modal) return;
+      if (type === 'privacy') {
+        title.textContent = 'Privacy & Security Policy';
+        content.innerHTML = `
+          <p><strong>1. Zero-Trust Passenger Encryption</strong><br/>All rider records, pickup coordinates, and contact details are encrypted in transit and at rest under strict FAANG-grade data protection standards.</p>
+          <p style="margin-top:12px;"><strong>2. Chauffeur Telemetry & Location Sharing</strong><br/>Live GPS coordinates are only shared during an active dispatched trip between the matched customer, chauffeur, and centralized operations control.</p>
+          <p style="margin-top:12px;"><strong>3. Payment & Credentials Protection</strong><br/>Authentication tokens are managed via secure, HttpOnly credentials. We never store raw banking passcodes or MFS PINs.</p>
+        `;
+      } else {
+        title.textContent = 'Terms of Service & Rider Guarantee';
+        content.innerHTML = `
+          <p><strong>1. Guaranteed Vehicle Allocation</strong><br/>Every vehicle listed on Rownaa has passed verified inspection of registration, fitness, and tax token credentials before being assigned.</p>
+          <p style="margin-top:12px;"><strong>2. Transparent Official Pricing</strong><br/>All base fares, extra km rates, and chauffeur waiting fees strictly follow the official Master Tariff. No arbitrary surge charges or hidden roadside demands.</p>
+          <p style="margin-top:12px;"><strong>3. Partner Revenue Protection</strong><br/>Fleet owners and drivers receive 90% guaranteed net payout on all completed journeys with automatic weekly settlements.</p>
+        `;
+      }
+      modal.style.display = 'flex';
+    };
+    window.closeLegalModal = function() {
+      const modal = document.getElementById('legalModal');
+      if (modal) modal.style.display = 'none';
+    };
+  </script>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <nav class="m-nav" id="m-nav">
+    <a href="index.html" class="m-nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+        <polyline points="9 22 9 12 15 12 15 22" />
+      </svg><span>Home</span></a>
+    <a href="find-cars.html" class="m-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg><span>Book</span></a>
+    <a href="owner-register.html" class="m-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2">
+        <rect x="1" y="3" width="15" height="13" />
+        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+        <circle cx="5.5" cy="18.5" r="2.5" />
+        <circle cx="18.5" cy="18.5" r="2.5" />
+      </svg><span>Earn</span></a>
+    <a href="login-sliding.html" class="m-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg><span>Account</span></a>
+  </nav>
+
+  <script src="js/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+{
+  "name": "server",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev:server": "ts-node src/index.ts",
+    "dev:worker": "ts-node src/index-worker.ts",
+    "dev:dashboard": "vendure dev dashboard",
+    "dev": "ts-node src/index.ts",
+    "build": "tsc",
+    "build:server": "tsc",
+    "build:worker": "tsc",
+    "build:dashboard": "vendure build dashboard",
+    "start:server": "node ./dist/index.js",
+    "start:worker": "node ./dist/index-worker.js",
+    "start": "node ./dist/index.js"
+  },
+  "dependencies": {
+    "@nestjs/common": "^12.1.2",
+    "@nestjs/core": "^12.1.2",
+    "@nestjs/graphql": "^14.0.3",
+    "@nestjs/platform-express": "^12.1.2",
+    "@vendure/admin-ui-plugin": "^3.7.4",
+    "@vendure/asset-server-plugin": "^3.7.4",
+    "@vendure/common": "^3.7.4",
+    "@vendure/core": "^3.7.4",
+    "@vendure/email-plugin": "^3.7.4",
+    "graphql": "^17.0.2",
+    "graphql-tag": "^2.12.7",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "sqlite3": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^7.0.2"
+  }
+}

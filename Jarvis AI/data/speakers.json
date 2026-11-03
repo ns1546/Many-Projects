@@ -1,0 +1,13 @@
+{
+  "boss": {
+    "name": "Boss",
+    "is_boss": true,
+    "role": "boss",
+    "title": "Sir",
+    "samples": 1,
+    "vector": null,
+    "created_at": 1791899353.58992,
+    "last_seen": 1791899353.5899205,
+    "description": "Primary Executive Commander (Master System Privileges)"
+  }
+}

@@ -1,0 +1,135 @@
+/* ════════════════════════════════════════════════════════════
+   MOBILE.CSS — JKH JESAN ACADEMY
+   App-grade responsive styles for smartphone & touch devices (≤768px)
+   Strictly scoped: ZERO effect on desktop (PC) layouts
+   ════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* ─── PREVENT HORIZONTAL OVERFLOW ─────────────────────── */
+  html, body {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* ─── TARGETED TOUCH TARGETS (NO INLINE LINK DISTORTION) ── */
+  button.btn-primary,
+  button.btn-outline,
+  .btn,
+  .btn-primary,
+  .btn-outline,
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  select,
+  textarea,
+  .touch-target {
+    min-height: 44px;
+  }
+
+  /* ─── TYPOGRAPHY SCALING FOR PHONES ───────────────────── */
+  h1 {
+    font-size: clamp(1.85rem, 7.5vw, 2.5rem) !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.03em !important;
+  }
+  h2 {
+    font-size: clamp(1.4rem, 5.5vw, 1.85rem) !important;
+    line-height: 1.25 !important;
+    letter-spacing: -0.025em !important;
+  }
+  h3 {
+    font-size: clamp(1.1rem, 4vw, 1.35rem) !important;
+    line-height: 1.3 !important;
+  }
+
+  body {
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ─── SECTION PADDING ON MOBILE ──────────────────────── */
+  /* Top section on any page must clear the 56px (3.5rem) fixed mobile header */
+  section:first-of-type,
+  main > div > section:first-of-type {
+    padding-top: max(5.25rem, env(safe-area-inset-top, 0px) + 4.75rem) !important;
+  }
+
+  section:not(:first-of-type) {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+
+  .section-lg, .section-xl {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+
+  /* ─── CONTAINER SPACING ──────────────────────────────── */
+  .container-max {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* ─── BOTTOM NAV SAFE AREA PADDING ─────────────────────── */
+  /* Ensures page content is never hidden behind the fixed MobileBottomNav */
+  main {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* ─── MOBILE BOTTOM DRAWER STYLING ───────────────────── */
+  .mobile-sheet {
+    border-radius: 1.5rem 1.5rem 0 0;
+    max-height: 85svh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ─── HORIZONTAL SCROLL PILLS UTILITY ─────────────────── */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ─── MOBILE CARDS ───────────────────────────────────── */
+  .feature-card, .card {
+    padding: 1rem !important;
+    border-radius: 1rem !important;
+  }
+
+  /* ─── TABLES ON TOUCH SCREENS ────────────────────────── */
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ─── HIDE DECORATIVE AMBIENT BLOBS (GPU performance) ── */
+  .decorative-blob {
+    display: none !important;
+  }
+
+  /* ─── DEV OVERLAY BADGE POSITIONING ──────────────────── */
+  nextjs-portal,
+  [data-nextjs-dev-tools-button],
+  [data-next-badge] {
+    bottom: 5.5rem !important;
+  }
+}
+
+/* ─── ULTRA COMPACT PHONES (≤ 390px, iPhone SE/Mini) ───── */
+@media (max-width: 390px) {
+  h1 { font-size: 1.7rem !important; }
+  h2 { font-size: 1.25rem !important; }
+  body { font-size: 14px; }
+  .container-max {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+}

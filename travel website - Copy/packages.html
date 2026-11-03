@@ -1,0 +1,207 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Packages | Izanfly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600;1,700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .page-hero {
+      padding: 180px 0 80px;
+      text-align: center;
+      background: var(--c-light);
+    }
+
+    .pkg-grid-pro {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    @media(max-width: 768px) {
+      .pkg-grid-pro {
+        grid-template-columns: 1fr;
+      }
+      .pkg-grid-pro .pkg-card-pro {
+        margin-top: 0 !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav id="navbar" class="navbar-pro scrolled">
+    <div class="nav-container">
+      <a href="index.html" class="logo-pro">
+        <div class="logo-icon"><img src="logo_transparent.png" alt="Izanfly Logo" style="height: 35px; width: auto; vertical-align: middle;"></div>
+        <div class="logo-text"><strong>Izanfly Tours & Travels</strong><span>Gov't Approved</span></div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="visas.html">Visas</a></li>
+        <li><a href="packages.html" class="active">Packages</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <a href="https://wa.me/+8801870160002" target="_blank" class="btn-nav"><i class="fab fa-whatsapp"></i> Chat
+        Now</a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <section class="page-hero">
+    <div class="container">
+    <div class="container relative z-10">
+      <span class="sub-heading">Exclusive Deals</span>
+      <h1 class="main-heading">Featured <i>Packages</i></h1>
+      <p style="max-width:600px; margin:0 auto; color:#64748b; font-size:1.1rem;">Discover our comprehensive travel and
+        work packages tailored for your success.</p>
+    </div>
+  </section>
+
+  <section class="section-pro bg-light" style="padding-top:80px; padding-bottom: 120px;">
+    <div class="container relative z-10">
+      <!-- Change to a 2-column staggered grid for a more editorial feel -->
+      <div class="pkg-grid-pro">
+
+        <!-- Package 1 -->
+        <div class="pkg-card-pro boarding-pass" data-reveal="up">
+          <div class="bp-left" style="background-image:url('images/saudi.png')">
+            <div class="bp-overlay"></div>
+            <span class="bp-tag">Work Visa</span>
+          </div>
+          <div class="bp-divider"></div>
+          <div class="bp-right">
+            <div class="bp-header">
+              <span class="bp-airline"><i class="fas fa-plane-departure"></i> Izanfly</span>
+              <span class="bp-class text-success"><i class="fas fa-check-circle"></i> Guaranteed</span>
+            </div>
+            <h4>Saudi Arabia Work Package</h4>
+            <div class="bp-details">
+              <div class="bp-detail"><span>Processing</span><strong>Fast Track</strong></div>
+              <div class="bp-detail"><span>Sponsor</span><strong>100% Company</strong></div>
+            </div>
+            <p>Complete visa processing, flight booking, and medical test facilitation. Full relocation support provided.</p>
+            <div class="bp-barcode"></div>
+            <a href="contact.html" class="btn-text">Book Now <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+
+        <!-- Package 2 (Staggered down slightly) -->
+        <div class="pkg-card-pro boarding-pass" data-reveal="up" data-delay="100" style="margin-top: 60px;">
+          <div class="bp-left" style="background-image:url('images/portugal.png')">
+            <div class="bp-overlay"></div>
+            <span class="bp-tag">D1 Gateway</span>
+          </div>
+          <div class="bp-divider"></div>
+          <div class="bp-right">
+            <div class="bp-header">
+              <span class="bp-airline"><i class="fas fa-plane-departure"></i> Izanfly</span>
+              <span class="bp-class text-success"><i class="fas fa-check-circle"></i> 100% Ratio</span>
+            </div>
+            <h4>Portugal D1 Gateway</h4>
+            <div class="bp-details">
+              <div class="bp-detail"><span>Access</span><strong>Schengen Zone</strong></div>
+              <div class="bp-detail"><span>Path</span><strong>Residency</strong></div>
+            </div>
+            <p>Schengen zone access with a 100% visa approval rating. Live, work, and build your future in Europe.</p>
+            <div class="bp-barcode"></div>
+            <a href="contact.html" class="btn-text">Book Now <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+
+        <!-- Package 3 -->
+        <div class="pkg-card-pro boarding-pass" data-reveal="up">
+          <div class="bp-left" style="background-image:url('images/maldives.png')">
+            <div class="bp-overlay"></div>
+            <span class="bp-tag">Resort Jobs</span>
+          </div>
+          <div class="bp-divider"></div>
+          <div class="bp-right">
+            <div class="bp-header">
+              <span class="bp-airline"><i class="fas fa-plane-departure"></i> Izanfly</span>
+              <span class="bp-class text-success"><i class="fas fa-check-circle"></i> Included</span>
+            </div>
+            <h4>Maldives Resort Jobs</h4>
+            <div class="bp-details">
+              <div class="bp-detail"><span>Flight</span><strong>Included</strong></div>
+              <div class="bp-detail"><span>Salary</span><strong>High Bracket</strong></div>
+            </div>
+            <p>Work in paradise. Complete documentation, work permit, and flight included with lucrative hospitality packages.</p>
+            <div class="bp-barcode"></div>
+            <a href="contact.html" class="btn-text">Book Now <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+
+        <!-- Package 4 (Staggered) -->
+        <div class="pkg-card-pro boarding-pass" data-reveal="up" data-delay="100" style="margin-top: 60px;">
+          <div class="bp-left" style="background-image:url('images/dubai.png')">
+            <div class="bp-overlay"></div>
+            <span class="bp-tag">Express Visa</span>
+          </div>
+          <div class="bp-divider"></div>
+          <div class="bp-right">
+            <div class="bp-header">
+              <span class="bp-airline"><i class="fas fa-plane-departure"></i> Izanfly</span>
+              <span class="bp-class text-success"><i class="fas fa-check-circle"></i> Express</span>
+            </div>
+            <h4>Dubai UAE Package</h4>
+            <div class="bp-details">
+              <div class="bp-detail"><span>Timeline</span><strong>48 Hours</strong></div>
+              <div class="bp-detail"><span>Sector</span><strong>All Available</strong></div>
+            </div>
+            <p>Fast track visa processing and flight ticketing. Immediate deployment opportunities across all major sectors.</p>
+            <div class="bp-barcode"></div>
+            <a href="contact.html" class="btn-text">Book Now <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+
+        <!-- Package 5 -->
+        <div class="pkg-card-pro boarding-pass" data-reveal="up">
+          <div class="bp-left" style="background-image:url('images/india.png')">
+            <div class="bp-overlay"></div>
+            <span class="bp-tag">Multi-Entry</span>
+          </div>
+          <div class="bp-divider"></div>
+          <div class="bp-right">
+            <div class="bp-header">
+              <span class="bp-airline"><i class="fas fa-plane-departure"></i> Izanfly</span>
+              <span class="bp-class text-success"><i class="fas fa-check-circle"></i> Trusted</span>
+            </div>
+            <h4>India Travel & Medical</h4>
+            <div class="bp-details">
+              <div class="bp-detail"><span>Type</span><strong>Medical/Biz</strong></div>
+              <div class="bp-detail"><span>Entry</span><strong>Double Entry</strong></div>
+            </div>
+            <p>Streamlined medical, business, and double entry visa processing with priority appointment booking.</p>
+            <div class="bp-barcode"></div>
+            <a href="contact.html" class="btn-text">Book Now <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer-pro">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2025 Izanfly. All Rights Reserved.</p>
+        <p>Designed &amp; Developed by <a href="https://www.facebook.com/EvoRiseSolutions/" target="_blank" class="evorise-credit"><span class="evo">Evo</span><span class="rise">Rise Solutions</span></a></p>
+      </div>
+      <div class="footer-watermark">IZANFLY</div>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+
+</html>

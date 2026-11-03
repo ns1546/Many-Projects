@@ -1,0 +1,108 @@
+
+--- Page 2 ---
+Declaration
+We do hereby declare that the research works presented in this thesis entitled, “FEDMED-
+X: Communication-Efficient Privacy-Preserving Federated Learning with Real Edge
+Hardware Deployment for Medical Image Classification” are the results of our own
+works. We further declare that the thesis/report has been compiled and written by us,
+and no part of this thesis/report has been submitted elsewhere for the requirements
+of any degree, award, diploma, or any other purposes except for publications. The
+materials that are obtained from other sources are duly acknowledged in this thesis.
+Signature of Authors
+ii
+
+--- Page 3 ---
+Mohammad Zunayed
+Md. Najmush Shakib
+ID: 20234103328
+ID: 20234103357
+Munim Halder
+Md. Nur Alam
+ID: 20234103351
+ID: 20234103153
+Omar Faruk Jihad
+ID: 20234103145
+iii
+
+--- Page 4 ---
+Approval
+It is hereby certified that the research work presented in this thesis entitled, “FEDMED-
+X: Communication-Efficient Privacy-Preserving Federated Learning with Real Edge
+Hardware Deployment for Medical Image Classification,” is the result of the original
+work carried out by Mohammad Zunayed, Md. Najmush Shakib, Munim Halder, Md.
+Nur Alam, and Omar Faruk Jihad. Furthermore, it is certified that this thesis/report
+satisfies the requirements and standards for the degree of Bachelor of Science in Com-
+puter Science and Engineering.
+iv
+
+--- Page 5 ---
+Md. Saddam Hossain
+Supervisor
+Assistant Professor, CSE
+Capstone Defense Board
+BUBT, Dhaka
+Dr. Md. Rajibul Islam
+Member (Internal)
+Associate Professor, Data Science
+Capstone Defense Board
+BUBT, Dhaka
+External Examiner Name
+Member (External)
+Professor, CSE
+Capstone Defense Board
+University Name
+Prof. Dr. Md. Ahsan Habib
+Convener
+Chairman, CSE
+Capstone Defense Board
+v
+
+--- Page 6 ---
+Dedication
+“We dedicate this research to our loving parents,
+whose unwavering love, encouragement, sacrifices,
+and constant support have been the foundation of our
+academic journey.
+This work is also dedicated to our respected teachers,
+particularly our supervisor Md. Saddam Hossain,
+whose academic vision and mentorship shaped every aspect
+of this research.
+Finally, we dedicate this work to the underserved patients
+vi
+
+--- Page 7 ---
+and rural healthcare workers of Bangladesh,
+whose critical need for affordable, private, and reliable
+diagnostic tools
+motivated the design and development of the FEDMED-X
+system.”
+vii
+
+--- Page 8 ---
+Acknowledgement
+We would like to express our heartfelt gratitude to the Almighty Allah, who offered
+our families and us kind care throughout this journey.
+We are deeply thankful to
+the Bangladesh University of Business and Technology (BUBT) for providing us with
+an excellent research environment and world-class computing facilities to pursue our
+capstone project.
+We express our sincerest gratitude to our respected supervisor, Md. Saddam Hos-
+sain, Assistant Professor, Department of CSE, BUBT. This research would not have
+been possible without his patient guidance, sharp technical insight, and consistent aca-
+demic support. He identified the research gap in privacy-preserving federated learning
+for edge medical devices, guided us through the complex integration of FedProx, Differ-
+ential Privacy, and gradient compression, and shared many essential research resources.
+He was disciplined and responsible, always finding time to discuss our progress.
+We are also thankful to our course teacher, Dr.
+Md.
+Rajibul Islam, Associate
+Professor and Chairman of the Department of Data Science and Engineering, BUBT,
+for providing valuable direction and constructive academic feedback throughout the
+semester. Special appreciation goes to Prof. Dr. Md. Ahsan Habib, Chairman
+of the CSE Department, and to all our respected faculty members for their consistent
+inspiration.
+We would also like to acknowledge our five-member team for their coordinated technical
+effort, patience, and mutual encouragement throughout the eight-month development
+cycle. Finally, we are grateful to our families, well-wishers, and BUBT for granting us
+this opportunity to contribute to trustworthy artificial intelligence in healthcare.
+viii

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evorise Restaurant Admin • Desktop Edition</title>
+  <link rel="stylesheet" href="desktop-notifications.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body, html {
+      width: 100%;
+      height: 100%;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Desktop Viewport Container */
+    #desktopAppContainer {
+      flex: 1;
+      width: 100%;
+      height: calc(100% - 38px);
+      position: relative;
+      background: #ffffff;
+    }
+
+    #adminFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      background: #ffffff;
+    }
+
+    /* Offline / Connecting State Overlay */
+    #connectingOverlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0f172a;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      z-index: 50;
+      transition: opacity 0.3s ease;
+    }
+
+    #connectingOverlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 44px;
+      height: 44px;
+      border: 3px solid rgba(233, 149, 69, 0.2);
+      border-top-color: #E99545;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .btn-retry {
+      background: #E99545;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn-retry:hover {
+      background: #d27e2e;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- App Viewport -->
+  <div id="desktopAppContainer">
+    <!-- Connecting Screen -->
+    <div id="connectingOverlay">
+      <div class="spinner"></div>
+      <h3 style="font-size: 18px; font-weight: 800;">Connecting to Restaurant Backend...</h3>
+      <p style="font-size: 13px; color: #94a3b8; max-width: 380px; text-align: center;">
+        Synchronizing with SQLite ACID engine and real-time WebSocket bus at <code>http://localhost:3000</code>.
+      </p>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:8px; margin-top:12px; width:100%; max-width:320px;">
+        <div style="display:flex; width:100%; gap:8px;">
+          <input type="text" id="inputCustomServerUrl" placeholder="http://localhost:3000" style="flex:1; padding:8px 12px; border-radius:8px; border:1px solid #334155; background:#1e293b; color:#fff; font-size:12px; outline:none;" />
+          <button type="button" class="btn-retry" id="btnSaveCustomServer" style="padding:8px 14px;">Connect</button>
+        </div>
+        <button type="button" class="btn-retry" id="btnManualRetry" style="background:#334155; width:100%; padding:8px;">Retry Connection</button>
+      </div>
+    </div>
+
+    <!-- Embedded Native Admin Panel -->
+    <iframe id="adminFrame" src="about:blank"></iframe>
+  </div>
+
+  <!-- Desktop Notification & Alert System Engine -->
+  <script src="desktop-notifications.js"></script>
+
+  <script>
+    (function () {
+      let SERVER_URL = localStorage.getItem('evorise_server_url') || 'http://localhost:3000';
+      const iframe = document.getElementById('adminFrame');
+      const overlay = document.getElementById('connectingOverlay');
+      const retryBtn = document.getElementById('btnManualRetry');
+      const inputCustom = document.getElementById('inputCustomServerUrl');
+      const saveCustomBtn = document.getElementById('btnSaveCustomServer');
+
+      if (inputCustom) inputCustom.value = SERVER_URL;
+
+      let retryInterval = null;
+      let activeWs = null;
+
+      async function verifyServerAndLoad() {
+        const adminUrl = `${SERVER_URL}/admin/index.html`;
+        try {
+          const res = await fetch(`${SERVER_URL}/api/v1/items`);
+          if (res.ok) {
+            clearInterval(retryInterval);
+            overlay.classList.add('hidden');
+            if (iframe.src !== adminUrl) {
+              iframe.src = adminUrl;
+            }
+            return true;
+          }
+        } catch (e) {
+          overlay.classList.remove('hidden');
+        }
+        return false;
+      }
+
+      if (saveCustomBtn) {
+        saveCustomBtn.addEventListener('click', () => {
+          let val = (inputCustom.value || '').trim();
+          if (val) {
+            if (!val.startsWith('http://') && !val.startsWith('https://')) {
+              val = 'http://' + val;
+            }
+            val = val.replace(/\/+$/, '');
+            SERVER_URL = val;
+            localStorage.setItem('evorise_server_url', SERVER_URL);
+            verifyServerAndLoad();
+            initDesktopWs();
+          }
+        });
+      }
+
+      retryBtn.addEventListener('click', () => {
+        verifyServerAndLoad();
+      });
+
+      // Poll server connection until online
+      verifyServerAndLoad().then(online => {
+        if (!online) {
+          retryInterval = setInterval(verifyServerAndLoad, 2500);
+        }
+      });
+
+      // Connect standalone WebSocket directly to backend for desktop audio/toast alerts
+      function initDesktopWs() {
+        try {
+          if (activeWs) {
+            try { activeWs.close(); } catch (e) {}
+          }
+          const wsProto = SERVER_URL.startsWith('https') ? 'wss:' : 'ws:';
+          const host = SERVER_URL.replace(/^https?:\/\//, '');
+          const ws = new WebSocket(`${wsProto}//${host}/ws`);
+          activeWs = ws;
+
+          ws.onmessage = (event) => {
+            try {
+              const msg = JSON.parse(event.data);
+              if (msg && msg.type === 'ORDER_CREATED' && msg.data) {
+                if (window.evoriseDesktop?.triggerAlert) {
+                  window.evoriseDesktop.triggerAlert(msg.data);
+                }
+              }
+            } catch (err) {}
+          };
+          ws.onclose = () => setTimeout(initDesktopWs, 4000);
+          ws.onerror = () => { try { ws.close(); } catch (e) {} };
+        } catch (e) {
+          setTimeout(initDesktopWs, 5000);
+        }
+      }
+
+      initDesktopWs();
+    })();
+  </script>
+</body>
+</html>

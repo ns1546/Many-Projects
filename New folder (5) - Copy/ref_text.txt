@@ -1,0 +1,117 @@
+Project Proposal
+AquaView
+AI-Powered Smart Water Health Assessment,
+Recovery Verification and Community Water Mapping System
+Course Title:Internet of Things (IoT) Lab
+Course ID:442
+Submitted By
+Najmush Shakib ID: 20234103357
+Munim Halder ID: 20234103351
+Department of Computer Science and Engineering
+Bangladesh University of Business and Technology (BUBT)
+Submitted To
+Course Teacher:Sudipa Saha
+IoT Lab
+Department of CSE
+Bangladesh University and Business Technology (BUBT)
+July 28, 2026
+11. Project Overview
+Water quality directly affects human health, agriculture, fish farming, and daily household
+activities. Existing low-cost water quality devices mainly display sensor values such as
+pH, TDS, and turbidity, which are difficult for ordinary users to understand. They also
+cannot determine how much the water has improved after treatment or maintain a history
+of water quality changes.
+The proposed project,AquaView, is an AI and IoT based smart water assessment
+platform that analyzes water quality, provides intelligent recommendations, compares
+water quality before and after treatment, and builds a GPS-based community water
+quality map.
+2. Problem Statement
+Many households and farmers do not have access to laboratory testing facilities. Existing
+portable devices only provide raw measurements without explaining:
+•Whether the water is suitable for drinking.
+•Whether it can be used for irrigation.
+•Whether it is suitable for fish farming.
+•Why the water quality is poor.
+•How to improve the water quality.
+•Whether treatment has actually improved the water.
+3. Objectives
+The main objectives of AquaView are:
+•Analyze water quality using IoT sensors.
+•Determine water suitability for humans, plants, fish farming, and household use.
+•Identify possible water quality issues.
+•Recommend suitable treatment methods.
+•Compare water quality before and after treatment.
+•Calculate the percentage of improvement after treatment.
+•Store historical reports in the cloud.
+•Generate a GPS-based community water quality map.
+24. Proposed Features
+The proposed system will include the following features:
+•Human Drinking Water Assessment
+•Plant Water Suitability Analysis
+•Fish Pond Water Analysis
+•Household Water Suitability
+•AI Water Health Score
+•Water Quality Classification
+•Treatment Recommendation
+•Retest Comparison
+•Improvement Percentage Calculation
+•Historical Water Reports
+•GPS Water Quality Mapping
+•Community Water Dashboard
+•Cloud Database Storage
+5. Novelty of the Project
+Unlike traditional water quality monitoring systems, AquaView focuses on intelligent
+decision support rather than only displaying sensor readings.
+The proposed contributions are:
+•AI-generated water health assessment.
+•Before and after treatment comparison.
+•Water recovery verification.
+•Improvement percentage analysis.
+•AI-based treatment recommendation.
+•GPS-based community water quality mapping.
+•Historical water quality tracking.
+36. Methodology
+The proposed workflow is:
+1. Collect water sample.
+2. Read sensor values using ESP32.
+3. Send sensor data to cloud database.
+4. AI analyzes water quality.
+5. Generate water health report.
+6. Recommend suitable treatment.
+7. User applies treatment.
+8. Retest the same water.
+9. Compare previous and current results.
+10. Update water quality map.
+7. Required Hardware
+Component
+ESP32 Development Board
+TDS Sensor
+Turbidity Sensor
+DS18B20 Temperature Sensor
+GPS Module (NEO-6M)
+OLED Display
+pH Sensor (Optional)
+8. Software Requirements
+•Arduino IDE
+•Python
+•Firebase
+•Machine Learning Model
+•Google Maps API / Leaflet
+•Flutter or Web Dashboard
+49. Expected Outcome
+The developed system will:
+•Analyze water quality intelligently.
+•Help users understand water safety.
+•Recommend suitable treatment methods.
+•Verify treatment effectiveness through retesting.
+•Create a community water quality database.
+•Display water quality locations on an interactive map.
+•Support future environmental monitoring.
+10. Conclusion
+AquaView aims to provide an affordable AI-powered IoT solution for intelligent water
+quality assessment. Instead of displaying only sensor values, the system will interpret
+water quality, recommend treatments, compare retest results, estimate improvement,
+and visualize community water quality through GPS mapping. The proposed system has
+the potential to support households, farmers, fish cultivators, and local communities in
+making better water-related decisions.
+5

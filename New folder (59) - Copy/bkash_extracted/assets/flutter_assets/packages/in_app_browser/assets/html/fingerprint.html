@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FingerprintJS Example Updated</title>
+    <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@2/dist/fingerprint2.min.js"></script>
+    <script>
+        function fetchFingerprint() {
+            Fingerprint2.get(function (components) {
+                var values = components.map(function (component) { return component.value })
+                var murmur = Fingerprint2.x64hash128(values.join(''), 31)
+                window.flutter_inappwebview.callHandler('fingerprint', murmur);
+            })
+        }
+        if (window.requestIdleCallback) {
+            requestIdleCallback(fetchFingerprint);
+        } else {
+            setTimeout(fetchFingerprint, 500)
+        }
+    </script>
+</head>
+
+<body>
+<div id="fingerprint"></div>
+</body>
+</html>

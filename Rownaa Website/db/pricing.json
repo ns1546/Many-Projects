@@ -1,0 +1,190 @@
+{
+  "hourly": {
+    "categories": [
+      {
+        "id": "sedan_economy",
+        "name": "Sedan (Economy)",
+        "rate4h": 1500,
+        "rate10h": 3000,
+        "extraHour": 300,
+        "extraKm": 15,
+        "active": true
+      },
+      {
+        "id": "sedan_standard",
+        "name": "Sedan (Standard)",
+        "rate4h": 2000,
+        "rate10h": 3500,
+        "extraHour": 400,
+        "extraKm": 20,
+        "active": true
+      },
+      {
+        "id": "sedan_premium",
+        "name": "Sedan (Premium)",
+        "rate4h": 3000,
+        "rate10h": 5000,
+        "extraHour": 500,
+        "extraKm": 30,
+        "active": true
+      },
+      {
+        "id": "noah",
+        "name": "Noah/Voxy",
+        "rate4h": 2500,
+        "rate10h": 4000,
+        "extraHour": 400,
+        "extraKm": 20,
+        "active": true
+      },
+      {
+        "id": "hiace",
+        "name": "Hiace",
+        "rate4h": 3500,
+        "rate10h": 5500,
+        "extraHour": 500,
+        "extraKm": 25,
+        "active": true
+      }
+    ],
+    "includedDistance": 10
+  },
+  "intercity": {
+    "extraKmRate": 20,
+    "sameDayReturnChargePercent": 50,
+    "maxSameDayDistance": 300,
+    "dailyWaitingCharge": 1500,
+    "tiers": [
+      {
+        "id": "sedan_economy",
+        "name": "Sedan (Economy)",
+        "baseFare": 3000,
+        "perKm": 20,
+        "active": true
+      },
+      {
+        "id": "sedan_standard",
+        "name": "Sedan (Standard)",
+        "baseFare": 4000,
+        "perKm": 25,
+        "active": true
+      },
+      {
+        "id": "sedan_premium",
+        "name": "Sedan (Premium)",
+        "baseFare": 5500,
+        "perKm": 35,
+        "active": true
+      },
+      {
+        "id": "noah",
+        "name": "Noah/Voxy",
+        "baseFare": 4500,
+        "perKm": 25,
+        "active": true
+      },
+      {
+        "id": "hiace",
+        "name": "Hiace",
+        "baseFare": 6000,
+        "perKm": 30,
+        "active": true
+      }
+    ]
+  },
+  "corporate": {
+    "maxBookingDays": 30,
+    "rates": {
+      "sedan_economy": [
+        25000,
+        48000,
+        68000,
+        130000
+      ],
+      "sedan_standard": [
+        30000,
+        58000,
+        80000,
+        150000
+      ],
+      "sedan_premium": [
+        45000,
+        85000,
+        125000,
+        240000
+      ],
+      "noah": [
+        35000,
+        68000,
+        95000,
+        180000
+      ],
+      "hiace": [
+        45000,
+        88000,
+        125000,
+        240000
+      ]
+    }
+  },
+  "airport": {
+    "freeWaitSendOff": 15,
+    "freeWaitReceiveDom": 30,
+    "freeWaitReceiveInt": 60,
+    "hourlyWaitCharge": 500,
+    "roundTripSurcharge": 1000,
+    "lateNightSurcharge": 500,
+    "zones": [
+      {
+        "id": "dhaka_north",
+        "name": "Dhaka North",
+        "rates": {
+          "sedan_economy": 1500,
+          "sedan_standard": 2000,
+          "sedan_premium": 3000,
+          "noah": 2500,
+          "hiace": 3500
+        }
+      },
+      {
+        "id": "dhaka_south",
+        "name": "Dhaka South",
+        "rates": {
+          "sedan_economy": 1800,
+          "sedan_standard": 2300,
+          "sedan_premium": 3300,
+          "noah": 2800,
+          "hiace": 3800
+        }
+      }
+    ]
+  },
+  "tour": {
+    "routes": [
+      {
+        "id": "rt_sylhet",
+        "name": "Dhaka-Sylhet (3 Days)",
+        "days": 3,
+        "rates": {
+          "sedan_economy": 12000,
+          "sedan_standard": 15000,
+          "sedan_premium": 22000,
+          "noah": 18000,
+          "hiace": 25000
+        }
+      },
+      {
+        "id": "rt_cox",
+        "name": "Dhaka-Cox's Bazar (4 Days)",
+        "days": 4,
+        "rates": {
+          "sedan_economy": 18000,
+          "sedan_standard": 22000,
+          "sedan_premium": 32000,
+          "noah": 26000,
+          "hiace": 35000
+        }
+      }
+    ]
+  }
+}

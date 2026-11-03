@@ -1,0 +1,95 @@
+{
+  "hummer_version": "1.0.0",
+  "tasks": [
+    {
+      "type": "webTask",
+      "dispatchConfig": {
+        "jumpTo": -1
+      },
+      "renderConfig": {
+        "name": "selectDocType",
+        "exitAfterFail": true,
+        "retryAfterCancel": false,
+        "urlPattern": "URL_EKYC_GUIDE"
+      }
+    },
+    {
+      "type": "nativeTask",
+      "dispatchConfig": {
+        "jumpTo": 0
+      },
+      "renderConfig": {
+        "name": "ZDoc",
+        "retryAfterCancel": true,
+        "exitAfterFail": true,
+        "needFinalizeAndCancel": true,
+        "zimIdKey": "DOC_ZIM_ID",
+        "bizDataKey": [
+          "clientDocType"
+        ]
+      }
+    },
+    {
+      "type": "webTask",
+      "dispatchConfig": {
+        "jumpTo": 0
+      },
+      "renderConfig": {
+        "name": "inputInfo",
+        "retryAfterCancel": true,
+        "urlPattern": "URL_DOC_USER_INPUT"
+      }
+    },
+    {
+      "type": "webTask",
+      "dispatchConfig": {
+        "jumpTo": 2
+      },
+      "renderConfig": {
+        "name": "faceGuide",
+        "exitAfterFail": true,
+        "retryAfterCancel": true,
+        "urlPattern": "URL_FACE_GUIDE"
+      }
+    },
+    {
+      "type": "nativeTask",
+      "dispatchConfig": {
+        "jumpTo": 3
+      },
+      "renderConfig": {
+        "name": "ZFace",
+        "exitAfterFail": true,
+        "retryAfterCancel": true,
+        "needFinalizeAndCancel":true,
+        "zimIdKey": "FACE_ZIM_ID"
+      }
+    },
+//    {
+//      "type": "webTask",
+//      "dispatchConfig": {
+//        "jumpTo": 3
+//      },
+//      "renderConfig": {
+//        "name": "signature",
+//        "exitAfterFail": true,
+//        "retryAfterCancel": true,
+//        "urlPattern": "URL_SIGNATURE"
+//      }
+//    },
+
+    {
+      "type": "webTask",
+      "dispatchConfig": {
+        "jumpTo": 3
+      },
+      "renderConfig": {
+        "name": "infoReview",
+        "exitAfterFail": true,
+        "retryAfterCancel": true,
+        "urlPattern": "URL_DOC_USER_CONFIRM"
+      }
+    }
+
+  ]
+}

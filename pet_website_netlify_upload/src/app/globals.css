@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #1a56db;
+  --color-primary-dark: #1e40af;
+  --color-primary-light: #eff6ff;
+  --color-accent: #f97316;
+  --color-accent-dark: #ea580c;
+  --color-secondary: #f97316;
+  --color-secondary-dark: #ea580c;
+  --color-success: #16a34a;
+  --color-background: #f5f5f5;
+  --color-surface: #ffffff;
+  --color-text: #111827;
+  --color-text-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --font-sans: var(--font-open-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-poppins: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  :root {
+    --background: var(--color-background);
+    --foreground: var(--color-text);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    -webkit-font-smoothing: antialiased;
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-poppins);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-white font-semibold py-2.5 px-5 rounded-lg hover:bg-primary-dark transition-all duration-200 active:scale-95 inline-flex items-center justify-center gap-2;
+  }
+  .btn-secondary {
+    @apply bg-accent text-white font-semibold py-2.5 px-5 rounded-lg hover:bg-accent-dark transition-all duration-200 active:scale-95 inline-flex items-center justify-center gap-2;
+  }
+  .btn-outline {
+    @apply border border-gray-300 text-gray-700 font-medium py-2.5 px-5 rounded-lg hover:bg-gray-50 transition-colors duration-200 inline-flex items-center justify-center gap-2;
+  }
+  .card {
+    @apply bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-all duration-200;
+  }
+  .input-field {
+    @apply w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all bg-white;
+  }
+  .glass-header {
+    @apply bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm;
+  }
+}
+
+.product-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -5px rgba(0,0,0,0.1);
+}
+
+html { scroll-behavior: smooth; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fadeInUp 0.4s ease forwards; }

@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base href="../">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Visual Studio & Memory Archive | JKH Jesan</title>
+
+    <!-- InfinityFree Anti-Bot / Security Query Parameter Cleaner -->
+    <script>
+        (function() {
+            if (window.location.search && (window.location.search.includes('i=') || window.location.search.includes('__test'))) {
+                var newSearch = window.location.search.replace(/[?&](i|__test)=[^&]*/g, '').replace(/^&/, '?');
+                var cleanUrl = window.location.pathname + (newSearch && newSearch !== '?' ? newSearch : '') + window.location.hash;
+                window.history.replaceState(null, document.title, cleanUrl);
+            }
+        })();
+    </script>
+
+    <meta name="description" content="Explore the visual archive of JKH Jesan — Behind-the-scenes vocal booth recordings, ADAM Audio studio monitoring setup, and moments from high-profile productions.">
+    <link rel="canonical" href="https://jkhjesan.com/gallery">
+
+    <!-- Google Search & Browser Identity (Favicon) -->
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <link rel="icon" type="image/png" sizes="48x48" href="./favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="./favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./favicon-192x192.png">
+    <link rel="shortcut icon" href="./favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+    <link rel="manifest" href="./site.webmanifest">
+
+    <!-- Search Engine Directives -->
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="author" content="JKH Jesan">
+    <meta name="keywords" content="JKH Jesan Studio, Visual Archive, Vocal Booth Recording, Music Studio Dhaka, ADAM Audio, Audio Engineer Photos">
+
+    <!-- OpenGraph & Twitter Social Cards -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Visual Studio & Memory Archive | JKH Jesan">
+    <meta property="og:description" content="Behind-the-scenes recording sessions and studio atmosphere of JKH Jesan.">
+    <meta property="og:url" content="https://jkhjesan.com/gallery">
+    <meta property="og:image" content="./drive-download-20260503T111429Z-3-001/jkh_update_05.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Visual Studio & Memory Archive | JKH Jesan">
+    <meta name="twitter:description" content="Behind-the-scenes recording sessions and studio atmosphere of JKH Jesan.">
+    <!-- Geographical & Local SEO -->
+    <meta name="geo.region" content="BD-13">
+    <meta name="geo.placename" content="House 127, Road 10, Block C, Niketon, Gulshan 1, Dhaka 1212, Bangladesh">
+    <meta name="geo.position" content="23.7744;90.4078">
+    <meta name="ICBM" content="23.7744, 90.4078">
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "ImageGallery",
+          "@id": "https://jkhjesan.com/gallery#gallery",
+          "url": "https://jkhjesan.com/gallery",
+          "name": "Visual Studio & Memory Archive | JKH Jesan",
+          "description": "Studio sessions, gear, and visual documentation of music productions by JKH Jesan."
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://jkhjesan.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Archive", "item": "https://jkhjesan.com/gallery" }
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Manrope', 'sans-serif'], display: ['Syne', 'sans-serif'], serif: ['Playfair Display', 'serif'] },
+                    colors: { dark: '#050505', surface: '#121212', accent: '#FF4500' }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+    <style>
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background: #FF4500;
+            color: #fff;
+        }
+
+        .noise::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: url("grain.png");
+            background-repeat: repeat;
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .hover-flip {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            padding-bottom: 2px;
+        }
+
+        .hover-flip span {
+            display: inline-block;
+            transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+
+        .hover-flip::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: #FF4500;
+            transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+
+        .hover-flip:hover span {
+            transform: translateY(-100%);
+        }
+
+        .hover-flip:hover::after {
+            transform: translateY(-100%);
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+        }
+
+        .bento-border {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            background: #121212;
+            transition: border-color 0.4s ease;
+        }
+
+        .bento-border:hover {
+            border-color: rgba(255, 69, 0, 0.4);
+        }
+
+        .img-scale img {
+            transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .img-scale:hover img {
+            transform: scale(1.05);
+        }
+
+        .masonry {
+            column-count: 1;
+            column-gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .masonry {
+                column-count: 2;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .masonry {
+                column-count: 3;
+            }
+        }
+
+        @media (min-width: 1536px) {
+            .masonry {
+                column-count: 4;
+            }
+        }
+
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 2rem;
+            border-radius: 16px;
+            background: rgba(18, 18, 18, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 8px;
+            transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .masonry-item:hover {
+            border-color: rgba(255, 69, 0, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+        }
+
+        .masonry-item img {
+            border-radius: 12px;
+            display: block;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+    </style>
+    <!-- Master Styling & 3D Perspective System -->
+    <link rel="stylesheet" href="styles.css?v=2.1">
+    <!-- Dedicated Master Mobile Design System (Loaded Last for Full Precedence) -->
+    <link rel="stylesheet" href="mobile.css?v=2.1">
+</head>
+
+<body class="noise">
+
+    <!-- Static Image Logo -->
+    <div class="absolute top-8 left-8 z-40 hidden md:block mix-blend-screen w-32">
+        <a href="./">
+            <img src="./JKH_ART_WORK-removebg-preview.png" alt="JKH Logo"
+                class="w-full h-auto filter brightness-0 invert opacity-90 hover:opacity-100 transition-opacity">
+        </a>
+    </div>
+
+    <!-- Dedicated Mobile Header Bar (Visible on mobile <= 768px) -->
+    <header id="mobile-header" class="flex md:hidden items-center justify-between">
+        <a href="./" class="flex items-center gap-2.5">
+            <img src="./JKH_ART_WORK-removebg-preview.png" alt="JKH Logo" class="w-8 h-8 object-contain filter brightness-0 invert">
+            <span class="font-display font-extrabold text-sm tracking-wider text-white uppercase">JKH JESAN</span>
+        </a>
+        <button id="mobile-menu-toggle" aria-label="Toggle Navigation Menu" aria-expanded="false">
+            <span class="hamburger-line hamburger-line-1"></span>
+            <span class="hamburger-line hamburger-line-2"></span>
+            <span class="hamburger-line hamburger-line-3"></span>
+        </button>
+    </header>
+
+    <!-- Dedicated Fullscreen Mobile Navigation Drawer -->
+    <div id="mobile-nav-drawer" class="md:hidden">
+        <div class="flex flex-col gap-6">
+            <div class="flex items-center justify-between pb-2 border-b border-white/10">
+                <span class="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-accent">Visual History</span>
+                <span class="font-sans text-[10px] text-gray-500 font-bold uppercase tracking-widest">Dhaka, BD</span>
+            </div>
+            <nav class="flex flex-col">
+                <a href="./" class="mobile-drawer-link">
+                    <span>HOME</span>
+                    <span class="link-num">01</span>
+                </a>
+                <a href="about" class="mobile-drawer-link">
+                    <span>ABOUT</span>
+                    <span class="link-num">02</span>
+                </a>
+                <a href="works" class="mobile-drawer-link">
+                    <span>WORKS</span>
+                    <span class="link-num">03</span>
+                </a>
+                <a href="studio" class="mobile-drawer-link">
+                    <span>STUDIO</span>
+                    <span class="link-num">04</span>
+                </a>
+                <a href="gallery" class="mobile-drawer-link active-page">
+                    <span>ARCHIVE</span>
+                    <span class="link-num">05</span>
+                </a>
+                <a href="contact" class="mobile-drawer-link">
+                    <span>CONTACT</span>
+                    <span class="link-num">06</span>
+                </a>
+            </nav>
+        </div>
+
+        <div class="flex flex-col gap-4 pt-6 border-t border-white/10">
+            <a href="contact" class="w-full text-center py-3.5 rounded-full bg-accent text-white font-sans text-xs font-bold uppercase tracking-widest shadow-[0_0_20px_rgba(255,69,0,0.4)]">Start a Project</a>
+            <div class="flex justify-around items-center pt-2 text-gray-400 text-xs font-bold uppercase tracking-widest">
+                <a href="https://wa.me/8801938172454" target="_blank" class="hover:text-accent flex items-center gap-1.5"><i class="fab fa-whatsapp text-accent"></i> WhatsApp</a>
+                <a href="https://www.facebook.com/jkh.jesan.9/" target="_blank" class="hover:text-accent flex items-center gap-1.5"><i class="fab fa-facebook text-accent"></i> Facebook</a>
+                <a href="https://youtube.com/@jkhjesan?si=00dHez7xnIWZATza" target="_blank" class="hover:text-accent flex items-center gap-1.5"><i class="fab fa-youtube text-accent"></i> YouTube</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop Floating Pill Navigation (Hidden on Mobile) -->
+    <nav id="desktop-nav"
+        class="fixed top-6 md:top-8 left-1/2 -translate-x-1/2 z-50 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-full px-8 py-3 hidden md:flex items-center justify-center gap-8 text-[10px] font-bold uppercase tracking-[0.2em] text-white shadow-[0_0_30px_rgba(0,0,0,0.5)] w-auto overflow-hidden">
+        <a href="./" class="hover-flip" data-text="HOME"><span>HOME</span></a>
+        <a href="about" class="hover-flip" data-text="ABOUT"><span>ABOUT</span></a>
+        <a href="works" class="hover-flip" data-text="WORKS"><span>WORKS</span></a>
+        <a href="studio" class="hover-flip" data-text="STUDIO"><span>STUDIO</span></a>
+        <a href="gallery" class="hover-flip" data-text="ARCHIVE"><span class="text-accent">ARCHIVE</span></a>
+        <a href="contact" class="hover-flip" data-text="CONTACT"><span>CONTACT</span></a>
+    </nav>
+
+    <!-- 1. MASSIVE ARCHIVE HERO & CATEGORY CONTROLS -->
+    <section class="pt-32 md:pt-48 pb-12 px-4 md:px-12 relative z-20">
+        <div class="container mx-auto max-w-[1600px] text-center md:text-left border-b border-white/10 pb-12 md:pb-16">
+            <p class="font-sans text-[clamp(8px,1vw,10px)] uppercase tracking-[0.4em] font-bold text-accent mb-4 md:mb-6 gs-reveal">
+                Visual History & Documentary
+            </p>
+            <h1 class="font-display font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight uppercase tracking-tight text-white gs-reveal break-words">
+                The <span class="text-transparent" style="-webkit-text-stroke: clamp(1px,0.2vw,2px) rgba(255,255,255,0.2);">Archive.</span>
+            </h1>
+
+            <!-- Category Filter Tabs -->
+            <div class="mt-8 flex flex-wrap gap-3 items-center justify-center md:justify-start gs-reveal">
+                <button id="filter-all" class="archive-filter-btn active px-5 py-2.5 rounded-full border border-accent bg-accent text-white font-sans text-xs font-bold uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(255,69,0,0.3)]" data-filter="all">
+                    <i class="fas fa-th-large mr-1.5"></i> All Visuals
+                </button>
+                <button id="filter-collab" class="archive-filter-btn px-5 py-2.5 rounded-full border border-white/20 bg-white/5 hover:border-accent text-gray-300 hover:text-white font-sans text-xs font-bold uppercase tracking-widest transition-all" data-filter="collab">
+                    <i class="fas fa-users text-accent mr-1.5"></i> Celebrity Collaborations (Work Samples)
+                </button>
+                <button id="filter-solo" class="archive-filter-btn px-5 py-2.5 rounded-full border border-white/20 bg-white/5 hover:border-accent text-gray-300 hover:text-white font-sans text-xs font-bold uppercase tracking-widest transition-all" data-filter="solo">
+                    <i class="fas fa-user text-accent mr-1.5"></i> Solo Portraits & Studio Life
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2A. CELEBRITY COLLABORATIONS SECTION (WORK SAMPLES WITH CELEBRITIES) -->
+    <section id="section-collab" class="archive-gallery-section py-12 px-4 md:px-12 relative z-20">
+        <div class="container mx-auto max-w-[1600px]">
+            <!-- Section Header -->
+            <div class="mb-10 pb-4 border-b border-white/10 flex flex-col md:flex-row md:items-end justify-between gs-reveal">
+                <div>
+                    <span class="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.4em] font-bold text-accent mb-2 block">Documentary Work Samples</span>
+                    <h2 class="font-display font-extrabold text-2xl md:text-4xl uppercase tracking-tight text-white">Celebrity & Artist Collaborations</h2>
+                </div>
+                <p class="font-sans text-xs text-gray-400 mt-2 md:mt-0 max-w-xl leading-relaxed">
+                    Behind-the-scenes drama OST tracking sessions, playback vocalists, actors, and milestone productions with celebrated Bangladeshi artists.
+                </p>
+            </div>
+
+            <!-- Masonry Grid for Celebrity Collaborations -->
+            <div class="masonry" id="grid-collaborations">
+                <!-- Javascript will inject celebrity collaboration photos here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 2B. SOLO PORTRAITS & STUDIO LIFE SECTION -->
+    <section id="section-solo" class="archive-gallery-section py-12 px-4 md:px-12 relative z-20 border-t border-white/5">
+        <div class="container mx-auto max-w-[1600px]">
+            <!-- Section Header -->
+            <div class="mb-10 pb-4 border-b border-white/10 flex flex-col md:flex-row md:items-end justify-between gs-reveal">
+                <div>
+                    <span class="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.4em] font-bold text-accent mb-2 block">Studio Life & Sound Lab</span>
+                    <h2 class="font-display font-extrabold text-2xl md:text-4xl uppercase tracking-tight text-white">Solo Portraits & Studio Life</h2>
+                </div>
+                <p class="font-sans text-xs text-gray-400 mt-2 md:mt-0 max-w-xl leading-relaxed">
+                    JKH Jesan inside the acoustic sanctum — mandolin recordings, analog gear calibration, DAW arranging, and official studio portraits.
+                </p>
+            </div>
+
+            <!-- Masonry Grid for Solo Portraits -->
+            <div class="masonry" id="grid-solo">
+                <!-- Javascript will inject solo portraits here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. MASSIVE FOOTER CTA -->
+    <section
+        class="min-h-[70vh] md:min-h-[80vh] flex flex-col justify-between pt-20 md:pt-32 px-4 md:px-12 bg-white text-black relative z-30">
+        <div class="container mx-auto max-w-[1600px] flex-grow flex flex-col justify-center text-center gs-reveal">
+            <p
+                class="font-sans font-bold text-[clamp(8px,1vw,12px)] uppercase tracking-[0.4em] text-gray-400 mb-6 md:mb-10">
+                End of Archive</p>
+            <a href="contact" class="hover-flip" data-text="LET'S WORK">
+                <span
+                    class="font-display font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight uppercase tracking-tight text-black mix-blend-difference break-words block px-4">LET'S
+                    WORK</span>
+            </a>
+        </div>
+        <div
+            class="w-full py-8 border-t border-black/10 flex flex-col md:flex-row justify-between items-center text-[10px] font-bold uppercase tracking-[0.2em] font-sans text-gray-500 relative">
+            <p>&copy; 2026 JKH JESAN</p>
+            <a href="admin.html"
+                class="opacity-20 hover:opacity-100 transition-all duration-500 transform hover:scale-110 hover:text-accent cursor-pointer group flex items-center gap-2">
+                <i class="fas fa-lock text-[8px] group-hover:animate-pulse"></i> Sys
+            </a>
+        </div>
+    </section>
+
+    <script>
+        const lenis = new Lenis({
+            duration: 1.1,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            gestureOrientation: 'vertical',
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            touchMultiplier: 1.6,
+            infinite: false
+        });
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+        ScrollTrigger.config({ limitCallbacks: true, ignoreMobileResize: true });
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Curated Image Data: Separated into Celebrity Collaborations & Solo Portraits
+        const celebrityImages = [
+            { file: "jkh_update_01.jpg", title: "Composition & Production Session with Artist — JKH Jesan" },
+            { file: "jkh_update_02.jpg", title: "Studio Recording Session with Musicians — JKH Jesan" },
+            { file: "jkh_update_03.jpg", title: "Arrangement Session with Guest Artists — JKH Jesan" },
+            { file: "jkh_update_04.jpg", title: "Playback Vocal Collaboration with Senior Vocalist — JKH Jesan" },
+            { file: "jkh_update_06.jpg", title: "Audio Engineering & Tracking Session with Musicians — JKH Jesan" },
+            { file: "FB_IMG_1777655890475.jpg", title: "Celebrity Recording Session & Director Collaboration — JKH Jesan" },
+            { file: "FB_IMG_1777655924010.jpg", title: "Drama Cast & Star Collaboration — JKH Jesan" },
+            { file: "FB_IMG_1777655929670.jpg", title: "Studio Collaboration Session — JKH Jesan" },
+            { file: "FB_IMG_1777655934082.jpg", title: "Drama Production Team & Celebrity Cast — JKH Jesan" },
+            { file: "FB_IMG_1777655939253.jpg", title: "Control Room Playback Session with Vocalists — JKH Jesan" },
+            { file: "FB_IMG_1777655994940.jpg", title: "Live Concert Session with Guitars — JKH Jesan" },
+            { file: "FB_IMG_1777656001768.jpg", title: "Bangla Drama Music Production Team on Stage — JKH Jesan" },
+            { file: "FB_IMG_1777656005498.jpg", title: "Lead Drama Actor Studio Tracking Session — JKH Jesan" },
+            { file: "FB_IMG_1777656024779.jpg", title: "OST Production Team & Star Cast — JKH Jesan" },
+            { file: "FB_IMG_1777656103803.jpg", title: "Studio Media Recording Session with Vocalist — JKH Jesan" },
+            { file: "FB_IMG_1777656107898.jpg", title: "Studio Vocal Session with Artists — JKH Jesan" },
+            { file: "FB_IMG_1777656124718.jpg", title: "Studio Audio Review with Production Crew — JKH Jesan" },
+            { file: "FB_IMG_1777656146065.jpg", title: "Control Room Audio Playback with Directors — JKH Jesan" }
+        ];
+
+        const soloImages = [
+            { file: "_TMS0232.JPG", title: "JKH Jesan — Studio Portrait with ADAM Audio Monitoring" },
+            { file: "_TMS0234.JPG", title: "JKH Jesan — Master Desk Monitoring & Sound Lab" },
+            { file: "jkh_update_05.jpg", title: "JKH Jesan — Singing at Yamaha PSR Keyboard" },
+            { file: "IMG_9942.JPG", title: "JKH Jesan — Acoustic Mandolin Live Tracking" },
+            { file: "IMG_9943_portrait.jpg", title: "JKH Jesan — Studio Portrait with Mandolin" },
+            { file: "IMG_9948_portrait.jpg", title: "JKH Jesan — Acoustic Session Portrait" },
+            { file: "IMG_9883.JPG", title: "JKH Jesan — Audio Architect & Music Director" },
+            { file: "JKh PIc.png", title: "JKH Jesan — Official Artistic Portrait" },
+            { file: "FB_IMG_1777655910545.jpg", title: "JKH Jesan — Rooftop Portrait Session" },
+            { file: "FB_IMG_1777655917002.jpg", title: "JKH Jesan — Acoustic Guitar Night Session" },
+            { file: "FB_IMG_1777655945649.jpg", title: "JKH Jesan — Outdoor Acoustic Guitar Portrait" },
+            { file: "FB_IMG_1777656008448.jpg", title: "JKH Jesan — Mandolin on Brick Stairs" },
+            { file: "FB_IMG_1777656016895.jpg", title: "JKH Jesan — Cinematic Rain Portrait" },
+            { file: "FB_IMG_1777656114850.jpg", title: "JKH Jesan — Official Creator Award Plaque" }
+        ];
+
+        function createCardHTML(item) {
+            const src = `./drive-download-20260503T111429Z-3-001/${item.file}`;
+            return `
+            <div class="masonry-item bento-border overflow-hidden img-scale gs-reveal relative group cursor-pointer p-2 bg-[#121212]/90 rounded-2xl" onclick="window.openLightbox('${src}', '${item.title}')" title="Click to view full picture">
+                <div class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-black/70 backdrop-blur-md border border-white/20 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <i class="fas fa-search-plus text-xs"></i>
+                </div>
+                <img src="${src}" data-lightbox="true" data-caption="${item.title}" alt="${item.title}" loading="lazy" class="w-full h-auto object-contain rounded-xl filter grayscale group-hover:grayscale-0 transition-all duration-700">
+            </div>`;
+        }
+
+        function renderGalleries() {
+            const collabGrid = document.getElementById('grid-collaborations');
+            const soloGrid = document.getElementById('grid-solo');
+
+            if (collabGrid) {
+                collabGrid.innerHTML = celebrityImages.map(item => createCardHTML(item)).join('');
+            }
+            if (soloGrid) {
+                soloGrid.innerHTML = soloImages.map(item => createCardHTML(item)).join('');
+            }
+
+            setTimeout(() => {
+                gsap.utils.toArray('.gs-reveal').forEach(elem => {
+                    gsap.fromTo(elem, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out", scrollTrigger: { trigger: elem, start: "top 90%" } });
+                });
+                ScrollTrigger.refresh();
+            }, 300);
+        }
+
+        renderGalleries();
+
+        // Filter Functionality
+        const filterBtns = document.querySelectorAll('.archive-filter-btn');
+        const sectionCollab = document.getElementById('section-collab');
+        const sectionSolo = document.getElementById('section-solo');
+
+        function applyFilter(filter) {
+            filterBtns.forEach(btn => {
+                if (btn.getAttribute('data-filter') === filter) {
+                    btn.classList.add('active', 'bg-accent', 'border-accent', 'text-white', 'shadow-[0_0_15px_rgba(255,69,0,0.3)]');
+                    btn.classList.remove('border-white/20', 'bg-white/5', 'text-gray-300');
+                } else {
+                    btn.classList.remove('active', 'bg-accent', 'border-accent', 'text-white', 'shadow-[0_0_15px_rgba(255,69,0,0.3)]');
+                    btn.classList.add('border-white/20', 'bg-white/5', 'text-gray-300');
+                }
+            });
+
+            if (filter === 'collab') {
+                sectionCollab.style.display = 'block';
+                sectionSolo.style.display = 'none';
+            } else if (filter === 'solo') {
+                sectionCollab.style.display = 'none';
+                sectionSolo.style.display = 'block';
+            } else {
+                sectionCollab.style.display = 'block';
+                sectionSolo.style.display = 'block';
+            }
+
+            setTimeout(() => {
+                ScrollTrigger.refresh();
+            }, 100);
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                applyFilter(btn.getAttribute('data-filter'));
+            });
+        });
+
+        // Check URL Query Param (?cat=collab or ?cat=solo)
+        const urlParams = new URLSearchParams(window.location.search);
+        const catParam = urlParams.get('cat');
+        if (catParam === 'collab' || catParam === 'solo') {
+            applyFilter(catParam);
+        }
+    </script>
+    <script src="mobile.js"></script>
+    <!-- EvoRise Solutions Creator Tag -->
+    <a href="https://www.facebook.com/EvoRiseSolutions/" target="_blank"
+        class="block relative w-full border-t border-white/10 bg-[#050505] overflow-hidden group py-10 cursor-pointer z-50 hover:bg-[#0a0a0a] transition-colors duration-500">
+        <!-- Animated Background Gradient -->
+        <div
+            class="absolute inset-0 bg-gradient-to-r from-accent/0 via-accent/10 to-accent/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out">
+        </div>
+        <div
+            class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KPC9zdmc+')] opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        </div>
+
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-center gap-6 relative z-10">
+            <span
+                class="font-sans text-[10px] md:text-xs uppercase tracking-[0.5em] text-gray-500 group-hover:text-white transition-colors duration-300">Engineered
+                & Designed By</span>
+
+            <div class="relative inline-flex items-center justify-center">
+                <span
+                    class="font-display font-extrabold text-2xl md:text-4xl uppercase tracking-widest text-transparent group-hover:scale-105 transition-transform duration-500 ease-out"
+                    style="-webkit-text-stroke: 1px rgba(255,255,255,0.4);">
+                    <span
+                        class="text-white group-hover:text-accent transition-colors duration-500 drop-shadow-[0_0_15px_rgba(255,69,0,0)] group-hover:drop-shadow-[0_0_25px_rgba(255,69,0,0.8)]">EvoRise</span>
+                    Solutions
+                </span>
+
+                <!-- Glowing Particle (Animated) -->
+                <div
+                    class="absolute -right-6 top-0 w-3 h-3 rounded-full bg-accent opacity-0 group-hover:opacity-100 group-hover:animate-ping">
+                </div>
+                <div class="absolute -left-6 bottom-0 w-2 h-2 rounded-full bg-white opacity-0 group-hover:opacity-100 group-hover:animate-ping"
+                    style="animation-delay: 0.3s"></div>
+            </div>
+        </div>
+    </a>
+
+    <!-- Floating Instant WhatsApp Quick-Connect Button (Bulletproof Cache-Resistant Inline & Utility Styles) -->
+    <a href="https://wa.me/8801938172454?text=Hello%20JKH%20Jesan,%20I%20would%20like%20to%20collaborate%20on%20an%20audio%20project." 
+       target="_blank" 
+       rel="noopener noreferrer" 
+       aria-label="Direct WhatsApp Chat" 
+       id="floating-whatsapp-btn" 
+       title="Chat with JKH Jesan on WhatsApp"
+       class="fixed bottom-6 left-5 z-[99999] inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-[#0f0f0f]/95 border border-[#25D366]/50 text-white shadow-2xl backdrop-blur-md transition-all hover:scale-105 hover:bg-[#25D366] hover:text-black group"
+       style="position: fixed !important; bottom: 24px !important; left: 20px !important; z-index: 99999 !important; display: inline-flex !important; align-items: center !important; gap: 9px !important; padding: 10px 16px !important; background: rgba(15, 15, 15, 0.95) !important; border: 1px solid rgba(37, 211, 102, 0.5) !important; border-radius: 9999px !important; color: #ffffff !important; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(37, 211, 102, 0.3) !important; backdrop-filter: blur(16px) !important; text-decoration: none !important;">
+        <div class="relative flex items-center justify-center">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#25D366] animate-ping absolute"></span>
+            <span class="w-2 h-2 rounded-full bg-[#25D366] group-hover:bg-black transition-colors"></span>
+        </div>
+        <i class="fab fa-whatsapp text-lg text-[#25D366] group-hover:text-black transition-colors" style="color: #25D366 !important; font-size: 1.25rem !important;"></i>
+        <span class="font-sans text-[11px] font-bold tracking-wider uppercase hidden sm:inline-block">WhatsApp</span>
+    </a>
+</body>
+
+</html>

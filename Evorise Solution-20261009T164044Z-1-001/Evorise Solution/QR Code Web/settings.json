@@ -1,0 +1,23 @@
+{
+  "restaurantName": "Spice Garden & Grill",
+  "primaryColor": "#244638",
+  "secondaryColor": "#f3f4f6",
+  "buttonColor": "#244638",
+  "textColor": "#0f172a",
+  "themePreset": "minimalist-dark",
+  "fontFamily": "Plus Jakarta Sans",
+  "currencySymbol": "৳",
+  "taxRate": 5,
+  "geofenceEnabled": true,
+  "restaurantLat": 23.8103,
+  "restaurantLng": 90.4125,
+  "geofenceRadiusMeters": 120,
+  "autoAcceptOrders": false,
+  "autoShiftSteps": false,
+  "autoShiftPrepMinutes": 2,
+  "autoShiftReadyMinutes": 10,
+  "autoShiftDeliverMinutes": 5,
+  "enableSubCategories": true,
+  "enableOffers": true,
+  "enableDemoContent": false
+}

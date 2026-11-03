@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salon Haircut Offer — Creative Banner System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #09090b;
+      --card-bg: #121216;
+      --border: #22222a;
+      --accent: #c4a97d;
+      --text: #f4f4f5;
+      --text-muted: #8e8e99;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding: 40px 24px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .title-group h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+
+    .title-group p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text);
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 32px;
+    }
+
+    .banner-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .preview-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1/1;
+      background: #000000;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview-frame iframe {
+      width: 1080px;
+      height: 1080px;
+      border: none;
+      transform-origin: top left;
+    }
+
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1;
+    }
+
+    .tag-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: rgba(196, 169, 125, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(196, 169, 125, 0.3);
+    }
+
+    .ratio-badge {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .specs-table {
+      margin-top: auto;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      font-size: 12px;
+    }
+
+    .spec-item span {
+      display: block;
+      color: var(--text-muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .spec-item strong {
+      color: #dedee3;
+      font-weight: 600;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .actions .btn {
+      flex: 1;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="title-group">
+        <h1>Salon Haircut Offer &bull; Social Media Banner Suite</h1>
+        <p>Crafted with <strong>ui-ux-pro-max: banner-design</strong> &bull; Multi-Format Creative Production (1080 &times; 1080 px &bull; 1:1 Feed Standard)</p>
+      </div>
+      <div class="controls">
+        <a href="editorial-luxe-1080x1080.html" target="_blank" class="btn">Open Option 1</a>
+        <a href="dark-luxe-1080x1080.html" target="_blank" class="btn">Open Option 2</a>
+        <a href="swiss-minimalist-1080x1080.html" target="_blank" class="btn">Open Option 3</a>
+      </div>
+    </header>
+
+    <div class="grid">
+      
+      <!-- Option 1 -->
+      <div class="banner-card">
+        <div class="preview-frame" id="frame-1">
+          <iframe src="editorial-luxe-1080x1080.html" scrolling="no"></iframe>
+        </div>
+        <div class="card-body">
+          <div class="tag-row">
+            <span class="badge">Art Direction 1</span>
+            <span class="ratio-badge">1080 &times; 1080 px</span>
+          </div>
+          <h2 class="card-title">Editorial Luxe (Haute Coiffure)</h2>
+          <p class="card-desc">
+            Vogue-editorial art direction with gold foil accents, frosted glass morphism, and high-fashion photographic depth. Designed for luxury boutique salons targeting high-value clientele.
+          </p>
+          <div class="specs-table">
+            <div class="spec-item">
+              <span>Typography</span>
+              <strong>Cinzel + Plus Jakarta Sans</strong>
+            </div>
+            <div class="spec-item">
+              <span>Palette</span>
+              <strong>#C4A97D &bull; #121214 &bull; White</strong>
+            </div>
+            <div class="spec-item">
+              <span>Offer Angle</span>
+              <strong>30% Off First Visit + Blowout</strong>
+            </div>
+            <div class="spec-item">
+              <span>Safe Zone</span>
+              <strong>Compliant (Central 78%)</strong>
+            </div>
+          </div>
+          <div class="actions">
+            <a href="editorial-luxe-1080x1080.html" target="_blank" class="btn">Full Screen View</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Option 2 -->
+      <div class="banner-card">
+        <div class="preview-frame" id="frame-2">
+          <iframe src="dark-luxe-1080x1080.html" scrolling="no"></iframe>
+        </div>
+        <div class="card-body">
+          <div class="tag-row">
+            <span class="badge">Art Direction 2</span>
+            <span class="ratio-badge">1080 &times; 1080 px</span>
+          </div>
+          <h2 class="card-title">Dark Mode &amp; Amber Glow</h2>
+          <p class="card-desc">
+            Nocturnal studio aesthetic with heavy typographic punch (Syne 800), high-contrast amber pricing card, and directional edge lighting. High-conversion direct-response banner.
+          </p>
+          <div class="specs-table">
+            <div class="spec-item">
+              <span>Typography</span>
+              <strong>Syne + Plus Jakarta Sans</strong>
+            </div>
+            <div class="spec-item">
+              <span>Palette</span>
+              <strong>#E5A952 &bull; #09090B &bull; Platinum</strong>
+            </div>
+            <div class="spec-item">
+              <span>Offer Angle</span>
+              <strong>$45 Cut &amp; Finish (Was $75)</strong>
+            </div>
+            <div class="spec-item">
+              <span>Contrast Ratio</span>
+              <strong>12.4:1 (WCAG AAA)</strong>
+            </div>
+          </div>
+          <div class="actions">
+            <a href="dark-luxe-1080x1080.html" target="_blank" class="btn">Full Screen View</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Option 3 -->
+      <div class="banner-card">
+        <div class="preview-frame" id="frame-3">
+          <iframe src="swiss-minimalist-1080x1080.html" scrolling="no"></iframe>
+        </div>
+        <div class="card-body">
+          <div class="tag-row">
+            <span class="badge">Art Direction 3</span>
+            <span class="ratio-badge">1080 &times; 1080 px</span>
+          </div>
+          <h2 class="card-title">Swiss Minimalist &amp; Editorial Split</h2>
+          <p class="card-desc">
+            Architectural asymmetric split layout. Strict monochrome typography grid on the left juxtaposed with full-height model photography on the right. Modern, clean, and zero-fluff.
+          </p>
+          <div class="specs-table">
+            <div class="spec-item">
+              <span>Typography</span>
+              <strong>Space Grotesk + Plus Jakarta</strong>
+            </div>
+            <div class="spec-item">
+              <span>Palette</span>
+              <strong>#0D0D0F &bull; #FFFFFF &bull; Graphite</strong>
+            </div>
+            <div class="spec-item">
+              <span>Offer Angle</span>
+              <strong>30% Off Architectural Cut</strong>
+            </div>
+            <div class="spec-item">
+              <span>Design Principle</span>
+              <strong>Swiss International Style</strong>
+            </div>
+          </div>
+          <div class="actions">
+            <a href="swiss-minimalist-1080x1080.html" target="_blank" class="btn">Full Screen View</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Responsive auto-scaler for iframes to fit card previews cleanly
+    function scaleIframes() {
+      document.querySelectorAll('.preview-frame').forEach(frame => {
+        const iframe = frame.querySelector('iframe');
+        const containerWidth = frame.clientWidth;
+        const scale = containerWidth / 1080;
+        iframe.style.transform = `scale(${scale})`;
+      });
+    }
+
+    window.addEventListener('resize', scaleIframes);
+    window.addEventListener('DOMContentLoaded', scaleIframes);
+    setTimeout(scaleIframes, 300);
+  </script>
+</body>
+</html>

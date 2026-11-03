@@ -1,0 +1,68 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Core Role Checks
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated();
+    }
+
+    // Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- USER ACCOUNTS ---
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // --- BANNERS & PROMOTIONS ---
+    match /banners/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // --- OFFERS ---
+    match /offers/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // --- CATEGORIES ---
+    match /categories/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // --- MENU ITEMS ---
+    match /items/{itemId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // --- RESTAURANT CONFIG (SETTINGS) ---
+    match /config/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // --- CUSTOMER ORDERS ---
+    match /orders/{orderId} {
+      allow read: if true;
+      allow create: if true; // Public customers ordering food
+      allow update, delete: if true;
+    }
+
+    // --- DEMO TENANT SCOPES ---
+    match /demos/{demoId}/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+  }
+}

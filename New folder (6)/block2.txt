@@ -1,0 +1,396 @@
+        function renderAgreementMonitoringTable() {
+            const tbody = document.getElementById('agreement-monitoring-tbody');
+            tbody.innerHTML = '';
+            editableAgreementMonitoring.forEach((item, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td class="px-3 py-2"><input type="text" class="feature-input w-full" value="${item.service}" oninput="updateAgreementMonitoring(${index}, 'service', this.value)"></td>
+                    <td class="px-3 py-2"><textarea class="feature-input w-full" oninput="updateAgreementMonitoring(${index}, 'description', this.value)">${item.description}</textarea></td>
+                    <td class="px-3 py-2 text-center">
+                        <button onclick="insertAgreementMonitoringRow(${index})" class="text-blue-600 hover:text-blue-900 text-sm font-medium mr-2" title="Insert Below" style="margin-right: 5px;">+ Add</button>
+                        <button onclick="deleteAgreementMonitoringRow(${index})" class="text-red-600 hover:text-red-900 text-sm font-medium disabled:opacity-50">Delete</button>
+                    </td>
+                `;
+            });
+            toggleSensitiveEditing(document.getElementById('input-sensitiveEdit').checked);
+        }
+        function insertAgreementMonitoringRow(index) {
+            if (!document.getElementById('input-sensitiveEdit').checked) return;
+            editableAgreementMonitoring.splice(index + 1, 0, { service: 'New Item', description: 'New item description.' });
+            renderAgreementMonitoringTable();
+        }
+        function updateAgreementMonitoring(index, key, value) {
+            if (editableAgreementMonitoring[index]) {
+                editableAgreementMonitoring[index][key] = value;
+            }
+        }
+        function addAgreementMonitoringRow() {
+            editableAgreementMonitoring.push({ service: 'New Item', description: 'New item description.' });
+            renderAgreementMonitoringTable();
+        }
+        function deleteAgreementMonitoringRow(index) {
+            if (editableAgreementMonitoring.length > 1) {
+                editableAgreementMonitoring.splice(index, 1);
+                renderAgreementMonitoringTable();
+            }
+        }
+        function renderAgreementPolicyList() {
+            const list = document.getElementById('agreement-policy-list');
+            list.innerHTML = '';
+            editableAgreementPolicy.forEach((item, index) => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'p-2 border border-gray-200 rounded-md';
+                itemEl.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <input type="text" class="feature-input w-full font-semibold" value="${item.title}" oninput="updateAgreementPolicy(${index}, 'title', this.value)" placeholder="Policy Title">
+                        <button onclick="insertAgreementPolicyItem(${index})" class="ml-2 text-blue-600 hover:text-blue-900 text-sm font-medium disabled:opacity-50">+ Add</button>
+                        <button onclick="deleteAgreementPolicyItem(${index})" class="ml-2 text-red-600 hover:text-red-900 text-sm font-medium disabled:opacity-50">Delete</button>
+                    </div>
+                    <textarea class="feature-input w-full" oninput="updateAgreementPolicy(${index}, 'text', this.value)" rows="3" placeholder="Policy text...">${item.text}</textarea>
+                `;
+                list.appendChild(itemEl);
+            });
+            toggleSensitiveEditing(document.getElementById('input-sensitiveEdit').checked);
+        }
+        function insertAgreementPolicyItem(index) {
+            if (!document.getElementById('input-sensitiveEdit').checked) return;
+            editableAgreementPolicy.splice(index + 1, 0, { title: 'New Policy Title', text: 'New policy description.' });
+            renderAgreementPolicyList();
+            renderDynamicLists();
+        }
+        function updateAgreementPolicy(index, key, value) {
+            if (editableAgreementPolicy[index]) {
+                editableAgreementPolicy[index][key] = value;
+            }
+        }
+        function addAgreementPolicyItem() {
+            editableAgreementPolicy.push({ title: 'New Policy Title', text: 'New policy description.' });
+            renderAgreementPolicyList();
+            renderDynamicLists();
+        }
+        function deleteAgreementPolicyItem(index) {
+            if (editableAgreementPolicy.length > 1) {
+                editableAgreementPolicy.splice(index, 1);
+                renderAgreementPolicyList();
+            renderDynamicLists();
+            }
+        }
+
+        // --- AGREEMENT: Data Collection (No changes) ---
+        function collectAgreementData() {
+            // ... (This function remains the same as v3) ...
+            const data = {};
+            data.agencyName = document.getElementById('input-agn-name').value;
+            data.agencyAddress = document.getElementById('input-agn-address').value;
+            data.clientName = document.getElementById('input-agn-clientName').value;
+            data.clientAddress = document.getElementById('input-agn-clientAddress').value;
+            data.effectiveDate = document.getElementById('input-agn-effectiveDate').value;
+            data.version = document.getElementById('input-agn-version').value;
+            data.purpose = document.getElementById('input-agn-purpose').value;
+            data.startDate = document.getElementById('input-agn-startDate').value;
+            data.endDate = document.getElementById('input-agn-endDate').value;
+            data.durationText = document.getElementById('input-agn-durationText').value;
+            data.services = editableAgreementServices;
+            data.monitoring = editableAgreementMonitoring;
+            data.retainerFee = document.getElementById('input-agn-retainerFee').value;
+            data.adBudget = document.getElementById('input-agn-adBudget').value;
+            data.adBudgetNote = document.getElementById('input-agn-adBudgetNote').value;
+            data.paymentTerms = document.getElementById('input-agn-paymentTerms').value;
+            data.policy = editableAgreementPolicy;
+            return data;
+        }
+
+        // --- AGREEMENT: HTML Component Generators (No changes) ---
+        // All createAgreement...HTML functions remain exactly the same as v3.
+        function createAgreementHeaderHTML(data) {
+            return `
+                <div style="width: 100%; margin-bottom: 20px; text-align: center;">
+                    <h1 style="font-size: 20pt; color: #000000; margin: 0; padding: 0;">${data.agencyName}</h1>
+                    <p style="font-size: 14pt; color: #000000; margin: 0; padding: 0; border-bottom: 2px solid #000000; padding-bottom: 10px;">SERVICE AGREEMENT & WORKING POLICY</p>
+                </div>
+                <p style="font-size: 10pt;"><strong>Between:</strong> ${data.agencyName} (Service Provider)<br>Address: ${data.agencyAddress}</p>
+                <p style="font-size: 10pt;"><strong>AND</strong></p>
+                <p style="font-size: 10pt;"><strong>Client:</strong> ${data.clientName} (Service Receiver)<br>Address: ${data.clientAddress}</p>
+                <p style="font-size: 10pt;"><strong>Agreement Effective Date:</strong> ${data.effectiveDate}</p>
+                <p style="font-size: 10pt;"><strong>Version:</strong> ${data.version} | ${data.effectiveDate}</p>
+            `;
+        }
+        function createAgreementServicesTableHTML(services) {
+            let html = `
+                <h2 style="font-size: 14pt; font-weight: bold; color: #000000;">3. Services and Details</h2>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10pt;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #d1d5db; padding: 10px; text-align: left;">Service Feature</th>
+                            <th style="border: 1px solid #d1d5db; padding: 10px; text-align: left;">Quantity</th>
+                            <th style="border: 1px solid #d1d5db; padding: 10px; text-align: left;">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            services.forEach(s => {
+                html += `
+                    <tr>
+                        <td style="border: 1px solid #d1d5db; padding: 8px;">${s.feature}</td>
+                        <td style="border: 1px solid #d1d5db; padding: 8px;">${s.quantity}</td>
+                        <td style="border: 1px solid #d1d5db; padding: 8px;">${s.description}</td>
+                    </tr>
+                `;
+            });
+            html += `</tbody></table>`;
+            return html;
+        }
+        function createAgreementMonitoringTableHTML(monitoring) {
+            let html = `
+                <h2 style="font-size: 14pt; font-weight: bold; color: #000000;">4. Monitoring, Reporting & Communication</h2>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10pt;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #d1d5db; padding: 10px; text-align: left;">Service</th>
+                            <th style="border: 1px solid #d1d5db; padding: 10px; text-align: left;">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            monitoring.forEach(m => {
+                html += `
+                    <tr>
+                        <td style="border: 1px solid #d1d5db; padding: 8px;">${m.service}</td>
+                        <td style="border: 1px solid #d1d5db; padding: 8px;">${m.description}</td>
+                    </tr>
+                `;
+            });
+            html += `</tbody></table>`;
+            return html;
+        }
+        function createAgreementFinancialsTableHTML(data) {
+             return `
+                <h2 style="font-size: 14pt; font-weight: bold; color: #000000;">5. Financial Overview</h2>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10pt;">
+                    <thead>
+                        <tr style="background-color: #f3f4f6;">
+                            <th style="border: 1px solid #d1d5db; padding: 10px; text-align: left;">Service Category</th>
+                            <th style="border: 1px solid #d1d5db; padding: 10px; text-align: left;">Deliverables & Value (BDT)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #d1d5db; padding: 8px;">Monthly Retainer Fee</td>
+                            <td style="border: 1px solid #d1d5db; padding: 8px;">${data.retainerFee}</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #d1d5db; padding: 8px;">All Services</td>
+                            <td style="border: 1px solid #d1d5db; padding: 8px;">Included</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #d1d5db; padding: 8px;">Ad/Boosting Budget</td>
+                            <td style="border: 1px solid #d1d5db; padding: 8px;">(Not Included Under Monthly Retainer Fee). Paid by Client</td>
+                        </tr>
+                         <tr>
+                            <td style="border: 1px solid #d1d5db; padding: 8px;">Paid Ad Budget</td>
+                            <td style="border: 1px solid #d1d5db; padding: 8px;">${data.adBudget} (Client-funded, paid directly to Meta)<br><br>${data.adBudgetNote}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+        }
+        function createAgreementPolicyListHTML(policy, agencyName) {
+            let html = `
+                <h2 style="font-size: 14pt; font-weight: bold; color: #000000;">7. ${agencyName}-Working Policy</h2>
+                <ol style="list-style-type: decimal; margin-left: 20px; padding-left: 0; font-size: 10pt;">
+            `;
+            policy.forEach(p => {
+                html += `<li style="margin-bottom: 10px;"><strong>${p.title}:</strong> ${p.text.replace(/\n/g, '<br>')}</li>`;
+            });
+            html += `</ol>`;
+            return html;
+        }
+
+        // --- AGREEMENT: Download ---
+
+        function generateAgreementDocx() {
+            const data = collectAgreementData();
+            const clientNameForFilename = data.clientName.replace(/[^a-z0-9]/gi, '_');
+
+            if (!sunEditorAgreement) return;
+            let editedContent = sunEditorAgreement.getContents(true);
+            
+            const signatureBlock = `
+                <h2 style="font-size: 14pt; font-weight: bold; color: #000000; page-break-before: auto;">8. Signatures & Approval</h2>
+                <p style="font-size: 10pt;">This agreement is prepared in two (2) copies, duly signed, and each party will retain one copy.</p>
+                <div style="width: 100%; margin-top: 40px; display: flex; justify-content: space-between;">
+                    <div style="width: 45%; vertical-align: top;">
+                        <p style="font-size: 10pt;"><strong>First Party: ${data.agencyName} (Service Provider)</strong></p>
+                        <div class="sig-line"></div>
+                        <p style="font-size: 10pt;">Name: ________________________<br>Designation: ________________________<br>Signature: ____________________<br>Date: _______________________</p>
+                    </div>
+                    <div style="width: 10%;"></div>
+                    <div style="width: 45%; vertical-align: top;">
+                        <p style="font-size: 10pt;"><strong>Second Party: ${data.clientName} (Service Receiver)</strong></p>
+                        <div class="sig-line"></div>
+                        <p style="font-size: 10pt;">Name: ________________________<br>Designation: ____________________<br>Signature: ____________________<br>Date: _______________________</p>
+                    </div>
+                </div>
+            `;
+            editedContent += signatureBlock;
+            const content = `
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        /* ... (Styles remain the same as v3) ... */
+                        body { font-family: Calibri, sans-serif; line-height: 1.6; margin: 40px; color: #000000; }
+                        h1 { font-size: 22pt; color: #000000; margin-top: 30px; margin-bottom: 15px; }
+                        h2 { font-size: 16pt; color: #000000; margin-top: 25px; margin-bottom: 10px; page-break-after: avoid; }
+                        table { border-collapse: collapse; width: 100%; margin-bottom: 20px; font-size: 10pt; page-break-inside: avoid; }
+                        th, td { border: 1px solid #d1d5db; padding: 8px; text-align: left; vertical-align: top; }
+                        thead tr { background-color: #f3f4f6; }
+                        ol { margin-left: 20px; padding-left: 0; font-size: 10pt; page-break-inside: avoid; }
+                        ol li { margin-bottom: 8px; }
+                        strong { font-weight: bold; }
+                        .sig-block { margin-top: 50px; width: 45%; font-size: 10pt; }
+                        .sig-line { border-bottom: 1px solid #374151; height: 20px; margin-top: 30px; }
+                        /* REMOVED: img { max-width: 100%; height: auto; } */
+                    </style>
+                </head>
+                <body>
+                    ${editedContent}
+                </body>
+                </html>
+            `;
+            const blob = new Blob([content], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${clientNameForFilename}_Service_Agreement.doc`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function generateAgreementHtml() {
+            const data = collectAgreementData();
+            const clientNameForFilename = data.clientName.replace(/[^a-z0-9]/gi, '_');
+
+            if (!sunEditorAgreement) return;
+            let editedContent = sunEditorAgreement.getContents(true);
+            
+            const signatureBlock = `
+                <h2 style="font-size: 14pt; font-weight: bold; color: #000000;">8. Signatures & Approval</h2>
+                <p style="font-size: 10pt;">This agreement is prepared in two (2) copies, duly signed, and each party will retain one copy.</p>
+                <div style="width: 100%; margin-top: 40px; display: flex; justify-content: space-between;">
+                    <div style="width: 45%; vertical-align: top;">
+                        <p style="font-size: 10pt;"><strong>First Party: ${data.agencyName} (Service Provider)</strong></p>
+                        <div class="sig-line"></div>
+                        <p style="font-size: 10pt;">Name: ________________________<br>Designation: ________________________<br>Signature: ____________________<br>Date: _______________________</p>
+                    </div>
+                    <div style="width: 10%;"></div>
+                    <div style="width: 45%; vertical-align: top;">
+                        <p style="font-size: 10pt;"><strong>Second Party: ${data.clientName} (Service Receiver)</strong></p>
+                        <div class="sig-line"></div>
+                        <p style="font-size: 10pt;">Name: ________________________<br>Designation: ____________________<br>Signature: ____________________<br>Date: _______________________</p>
+                    </div>
+                </div>
+            `;
+            editedContent += signatureBlock;
+            const content = `
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Service Agreement - ${data.clientName}</title>
+                    <style>
+                        /* ... (Styles remain the same as v3) ... */
+                        body { font-family: Calibri, sans-serif; line-height: 1.6; margin: 40px; color: #374151; max-width: 800px; margin-left: auto; margin-right: auto; }
+                        h1 { font-size: 22pt; color: #000000; margin-top: 30px; margin-bottom: 15px; }
+                        h2 { font-size: 16pt; color: #000000; margin-top: 25px; margin-bottom: 10px; }
+                        table { border-collapse: collapse; width: 100%; margin-bottom: 20px; font-size: 10pt; }
+                        th, td { border: 1px solid #d1d5db; padding: 8px; text-align: left; vertical-align: top; }
+                        thead tr { background-color: #f3f4f6; }
+                        ol { margin-left: 20px; padding-left: 0; font-size: 10pt; }
+                        ol li { margin-bottom: 8px; }
+                        strong { font-weight: bold; }
+                        .sig-block { margin-top: 50px; width: 45%; font-size: 10pt; }
+                        .sig-line { border-bottom: 1px solid #374151; height: 20px; margin-top: 30px; }
+                        /* REMOVED: img { max-width: 100%; height: auto; } */
+                    </style>
+                </head>
+                <body>
+                    ${editedContent}
+                </body>
+                </html>
+            `;
+            const blob = new Blob([content], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${clientNameForFilename}_Service_Agreement.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        // --- AI API AND ADVANCED TOOLS ---
+        const GROQ_API_KEY = "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";
+        
+        function getActiveEditor() {
+            if (currentWorld === 'proposal' && typeof sunEditorProposal !== 'undefined') return sunEditorProposal;
+            if (currentWorld === 'agreement' && typeof sunEditorAgreement !== 'undefined') return sunEditorAgreement;
+            return null;
+        }
+
+        function executeFindReplace() {
+            const findWord = document.getElementById('ai-find-word').value;
+            const replaceWord = document.getElementById('ai-replace-word').value;
+            if (!findWord) return alert("Please enter a word to find.");
+            
+            const editor = getActiveEditor();
+            if (!editor) return alert("Please load content into the editor first.");
+            
+            let content = editor.getContents();
+            // Simple replace all, maintaining HTML tags mostly (can be a bit risky with HTML but sufficient for standard text replacements)
+            const regex = new RegExp(findWord, 'gi');
+            const newContent = content.replace(regex, replaceWord);
+            
+            editor.setContents(newContent);
+            alert(`Replaced all occurrences of "${findWord}".`);
+        }
+
+        async function executeAIGeneration() {
+            const prompt = document.getElementById('ai-prompt').value;
+            if (!prompt) return alert("Please enter a prompt for the AI.");
+            
+            const btn = document.getElementById('ai-generate-btn');
+            btn.innerHTML = "Generating...";
+            btn.disabled = true;
+            
+            try {
+                const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${GROQ_API_KEY}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        model: "llama-3.1-8b-instant", 
+                        messages: [{ role: "user", content: prompt }],
+                        temperature: 0.7
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.choices && data.choices.length > 0) {
+                    const resultText = data.choices[0].message.content;
+                    document.getElementById('ai-result').value = resultText;
+                    document.getElementById('ai-response-area').classList.remove('hidden');
+                } else {
+                    alert("AI generation failed. Please check the API key.");
+                }
+            } catch (error) {
+                console.error("AI Error:", error);
+                alert("Error connecting to AI. See console.");
+            }
+            
+            btn.innerHTML = "Generate Content";
+            btn.disabled = false;
+        }

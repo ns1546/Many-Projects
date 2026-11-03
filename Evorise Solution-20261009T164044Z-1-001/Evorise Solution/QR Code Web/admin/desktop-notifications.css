@@ -1,0 +1,667 @@
+/* ========================================================
+   EVORISE DESKTOP NOTIFICATIONS & ALERT SYSTEM
+   Enterprise POS & Kitchen Management Styling
+   ======================================================== */
+
+:root {
+  --desktop-accent: #E99545;
+  --desktop-accent-hover: #d27e2e;
+  --desktop-success: #10b981;
+  --desktop-danger: #ef4444;
+  --desktop-warning: #f59e0b;
+  --desktop-bg: #ffffff;
+  --desktop-card: #f8fafc;
+  --desktop-border: #e2e8f0;
+  --desktop-text: #0f172a;
+  --desktop-text-muted: #64748b;
+  --desktop-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --desktop-glass: rgba(255, 255, 255, 0.95);
+}
+
+[data-theme="dark"], body.dark-mode {
+  --desktop-bg: #0f172a;
+  --desktop-card: #1e293b;
+  --desktop-border: #334155;
+  --desktop-text: #f8fafc;
+  --desktop-text-muted: #94a3b8;
+  --desktop-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  --desktop-glass: rgba(30, 41, 59, 0.95);
+}
+
+/* ==========================================
+   DESKTOP TITLEBAR & TOP ACTION CONTROLS
+   ========================================== */
+.desktop-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 38px;
+  background: var(--desktop-card);
+  border-bottom: 1px solid var(--desktop-border);
+  padding: 0 14px;
+  user-select: none;
+  -webkit-app-region: drag;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--desktop-text-muted);
+  z-index: 9999;
+  position: sticky;
+  top: 0;
+}
+
+.desktop-titlebar-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--desktop-text);
+  font-weight: 700;
+}
+
+.desktop-titlebar-title .status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--desktop-success);
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+  animation: pulse-dot 2s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.7; }
+}
+
+.desktop-titlebar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  -webkit-app-region: no-drag;
+}
+
+.desktop-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--desktop-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.desktop-icon-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: var(--desktop-border);
+}
+
+[data-theme="dark"] .desktop-icon-btn:hover,
+body.dark-mode .desktop-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ==========================================
+   NOTIFICATION BADGE SYSTEM
+   ========================================== */
+.desktop-badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  background: var(--desktop-danger);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  min-width: 18px;
+  height: 18px;
+  line-height: 18px;
+  border-radius: 9px;
+  text-align: center;
+  padding: 0 4px;
+  box-shadow: 0 2px 5px rgba(239, 68, 68, 0.5);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.desktop-badge.pulse {
+  animation: badge-pulse 1.4s infinite;
+}
+
+@keyframes badge-pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+  70% { transform: scale(1.15); box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.desktop-badge.hidden {
+  display: none !important;
+}
+
+/* ==========================================
+   NOTIFICATION CENTER DRAWER
+   ========================================== */
+.notification-drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 10000;
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.notification-drawer-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.notification-drawer {
+  position: fixed;
+  top: 48px;
+  right: 20px;
+  width: 380px;
+  max-width: calc(100vw - 40px);
+  max-height: 520px;
+  background: var(--desktop-glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--desktop-border);
+  border-radius: 16px;
+  box-shadow: var(--desktop-shadow);
+  z-index: 10001;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(-12px) scale(0.96);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.notification-drawer.open {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.notification-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--desktop-border);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.notification-drawer-header h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--desktop-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.notification-drawer-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.notification-drawer-actions button {
+  background: transparent;
+  border: none;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--desktop-accent);
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+
+.notification-drawer-actions button:hover {
+  text-decoration: underline;
+}
+
+.notification-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 12px;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.notification-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--desktop-card);
+  border: 1px solid var(--desktop-border);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.notification-item:hover {
+  transform: translateY(-1px);
+  border-color: var(--desktop-accent);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.notification-item.unread {
+  border-left: 4px solid var(--desktop-accent);
+  background: rgba(233, 149, 69, 0.04);
+}
+
+.notification-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #fef3c7;
+  color: #d97706;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.notification-icon.order {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.notification-icon.urgent {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--desktop-text);
+  margin-bottom: 2px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-time {
+  font-size: 10px;
+  color: var(--desktop-text-muted);
+  font-weight: 500;
+}
+
+.notification-desc {
+  font-size: 12px;
+  color: var(--desktop-text-muted);
+  line-height: 1.4;
+  margin-bottom: 6px;
+  word-break: break-word;
+}
+
+.notification-item-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.notification-item-actions button {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 5px;
+  border: 1px solid var(--desktop-border);
+  background: var(--desktop-bg);
+  color: var(--desktop-text);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.notification-item-actions button.btn-primary-action {
+  background: var(--desktop-accent);
+  color: #ffffff;
+  border-color: var(--desktop-accent);
+}
+
+.notification-empty-state {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--desktop-text-muted);
+  font-size: 13px;
+}
+
+/* ==========================================
+   FLOATING DESKTOP TOAST ALERTS (AUDIO & POPUPS)
+   ========================================== */
+.desktop-toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 10005;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+  max-width: 420px;
+  width: calc(100vw - 48px);
+}
+
+.desktop-toast {
+  pointer-events: auto;
+  background: var(--desktop-glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--desktop-border);
+  border-left: 5px solid var(--desktop-accent);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: var(--desktop-shadow);
+  display: flex;
+  gap: 14px;
+  animation: slide-in-toast 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s ease;
+}
+
+.desktop-toast.urgent {
+  border-left-color: var(--desktop-danger);
+  animation: slide-in-toast 0.35s cubic-bezier(0.16, 1, 0.3, 1), toast-shake 0.5s ease 0.4s;
+}
+
+@keyframes slide-in-toast {
+  from { transform: translateX(60px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes toast-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+.desktop-toast-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(233, 149, 69, 0.15);
+  color: var(--desktop-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.desktop-toast-body {
+  flex: 1;
+}
+
+.desktop-toast-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--desktop-text);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.desktop-toast-title .table-tag {
+  background: var(--desktop-accent);
+  color: #fff;
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.desktop-toast-desc {
+  font-size: 12px;
+  color: var(--desktop-text-muted);
+  margin: 4px 0 10px 0;
+  line-height: 1.4;
+}
+
+.desktop-toast-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.desktop-toast-actions button {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.desktop-toast-actions button:active {
+  transform: scale(0.96);
+}
+
+.desktop-toast-actions .btn-ack {
+  background: var(--desktop-accent);
+  color: #fff;
+}
+
+.desktop-toast-actions .btn-dismiss {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--desktop-text);
+}
+
+/* ==========================================
+   DESKTOP NOTIFICATIONS SETTINGS MODAL
+   ========================================== */
+.desktop-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 10010;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.desktop-modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.desktop-modal {
+  background: var(--desktop-bg);
+  border: 1px solid var(--desktop-border);
+  border-radius: 18px;
+  width: 520px;
+  max-width: 95vw;
+  box-shadow: var(--desktop-shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.95);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.desktop-modal-overlay.open .desktop-modal {
+  transform: scale(1);
+}
+
+.desktop-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--desktop-border);
+  background: var(--desktop-card);
+}
+
+.desktop-modal-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--desktop-text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.desktop-modal-body {
+  padding: 22px;
+  overflow-y: auto;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.setting-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  background: var(--desktop-card);
+  border: 1px solid var(--desktop-border);
+  border-radius: 12px;
+  transition: border-color 0.2s ease;
+}
+
+.setting-row:hover {
+  border-color: var(--desktop-accent);
+}
+
+.setting-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.setting-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--desktop-text);
+}
+
+.setting-desc {
+  font-size: 11px;
+  color: var(--desktop-text-muted);
+}
+
+/* Custom Switch Toggle */
+.desktop-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.desktop-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.desktop-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #cbd5e1;
+  transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 24px;
+}
+
+.desktop-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.desktop-switch input:checked + .desktop-slider {
+  background-color: var(--desktop-accent);
+}
+
+.desktop-switch input:checked + .desktop-slider:before {
+  transform: translateX(20px);
+}
+
+/* Select, Slider & Inputs */
+.desktop-select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--desktop-border);
+  background: var(--desktop-bg);
+  color: var(--desktop-text);
+  font-size: 13px;
+  font-weight: 600;
+  outline: none;
+}
+
+.desktop-range {
+  width: 100%;
+  accent-color: var(--desktop-accent);
+  cursor: pointer;
+}
+
+.desktop-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 22px;
+  border-top: 1px solid var(--desktop-border);
+  background: var(--desktop-card);
+}
+
+.btn-desktop-secondary {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--desktop-border);
+  background: var(--desktop-bg);
+  color: var(--desktop-text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-desktop-primary {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  background: var(--desktop-accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-desktop-primary:hover {
+  background: var(--desktop-accent-hover);
+}

@@ -1,0 +1,43 @@
+# Rownaa Phase 7: Advanced Pricing Engine Implementation
+
+## Objective
+Implement the comprehensive service pricing specification across the Rownaa platform, ensuring that all 5 key services (Hourly Rental, Intercity, Corporate Transport, Airport Transfer, and Travel & Tour) follow the client's detailed formulas.
+
+## Strategy & Approach
+This phase will build a central, flexible Pricing Engine in Javascript, connected to an Admin-editable data structure. The Customer app will dynamically call this engine to generate precise fares instead of showing static numbers.
+
+### Step 1: Data Architecture & Storage
+1. **Pricing Configuration Schema**: We will build a JSON structure to represent all rates, tiers, zones, and variables mentioned in the doc (e.g., Hourly base packages, Intercity per-KM rates, Airport zone grids).
+2. **Local Data Store**: For the frontend prototype, this schema will be saved to `localStorage` (simulating a backend DB).
+
+### Step 2: The Core Pricing Engine (`js/pricing.js`)
+We will create a dedicated script containing pure calculation logic.
+- `calculateHourly(category, hours, distance)`
+- `calculateIntercity(type, category, distance, nights)`
+- `calculateCorporate(category, days)`
+- `calculateAirport(zone, category, direction, waitTime, isNight)`
+- `calculateTour(route, category, extraDays)`
+
+### Step 3: Admin Panel Integration
+1. Add a **"Pricing & Rates"** section to the Admin sidebar (`admin-panel.html`).
+2. Build dedicated tabs inside this panel for:
+   - **Hourly Rates** (Editable grid of 4/10 hr packages + extra charges)
+   - **Intercity Rates** (Editable Tiers: Economy, Premium + global settings like Max Same-Day Distance)
+   - **Corporate Rates** (4 duration tiers per category)
+   - **Airport Transfer** (8 Zones × 5 Categories grid, plus surcharges)
+   - **Travel & Tour** (Custom route definitions)
+3. Implement JS logic to read from and write back to `localStorage` when Admin saves changes.
+
+### Step 4: Customer Panel & Booking Flow Integration
+1. Update `index.html` (Booking Console) to capture the exact inputs required for the pricing formulas (e.g., Pickup/Drop locations, Wait Nights, Trip Direction for Airport).
+2. Update `find-cars.html` to:
+   - Read URL parameters representing the trip details.
+   - Run the Pricing Engine to calculate the actual `Total Price`.
+   - Update the vehicle cards dynamically to display the precise calculation.
+
+### Execution Sequence
+1. Write `js/pricing-data.js` to seed the default data structure.
+2. Write `js/pricing.js` for the calculation logic.
+3. Replace content in `admin-panel.html` to add the new Pricing section.
+4. Replace content in `find-cars.html` to inject dynamic pricing logic on page load.
+5. Provide a summary of completion to the user.

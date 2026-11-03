@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64.802" height="64.802" viewBox="0 0 64.802 64.802">
+  <g id="smartphone-3" transform="translate(0)">
+    <g id="Group_34530" data-name="Group 34530" transform="translate(0)">
+      <path id="Path_22963" data-name="Path 22963" d="M286.72,209.84a5.04,5.04,0,0,1,5.04-5.04h14.4a5.04,5.04,0,0,1,5.04,5.04v25.921a5.04,5.04,0,0,1-5.04,5.04h-14.4a5.04,5.04,0,0,1-5.04-5.04Zm5.04-.72a.72.72,0,0,0-.72.72v25.921a.72.72,0,0,0,.72.72h14.4a.72.72,0,0,0,.72-.72V209.84a.72.72,0,0,0-.72-.72Z" transform="translate(-246.399 -175.999)" fill="#e2136e" fill-rule="evenodd"/>
+      <path id="Path_22964" data-name="Path 22964" d="M348.16,381.04a2.16,2.16,0,0,1,2.16-2.16h2.88a2.16,2.16,0,1,1,0,4.32h-2.88A2.16,2.16,0,0,1,348.16,381.04Z" transform="translate(-299.199 -325.598)" fill="#e2136e" fill-rule="evenodd"/>
+      <path id="Path_22965" data-name="Path 22965" d="M28.082,34.284v26.2H5.041A5.04,5.04,0,0,1,0,55.441V44.866A4.774,4.774,0,0,1,2.535,40.65a54.411,54.411,0,0,1,25.547-6.366ZM28.082,0V30.241A15.12,15.12,0,0,1,28.082,0Z" transform="translate(-0.001)" fill="#7e97a3" fill-rule="evenodd"/>
+      <path id="Path_22967" data-name="Path 22967" d="M298.96,204.8h-7.2a5.04,5.04,0,0,0-5.04,5.04v25.921a5.04,5.04,0,0,0,5.04,5.04h7.2v-4.32h-7.2a.72.72,0,0,1-.72-.72V209.84a.72.72,0,0,1,.72-.72h7.2Z" transform="translate(-246.399 -175.999)" fill="#e2136e" fill-rule="evenodd"/>
+    </g>
+    <g id="Group_34531" data-name="Group 34531">
+      <path id="Path_22961" data-name="Path 22961" d="M37.473,269.988q-.032-.356-.032-.72V244.6a54.437,54.437,0,0,0-34.907,5.556A4.774,4.774,0,0,0,0,254.372v10.575a5.04,5.04,0,0,0,5.04,5.04H37.473Z" transform="translate(0 -209.506)" fill="#e0e0e0"/>
+      <path id="Path_22962" data-name="Path 22962" d="M107.281,0A15.12,15.12,0,1,0,122.4,15.12,15.12,15.12,0,0,0,107.281,0Z" transform="translate(-79.201)" fill="#e0e0e0" fill-rule="evenodd"/>
+    </g>
+  </g>
+</svg>

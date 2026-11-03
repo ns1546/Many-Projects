@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Tahsin Islam Sifat</title>
+  <meta name="description" content="Get in touch with Tahsin Islam Sifat via email or WhatsApp.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <a href="index.html" class="logo">Tahsin.</a>
+    
+    <!-- Professional Menu Toggle -->
+    <div id="menu-toggle" class="menu-toggle">
+      <span>Menu</span>
+      <div class="hamburger-icon">
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Side Drawer Navigation -->
+  <div id="nav-overlay" class="nav-overlay"></div>
+  <nav class="nav-links" id="nav-links">
+    <div id="close-menu" class="close-menu">Close ✕</div>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="skills.html">Skills</a>
+    <a href="experience.html">Experience</a>
+    <a href="work.html">Work</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <h1 class="page-title">
+      Let's<br>Talk
+    </h1>
+    <p class="page-subtitle">
+      Whether you have a project idea, need network engineering help, or just want to connect — I'm always open to great conversations.
+    </p>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact-layout">
+    <div class="contact-info-col">
+      <p class="contact-info-desc">
+        Based in Dhaka, Bangladesh.<br>
+        Available for remote work worldwide.
+      </p>
+
+      <div class="contact-detail">
+        <div class="form-label">Email</div>
+        <a href="mailto:tahsin.sifat@email.com">tahsin.sifat@email.com</a>
+      </div>
+
+      <div class="contact-detail">
+        <div class="form-label">WhatsApp</div>
+        <a href="https://wa.me/8801628500052" target="_blank">+880 1628 500052</a>
+      </div>
+
+      <div class="contact-detail" style="margin-top: 4rem;">
+        <div class="form-label">Socials</div>
+        <div style="display: flex; gap: 2rem;">
+          <a href="https://www.linkedin.com" target="_blank" style="font-size: 1rem; border-bottom: 1px solid var(--white);">LinkedIn</a>
+          <a href="https://github.com" target="_blank" style="font-size: 1rem; border-bottom: 1px solid var(--white);">GitHub</a>
+          <a href="https://www.facebook.com/Tahsin10.TN" target="_blank" style="font-size: 1rem; border-bottom: 1px solid var(--white);">Facebook</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="contact-form-col">
+      <form id="contactForm" novalidate>
+        <input type="hidden" id="via" name="via" value="email">
+        
+        <div class="form-group">
+          <label class="form-label" for="name">Name</label>
+          <input type="text" class="form-control" id="name" placeholder="John Doe" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input type="email" class="form-control" id="email" placeholder="john@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="subject">Subject</label>
+          <input type="text" class="form-control" id="subject" placeholder="Project Inquiry">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="message">Message</label>
+          <textarea class="form-control" id="message" rows="4" placeholder="Tell me about your project..." required style="resize: vertical;"></textarea>
+        </div>
+
+        <button type="submit" class="btn-wa">Send Message</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section style="padding: 0 4rem 8rem;">
+    <h2 style="font-family: var(--font-serif); font-size: 3rem; margin-bottom: 2rem;">Common Questions</h2>
+    
+    <div class="faq-item">
+      <div class="faq-q">Are you available for freelance projects? <span>+</span></div>
+      <div class="faq-a">Yes! I'm currently open to freelance opportunities in both network engineering and full-stack web development. Feel free to reach out with your project details.</div>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-q">What technologies do you specialize in? <span>+</span></div>
+      <div class="faq-a">I specialize in MikroTik networking, OLT management, ISP infrastructure, and MERN stack web development (MongoDB, Express.js, React.js, Node.js).</div>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-q">Do you work remotely? <span>+</span></div>
+      <div class="faq-a">Absolutely! I'm fully set up for remote collaboration worldwide. I'm based in Dhaka, Bangladesh but work with clients globally.</div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-bottom">
+      <div class="footer-copy">
+        &copy; 2026 Tahsin Islam Sifat.<br>All Rights Reserved.
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com" target="_blank">LinkedIn</a>
+        <a href="https://github.com" target="_blank">GitHub</a>
+        <a href="https://wa.me/8801628500052" target="_blank">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="admin.js"></script>
+  <script>
+    // FAQ accordion logic
+    document.querySelectorAll('.faq-q').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.parentElement;
+        item.classList.toggle('open');
+        const span = q.querySelector('span');
+        span.textContent = item.classList.contains('open') ? '−' : '+';
+      });
+    });
+  </script>
+</body>
+</html>

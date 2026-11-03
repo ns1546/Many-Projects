@@ -1,0 +1,7 @@
+{
+  "name": "Kajol Arifin Ome - Director Portfolio",
+  "description": "A high-end cinematic portfolio for renowned director Kajol Arifin Ome, featuring professional side-to-center scroll animations, clapperboard entry, and liquid motion UI elements.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

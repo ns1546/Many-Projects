@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Download Evo Alarm - Native Mobile App (APK)</title>
+  <link rel="icon" type="image/png" href="/icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-black: #08090d;
+      --bg-card: #12141c;
+      --bg-card-hover: #191c28;
+      --border-hairline: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(48, 209, 88, 0.35);
+      --color-accent: #30d158;
+      --color-cyan: #0a84ff;
+      --color-purple: #af52de;
+      --color-amber: #ff9f0a;
+      --text-primary: #ffffff;
+      --text-secondary: #9aa0a6;
+      --text-tertiary: #5f6368;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at 50% 15%, #181d2f 0%, var(--bg-black) 70%);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 16px;
+    }
+    .download-container {
+      width: 100%;
+      max-width: 440px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .app-brand-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-hairline);
+      border-radius: 24px;
+      padding: 30px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+    }
+    .app-brand-card::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 160px;
+      height: 160px;
+      background: radial-gradient(circle, rgba(48, 209, 88, 0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .app-icon-circle {
+      width: 76px;
+      height: 76px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #1f2937, #111827);
+      border: 2px solid rgba(48, 209, 88, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      margin: 0 auto 16px;
+      box-shadow: 0 8px 24px rgba(48, 209, 88, 0.25);
+    }
+    .app-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+    .app-tagline {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .version-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 11px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-hairline);
+      color: var(--text-secondary);
+    }
+    .badge-accent {
+      background: rgba(48, 209, 88, 0.12);
+      border-color: rgba(48, 209, 88, 0.35);
+      color: var(--color-accent);
+    }
+    .badge-cyan {
+      background: rgba(10, 132, 255, 0.12);
+      border-color: rgba(10, 132, 255, 0.35);
+      color: var(--color-cyan);
+    }
+    .btn-download-main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #30d158 0%, #22a042 100%);
+      color: #000;
+      font-size: 16px;
+      font-weight: 800;
+      border-radius: 16px;
+      text-decoration: none;
+      box-shadow: 0 8px 25px rgba(48, 209, 88, 0.4);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      border: none;
+    }
+    .btn-download-main:active {
+      transform: scale(0.98);
+      box-shadow: 0 4px 15px rgba(48, 209, 88, 0.3);
+    }
+    .auto-download-notice {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-secondary-web {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 13px 18px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-hairline);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 14px;
+      text-decoration: none;
+      margin-top: 10px;
+      transition: background 0.15s;
+    }
+    .btn-secondary-web:hover {
+      background: rgba(255, 255, 255, 0.09);
+    }
+    .instructions-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-hairline);
+      border-radius: 20px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .step-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .step-number {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(10, 132, 255, 0.15);
+      border: 1px solid rgba(10, 132, 255, 0.4);
+      color: var(--color-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-content {
+      flex: 1;
+    }
+    .step-head {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    .step-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+    .tip-box {
+      background: rgba(255, 159, 10, 0.1);
+      border: 1px solid rgba(255, 159, 10, 0.3);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 11px;
+      color: #ffb340;
+      line-height: 1.4;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .features-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-hairline);
+      border-radius: 20px;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .feature-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-hairline);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .feature-icon {
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+    .feature-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .feature-desc {
+      font-size: 10.5px;
+      color: var(--text-secondary);
+      line-height: 1.35;
+    }
+    .footer-note {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-tertiary);
+      padding: 8px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="download-container">
+
+    <!-- Hero Card -->
+    <div class="app-brand-card">
+      <img src="/icon.png" alt="Evo Alarm Icon" style="width:84px; height:84px; border-radius:22px; box-shadow:0 8px 28px rgba(48,209,88,0.35); margin: 0 auto 16px; display:block; border:2px solid rgba(48,209,88,0.4);" />
+      <h1 class="app-title">Evo Alarm</h1>
+      <p class="app-tagline">
+        Evolutionary Multi-Device Smart Alarm & Squad Wake-Up System
+      </p>
+
+      <div class="version-badge-row">
+        <span class="badge badge-accent">● v1.0 Production APK</span>
+        <span class="badge badge-cyan">15.2 MB</span>
+        <span class="badge">Android 7.0+</span>
+      </div>
+
+      <!-- Main Direct APK Download Button -->
+      <a href="/EvoAlarm.apk" download="EvoAlarm.apk" id="btnDownload" class="btn-download-main">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        <span>Download Evo Alarm APK</span>
+      </a>
+
+      <div class="auto-download-notice" id="autoDownloadNotice">
+        <span>⏱️ Auto-downloading in <strong id="countdownSec" style="color:var(--color-accent);">3</strong>s...</span>
+        <span style="opacity:0.4;">•</span>
+        <a href="/EvoAlarm.apk" download="EvoAlarm.apk" style="color:var(--color-cyan); text-decoration:none;">Tap if not started</a>
+      </div>
+
+      <!-- Secondary Web App Option -->
+      <a href="/" id="btnOpenWeb" class="btn-secondary-web">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        <span>Or Open Web App in Browser</span>
+      </a>
+    </div>
+
+    <!-- 3-Step Install Instructions -->
+    <div class="instructions-card">
+      <div class="section-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+        <span>How to Install on Android</span>
+      </div>
+
+      <div class="step-item">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <div class="step-head">Tap "Download Evo Alarm APK"</div>
+          <div class="step-sub">Save <code>EvoAlarm.apk</code> (15.2 MB) to your phone.</div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <div class="step-head">Open Downloaded File</div>
+          <div class="step-sub">Tap the download completion notification or find it in your "Files" / "Downloads" app.</div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <div class="step-head">Allow Install & Launch</div>
+          <div class="step-sub">If Android asks <em>"Allow unknown apps"</em>, tap <strong>Settings → Allow from this source</strong>, then tap <strong>Install</strong>.</div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <span>⚠️</span>
+        <div>
+          <strong>Google Chrome warning:</strong> If Chrome shows <em>"File might be harmful"</em>, tap <strong>Download anyway</strong>. This is normal for all direct APK downloads outside Google Play Store.
+        </div>
+      </div>
+    </div>
+
+    <!-- App Capabilities -->
+    <div class="features-card">
+      <div class="feature-item">
+        <span class="feature-icon">🔇</span>
+        <span class="feature-title">Pierces Silent Mode</span>
+        <span class="feature-desc">Uses hardware STREAM_ALARM to sound even on silent switch.</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">🔒</span>
+        <span class="feature-title">Lock-Screen Wakeup</span>
+        <span class="feature-desc">Full-screen intent lights up display when alarm strikes.</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">🤝</span>
+        <span class="feature-title">Combine Squad Sync</span>
+        <span class="feature-desc">Rings together across all registered family/team phones.</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">🎯</span>
+        <span class="feature-title">Device Selective</span>
+        <span class="feature-desc">Target individual phones or the entire squad at once.</span>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      CombineAlarm • Powered by Firebase Cloud Messaging & Real-Time Sync
+    </div>
+
+  </div>
+
+  <script>
+    // Carry over room query parameter if present
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomParam = urlParams.get('room');
+    if (roomParam) {
+      document.getElementById('btnOpenWeb').href = '/?room=' + encodeURIComponent(roomParam);
+    }
+
+    // Auto-trigger download countdown
+    let count = 3;
+    const countdownEl = document.getElementById('countdownSec');
+    const noticeEl = document.getElementById('autoDownloadNotice');
+
+    const timer = setInterval(() => {
+      count--;
+      if (countdownEl) countdownEl.textContent = count;
+      if (count <= 0) {
+        clearInterval(timer);
+        if (noticeEl) {
+          noticeEl.innerHTML = '<span>✅ Download started! <a href="/EvoAlarm.apk" download="EvoAlarm.apk" style="color:var(--color-accent); font-weight:700; text-decoration:none;">Download again</a> if needed.</span>';
+        }
+        // Trigger download
+        const a = document.createElement('a');
+        a.href = '/EvoAlarm.apk';
+        a.download = 'EvoAlarm.apk';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      }
+    }, 1000);
+  </script>
+</body>
+</html>

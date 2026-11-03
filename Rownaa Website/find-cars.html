@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Available Fleet — Rownaa®</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <!-- Premium Font Stack -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  
+  <!-- Professional Icon Library (Phosphor Icons) -->
+  <script type="module" src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="js/auth.js"></script>
+  
+  <style>
+/* ============================================================
+   ROWNAA FIND CARS PAGE
+   Corporate, Luxury, "Uber Black" Aesthetic
+============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Core Palette */
+  --bg-base:      #050505;
+  --bg-panel:     #0c0c0c;
+  --bg-elevated:  #141414;
+  --bg-hover:     #1a1a1a;
+  
+  --border-subtle:rgba(255, 255, 255, 0.08);
+  --border-strong:rgba(255, 255, 255, 0.15);
+  
+  /* Accents */
+  --accent:       #d4ff00; /* Signature Lime */
+  
+  /* Typography */
+  --text-primary: #ffffff;
+  --text-secondary:rgba(255, 255, 255, 0.6);
+  --text-tertiary:rgba(255, 255, 255, 0.4);
+  
+  /* Fonts */
+  --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-ui:      'Inter', sans-serif;
+  
+  /* Layout Settings */
+  --header-h:     80px;
+  --sidebar-w:    320px;
+  --border-rad:   12px;
+  
+  --ease:         cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html { font-size: 15px; scroll-behavior: smooth; }
+body {
+  font-family: var(--font-ui); background-color: var(--bg-base); color: var(--text-primary);
+  min-height: 100vh; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; line-height: 1.5;
+}
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; color: inherit; }
+input, select, textarea { font-family: inherit; color: inherit; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+.animate-slide { animation: slideUp 0.6s var(--ease) both; }
+.d-1 { animation-delay: 0.05s; }
+.d-2 { animation-delay: 0.1s; }
+.d-3 { animation-delay: 0.15s; }
+
+/* ----------------------------------------------------
+   HEADER
+---------------------------------------------------- */
+.top-header {
+  height: var(--header-h); border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; position: sticky; top: 0; background: rgba(5,5,5,0.95); backdrop-filter: blur(12px); z-index: 90;
+}
+.brand-logo { font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; letter-spacing: -0.03em; display: flex; align-items: center; gap: 8px; }
+.brand-logo span { color: var(--accent); }
+.nav-link { font-size: 0.9rem; font-weight: 600; color: var(--text-secondary); transition: color 0.2s; display: flex; align-items: center; gap: 8px;}
+.nav-link:hover { color: var(--text-primary); }
+
+/* ----------------------------------------------------
+   LAYOUT
+---------------------------------------------------- */
+.fc-layout { display: flex; min-height: calc(100vh - var(--header-h)); }
+
+/* ----------------------------------------------------
+   SIDEBAR (FILTERS)
+---------------------------------------------------- */
+.fc-sidebar {
+  width: var(--sidebar-w); background: var(--bg-panel); border-right: 1px solid var(--border-subtle);
+  padding: 32px; position: sticky; top: var(--header-h); height: calc(100vh - var(--header-h)); overflow-y: auto; flex-shrink: 0;
+}
+.fc-sidebar::-webkit-scrollbar { display: none; }
+.sb-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-tertiary); font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 8px;}
+
+.f-group { margin-bottom: 24px; }
+.f-label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; margin-bottom: 12px; color: var(--text-secondary); }
+.f-input {
+  width: 100%; background: var(--bg-base); border: 1px solid var(--border-strong); border-radius: 6px; padding: 12px 16px;
+  color: var(--text-primary); font-size: 0.9rem; outline: none; transition: all 0.2s; -webkit-appearance: none;
+}
+.f-input:focus { border-color: var(--text-primary); }
+select.f-input { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px; padding-right: 40px;}
+
+.type-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.type-btn {
+  background: var(--bg-base); border: 1px solid var(--border-strong); color: var(--text-secondary); padding: 8px 16px;
+  border-radius: 100px; font-size: 0.8rem; font-weight: 600; font-family: var(--font-display); transition: all 0.2s;
+}
+.type-btn:hover { border-color: var(--text-primary); color: var(--text-primary); }
+.type-btn.active { background: var(--text-primary); color: #000; border-color: var(--text-primary); }
+
+.btn-primary { background: var(--text-primary); color: #000; font-weight: 700; font-size: 0.9rem; padding: 14px 24px; border-radius: 6px; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-primary:hover { background: var(--accent); }
+
+/* ----------------------------------------------------
+   MAIN AREA (GRID)
+---------------------------------------------------- */
+.fc-main { flex: 1; padding: 48px; background: var(--bg-base); }
+.fc-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; }
+.fc-title { font-family: var(--font-display); font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; }
+.fc-header select { width: 200px; }
+
+.fc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+
+.car-card {
+  background: linear-gradient(180deg, rgba(20, 20, 25, 0.85) 0%, rgba(13, 13, 16, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08); 
+  border-radius: 16px;
+  overflow: hidden; 
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+  display: flex; flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.car-card:hover { 
+  border-color: rgba(212, 255, 0, 0.28); 
+  transform: translateY(-5px); 
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(212, 255, 0, 0.18); 
+}
+.cc-img { 
+  height: 220px; 
+  background: radial-gradient(circle at center, rgba(35, 35, 45, 0.6) 0%, rgba(15, 15, 18, 0.9) 100%); 
+  position: relative; display: flex; align-items: center; justify-content: center; 
+  overflow: hidden;
+}
+.cc-img img { 
+  width: 100%; height: 100%; object-fit: cover; 
+  opacity: 0.92; 
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease; 
+}
+.car-card:hover .cc-img img { 
+  opacity: 1; 
+  transform: scale(1.05);
+}
+.cc-fallback-icon { font-size: 5rem; color: var(--text-tertiary); position: absolute; }
+.cc-badge { 
+  position: absolute; top: 16px; left: 16px; 
+  background: rgba(12, 12, 16, 0.85); 
+  padding: 5px 12px; border-radius: 9999px; 
+  font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; 
+  text-transform: uppercase; 
+  border: 1px solid rgba(255, 255, 255, 0.12); 
+  color: var(--accent);
+  backdrop-filter: blur(10px); 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.cc-body { padding: 24px; display: flex; flex-direction: column; flex: 1; }
+.cc-title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.02em; }
+.cc-meta { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+.cm-item { font-size: 0.8rem; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; font-weight: 500; }
+.cm-item i { color: var(--accent); font-size: 1rem; }
+
+.cc-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-subtle); }
+.cc-price { font-family: var(--font-display); font-size: 1.55rem; font-weight: 800; color: var(--text-primary); line-height: 1; font-variant-numeric: tabular-nums; }
+.cc-price small { display: block; font-size: 0.7rem; font-family: var(--font-ui); color: var(--text-tertiary); font-weight: 600; margin-top: 5px; text-transform: uppercase; letter-spacing: 0.04em; }
+.btn-select { 
+  background: rgba(255, 255, 255, 0.06); 
+  border: 1px solid rgba(255, 255, 255, 0.12); 
+  color: var(--text-primary); 
+  padding: 9px 18px; 
+  border-radius: 9999px; 
+  font-weight: 700; 
+  font-size: 0.82rem; 
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); 
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.car-card:hover .btn-select { 
+  background: var(--accent); 
+  color: #000; 
+  border-color: var(--accent); 
+  box-shadow: 0 4px 16px rgba(212, 255, 0, 0.35);
+  transform: translateY(-1px);
+}
+
+/* ----------------------------------------------------
+   MODAL OVERLAY
+---------------------------------------------------- */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 2000; align-items: center; justify-content: center; padding: 24px; }
+.modal-overlay.active { display: flex; animation: fadeIn 0.2s ease; }
+.modal-box { 
+  background: linear-gradient(180deg, rgba(22, 22, 28, 0.98) 0%, rgba(14, 14, 18, 0.99) 100%); 
+  border: 1px solid rgba(255, 255, 255, 0.14); 
+  border-radius: 20px; 
+  padding: 36px; 
+  width: 100%; 
+  max-width: 480px; 
+  position: relative; 
+  box-shadow: 0 25px 70px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+.modal-close { position: absolute; top: 20px; right: 20px; color: var(--text-secondary); font-size: 1.5rem; transition: color 0.2s; }
+.modal-close:hover { color: var(--text-primary); }
+.modal-box h2 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+.modal-box p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 32px; }
+
+.mb-notice { background: var(--accent-dim); border: 1px solid var(--accent-glow); padding: 16px; border-radius: 8px; font-size: 0.85rem; color: var(--accent); margin-bottom: 24px; display: flex; gap: 12px; align-items: flex-start;}
+.mb-notice i { font-size: 1.2rem; margin-top: 2px; }
+
+/* ----------------------------------------------------
+   RESPONSIVE
+---------------------------------------------------- */
+@media(max-width: 900px) {
+  .fc-layout { flex-direction: column; }
+  .fc-sidebar { width: 100%; position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border-subtle); padding: 24px; }
+  .fc-main { padding: 24px; }
+  .top-header { padding: 0 24px; }
+  .fc-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .fc-header select { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<header class="top-header">
+  <div style="display:flex;align-items:center;gap:24px;">
+    <a href="index.html" class="brand-logo">ROWNAA<span>®</span></a>
+    <a href="index.html" class="nav-link"><i class="ph ph-arrow-left"></i> Return Home</a>
+  </div>
+  <div id="fc-auth-nav" style="display:flex;align-items:center;gap:16px;">
+    <a href="login-sliding.html?redirect=find-cars.html" class="nav-link" id="nav-login-link"><i class="ph ph-sign-in"></i> Sign In</a>
+  </div>
+</header>
+
+<div class="fc-layout">
+  <!-- Filters Sidebar -->
+  <aside class="fc-sidebar">
+    <div class="sb-title"><i class="ph-fill ph-faders"></i> Search Filters</div>
+    
+    <div class="f-group">
+      <label class="f-label">Service Type</label>
+      <select class="f-input" id="f-svc" onchange="applyFilters()">
+        <option>All Services</option>
+        <option>Airport Transfer</option>
+        <option>Hourly Rental</option>
+        <option>Intercity Travel</option>
+        <option>Corporate Fleet</option>
+        <option>Travel & Tour</option>
+        <option>Event & Wedding</option>
+      </select>
+    </div>
+    
+    <div class="f-group">
+      <label class="f-label">Car Class</label>
+      <div class="type-grid" id="f-class">
+        <button class="type-btn active" data-class="" onclick="document.querySelectorAll('#f-class .type-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active'); applyFilters();">All</button>
+        <button class="type-btn" data-class="Sedan" onclick="document.querySelectorAll('#f-class .type-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active'); applyFilters();">Sedan</button>
+        <button class="type-btn" data-class="SUV" onclick="document.querySelectorAll('#f-class .type-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active'); applyFilters();">SUV</button>
+        <button class="type-btn" data-class="Microbus" onclick="document.querySelectorAll('#f-class .type-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active'); applyFilters();">Microbus</button>
+      </div>
+    </div>
+    
+    <div class="f-group">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <label class="f-label" style="margin-bottom:0;">Pickup Location</label>
+        <button type="button" onclick="detectFindCarsCity()" style="background:none; border:none; color:var(--accent); font-size:0.75rem; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px;" title="Detect Current GPS Location">
+          <i class="ph-bold ph-crosshair"></i> Current Location
+        </button>
+      </div>
+      <select class="f-input" id="f-zone" onchange="applyFilters()">
+        <option value="">Anywhere</option>
+        <option value="Dhaka">Dhaka</option>
+        <option value="Chittagong">Chittagong</option>
+        <option value="Sylhet">Sylhet</option>
+      </select>
+    </div>
+    
+    <button class="btn-primary" style="width:100%; margin-top:16px" onclick="applyFilters()"><i class="ph ph-magnifying-glass"></i> Apply Filters</button>
+  </aside>
+  
+  <!-- Main Grid -->
+  <main class="fc-main">
+    <div class="fc-header animate-slide">
+      <h2 class="fc-title">Available Vehicles</h2>
+      <select class="f-input" id="f-sort" aria-label="Sort Available Vehicles" onchange="applyFilters()">
+        <option value="rating-desc">Sort: Highest Rated</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+      </select>
+    </div>
+
+    <!-- Real-time Instant Search Bar (FAANG Scale Vehicle Discovery) -->
+    <div style="position:relative; margin-bottom:20px;">
+      <i class="ph ph-magnifying-glass" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--text-tertiary); font-size:1.1rem; pointer-events:none;"></i>
+      <input type="text" id="fc-search" class="f-input" placeholder="Search by vehicle model, brand, or seating (e.g. Mercedes, Hiace, Prado, Axio, 7 seats)..." oninput="applyFilters()" style="width:100%; padding-left:42px; padding-right:36px; height:46px; border-radius:10px; background:var(--bg-elevated); border:1px solid var(--border-subtle); color:#fff; font-size:0.92rem;" />
+      <button type="button" id="fc-search-clear" onclick="clearCarSearch()" style="display:none; position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--text-tertiary); cursor:pointer; font-size:1.1rem;" title="Clear search"><i class="ph-fill ph-x-circle"></i></button>
+    </div>
+    
+    <div class="fc-grid animate-slide d-1" id="cars-container">
+      <!-- Rendered by JS -->
+    </div>
+  </main>
+</div>
+
+<!-- ===================== BOOKING MODAL ===================== -->
+<div class="modal-overlay" id="b-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()"><i class="ph ph-x"></i></button>
+    <h2 id="m-car">Toyota Axio</h2>
+    <p>Complete booking request</p>
+    
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="f-group" style="margin:0">
+        <label class="f-label">Full Name</label>
+        <input type="text" class="f-input" id="m-fullname" placeholder="Enter your full name" required/>
+      </div>
+      <div class="f-group" style="margin:0">
+        <label class="f-label">Phone Number</label>
+        <input type="tel" class="f-input" id="m-phone" placeholder="+880 1XXXXXXXXX" required/>
+      </div>
+      
+      <div class="mb-notice">
+        <i class="ph-fill ph-shield-check"></i>
+        <div>You will be redirected to our secure gateway to review fare details and confirm this booking.</div>
+      </div>
+      
+      <button class="btn-primary" style="width:100%" onclick="continueToCheckout()">
+        Continue to Checkout <i class="ph ph-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function getSavedRiderData() {
+    let name = '';
+    let phone = '';
+    try {
+      const matchName = document.cookie.match(/(?:^|;\s*)rownaa_rider_name=([^;]+)/);
+      const matchPhone = document.cookie.match(/(?:^|;\s*)rownaa_rider_phone=([^;]+)/);
+      name = matchName ? decodeURIComponent(matchName[1]) : (localStorage.getItem('rownaa_rider_name') || '');
+      phone = matchPhone ? decodeURIComponent(matchPhone[1]) : (localStorage.getItem('rownaa_rider_phone') || '');
+    } catch(e) {}
+    return { name, phone };
+  }
+
+  function saveRiderData(name, phone) {
+    try {
+      if (name) {
+        document.cookie = `rownaa_rider_name=${encodeURIComponent(name)}; path=/; max-age=31536000; SameSite=Lax`;
+        localStorage.setItem('rownaa_rider_name', name);
+      }
+      if (phone) {
+        document.cookie = `rownaa_rider_phone=${encodeURIComponent(phone)}; path=/; max-age=31536000; SameSite=Lax`;
+        localStorage.setItem('rownaa_rider_phone', phone);
+      }
+    } catch(e) {}
+  }
+
+  function openModal(name) {
+    document.getElementById('m-car').textContent = name;
+    
+    // Auto-fill rider details from Cookies / LocalStorage or Logged-in session
+    const saved = getSavedRiderData();
+    const user = (window.AppState && window.AppState.user) || window.rownaaSession;
+    const finalName = (user && user.name) || saved.name || '';
+    const finalPhone = (user && user.phone) || saved.phone || '';
+
+    const nameInput = document.getElementById('m-fullname');
+    const phoneInput = document.getElementById('m-phone');
+    if (nameInput && !nameInput.value) nameInput.value = finalName;
+    if (phoneInput && !phoneInput.value) phoneInput.value = finalPhone;
+
+    document.getElementById('b-modal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('b-modal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function continueToCheckout() {
+    const car = document.getElementById('m-car').textContent;
+    const name = document.getElementById('m-fullname').value.trim();
+    const phone = document.getElementById('m-phone').value.trim();
+
+    if (!name || !phone) {
+      alert("Please enter your name and contact phone number.");
+      return;
+    }
+
+    // Persist rider credentials in Cookies & LocalStorage for effortless repeat bookings
+    saveRiderData(name, phone);
+
+    const currentUrlParams = new URLSearchParams(window.location.search);
+    const svc = currentUrlParams.get('service') || currentServiceTag || 'airport';
+    const loc = currentUrlParams.get('location') || (document.getElementById('f-zone') ? document.getElementById('f-zone').value : '') || '';
+    const date = currentUrlParams.get('date') || '';
+    const time = currentUrlParams.get('time') || '';
+    const pax = currentUrlParams.get('pax') || '1';
+
+    let targetUrl = `checkout.html?car=${encodeURIComponent(car)}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&service=${encodeURIComponent(svc)}`;
+    if (loc) targetUrl += `&pickup=${encodeURIComponent(loc)}`;
+    if (date) targetUrl += `&date=${encodeURIComponent(date)}`;
+    if (time) targetUrl += `&time=${encodeURIComponent(time)}`;
+    if (pax) targetUrl += `&pax=${encodeURIComponent(pax)}`;
+
+    window.location.href = targetUrl;
+  }
+  
+  // Polyfill for spin animation
+  const style = document.createElement('style');
+  style.innerHTML = `@keyframes spin { 100% { transform: rotate(360deg); } }`;
+  document.head.appendChild(style);
+
+// Auto-injected to fix Vite module scoping
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.continueToCheckout = continueToCheckout;
+</script>
+<script src="js/pricing-data.js"></script>
+<script src="js/pricing.js"></script>
+<script src="js/inventory.js"></script>
+<script>
+  let currentServiceTag = '';
+
+  function applyFilters() {
+      const svcVal = document.getElementById('f-svc') ? document.getElementById('f-svc').value : '';
+      let serviceTag = '';
+      if (svcVal === 'All Services') {
+          currentServiceTag = '';
+          serviceTag = '';
+      } else if (svcVal) {
+          if(svcVal === 'Airport Transfer') serviceTag = 'airport';
+          else if(svcVal === 'Hourly Rental') serviceTag = 'hourly';
+          else if(svcVal === 'Intercity Travel') serviceTag = 'intercity';
+          else if(svcVal === 'Corporate Fleet') serviceTag = 'corporate';
+          else if(svcVal === 'Travel & Tour') serviceTag = 'tour';
+          else if(svcVal === 'Event & Wedding') serviceTag = 'event';
+          currentServiceTag = serviceTag;
+      } else if (currentServiceTag) {
+          serviceTag = currentServiceTag;
+      }
+
+      const activeClassBtn = document.querySelector('#f-class .type-btn.active');
+      const carClass = activeClassBtn ? activeClassBtn.getAttribute('data-class') : '';
+      
+      const zone = document.getElementById('f-zone') ? document.getElementById('f-zone').value : '';
+      
+      const searchInput = document.getElementById('fc-search');
+      const searchKeyword = searchInput ? searchInput.value.trim() : '';
+      const clearBtn = document.getElementById('fc-search-clear');
+      if (clearBtn) clearBtn.style.display = searchKeyword ? 'block' : 'none';
+
+      const sortVal = document.getElementById('f-sort') ? document.getElementById('f-sort').value : 'price-asc';
+      let sortBy = 'baseRate';
+      let sortOrder = 'asc';
+      
+      if (sortVal === 'price-desc') {
+          sortOrder = 'desc';
+      } else if (sortVal === 'rating-desc') {
+          sortBy = 'rating';
+          sortOrder = 'desc';
+      }
+      
+      const options = {
+          page: 1,
+          limit: 100,
+          search: searchKeyword,
+          serviceTag: serviceTag,
+          category: carClass,
+          zone: zone,
+          sortBy: sortBy,
+          sortOrder: sortOrder,
+          includeDeleted: false
+      };
+      
+      renderCarsFiltered(options);
+  }
+
+  function detectFindCarsCity() {
+    const sel = document.getElementById('f-zone');
+    if (!sel) return;
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          sel.value = 'Dhaka';
+          applyFilters();
+        },
+        () => {
+          sel.value = 'Dhaka';
+          applyFilters();
+        },
+        { timeout: 4000 }
+      );
+    } else {
+      sel.value = 'Dhaka';
+      applyFilters();
+    }
+  }
+  window.detectFindCarsCity = detectFindCarsCity;
+
+  async function renderCarsFiltered(options) {
+    const grid = document.getElementById('cars-container');
+    if(!grid) return;
+
+    if (!window.InventoryManager) {
+      setTimeout(() => renderCarsFiltered(options), 80);
+      return;
+    }
+
+    let cars = [];
+    try {
+      const res = await window.InventoryManager.getPaginated(options);
+      cars = (res && res.data) ? res.data : [];
+    } catch (err) {
+      console.warn('[FindCars] Inventory fetch fallback:', err);
+      if (window.DEFAULT_FLEET) {
+        cars = window.DEFAULT_FLEET;
+      }
+    }
+
+    if (!cars || cars.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 60px 24px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 12px; margin: 20px 0;">
+          <i class="ph-fill ph-car-profile" style="font-size: 3rem; color: var(--accent); margin-bottom: 16px; display: inline-block;"></i>
+          <h3 style="color: var(--text-primary); margin-bottom: 8px; font-size: 1.3rem;">No Vehicles Found</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 0.95rem;">No vehicles match the selected filter criteria.</p>
+          <button class="type-btn active" onclick="resetFilters()" style="display: inline-block; padding: 10px 24px; cursor: pointer; border: 1px solid var(--accent); border-radius: 8px;">Show All Vehicles</button>
+        </div>
+      `;
+      return;
+    }
+    
+    let html = '';
+    cars.forEach(car => {
+      // Dynamic Pricing lookup strictly aligned with Admin Tariff
+      let dynamicPrice = car.baseRate;
+      let priceSub = 'Base Fare';
+      if (window.PricingEngine) {
+        const tier = window.PricingEngine._normalizeCategory(car.category || car.name);
+        const service = (options && options.serviceTag) || currentServiceTag || 'hourly';
+        if (service === 'hourly' || service === 'hf') {
+          let p = window.PricingEngine.calculateHourly(tier, false, 0, 0);
+          if (p) { dynamicPrice = p.baseFare; priceSub = '4-Hour Package'; }
+        } else if (service === 'intercity' || service === 'ic') {
+          let dist = 200;
+          let p = window.PricingEngine.calculateIntercity(tier, dist, false, 0);
+          if (p) { dynamicPrice = p.total; priceSub = `One-Way (${dist}km)`; }
+        } else if (service === 'airport' || service === 'af') {
+          let p = window.PricingEngine.calculateAirport('zone1', tier, 'Airport Drop-off', false);
+          if (p) { dynamicPrice = p.total; priceSub = 'Zone 1 Flat'; }
+        } else {
+          let p = window.PricingEngine.calculateHourly(tier, false, 0, 0);
+          if (p) { dynamicPrice = p.baseFare; priceSub = '4-hr Base Rate'; }
+        }
+      }
+      let priceText = `৳${(dynamicPrice || car.baseRate || 2000).toLocaleString()} <small>${priceSub}</small>`;
+
+      html += `
+      <div class="car-card">
+        <div class="cc-img">
+          <i class="ph-fill ph-car-profile cc-fallback-icon"></i>
+          <img src="${car.image}" alt="${car.name}" onerror="this.style.display='none'"/>
+          <div class="cc-badge">${car.category}</div>
+        </div>
+        <div class="cc-body">
+          <h3 class="cc-title">${car.name}</h3>
+          <div class="cc-meta">
+            <span class="cm-item"><i class="ph-fill ph-users"></i> ${car.seats} Seats</span>
+            <span class="cm-item"><i class="ph-fill ph-star"></i> 4.9 (87)</span>
+            <span class="cm-item"><i class="ph-fill ph-map-pin"></i> ${car.hasAc ? 'A/C Available' : 'Non A/C'}</span>
+          </div>
+          <div class="cc-footer">
+            <div class="cc-price">${priceText}</div>
+            <button class="btn-select" onclick="openModal('${car.name}')">Select Vehicle ↗</button>
+          </div>
+        </div>
+      </div>
+      `;
+    });
+    grid.innerHTML = html;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const svc = urlParams.get('service');
+    if(svc) {
+        if(svc === 'af') currentServiceTag = 'airport';
+        if(svc === 'hf') currentServiceTag = 'hourly';
+        if(svc === 'ic') currentServiceTag = 'intercity';
+        
+        let title = 'Available Vehicles';
+        if (svc === 'hourly' || svc === 'hf') title = 'Hourly Rental Cars';
+        if (svc === 'intercity' || svc === 'ic') title = 'Intercity Travel';
+        if (svc === 'airport' || svc === 'af') title = 'Airport Transfer';
+        if (svc === 'corporate' || svc === 'cf') title = 'Corporate Fleet';
+        if (svc === 'tour' || svc === 'tf') title = 'Travel & Tour Packages';
+        if (svc === 'event' || svc === 'ef') title = 'Event & Wedding Fleet';
+        const titleEl = document.querySelector('.fc-title');
+        if (titleEl) titleEl.textContent = title;
+        
+        // Auto-select in dropdown if possible
+        const svcDrop = document.getElementById('f-svc');
+        if (svcDrop) {
+            if (svc === 'af' || svc === 'airport') svcDrop.value = 'Airport Transfer';
+            else if (svc === 'hf' || svc === 'hourly') svcDrop.value = 'Hourly Rental';
+            else if (svc === 'ic' || svc === 'intercity') svcDrop.value = 'Intercity Travel';
+            else if (svc === 'cf' || svc === 'corporate') svcDrop.value = 'Corporate Fleet';
+            else if (svc === 'tf' || svc === 'tour') svcDrop.value = 'Travel & Tour';
+            else if (svc === 'ef' || svc === 'event') svcDrop.value = 'Event & Wedding';
+        }
+    }
+    
+    // Wire up service dropdown change
+    const svcDrop = document.getElementById('f-svc');
+    if (svcDrop) {
+        svcDrop.addEventListener('change', applyFilters);
+    }
+    
+    applyFilters();
+  });
+
+  window.clearCarSearch = function() {
+    const sInput = document.getElementById('fc-search');
+    if (sInput) sInput.value = '';
+    const clearBtn = document.getElementById('fc-search-clear');
+    if (clearBtn) clearBtn.style.display = 'none';
+    applyFilters();
+  };
+
+  window.resetFilters = function() {
+    const sInput = document.getElementById('fc-search');
+    if (sInput) sInput.value = '';
+    const clearBtn = document.getElementById('fc-search-clear');
+    if (clearBtn) clearBtn.style.display = 'none';
+    const svcDrop = document.getElementById('f-svc');
+    if (svcDrop) svcDrop.value = 'All Services';
+    const zoneDrop = document.getElementById('f-zone');
+    if (zoneDrop) zoneDrop.value = 'Anywhere';
+    currentServiceTag = '';
+    document.querySelectorAll('#f-class .type-btn').forEach(b => b.classList.remove('active'));
+    const allBtn = document.querySelector('#f-class .type-btn[data-class=""]');
+    if (allBtn) allBtn.classList.add('active');
+    applyFilters();
+  };
+
+// Auto-injected to fix Vite module scoping
+window.applyFilters = applyFilters;
+window.renderCarsFiltered = renderCarsFiltered;
+
+// Real-time Pricing Sync
+window.addEventListener('pricingUpdated', () => {
+  if (typeof renderCarsFiltered === 'function') renderCarsFiltered();
+});
+window.addEventListener('storage', (e) => {
+  if (e.key === 'rownaa_master_pricing') {
+    if (typeof renderCarsFiltered === 'function') renderCarsFiltered();
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+{
+  "content": {
+    "Global": {
+      "nav_home": "HOME",
+      "nav_about": "ABOUT",
+      "nav_works": "WORKS",
+      "nav_studio": "VISUAL STUDIO",
+      "nav_archive": "ARCHIVE",
+      "nav_contact": "CONTACT",
+      "footer_cta_sub": "Ready to build the sound?",
+      "footer_cta_main": "START A PROJECT",
+      "footer_wa": "WhatsApp",
+      "footer_fb": "Facebook",
+      "footer_yt": "YouTube",
+      "copyright": "© 2026 JKH JESAN"
+    },
+    "Home": {
+      "hero_word_1": "AUDIO",
+      "hero_word_2": "ARCHITECT",
+      "hero_word_3": "JKH JESAN.",
+      "hero_subtitle": "Mastering the intersection of emotion and sound since 2011.",
+      "marquee": "Music Director • Composer • Audio Engineer • Mix & Master",
+      "about_kicker": "The Architect",
+      "about_title_1": "Who",
+      "about_title_2": "I",
+      "about_title_3": "Am?",
+      "about_bio": "Based in Niketon, Dhaka, I am a Music Producer and Composer dedicated to the art of sound. With a deep connection to the Bangladeshi media industry, my work spans from heart-touching OSTs for Bangla Drama to high-fidelity mixing for fictions.",
+      "about_btn": "More About Me",
+      "works_kicker": "Selected Works",
+      "works_title": "Editorial / Commercial",
+      "stat_1_val": "13+",
+      "stat_1_label": "Years Exp.",
+      "stat_2_val": "100+",
+      "stat_2_label": "Projects",
+      "stat_3_val": "20M+",
+      "stat_3_label": "Streams",
+      "stat_desc": "In 13 years, I have shaped the sound of Bangladeshi entertainment — from national TV dramas to global streaming platforms. Every note is a story.",
+      "sanctuary_kicker": "The Sanctuary",
+      "sanctuary_title": "Visual Studio",
+      "sanct_img_1_label": "Vocal Recording",
+      "sanct_img_2_label": "Mixing & Mastering",
+      "sanct_img_3_label": "Signal Flow",
+      "audio_title": "Kothay Pabo Tare",
+      "audio_label": "Now Playing"
+    },
+    "About": {
+      "hero_kicker": "Biography",
+      "hero_title": "The <span class='text-transparent' style='-webkit-text-stroke: 1px rgba(255,255,255,0.2);'>Architect</span> <br>Of Sound.",
+      "quote": "Audio that bypasses the ear and strikes <span class='text-accent italic font-serif tracking-normal'>the soul.</span>",
+      "bio_1": "Based in Niketon, Dhaka, I have spent the last 13+ years defining the soundscape of the Bangladeshi media industry. My work spans from heart-touching OSTs for Bangla Drama to high-fidelity mixing for cinematic fictions.",
+      "bio_2": "Whether scoring the background music (BGM) for a tense dramatic scene or mixing and mastering a track for global platforms, I approach every frequency with artistic intuition and technical precision.",
+      "timeline_title": "The <span class='text-accent'>Journey.</span>",
+      "t1_title": "The Beginning",
+      "t1_desc": "Started journey into the world of audio production and sound engineering.",
+      "t1_year": "2011",
+      "t1_quote": "\"First steps into understanding frequencies, synthesis, and the emotional impact of a single note.\"",
+      "t2_title": "Industry Breakthrough",
+      "t2_desc": "Began composing major OSTs and BGMs for top-tier Bangladeshi dramas and media.",
+      "t2_year": "2016",
+      "t2_quote": "Establishing the JKH sound signature across national television.",
+      "t3_title": "Cinematic Era",
+      "t3_desc": "Expanding into film scoring, complex mixing & mastering for digital platforms (Spotify, Apple Music).",
+      "t3_year": "Present",
+      "t3_quote": "\"Over 100+ major projects, 20+ Million streams, and a relentless pursuit of perfection.\"",
+      "gear_title": "Studio <br><span class='text-accent'>Arsenal.</span>",
+      "g1_cat": "Primary DAW",
+      "g1_name": "Logic Pro",
+      "g2_cat": "Microphone",
+      "g2_name": "Rode NT 2A",
+      "g3_cat": "Headphones",
+      "g3_name": "DT 990 PRO",
+      "g4_cat": "Headphones",
+      "g4_name": "HD 550",
+      "g5_cat": "Headphones",
+      "g5_name": "AKG K52",
+      "g6_cat": "Studio Monitors",
+      "g6_name": "Adam T5V"
+    },
+    "Contact": {
+      "hero_title": "Let's <span class='text-transparent' style='-webkit-text-stroke: 1px rgba(255,255,255,0.2);'>Talk.</span>",
+      "subtitle": "Looking for a world-class audio architect for your next major project? Fill out the form below or reach out directly.",
+      "info_1_title": "Direct Line",
+      "info_1_val": "+880 1938 172 454",
+      "info_2_title": "Electronic",
+      "info_2_val": "jkhjesan@gmail.com",
+      "info_3_title": "Studio Base",
+      "info_3_val": "House 127, Road 10, Block C, Niketon, Gulshan 1, Dhaka 1212",
+      "form_name": "Your Name",
+      "form_email": "Your Email",
+      "form_details": "Project Details...",
+      "form_btn": "Send Message"
+    },
+    "Works": {
+      "hero_kicker": "Selected Works",
+      "hero_title": "The Audio <br><span class='text-transparent' style='-webkit-text-stroke: 1px rgba(255,255,255,0.2);'>Portfolio.</span>"
+    },
+    "Archive": {
+      "hero_kicker": "Visual History",
+      "hero_title": "The <span class='text-transparent' style='-webkit-text-stroke: 1px rgba(255,255,255,0.2);'>Archive.</span>",
+      "footer_kicker": "End of Archive",
+      "footer_btn": "LET'S WORK"
+    }
+  },
+  "links": {
+    "whatsapp_number": "8801938172454",
+    "whatsapp_url": "https://wa.me/8801938172454",
+    "facebook_url": "https://www.facebook.com/jkh.jesan.9/",
+    "youtube_url": "https://youtube.com/@jkhjesan?si=00dHez7xnIWZATza",
+    "email_address": "jkhjesan@gmail.com",
+    "google_maps_url": "https://www.google.com/maps/place/JKH+Jesan+Studio/@23.7714134,90.4080972,17z/data=!3m1!4b1!4m6!3m5!1s0x3755c7000d694a93:0x589b9ce2be4b642e!8m2!3d23.7714134!4d90.4106721!16s%2Fg%2F11x5c4bpkz?entry=ttu",
+    "contact_page_link": "contact",
+    "about_page_link": "about",
+    "works_page_link": "works",
+    "gallery_page_link": "gallery",
+    "evorise_url": "https://www.facebook.com/EvoRiseSolutions/"
+  },
+  "images": {
+    "site_logo": "./JKH_ART_WORK-removebg-preview.png",
+    "hero_bg_1": "./drive-download-20260503T111429Z-3-001/JKh PIc.png",
+    "hero_bg_2": "./drive-download-20260503T111429Z-3-001/_TMS0232.JPG",
+    "about_preview_img": "./drive-download-20260503T111429Z-3-001/IMG_9883 (1).jpg.jpeg",
+    "about_page_img": "./drive-download-20260503T111429Z-3-001/IMG_9883.JPG",
+    "timeline_img": "./drive-download-20260503T111429Z-3-001/FB_IMG_1777656008448.jpg",
+    "gear_full_img": "./drive-download-20260503T111429Z-3-001/_TMS0234.JPG",
+    "audio_player_img": "./drive-download-20260503T111429Z-3-001/JKh PIc.png",
+    "audio_src": "Kothay Pabo tare Final Master.mp3",
+    "sanct_img_1": "./pictures for visual studio/vocal booth.jpeg",
+    "sanct_img_2": "./pictures for visual studio/Studio Visual- ADAM AUDIO.jpeg",
+    "sanct_img_3": "./pictures for visual studio/Microphone instead of Mixing Console.jpeg"
+  },
+  "settings": {
+    "accent_color": "#FF4500",
+    "bg_color": "#050505",
+    "surface_color": "#121212",
+    "site_title": "JKH Jesan | Creative Audio Architect",
+    "meta_description": "JKH Jesan — Award-winning Music Producer, Composer, and Audio Engineer from Dhaka, Bangladesh.",
+    "sticker_text_1": "Audio Architect",
+    "sticker_text_2": "Music Producer"
+  },
+  "works": [
+    {
+      "id": 1714749411101,
+      "title": "Tomake Paoar Baji | তোমাকে পাওয়ার বাজি",
+      "category": "Songs",
+      "link": "https://www.youtube.com/watch?v=M2D5lK2l6V4"
+    },
+    {
+      "id": 1714749411102,
+      "title": "Bosh Korila Mon (বশ করিলা মন)",
+      "category": "Songs",
+      "link": "https://www.youtube.com/watch?v=f6Gg23HC7JY"
+    },
+    {
+      "id": 1714749411103,
+      "title": "Ek Jibone Eto Betha (এক জীবনে এত ব্যথা)",
+      "category": "Songs",
+      "link": "https://www.youtube.com/watch?v=FnsjJAc6j18"
+    },
+    {
+      "id": 1714749411104,
+      "title": "Premer Meye | প্রেমের মেয়ে",
+      "category": "Songs",
+      "link": "https://www.youtube.com/watch?v=hO7xP4xwPzQ"
+    },
+    {
+      "id": 1714749411105,
+      "title": "Aponjon | আপনজন",
+      "category": "BGM",
+      "link": "https://www.youtube.com/watch?v=_cqPDqx54RE"
+    },
+    {
+      "id": 1714749411106,
+      "title": "Anarkoli (আনারকলি)",
+      "category": "BGM",
+      "link": "https://www.youtube.com/watch?v=80opMhwlldo"
+    },
+    {
+      "id": 1714749411107,
+      "title": "Ojana Maya | অজানা মায়া",
+      "category": "BGM",
+      "link": "https://www.youtube.com/watch?v=D9vDMc9_2AE&t=2529s"
+    },
+    {
+      "id": 1714749411111,
+      "title": "Kothay Pabo Tare",
+      "category": "OST / Composition",
+      "link": "https://www.youtube.com/watch?v=f023KdTlYBk"
+    },
+    {
+      "id": 1714749411112,
+      "title": "Ridoy Nayer Boitha",
+      "category": "BGM Soundtrack",
+      "link": "https://www.youtube.com/watch?v=PwU--Y4GWJg"
+    }
+  ],
+  "gallery": [
+    "./drive-download-20260503T111429Z-3-001/jkh_update_01.jpg",
+    "./drive-download-20260503T111429Z-3-001/jkh_update_02.jpg",
+    "./drive-download-20260503T111429Z-3-001/jkh_update_03.jpg",
+    "./drive-download-20260503T111429Z-3-001/jkh_update_04.jpg",
+    "./drive-download-20260503T111429Z-3-001/jkh_update_05.jpg",
+    "./drive-download-20260503T111429Z-3-001/jkh_update_06.jpg",
+    "./drive-download-20260503T111429Z-3-001/IMG_9883.JPG",
+    "./drive-download-20260503T111429Z-3-001/IMG_9942.JPG",
+    "./drive-download-20260503T111429Z-3-001/IMG_9943_portrait.jpg",
+    "./drive-download-20260503T111429Z-3-001/IMG_9948_portrait.jpg",
+    "./drive-download-20260503T111429Z-3-001/_TMS0232.JPG",
+    "./drive-download-20260503T111429Z-3-001/_TMS0234.JPG",
+    "./drive-download-20260503T111429Z-3-001/FB_IMG_1777655890475.jpg",
+    "./drive-download-20260503T111429Z-3-001/FB_IMG_1777656005498.jpg",
+    "./drive-download-20260503T111429Z-3-001/FB_IMG_1777656008448.jpg",
+    "./drive-download-20260503T111429Z-3-001/FB_IMG_1777656016895.jpg",
+    "./drive-download-20260503T111429Z-3-001/FB_IMG_1777656024779.jpg",
+    "./drive-download-20260503T111429Z-3-001/FB_IMG_1777656114850.jpg",
+    "./drive-download-20260503T111429Z-3-001/FB_IMG_1777655945649.jpg",
+    "./drive-download-20260503T111429Z-3-001/FB_IMG_1777655910545.jpg",
+    "./drive-download-20260503T111429Z-3-001/FB_IMG_1777655924010.jpg",
+    "./drive-download-20260503T111429Z-3-001/FB_IMG_1777655934082.jpg"
+  ],
+  "branding": {
+    "logo": "../JKH_ART_WORK-removebg-preview.png",
+    "hero_img": "../drive-download-20260503T111429Z-3-001/IMG_9883.JPG",
+    "about_img": "../drive-download-20260503T111429Z-3-001/IMG_9883.JPG"
+  }
+}

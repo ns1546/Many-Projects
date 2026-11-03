@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Premium Audio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">AURA</div>
+        <div class="nav-links">
+            <a href="#" class="active">Headphones</a>
+            <a href="#">Earbuds</a>
+            <a href="#">Speakers</a>
+            <a href="#">Accessories</a>
+        </div>
+        <div class="nav-actions">
+            <button class="icon-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
+            <button class="icon-btn bag-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                <span class="badge">2</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="hero">
+        <div class="hero-content">
+            <div class="badge-pill">New Arrival</div>
+            <h1 class="hero-title">Aura <br>Silence Pro</h1>
+            <p class="hero-desc">Experience pure, unadulterated sound with our next-generation active noise cancellation technology. Designed for the purists.</p>
+            <div class="hero-actions">
+                <button class="btn btn-primary">Add to Bag — $399</button>
+                <button class="btn btn-secondary">Explore Features</button>
+            </div>
+            
+            <div class="specs">
+                <div class="spec-item">
+                    <span class="spec-val">40h</span>
+                    <span class="spec-label">Battery Life</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-val">ANC</span>
+                    <span class="spec-label">Pro Noise Cancelling</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-val">Hi-Res</span>
+                    <span class="spec-label">Lossless Audio</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="product-showcase">
+                <!-- A beautiful gradient blob behind the product -->
+                <div class="blob blob-1"></div>
+                <div class="blob blob-2"></div>
+                <!-- High quality unsplash headphone image -->
+                <img src="https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?q=80&w=1000&auto=format&fit=crop" alt="Aura Silence Pro Headphones" class="product-image">
+                
+                <div class="floating-card glass">
+                    <div class="card-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    </div>
+                    <div class="card-text">
+                        <h4>Free Shipping</h4>
+                        <p>On all premium orders</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <section class="collection">
+        <div class="section-header">
+            <h2>Curated Collection</h2>
+            <a href="#" class="view-all">View All Products &rarr;</a>
+        </div>
+        
+        <div class="product-grid">
+            <!-- Product 1 -->
+            <div class="product-card">
+                <div class="product-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=800&auto=format&fit=crop" alt="Earbuds">
+                    <button class="add-btn">+</button>
+                </div>
+                <div class="product-info">
+                    <h3>Aura Buds Studio</h3>
+                    <p class="price">$149.00</p>
+                </div>
+                <p class="product-meta">True Wireless In-Ear</p>
+            </div>
+            
+            <!-- Product 2 -->
+            <div class="product-card">
+                <div class="product-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?q=80&w=800&auto=format&fit=crop" alt="Speaker">
+                    <button class="add-btn">+</button>
+                </div>
+                <div class="product-info">
+                    <h3>Aura SoundBar</h3>
+                    <p class="price">$299.00</p>
+                </div>
+                <p class="product-meta">Home Theater System</p>
+            </div>
+            
+            <!-- Product 3 -->
+            <div class="product-card">
+                <div class="product-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?q=80&w=800&auto=format&fit=crop" alt="Headphones">
+                    <button class="add-btn">+</button>
+                </div>
+                <div class="product-info">
+                    <h3>Aura Classic</h3>
+                    <p class="price">$199.00</p>
+                </div>
+                <p class="product-meta">Over-Ear Heritage</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Add smooth reveal animations on scroll
+        document.addEventListener("DOMContentLoaded", () => {
+            const cards = document.querySelectorAll('.product-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.1 * index}s`;
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>

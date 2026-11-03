@@ -1,0 +1,127 @@
+version: '3.8'
+
+services:
+  # 1. API GATEWAY / LOAD BALANCER
+  api-gateway:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - auth-service
+      - booking-service
+      - inventory-service
+    networks:
+      - rownaa-net
+
+  # 2. MICROSERVICES
+  auth-service:
+    build: 
+      context: ./services/auth
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=postgres-primary
+      - REDIS_HOST=redis-cache
+      - JWT_SECRET=ub3r_s3cur3_faang_l3v3l_k3y_9988776655
+    depends_on:
+      - postgres-primary
+      - redis-cache
+    networks:
+      - rownaa-net
+
+  booking-service:
+    build: 
+      context: ./services/booking
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=postgres-primary
+      - RABBITMQ_URL=amqp://rabbitmq
+      - JWT_SECRET=ub3r_s3cur3_faang_l3v3l_k3y_9988776655
+    depends_on:
+      - postgres-primary
+      - rabbitmq
+    networks:
+      - rownaa-net
+
+  inventory-service:
+    build: 
+      context: ./services/inventory
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=postgres-primary
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    depends_on:
+      - postgres-primary
+      - elasticsearch
+    networks:
+      - rownaa-net
+
+  # 3. DATABASES (Primary / Replica Cluster)
+  postgres-primary:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=rownaa
+      - POSTGRES_PASSWORD=secure_password
+      - POSTGRES_DB=rownaa_db
+    volumes:
+      - pg-primary-data:/var/lib/postgresql/data
+    networks:
+      - rownaa-net
+
+  postgres-replica:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=rownaa
+      - POSTGRES_PASSWORD=secure_password
+    depends_on:
+      - postgres-primary
+    networks:
+      - rownaa-net
+
+  # 4. CACHING & SEARCH
+  redis-cache:
+    image: redis:alpine
+    networks:
+      - rownaa-net
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.0
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    networks:
+      - rownaa-net
+
+  # 5. MESSAGE BROKER (Asynchronous Events)
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "15672:15672" # Management UI
+    networks:
+      - rownaa-net
+
+  # 6. OBSERVABILITY (Monitoring & Logging)
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - rownaa-net
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - rownaa-net
+
+networks:
+  rownaa-net:
+    driver: bridge
+
+volumes:
+  pg-primary-data:

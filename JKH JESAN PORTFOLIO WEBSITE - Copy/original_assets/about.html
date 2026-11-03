@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | JKH Jesan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Manrope', 'sans-serif'], display: ['Syne', 'sans-serif'], serif: ['Playfair Display', 'serif'] },
+                    colors: { dark: '#050505', surface: '#121212', accent: '#FF4500' }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+    <style>
+        body { background-color: #050505; color: #ffffff; overflow-x: hidden; }
+        ::selection { background: #FF4500; color: #fff; }
+        .noise::before {
+            content: ""; position: fixed; inset: 0;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.05; pointer-events: none; z-index: 9999;
+        }
+        .hover-flip { position: relative; overflow: hidden; display: inline-block; padding-bottom: 2px; }
+        .hover-flip span { display: inline-block; transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1); }
+        .hover-flip::after { content: attr(data-text); position: absolute; top: 100%; left: 0; width: 100%; height: 100%; color: #FF4500; transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1); }
+        .hover-flip:hover span { transform: translateY(-100%); }
+        .hover-flip:hover::after { transform: translateY(-100%); }
+        .bento-border { border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; background: #121212; transition: border-color 0.4s ease; }
+        .bento-border:hover { border-color: rgba(255, 69, 0, 0.4); }
+        ::-webkit-scrollbar { width: 0px; }
+        .img-mask { clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%); }
+        .img-scale img { transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .img-scale:hover img { transform: scale(1.05); }
+    </style>
+</head>
+<body class="noise">
+
+    <nav class="fixed top-8 left-1/2 -translate-x-1/2 z-50 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-full px-8 py-4 flex items-center gap-10 text-[10px] font-bold uppercase tracking-[0.2em] text-white shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+        <a href="index - Copy (2).html" class="hover-flip" data-text="HOME"><span>HOME</span></a>
+        <a href="about.html" class="hover-flip" data-text="ABOUT"><span class="text-accent">ABOUT</span></a>
+        <a href="works.html" class="hover-flip" data-text="WORKS"><span>WORKS</span></a>
+        <a href="gallery.html" class="hover-flip" data-text="ARCHIVE"><span>ARCHIVE</span></a>
+        <a href="contact.html" class="hover-flip" data-text="CONTACT"><span>CONTACT</span></a>
+    </nav>
+
+    <!-- Image Logo -->
+    <div class="fixed top-8 left-8 z-40 hidden md:block mix-blend-screen w-32">
+        <a href="index - Copy (2).html">
+            <img src="../JKH_ART_WORK-removebg-preview.png" alt="JKH Logo" class="w-full h-auto filter brightness-0 invert opacity-90 hover:opacity-100 transition-opacity">
+        </a>
+    </div>
+
+    <!-- 1. MASSIVE ABOUT HERO -->
+    <section class="pt-48 pb-32 px-4 md:px-12 relative z-20 min-h-[90vh] flex flex-col justify-center border-b border-white/5">
+        <div class="container mx-auto max-w-[1600px]">
+            <p class="font-sans text-[10px] uppercase tracking-[0.4em] font-bold text-accent mb-6 gs-reveal">Biography</p>
+            <h1 class="font-display font-extrabold text-[12vw] md:text-[8vw] leading-[0.9] uppercase tracking-tighter mb-16 text-white gs-reveal break-words">
+                The <span class="text-transparent" style="-webkit-text-stroke: 1px rgba(255,255,255,0.2);">Architect</span> <br>Of Sound.
+            </h1>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-20">
+                <!-- Main Bio Editorial Box -->
+                <div class="lg:col-span-8 bento-border p-10 md:p-16 flex flex-col justify-between overflow-hidden relative group gs-reveal">
+                    <div class="absolute -right-32 -bottom-32 w-96 h-96 bg-accent/5 rounded-full blur-[100px] group-hover:bg-accent/10 transition-colors duration-700"></div>
+                    <div class="relative z-10">
+                        <i class="fas fa-quote-left text-4xl text-accent mb-10"></i>
+                        <h2 class="font-display font-extrabold text-4xl md:text-5xl uppercase tracking-tighter leading-[0.9] text-white mb-12">
+                            Audio that bypasses the ear and strikes <span class="text-accent italic font-serif tracking-normal">the soul.</span>
+                        </h2>
+                    </div>
+                    <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-400 font-sans text-sm leading-relaxed tracking-wide">
+                        <p>Based in Niketon, Dhaka, I have spent the last 13+ years defining the soundscape of the Bangladeshi media industry. My work spans from heart-touching OSTs for Bangla Drama to high-fidelity mixing for cinematic fictions.</p>
+                        <p>Whether scoring the background music (BGM) for a tense dramatic scene or mixing and mastering a track for global platforms, I approach every frequency with artistic intuition and technical precision.</p>
+                    </div>
+                </div>
+
+                <!-- Best Bio Image Box -->
+                <div class="lg:col-span-4 bento-border overflow-hidden img-scale img-mask min-h-[500px] gs-reveal">
+                    <img src="../drive-download-20260503T111429Z-3-001/IMG_9883.JPG" class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-700">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. THE JOURNEY (Timeline) -->
+    <section class="py-32 px-4 md:px-12 bg-surface relative z-20 min-h-screen">
+        <div class="container mx-auto max-w-[1200px]">
+            <h2 class="font-display font-bold text-[6vw] uppercase tracking-tighter mb-20 text-white gs-reveal">The <span class="text-accent">Journey.</span></h2>
+            
+            <div class="space-y-16 relative">
+                <!-- Timeline Line -->
+                <div class="absolute left-0 md:left-1/2 top-0 bottom-0 w-[1px] bg-white/10 hidden md:block"></div>
+                
+                <!-- Timeline Item 1 -->
+                <div class="flex flex-col md:flex-row items-center justify-between w-full gs-reveal">
+                    <div class="w-full md:w-5/12 text-left md:text-right mb-6 md:mb-0">
+                        <h3 class="font-display font-bold text-3xl uppercase text-white mb-2">The Beginning</h3>
+                        <p class="font-sans text-gray-400 text-sm">Started journey into the world of audio production and sound engineering.</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-dark border border-white/20 flex items-center justify-center z-10 relative hidden md:flex">
+                        <span class="font-display font-bold text-xs text-accent">2011</span>
+                    </div>
+                    <div class="w-full md:w-5/12 bento-border p-8 bg-dark">
+                        <p class="font-serif italic text-xl text-gray-300">"First steps into understanding frequencies, synthesis, and the emotional impact of a single note."</p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 2 -->
+                <div class="flex flex-col md:flex-row-reverse items-center justify-between w-full gs-reveal">
+                    <div class="w-full md:w-5/12 text-left mb-6 md:mb-0">
+                        <h3 class="font-display font-bold text-3xl uppercase text-white mb-2">Industry Breakthrough</h3>
+                        <p class="font-sans text-gray-400 text-sm">Began composing major OSTs and BGMs for top-tier Bangladeshi dramas and media.</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-dark border border-white/20 flex items-center justify-center z-10 relative hidden md:flex">
+                        <span class="font-display font-bold text-xs text-accent">2016</span>
+                    </div>
+                    <div class="w-full md:w-5/12 bento-border p-8 bg-dark">
+                        <img src="../drive-download-20260503T111429Z-3-001/FB_IMG_1777656008448.jpg" class="w-full h-48 object-cover rounded-lg filter grayscale opacity-60 mb-4">
+                        <p class="font-serif italic text-xl text-gray-300">Establishing the JKH sound signature across national television.</p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 3 -->
+                <div class="flex flex-col md:flex-row items-center justify-between w-full gs-reveal">
+                    <div class="w-full md:w-5/12 text-left md:text-right mb-6 md:mb-0">
+                        <h3 class="font-display font-bold text-3xl uppercase text-white mb-2">Cinematic Era</h3>
+                        <p class="font-sans text-gray-400 text-sm">Expanding into film scoring, complex mixing & mastering for digital platforms (Spotify, Apple Music).</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-dark border border-white/20 flex items-center justify-center z-10 relative hidden md:flex">
+                        <span class="font-display font-bold text-xs text-accent">Present</span>
+                    </div>
+                    <div class="w-full md:w-5/12 bento-border p-8 bg-dark">
+                        <p class="font-serif italic text-xl text-gray-300">"Over 50+ major projects, 1 Million+ streams, and a relentless pursuit of perfection."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. STUDIO ARSENAL (Massive Typographic Layout) -->
+    <section class="py-32 px-4 md:px-12 bg-dark relative z-20 min-h-screen">
+        <div class="container mx-auto max-w-[1600px]">
+            <h2 class="font-display font-extrabold text-[8vw] uppercase tracking-tighter mb-16 text-white gs-reveal text-center md:text-left">
+                Studio <br><span class="text-accent">Arsenal.</span>
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Gear Box 1 -->
+                <div class="bento-border p-12 flex flex-col justify-between min-h-[300px] group gs-reveal hover:bg-white transition-colors duration-500">
+                    <span class="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-gray-500 group-hover:text-black">Primary DAW</span>
+                    <h3 class="font-display font-extrabold text-5xl uppercase text-white group-hover:text-accent mt-10">Logic Pro</h3>
+                </div>
+                <!-- Gear Box 2 -->
+                <div class="bento-border p-12 flex flex-col justify-between min-h-[300px] group gs-reveal hover:bg-white transition-colors duration-500">
+                    <span class="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-gray-500 group-hover:text-black">Microphone</span>
+                    <h3 class="font-display font-extrabold text-5xl uppercase text-white group-hover:text-accent mt-10">Rode NT 2A</h3>
+                </div>
+                <!-- Gear Box 3 -->
+                <div class="bento-border p-12 flex flex-col justify-between min-h-[300px] group gs-reveal hover:bg-white transition-colors duration-500">
+                    <span class="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-gray-500 group-hover:text-black">Headphones</span>
+                    <h3 class="font-display font-extrabold text-5xl uppercase text-white group-hover:text-accent mt-10">DT 990 PRO</h3>
+                </div>
+                <!-- Gear Box 4 -->
+                <div class="bento-border p-12 flex flex-col justify-between min-h-[300px] group gs-reveal hover:bg-white transition-colors duration-500">
+                    <span class="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-gray-500 group-hover:text-black">Headphones</span>
+                    <h3 class="font-display font-extrabold text-5xl uppercase text-white group-hover:text-accent mt-10">HD 550</h3>
+                </div>
+                <!-- Gear Box 5 -->
+                <div class="bento-border p-12 flex flex-col justify-between min-h-[300px] group gs-reveal hover:bg-white transition-colors duration-500">
+                    <span class="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-gray-500 group-hover:text-black">Headphones</span>
+                    <h3 class="font-display font-extrabold text-5xl uppercase text-white group-hover:text-accent mt-10">AKG K52</h3>
+                </div>
+                <!-- Gear Box 6 -->
+                <div class="bento-border p-12 flex flex-col justify-between min-h-[300px] group gs-reveal hover:bg-white transition-colors duration-500">
+                    <span class="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-gray-500 group-hover:text-black">Studio Monitors</span>
+                    <h3 class="font-display font-extrabold text-5xl uppercase text-white group-hover:text-accent mt-10">Adam T5V</h3>
+                </div>
+            </div>
+            
+            <div class="mt-16 w-full h-[400px] bento-border overflow-hidden img-scale img-mask gs-reveal">
+                <img src="../drive-download-20260503T111429Z-3-001/_TMS0234.JPG" class="w-full h-full object-cover filter grayscale hover:grayscale-0">
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. MASSIVE FOOTER CTA -->
+    <section class="min-h-screen flex flex-col justify-between pt-32 px-4 md:px-12 bg-white text-black relative z-30">
+        <div class="container mx-auto max-w-[1600px] flex-grow flex flex-col justify-center text-center gs-reveal">
+            <p class="font-sans font-bold text-xs uppercase tracking-[0.4em] text-gray-400 mb-10">Ready to build the sound?</p>
+            <a href="contact.html" class="hover-flip" data-text="START A PROJECT">
+                <span class="font-display font-extrabold text-[12vw] leading-[0.8] uppercase tracking-tighter text-black mix-blend-difference">START A PROJECT</span>
+            </a>
+            
+            <div class="mt-20 flex flex-wrap justify-center gap-8 md:gap-16">
+                <a href="https://wa.me/8801938172454" target="_blank" class="font-sans font-bold text-sm uppercase tracking-widest hover:text-accent transition-colors">WhatsApp</a>
+                <a href="https://www.facebook.com/jkh.jesan.9/" target="_blank" class="font-sans font-bold text-sm uppercase tracking-widest hover:text-accent transition-colors">Facebook</a>
+                <a href="https://youtube.com/@jkhjesan?si=00dHez7xnIWZATza" target="_blank" class="font-sans font-bold text-sm uppercase tracking-widest hover:text-accent transition-colors">YouTube</a>
+            </div>
+        </div>
+        <div class="w-full py-8 border-t border-black/10 flex flex-col md:flex-row justify-between items-center text-[10px] font-bold uppercase tracking-[0.2em] font-sans text-gray-500">
+            <p>&copy; 2026 JKH JESAN</p>
+            <p>DESIGNED IN DHAKA</p>
+        </div>
+    </section>
+
+    <script>
+        const lenis = new Lenis({ duration: 1.2, smooth: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.from(".img-mask", { clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)", duration: 1.5, ease: "power4.out", scrollTrigger: { trigger: ".img-mask", start: "top 80%" }});
+        gsap.utils.toArray('.gs-reveal').forEach(elem => {
+            gsap.fromTo(elem, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out", scrollTrigger: { trigger: elem, start: "top 85%" }});
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+# ROWNAA — Master Development Plan (Index)
+**Platform:** Car Rental Marketplace | **Tagline:** Book a car, anywhere you're headed.
+
+> This plan is split into 7 phase files. Read them in order. Every detail in this plan is derived directly from the Master Developer Specification PDF. No assumptions. No placeholder logic.
+
+---
+
+## Plan Files (Read in Order)
+
+| Phase | File | Focus |
+|-------|------|-------|
+| 0 | [Phase 0 — Design System & CSS Architecture](rownaa_phase0_design_system.md) | Brand identity, colors, fonts, spacing, component rules, desktop.css vs mobile.css architecture |
+| 1 | [Phase 1 — Project Foundation & Database](rownaa_phase1_foundation.md) | Tech stack, folder structure, database schema, RBAC, API structure |
+| 2 | [Phase 2 — Customer Panel & Booking Flow](rownaa_phase2_customer.md) | Homepage, 6 service forms (all fields), seat matching, My Bookings, payment |
+| 3 | [Phase 3 — Owner & Driver Registration](rownaa_phase3_owner.md) | 7-step onboarding, document upload, owner dashboard, approval flow |
+| 4 | [Phase 4 — Admin Panel (All 9 Panels)](rownaa_phase4_admin.md) | Full admin UI, two-layer verification, booking command center, commission engine |
+| 5 | [Phase 5 — Trip Lifecycle & Payments](rownaa_phase5_trips.md) | State machine, payment gateway, commission calculation, refund handling |
+| 6 | [Phase 6 — Mobile CSS (App Experience) & QA](rownaa_phase6_mobile_qa.md) | Separate mobile.css rules, bottom nav, swipeable cards, testing checklist |
+
+---
+
+## Critical Rules Enforced Throughout All Phases
+
+1. **NO AI default styling** — Every color, size, spacing value is explicitly defined in Phase 0.
+2. **NO free-text pickup location** — Always structured dropdown or map picker.
+3. **Unapproved car = invisible** — Zero exposure in any customer query.
+4. **Intercity Travel ≠ Travel & Tour** — Completely separate forms, separate backend logic, separate UI.
+5. **Mobile ≠ Shrunk website** — `mobile.css` is a completely separate file with app-like patterns.
+6. **One Business → Many Cars** — This DB relationship is set in Phase 1 and never violated.
+7. **End Trip disabled until Start Trip** — Hard UI + backend lock on trip state machine.
+8. **Commission = 10% auto-calculated** — Never entered manually by any user.

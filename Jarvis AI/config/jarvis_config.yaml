@@ -1,0 +1,44 @@
+# J.A.R.V.I.S. Master Configuration File
+system:
+  name: "J.A.R.V.I.S."
+  full_name: "Just A Rather Very Intelligent System"
+  version: "1.0.0"
+  log_level: "INFO"
+
+persona:
+  voice_name: "Paul Bettany / British Refined"
+  tone: "Calm, sophisticated, articulate, subtly witty, loyal"
+  salutation: "Sir"
+
+audio:
+  wake_word: "jarvis"
+  wake_word_sensitivity: 0.6
+  sample_rate: 16000
+  channels: 1
+  vad_threshold: 0.5
+  barge_in_enabled: true
+  tts_engine: "edge-tts" # Options: elevenlabs, edge-tts, piper
+  tts_voice: "en-GB-RyanNeural" # Refined British male voice (Free Edge TTS) or ElevenLabs voice ID
+
+models:
+  primary_provider: "openrouter" # openrouter, anthropic, openai, gemini, ollama
+  primary_model: "anthropic/claude-3.5-sonnet"
+  fast_model: "google/gemini-2.0-flash-001"
+  local_fallback_model: "llama3.2:latest"
+  temperature: 0.3
+
+safety:
+  enforce_safety_gates: true
+  tier1_auto_approve: true
+  tier2_require_verbal_confirmation: true
+  tier3_require_strict_confirmation: true
+
+automation:
+  powershell_timeout_seconds: 30
+  allow_raw_script_execution: true
+  everything_search_enabled: true
+
+communications:
+  email_notifications: true
+  telegram_proxy_enabled: false
+  whatsapp_proxy_enabled: false

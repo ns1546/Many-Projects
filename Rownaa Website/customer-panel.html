@@ -1,0 +1,2812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Rownaa® — Customer Portal</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <!-- Premium Font Stack -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  
+  <!-- Professional Icon Library (Phosphor Icons) & Conditional Socket.io -->
+  <script>
+    if (window.location.protocol !== 'file:') {
+      const s = document.createElement('script');
+      s.src = '/socket.io/socket.io.js';
+      document.head.appendChild(s);
+    }
+  </script>
+  <script type="module" src="https://unpkg.com/@phosphor-icons/web"></script>
+  
+  <!-- Pathao / Uber Grade Vector Map Engine (MapLibre GL JS) with Leaflet Fallback -->
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    window.AppState = window.AppState || { user: null, inventory: [], socket: null };
+  </script>
+  <script src="js/state.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // FAANG Enterprise Security: Resilient RBAC Guard for Customer Portal
+    async function enforceCustomerRBAC() {
+      // Under file:/// protocol (Direct File Explorer launch), NEVER redirect to login; auto-activate demo customer
+      if (window.location.protocol === 'file:') {
+        if (typeof window.switchUserSession === 'function') {
+          window.switchUserSession('customer', false);
+        }
+        return;
+      }
+
+      if (window.hydrateStatePromise) {
+        await window.hydrateStatePromise;
+      }
+      let attempts = 0;
+      while ((!window.AppState || !window.AppState.user) && (!window.rownaaSession) && attempts < 6) {
+        await new Promise(r => setTimeout(r, 60));
+        attempts++;
+      }
+      let user = (window.AppState && window.AppState.user) || window.rownaaSession;
+      if (!user) {
+        // Human test & demo fallback: auto-activate demo customer session so user is never locked out
+        if (typeof window.switchUserSession === 'function') {
+          window.switchUserSession('customer', false);
+        }
+      } else if (user.role !== 'customer' && user.role !== 'admin') {
+        console.warn('[Security] Unauthorized Role. Redirecting to login.');
+        if (typeof window !== 'undefined' && window.location && typeof window.location.replace === 'function' && !window._IS_TEST_ENV) {
+          try { window.location.replace('login-sliding.html?redirect=customer-panel.html'); } catch(e) {}
+        }
+      }
+    }
+    enforceCustomerRBAC();
+    window.enforceCustomerRBAC = enforceCustomerRBAC;
+  </script>
+  <script src="js/pricing-data.js"></script>
+  <script src="js/pricing.js"></script>
+  <script src="js/bookings.js"></script>
+  <script src="js/inventory.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/reviews.js"></script>
+  
+  <style>
+/* ============================================================
+   ROWNAA PROFESSIONAL CUSTOMER PORTAL
+   Corporate, Luxury, "Uber Black" Aesthetic
+============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Core Palette */
+  --bg-base:      #050505;
+  --bg-panel:     #0c0c0c;
+  --bg-elevated:  #141414;
+  --bg-hover:     #1a1a1a;
+  
+  --border-subtle:rgba(255, 255, 255, 0.08);
+  --border-strong:rgba(255, 255, 255, 0.15);
+  
+  /* Accents */
+  --accent:       #d4ff00; /* Signature Lime */
+  --accent-dim:   rgba(212, 255, 0, 0.08);
+  --accent-glow:  rgba(212, 255, 0, 0.2);
+  
+  /* Typography */
+  --text-primary: #ffffff;
+  --text-secondary:rgba(255, 255, 255, 0.6);
+  --text-tertiary:rgba(255, 255, 255, 0.4);
+  
+  /* Status Colors */
+  --success:      #10b981;
+  --success-bg:   rgba(16, 185, 129, 0.1);
+  --warning:      #f59e0b;
+  --warning-bg:   rgba(245, 158, 11, 0.1);
+  
+  /* Fonts */
+  --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-ui:      'Inter', sans-serif;
+  
+  /* Layout Settings */
+  --sidebar-w:    280px;
+  --header-h:     80px;
+  --border-rad:   12px;
+  
+  /* Easing */
+  --ease:         cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-location-action {
+  background: rgba(212, 255, 0, 0.08);
+  border: 1px solid rgba(212, 255, 0, 0.25);
+  color: var(--accent, #d4ff00);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-location-action:hover {
+  background: var(--accent, #d4ff00);
+  color: #000;
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+.btn-location-action.loading i {
+  animation: spin 1s linear infinite;
+}
+
+html { font-size: 15px; scroll-behavior: smooth; }
+body {
+  font-family: var(--font-ui);
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; color: inherit; }
+input, select, textarea { font-family: inherit; color: inherit; }
+ul { list-style: none; }
+
+/* ----------------------------------------------------
+   ANIMATIONS
+---------------------------------------------------- */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+.animate-slide { animation: slideUp 0.6s var(--ease) both; }
+.d-1 { animation-delay: 0.05s; }
+.d-2 { animation-delay: 0.1s; }
+.d-3 { animation-delay: 0.15s; }
+
+/* ----------------------------------------------------
+   LAYOUT ARCHITECTURE
+---------------------------------------------------- */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ----------------------------------------------------
+   SIDEBAR (Professional, Solid)
+---------------------------------------------------- */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+.brand {
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.brand-logo {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand-icon {
+  color: var(--accent);
+  font-size: 1.4rem;
+}
+
+.nav-section {
+  padding: 32px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.nav-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-tertiary);
+  font-weight: 700;
+  margin-bottom: 8px;
+  margin-top: 16px;
+}
+.nav-label:first-child { margin-top: 0; }
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+.nav-item i { font-size: 1.2rem; }
+.nav-item:hover { color: var(--text-primary); background: var(--bg-elevated); }
+.nav-item.active {
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.user-profile {
+  padding: 24px 32px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 0.9rem;
+}
+.user-info { display: flex; flex-direction: column; }
+.user-name { font-weight: 600; font-size: 0.9rem; }
+.user-tier { font-size: 0.75rem; color: var(--text-tertiary); display: flex; align-items: center; gap: 4px; margin-top: 2px;}
+
+/* ----------------------------------------------------
+   MAIN AREA
+---------------------------------------------------- */
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.top-header {
+  height: var(--header-h);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  position: sticky;
+  top: 0;
+  background: rgba(5,5,5,0.9);
+  backdrop-filter: blur(12px);
+  z-index: 90;
+}
+.header-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+.header-actions { display: flex; align-items: center; gap: 16px; }
+.btn-icon {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border-subtle);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  font-size: 1.2rem;
+}
+.btn-icon:hover { color: var(--text-primary); border-color: var(--border-strong); background: var(--bg-elevated); }
+.btn-primary {
+  background: var(--text-primary);
+  color: #000;
+  padding: 0 24px;
+  height: 40px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex; align-items: center; gap: 8px;
+  transition: all 0.2s;
+}
+.btn-primary:hover { background: var(--accent); }
+
+/* Panels */
+.panel { display: none; padding: 48px; }
+.panel.active { display: block; animation: fadeIn 0.4s ease; }
+
+/* ----------------------------------------------------
+   DASHBOARD
+---------------------------------------------------- */
+.page-heading {
+  margin-bottom: 40px;
+}
+.ph-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.ph-subtitle { color: var(--text-secondary); font-size: 1rem; }
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 48px;
+}
+.stat-box {
+  background: linear-gradient(180deg, rgba(20, 20, 25, 0.75) 0%, rgba(13, 13, 16, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--border-rad);
+  padding: 24px;
+  display: flex; flex-direction: column; gap: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.stat-box:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+.stat-box-head { 
+  display: flex; justify-content: space-between; align-items: center; 
+  color: var(--text-secondary); font-size: 1.25rem;
+}
+.stat-label { 
+  font-size: 0.78rem; font-weight: 700; text-transform: uppercase; 
+  letter-spacing: 0.06em; color: var(--text-tertiary); margin-top: 6px;
+}
+.stat-val { 
+  font-family: var(--font-display); font-size: 2.15rem; font-weight: 800; 
+  line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums;
+}
+.stat-change { font-size: 0.8rem; font-weight: 500; color: var(--success); display: flex; align-items: center; gap: 4px; }
+
+/* Dashboard Two Column */
+.dash-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+}
+.section-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.sh-title { font-size: 1.1rem; font-weight: 600; font-family: var(--font-display); }
+.sh-link { font-size: 0.85rem; font-weight: 500; color: var(--accent); display: flex; align-items: center; gap: 4px; }
+
+/* Trip List */
+.trip-list { display: flex; flex-direction: column; gap: 16px; }
+.trip-row {
+  display: flex; align-items: center; gap: 20px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-rad);
+  padding: 20px 24px;
+  transition: all 0.2s;
+}
+.trip-row:hover { border-color: var(--border-strong); background: var(--bg-hover); }
+.tr-icon {
+  width: 48px; height: 48px; border-radius: 8px;
+  background: var(--bg-elevated);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; color: var(--text-secondary);
+}
+.tr-body { flex: 1; }
+.tr-title { font-weight: 600; font-size: 1rem; margin-bottom: 4px; display: flex; align-items: center; gap: 12px; }
+.tr-route { color: var(--text-secondary); font-size: 0.85rem; display: flex; align-items: center; gap: 8px; }
+.badge {
+  padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.badge.confirmed { background: var(--success-bg); color: var(--success); }
+.badge.pending { background: var(--warning-bg); color: var(--warning); }
+.tr-meta { text-align: right; }
+.tr-date { font-weight: 600; font-size: 0.9rem; }
+.tr-id { color: var(--text-tertiary); font-size: 0.75rem; font-family: monospace; margin-top: 4px; }
+
+/* Quick Services */
+.quick-svc-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.svc-card {
+  display: flex; align-items: center; gap: 16px;
+  background: linear-gradient(180deg, rgba(20, 20, 24, 0.7) 0%, rgba(14, 14, 17, 0.9) 100%); 
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--border-rad); padding: 14px 18px;
+  cursor: pointer; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.svc-card:hover { 
+  transform: translateX(4px); 
+  border-color: rgba(212, 255, 0, 0.3); 
+  background: linear-gradient(180deg, rgba(26, 26, 32, 0.9) 0%, rgba(18, 18, 22, 0.95) 100%);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(212, 255, 0, 0.15);
+}
+.sc-icon { 
+  width: 40px; height: 40px; border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.25rem; color: var(--accent); 
+  transition: transform 0.2s ease;
+}
+.svc-card:hover .sc-icon { transform: scale(1.08); background: rgba(212, 255, 0, 0.1); border-color: rgba(212, 255, 0, 0.25); }
+.sc-info { flex: 1; }
+.sc-name { font-weight: 700; font-size: 0.92rem; font-family: var(--font-display); letter-spacing: -0.01em; }
+.sc-desc { font-size: 0.74rem; color: var(--text-tertiary); margin-top: 2px;}
+.svc-card i.ph-caret-right { transition: transform 0.2s ease, color 0.2s ease; }
+.svc-card:hover i.ph-caret-right { transform: translateX(3px); color: var(--accent) !important; }
+
+/* ----------------------------------------------------
+   BOOKING FLOW (Professional Split View)
+---------------------------------------------------- */
+.booking-container {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 48px;
+  align-items: start;
+}
+
+/* Service Tabs (Text + Icon, Clean) */
+.svc-tabs {
+  display: flex; gap: 12px; margin-bottom: 40px; flex-wrap: wrap;
+}
+.s-tab {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 20px; border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary); font-weight: 500; font-size: 0.9rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.s-tab i { font-size: 1.2rem; }
+.s-tab:hover { border-color: var(--border-strong); color: var(--text-primary); }
+.s-tab.active { background: var(--text-primary); color: #000; border-color: var(--text-primary); }
+
+/* Form Sections */
+.form-section {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-rad);
+  padding: 32px;
+  margin-bottom: 24px;
+}
+.fs-title {
+  font-family: var(--font-display); font-size: 1.1rem; font-weight: 700;
+  margin-bottom: 24px; display: flex; align-items: center; gap: 12px;
+}
+.fs-title i { color: var(--text-tertiary); }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-1 { display: grid; grid-template-columns: 1fr; gap: 20px; }
+.col-span-2 { grid-column: span 2; }
+
+.f-group { display: flex; flex-direction: column; gap: 8px; }
+.f-label { font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+.f-label .req { color: var(--warning); }
+.f-input {
+  background: var(--bg-base);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  padding: 14px 16px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  outline: none;
+  -webkit-appearance: none;
+}
+.f-input:focus { border-color: var(--text-primary); }
+select.f-input { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px; padding-right: 40px;}
+select.f-input option { background: var(--bg-elevated); }
+
+/* Switch Toggle */
+.seg-control { display: flex; background: var(--bg-base); border: 1px solid var(--border-strong); border-radius: 6px; padding: 4px; }
+.seg-btn { flex: 1; padding: 10px; text-align: center; font-weight: 500; font-size: 0.85rem; color: var(--text-secondary); border-radius: 4px; cursor: pointer; transition: all 0.2s; }
+.seg-btn.active { background: var(--bg-elevated); color: var(--text-primary); }
+
+/* Sticky Summary */
+.summary-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-rad);
+  position: sticky;
+  top: calc(var(--header-h) + 48px);
+}
+.sp-head { padding: 24px 32px; border-bottom: 1px solid var(--border-subtle); font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; }
+.sp-body { padding: 32px; }
+.sp-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.sp-key { color: var(--text-secondary); font-size: 0.85rem; display: flex; align-items: center; gap: 8px; }
+.sp-key i { font-size: 1.1rem; }
+.sp-val { font-weight: 500; font-size: 0.9rem; text-align: right; max-width: 60%; }
+.sp-val.empty { color: var(--text-tertiary); font-style: italic; }
+
+.sp-divider { height: 1px; background: var(--border-subtle); margin: 24px 0; }
+.sp-total { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 700; font-family: var(--font-display); }
+.sp-note { font-size: 0.75rem; color: var(--text-tertiary); text-align: center; margin-top: 16px; }
+
+.btn-submit {
+  width: 100%;
+  background: var(--text-primary); color: #000;
+  padding: 16px; border-radius: 6px;
+  font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em;
+  margin-top: 32px; display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: all 0.2s;
+}
+.btn-submit:hover { background: var(--accent); }
+
+/* Conditional Form */
+.svc-form { display: none; animation: fadeIn 0.3s; }
+.svc-form.active { display: block; }
+
+/* ----------------------------------------------------
+   CARS FLEET
+---------------------------------------------------- */
+.fleet-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.car-card {
+  background: linear-gradient(180deg, rgba(20, 20, 26, 0.85) 0%, rgba(13, 13, 16, 0.98) 100%); 
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px; overflow: hidden;
+  display: flex; flex-direction: column; 
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.car-card:hover { 
+  border-color: rgba(212, 255, 0, 0.28); 
+  transform: translateY(-4px); 
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(212, 255, 0, 0.15);
+}
+.cc-img { 
+  height: 200px; 
+  background: radial-gradient(circle at center, rgba(35, 35, 45, 0.6) 0%, rgba(15, 15, 18, 0.9) 100%); 
+  position: relative; overflow: hidden; 
+}
+.cc-img img { 
+  width: 100%; height: 100%; object-fit: cover; opacity: 0.92; 
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease; 
+}
+.car-card:hover .cc-img img { opacity: 1; transform: scale(1.05); }
+.cc-badge { 
+  position: absolute; top: 16px; left: 16px; 
+  background: rgba(12, 12, 16, 0.85); 
+  padding: 5px 12px; border-radius: 9999px; 
+  font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; 
+  text-transform: uppercase; 
+  border: 1px solid rgba(255, 255, 255, 0.12); 
+  color: var(--accent);
+  backdrop-filter: blur(10px);
+}
+.cc-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+.cc-title { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.02em; }
+.cc-specs { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+.cc-spec { font-size: 0.8rem; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; font-weight: 500; }
+.cc-spec i { color: var(--accent); font-size: 1rem; }
+.cc-foot { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border-subtle); }
+.cc-price { font-size: 1.35rem; font-weight: 800; font-family: var(--font-display); font-variant-numeric: tabular-nums; }
+.cc-price span { font-size: 0.75rem; color: var(--text-tertiary); font-weight: 500; font-family: var(--font-ui); }
+
+/* Review Modal Overlay & Dialog */
+#review-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 100000;
+}
+#review-modal-overlay.active {
+  display: block;
+}
+
+#review-modal-panel {
+  display: none !important;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 92%;
+  max-width: 540px;
+  max-height: 88vh;
+  background: linear-gradient(180deg, rgba(22, 22, 28, 0.98) 0%, rgba(13, 13, 16, 0.99) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 20px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  z-index: 100001;
+  flex-direction: column;
+  overflow: hidden;
+}
+#review-modal-panel.active {
+  display: flex !important;
+  animation: reviewModalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes reviewModalPop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -46%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+#review-modal-panel .sp-head {
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.02);
+}
+#review-modal-panel .sp-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#review-modal-panel .sp-head .btn-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  font-size: 1.1rem;
+  transition: all 0.2s;
+}
+#review-modal-panel .sp-head .btn-icon:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  transform: rotate(90deg);
+}
+#review-modal-panel .sp-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+#review-modal-panel .f-group {
+  margin-bottom: 18px;
+}
+#review-modal-panel .f-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+  margin-bottom: 8px;
+  display: block;
+}
+#review-modal-panel select.f-input,
+#review-modal-panel textarea.f-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: #fff;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  font-family: var(--font-ui);
+  transition: all 0.2s ease;
+  outline: none;
+}
+#review-modal-panel select.f-input:focus,
+#review-modal-panel textarea.f-input:focus {
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 0 0 2px rgba(212, 255, 0, 0.18);
+}
+#review-modal-panel .sp-foot {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  background: rgba(10, 10, 14, 0.7);
+}
+#review-modal-panel .sp-foot .btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-secondary);
+  padding: 9px 20px;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+#review-modal-panel .sp-foot .btn-outline:hover {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+}
+#review-modal-panel .sp-foot .btn-primary {
+  background: var(--accent);
+  color: #000;
+  border: 1px solid rgba(212, 255, 0, 0.4);
+  padding: 10px 22px;
+  border-radius: 9999px;
+  font-weight: 800;
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 16px rgba(212, 255, 0, 0.3);
+}
+#review-modal-panel .sp-foot .btn-primary:hover {
+  background: #e2ff33;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 22px rgba(212, 255, 0, 0.45);
+}
+#review-modal-panel .sp-foot .btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* ----------------------------------------------------
+   BOTTOM NAV (Mobile)
+---------------------------------------------------- */
+.mobile-nav {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--bg-panel); border-top: 1px solid var(--border-subtle);
+  height: 64px; z-index: 200;
+  padding: 0 16px;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.mn-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  color: var(--text-secondary); transition: all 0.2s; cursor: pointer; text-decoration: none;
+}
+.mn-item.active { color: var(--accent); }
+.mn-icon { font-size: 1.4rem; }
+.mn-label { font-size: 0.65rem; font-weight: 600; }
+
+@media (max-width: 900px) {
+  .mobile-nav { display: flex; }
+  .sidebar { display: none; }
+  .top-header { padding: 0 20px; }
+  .main-wrapper { margin-left: 0; padding-bottom: 80px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app-layout">
+  
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo"><i class="ph-fill ph-steering-wheel brand-icon"></i> ROWNAA</div>
+    </div>
+    
+    <nav class="nav-section">
+      <div class="nav-label">Menu</div>
+      <a href="#" class="nav-item active" onclick="switchTab('dashboard', this)">
+        <i class="ph ph-squares-four"></i> Overview
+      </a>
+      <a href="#" class="nav-item" onclick="switchTab('book', this)">
+        <i class="ph ph-calendar-plus"></i> Book a Ride
+      </a>
+      <a href="#" class="nav-item" onclick="switchTab('trips', this)">
+        <i class="ph ph-suitcase"></i> My Trips
+      </a>
+      
+      <div class="nav-label">Fleet & Docs</div>
+      <a href="#" class="nav-item" onclick="switchTab('fleet', this)">
+        <i class="ph ph-car-profile"></i> Browse Fleet
+      </a>
+      <a href="#" class="nav-item" onclick="switchTab('trips'); filterCustomerTrips('Completed'); return false;">
+        <i class="ph ph-file-text"></i> Invoices
+      </a>
+      
+      <div style="margin-top:auto"></div>
+      <a href="index.html" class="nav-item">
+        <i class="ph ph-arrow-left"></i> Main Website
+      </a>
+      <a href="#" class="nav-item" onclick="switchTab('profile', this)">
+        <i class="ph ph-user-circle"></i> Profile & Settings
+      </a>
+      <a href="#" class="nav-item" onclick="if(window.rownaaLogout) { window.rownaaLogout(); } else { window.location='index.html'; } return false;">
+        <i class="ph ph-sign-out"></i> Log Out
+      </a>
+    </nav>
+    
+    <div class="user-profile">
+      <div class="avatar" id="user-avatar-initials">CU</div>
+      <div class="user-info">
+        <div class="user-name" id="user-sidebar-name">Customer Account</div>
+        <div class="user-tier"><i class="ph-fill ph-seal-check" style="color:var(--accent)"></i> Verified Account</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===================== BOTTOM NAV (MOBILE) ===================== -->
+  <nav class="mobile-nav">
+    <div class="mn-item active" onclick="switchTab('dashboard', this)"><i class="ph ph-squares-four mn-icon"></i><span class="mn-label">Home</span></div>
+    <div class="mn-item" onclick="switchTab('book', this)"><i class="ph ph-calendar-plus mn-icon"></i><span class="mn-label">Book</span></div>
+    <div class="mn-item" onclick="switchTab('trips', this)"><i class="ph ph-suitcase mn-icon"></i><span class="mn-label">Trips</span></div>
+    <div class="mn-item" onclick="switchTab('fleet', this)"><i class="ph ph-car-profile mn-icon"></i><span class="mn-label">Fleet</span></div>
+    <div class="mn-item" onclick="switchTab('profile', this)"><i class="ph ph-user mn-icon"></i><span class="mn-label">Profile</span></div>
+  </nav>
+
+  <!-- ===================== MAIN WRAPPER ===================== -->
+  <main class="main-wrapper">
+    
+    <header class="top-header">
+      <div class="header-title" id="head-title">Overview</div>
+      <div class="header-actions" style="position:relative;">
+        <button class="btn-icon" id="btn-notif" style="position:relative;" onclick="toggleCustomerNotifs()" title="Notifications">
+          <i class="ph ph-bell"></i>
+          <span id="notif-badge" style="position:absolute; top:-4px; right:-4px; background:var(--accent); color:#000; font-size:0.65rem; font-weight:700; width:16px; height:16px; border-radius:50%; display:none; align-items:center; justify-content:center;"></span>
+        </button>
+        <div id="notif-dropdown" style="display:none; position:absolute; top:45px; right:120px; width:320px; background:var(--bg-panel); border:1px solid var(--border-strong); border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.7); z-index:999; flex-direction:column; overflow:hidden;">
+          <div style="padding:14px 16px; font-weight:700; border-bottom:1px solid var(--border-subtle); display:flex; justify-content:space-between; align-items:center;">
+            <span>Notifications</span>
+            <button class="btn-icon" style="border:none" onclick="toggleCustomerNotifs()"><i class="ph ph-x"></i></button>
+          </div>
+          <div id="notif-list" style="max-height:300px; overflow-y:auto; display:flex; flex-direction:column; padding:8px;">
+            <!-- Notifications render here -->
+          </div>
+        </div>
+        <button class="btn-primary" onclick="switchTab('book')">
+          <i class="ph ph-plus"></i> New Booking
+        </button>
+      </div>
+    </header>
+
+    <!-- ===================== PANEL: DASHBOARD ===================== -->
+    <div class="panel active" id="pnl-dashboard">
+      <div class="page-heading animate-slide">
+        <h1 class="ph-title" id="user-welcome-heading">Welcome back.</h1>
+        <p class="ph-subtitle">Here is a summary of your corporate and personal travel.</p>
+      </div>
+      
+      <div class="stats-grid animate-slide d-1">
+        <div class="stat-box">
+          <div class="stat-box-head"><i class="ph ph-suitcase"></i></div>
+          <div>
+            <div class="stat-val">12</div>
+            <div class="stat-label">Total Trips</div>
+          </div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-head"><i class="ph ph-clock"></i></div>
+          <div>
+            <div class="stat-val">2</div>
+            <div class="stat-label">Upcoming</div>
+          </div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-head"><i class="ph ph-wallet"></i></div>
+          <div>
+            <div class="stat-val">৳ 45K</div>
+            <div class="stat-label">Total Spend</div>
+          </div>
+        </div>
+        <div class="stat-box" style="border-color:var(--accent-glow); background:var(--bg-elevated)">
+          <div class="stat-box-head" style="color:var(--accent)"><i class="ph-fill ph-star"></i></div>
+          <div>
+            <div class="stat-val">4.8</div>
+            <div class="stat-label">Avg Rating Given</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-layout">
+        <!-- Recent Trips -->
+        <div class="animate-slide d-2">
+          <div class="section-header">
+            <div class="sh-title">Recent Activity</div>
+            <a href="#" class="sh-link" onclick="switchTab('trips')">View All <i class="ph ph-arrow-right"></i></a>
+          </div>
+          <div class="trip-list" id="dashboard-trips">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="animate-slide d-3">
+          <div class="section-header">
+            <div class="sh-title">Quick Book</div>
+          </div>
+          <div class="quick-svc-grid">
+            <div class="svc-card" onclick="openBook('airport')">
+              <div class="sc-icon"><i class="ph ph-airplane-takeoff"></i></div>
+              <div class="sc-info">
+                <div class="sc-name">Airport Transfer</div>
+                <div class="sc-desc">One-way or round trip (DAC Meet & Greet)</div>
+              </div>
+              <i class="ph ph-caret-right" style="color:var(--text-tertiary)"></i>
+            </div>
+            <div class="svc-card" onclick="openBook('hourly')">
+              <div class="sc-icon"><i class="ph ph-clock"></i></div>
+              <div class="sc-info">
+                <div class="sc-name">Hourly Chauffeur</div>
+                <div class="sc-desc">4h, 8h, or 12h flexible city standby</div>
+              </div>
+              <i class="ph ph-caret-right" style="color:var(--text-tertiary)"></i>
+            </div>
+            <div class="svc-card" onclick="openBook('intercity')">
+              <div class="sc-icon"><i class="ph ph-path"></i></div>
+              <div class="sc-info">
+                <div class="sc-name">Intercity Express</div>
+                <div class="sc-desc">Dhaka to Chittagong, Sylhet, Cox's Bazar</div>
+              </div>
+              <i class="ph ph-caret-right" style="color:var(--text-tertiary)"></i>
+            </div>
+            <div class="svc-card" onclick="openBook('corporate')">
+              <div class="sc-icon"><i class="ph ph-buildings"></i></div>
+              <div class="sc-info">
+                <div class="sc-name">Corporate Fleet</div>
+                <div class="sc-desc">Monthly executive billing contracts</div>
+              </div>
+              <i class="ph ph-caret-right" style="color:var(--text-tertiary)"></i>
+            </div>
+            <div class="svc-card" onclick="openBook('tour')">
+              <div class="sc-icon"><i class="ph ph-mountains"></i></div>
+              <div class="sc-info">
+                <div class="sc-name">Travel & Tour</div>
+                <div class="sc-desc">Multi-day vacation packages across Bangladesh</div>
+              </div>
+              <i class="ph ph-caret-right" style="color:var(--text-tertiary)"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PANEL: BOOKING ===================== -->
+    <div class="panel" id="pnl-book">
+      <div class="page-heading animate-slide">
+        <h1 class="ph-title">Book a Ride.</h1>
+        <p class="ph-subtitle">Select a service and fill in your trip details.</p>
+      </div>
+
+      <div class="booking-container animate-slide d-1">
+        <!-- Form Side -->
+        <div>
+          <div class="svc-tabs">
+            <div class="s-tab active" onclick="setService('airport', this)"><i class="ph ph-airplane-tilt"></i> Airport</div>
+            <div class="s-tab" onclick="setService('hourly', this)"><i class="ph ph-clock"></i> Hourly</div>
+            <div class="s-tab" onclick="setService('intercity', this)"><i class="ph ph-path"></i> Intercity</div>
+            <div class="s-tab" onclick="setService('corporate', this)"><i class="ph ph-buildings"></i> Corporate</div>
+            <div class="s-tab" onclick="setService('tour', this)"><i class="ph ph-mountains"></i> Tour</div>
+          </div>
+
+          <!-- Common Details -->
+          <div class="form-section">
+            <div class="fs-title"><i class="ph-fill ph-user-circle"></i> Rider Details</div>
+            <div class="grid-2">
+              <div class="f-group">
+                <label class="f-label" for="book-rider-name">Full Name <span class="req">*</span></label>
+                <input type="text" class="f-input" id="book-rider-name" placeholder="Your full name" value=""/>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="book-rider-phone">Phone Number <span class="req">*</span></label>
+                <input type="tel" class="f-input" id="book-rider-phone" placeholder="e.g. +880 1711 000000" value=""/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Specific: Airport -->
+          <div id="frm-airport" class="form-section svc-form active">
+            <div class="fs-title"><i class="ph-fill ph-airplane-tilt"></i> Airport Transfer</div>
+            <div class="grid-1" style="margin-bottom:20px">
+              <div class="f-group">
+                <label class="f-label">Direction</label>
+                <div class="seg-control" id="air-dir-control">
+                  <div class="seg-btn active" onclick="setAirportDirection('to_airport', this)">To Airport</div>
+                  <div class="seg-btn" onclick="setAirportDirection('from_airport', this)">From Airport</div>
+                  <div class="seg-btn" onclick="setAirportDirection('round_trip', this)">Round Trip (+৳500)</div>
+                </div>
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="f-group" id="grp-air-pickup">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <label class="f-label" id="lbl-air-pickup" style="margin-bottom:0;">Pickup Area <span class="req">*</span></label>
+                  <button type="button" class="btn-location-action" id="btn-air-gps" onclick="detectCustomerGPSLocation('airport')" title="Auto-detect nearest Airport Zone from GPS">
+                    <i class="ph-bold ph-crosshair"></i> Current Location
+                  </button>
+                </div>
+                <select class="f-input" id="air-pickup-select" onchange="onAirportPickupChange(this.value)">
+                  <option value="">Select Dhaka Area...</option>
+                  <option value="Uttara">Uttara (Zone 1 - 0-8 km)</option>
+                  <option value="Khilkhet">Khilkhet / Tongi (Zone 2 - 8-12 km)</option>
+                  <option value="Gulshan">Gulshan / Banani / Bashundhara (Zone 3 - 12-16 km)</option>
+                  <option value="Badda">Badda / Tejgaon / Mohakhali (Zone 4 - 16-20 km)</option>
+                  <option value="Mirpur">Mirpur / Cantonment (Zone 5 - 20-25 km)</option>
+                  <option value="Motijheel">Motijheel / Dhanmondi / Ramna (Zone 6 - 25-30 km)</option>
+                  <option value="Old Dhaka">Old Dhaka / Lalbagh (Zone 7 - 30-35 km)</option>
+                  <option value="Savar">Savar / Ashulia / Keraniganj (Zone 8 - 35-45 km)</option>
+                </select>
+              </div>
+              <div class="f-group" id="grp-air-dropoff">
+                <label class="f-label" id="lbl-air-dropoff">Airport Terminal <span class="req">*</span></label>
+                <select class="f-input" id="air-airport-select" onchange="onAirportTerminalChange(this.value)">
+                  <option value="Hazrat Shahjalal (DAC) Terminal 1">Hazrat Shahjalal (DAC) Terminal 1</option>
+                  <option value="Hazrat Shahjalal (DAC) Terminal 2">Hazrat Shahjalal (DAC) Terminal 2</option>
+                  <option value="Hazrat Shahjalal (DAC) Domestic">Hazrat Shahjalal (DAC) Domestic</option>
+                  <option value="Shah Amanat (CGP)">Shah Amanat (CGP)</option>
+                </select>
+              </div>
+              <div class="f-group col-span-2" id="grp-air-flight" style="display:none;">
+                <label class="f-label" for="air-flight-no">Flight Number & Arrival Details</label>
+                <input type="text" class="f-input" id="air-flight-no" placeholder="e.g. BG 085 / EK 582 (Driver monitors flight ETA)"/>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="air-date">Date <span class="req">*</span></label>
+                <input type="date" class="f-input" id="air-date" onchange="updateDateTime()"/>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="air-time">Pickup Time <span class="req">*</span></label>
+                <input type="time" class="f-input" id="air-time" value="09:00" onchange="updateDateTime()"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Specific: Corporate -->
+          <div id="frm-corporate" class="form-section svc-form">
+            <div class="fs-title"><i class="ph-fill ph-buildings"></i> Corporate Fleet</div>
+            <div class="grid-2">
+              <div class="f-group col-span-2">
+                <label class="f-label" for="corp-company">Company / Organization <span class="req">*</span></label>
+                <input type="text" class="f-input" id="corp-company" placeholder="e.g. Grameenphone / Unilever" oninput="updateCorporateLocation(this.value)" onchange="updateCorporateLocation(this.value)"/>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="corp-contract">Contract Duration</label>
+                <select class="f-input" id="corp-contract" onchange="calculateCustomerBookingFare()">
+                  <option value="1">1 Day Fixed (Daily Corporate Rate)</option>
+                  <option value="7">7 Days (Weekly Fleet Contract)</option>
+                  <option value="15">15 Days (Bi-Weekly Fleet Contract)</option>
+                  <option value="30">30 Days (Monthly Dedicated Fleet)</option>
+                </select>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="corp-duty">Daily Duty Hours</label>
+                <select class="f-input" id="corp-duty">
+                  <option value="10">10 Hours / Day</option>
+                  <option value="12">12 Hours / Day</option>
+                </select>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="corp-date">Start Date <span class="req">*</span></label>
+                <input type="date" class="f-input" id="corp-date" onchange="updateDateTime()"/>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="corp-time">Start Time <span class="req">*</span></label>
+                <input type="time" class="f-input" id="corp-time" value="09:00" onchange="updateDateTime()"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Specific: Intercity -->
+          <div id="frm-intercity" class="form-section svc-form">
+            <div class="fs-title"><i class="ph-fill ph-path"></i> Intercity Travel</div>
+            <div class="grid-1" style="margin-bottom:20px">
+              <div class="f-group">
+                <label class="f-label">Trip Type</label>
+                <div class="seg-control" id="ic-type-control">
+                  <div class="seg-btn active" onclick="setIntercityTripType('one_way', this)">One-Way</div>
+                  <div class="seg-btn" onclick="setIntercityTripType('same_day', this)">Same-Day Round Trip (+50%)</div>
+                  <div class="seg-btn" onclick="setIntercityTripType('multi_day', this)">Multi-Day Round Trip</div>
+                </div>
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="f-group">
+                <label class="f-label" for="ic-origin">Origin City <span class="req">*</span></label>
+                <select class="f-input" id="ic-origin" onchange="onIntercityRouteChanged()">
+                  <option value="Dhaka">Dhaka</option>
+                  <option value="Chittagong">Chittagong</option>
+                  <option value="Sylhet">Sylhet</option>
+                  <option value="Cox's Bazar">Cox's Bazar</option>
+                  <option value="Rajshahi">Rajshahi</option>
+                  <option value="Khulna">Khulna</option>
+                  <option value="Bogura">Bogura</option>
+                </select>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="ic-dest">Destination City <span class="req">*</span></label>
+                <select class="f-input" id="ic-dest" onchange="onIntercityRouteChanged()">
+                  <option value="Chittagong">Chittagong</option>
+                  <option value="Sylhet">Sylhet</option>
+                  <option value="Cox's Bazar">Cox's Bazar</option>
+                  <option value="Rajshahi">Rajshahi</option>
+                  <option value="Khulna">Khulna</option>
+                  <option value="Bogura">Bogura</option>
+                  <option value="Barishal">Barishal</option>
+                  <option value="Rangpur">Rangpur</option>
+                </select>
+              </div>
+              <div class="f-group col-span-2" id="grp-ic-nights" style="display:none;">
+                <label class="f-label" for="ic-nights">Chauffeur Waiting Nights (৳2,000/night)</label>
+                <input type="number" class="f-input" id="ic-nights" value="1" min="1" max="14" onchange="calculateCustomerBookingFare()"/>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="ic-date">Departure Date <span class="req">*</span></label>
+                <input type="date" class="f-input" id="ic-date" onchange="updateDateTime()"/>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="ic-time">Pickup Time <span class="req">*</span></label>
+                <input type="time" class="f-input" id="ic-time" value="08:00" onchange="updateDateTime()"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Specific: Hourly -->
+          <div id="frm-hourly" class="form-section svc-form">
+            <div class="fs-title"><i class="ph-fill ph-clock"></i> Hourly Rental (Inside Dhaka Metro)</div>
+            <div class="grid-2">
+              <div class="f-group col-span-2">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <label class="f-label" for="hourly-pickup" style="margin-bottom:0;">Pickup Address in Dhaka <span class="req">*</span></label>
+                  <div style="display:flex; gap:6px;">
+                    <button type="button" class="btn-location-action" id="btn-hourly-gps" onclick="detectCustomerGPSLocation('hourly')" title="Auto-detect current GPS location">
+                      <i class="ph-bold ph-crosshair"></i> Current Location
+                    </button>
+                    <button type="button" class="btn-location-action" id="btn-hourly-map" onclick="openCustomerMapModal('hourly')" title="Choose precise spot on interactive map">
+                      <i class="ph-bold ph-map-pin"></i> Pin on Map
+                    </button>
+                  </div>
+                </div>
+                <input type="text" class="f-input" id="hourly-pickup" placeholder="e.g. House 12, Road 7, Gulshan 2, Dhaka" oninput="updateHourlyLocation(this.value)" onchange="updateHourlyLocation(this.value)"/>
+              </div>
+              <div class="f-group col-span-2">
+                <label class="f-label" for="hourly-dur">Rental Duration Package</label>
+                <select class="f-input" id="hourly-dur" onchange="calculateCustomerBookingFare()">
+                  <option value="4h">4 Hours</option>
+                  <option value="10h">10 Hours</option>
+                </select>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="hourly-date">Date <span class="req">*</span></label>
+                <input type="date" class="f-input" id="hourly-date" onchange="updateDateTime()"/>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="hourly-time">Pickup Time <span class="req">*</span></label>
+                <input type="time" class="f-input" id="hourly-time" value="09:00" onchange="updateDateTime()"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Specific: Tour -->
+          <div id="frm-tour" class="form-section svc-form">
+            <div class="fs-title"><i class="ph-fill ph-mountains"></i> Travel &amp; Tour Packages</div>
+            <div class="grid-2">
+              <div class="f-group col-span-2">
+                <label class="f-label" for="tour-route">Select Tour Destination Package <span class="req">*</span></label>
+                <select class="f-input" id="tour-route" onchange="calculateCustomerBookingFare()">
+                  <option value="rt_cox">Dhaka ↔ Cox's Bazar (4 Days All-Inclusive)</option>
+                  <option value="rt_sreemangal">Dhaka ↔ Sreemangal (2 Days All-Inclusive)</option>
+                  <option value="rt_sylhet">Dhaka ↔ Sreemangal ↔ Sylhet (3 Days All-Inclusive)</option>
+                </select>
+              </div>
+              <div class="f-group col-span-2">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                  <label class="f-label" for="tour-pickup" style="margin-bottom:0">Dhaka Departure Point <span class="req">*</span></label>
+                  <button type="button" class="btn-location-action" onclick="detectCustomerGPSLocation('hourly')" title="Auto-detect current GPS location">
+                    <i class="ph-bold ph-crosshair"></i> Current Location
+                  </button>
+                </div>
+                <input type="text" class="f-input" id="tour-pickup" placeholder="e.g. Gulshan 2 / Dhanmondi, Dhaka" value="Gulshan 2, Dhaka" oninput="updateHourlyLocation(this.value)"/>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="tour-extra-days">Extend Tour (Extra Days)</label>
+                <select class="f-input" id="tour-extra-days" onchange="calculateCustomerBookingFare()">
+                  <option value="0">Standard Package Duration</option>
+                  <option value="1">+1 Extra Day</option>
+                  <option value="2">+2 Extra Days</option>
+                  <option value="3">+3 Extra Days</option>
+                </select>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="tour-date">Departure Date <span class="req">*</span></label>
+                <input type="date" class="f-input" id="tour-date" onchange="updateDateTime()"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preferences -->
+          <div class="form-section">
+            <div class="fs-title"><i class="ph-fill ph-car-profile"></i> Preferences</div>
+            <div class="grid-2">
+              <div class="f-group">
+                <label class="f-label">Car Type</label>
+                <select class="f-input" id="book-car-select" onchange="document.getElementById('sum-car').textContent=this.options[this.selectedIndex].text; if(typeof calculateCustomerBookingFare==='function') calculateCustomerBookingFare();">
+                  <option value="sedan_standard">Standard Sedan (4 Seats)</option>
+                  <option value="sedan_economy">Sedan Economy (4 Seats)</option>
+                  <option value="sedan_premium">Premium Sedan (4 Seats)</option>
+                  <option value="noah">Noah / Voxy (7 Seats)</option>
+                  <option value="chander_gari">Chander Gari (8 Seats)</option>
+                  <option value="hiace">HiAce Microbus (11 Seats)</option>
+                  <option value="luxury_prado">Luxury (Prado / Camry)</option>
+                </select>
+              </div>
+              <div class="f-group">
+                <label class="f-label">Passengers</label>
+                <input type="number" class="f-input" value="1" min="1"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary Side -->
+        <div class="summary-panel">
+          <div class="sp-head">Trip Summary</div>
+          <div class="sp-body">
+            
+            <div class="sp-row">
+              <div class="sp-key"><i class="ph ph-airplane-tilt"></i> Service</div>
+              <div class="sp-val" id="sum-svc">Airport Transfer</div>
+            </div>
+            
+            <div class="sp-row">
+              <div class="sp-key"><i class="ph ph-map-pin"></i> Location</div>
+              <div class="sp-val empty" id="sum-pick">Not Set</div>
+            </div>
+            
+            <div class="sp-row">
+              <div class="sp-key"><i class="ph ph-arrows-left-right"></i> Direction / Type</div>
+              <div class="sp-val" id="sum-dir">To Airport</div>
+            </div>
+            
+            <div class="sp-row">
+              <div class="sp-key"><i class="ph ph-calendar-blank"></i> Schedule</div>
+              <div class="sp-val empty" id="sum-dt">Select Date</div>
+            </div>
+            
+            <div class="sp-row">
+              <div class="sp-key"><i class="ph ph-car"></i> Vehicle</div>
+              <div class="sp-val" id="sum-car">Standard Sedan (4 Seats)</div>
+            </div>
+
+            <div class="sp-divider"></div>
+
+            <!-- Promo Code / Voucher Box -->
+            <div style="margin-bottom:14px;">
+              <label class="f-label" for="cust-booking-promo" style="font-size:0.75rem; color:var(--text-secondary); margin-bottom:6px; display:block;">Promo Voucher</label>
+              <div style="display:flex; gap:6px;">
+                <input type="text" id="cust-promo" class="f-input" placeholder="Enter promo code or voucher (e.g. ROWNAA20)" style="text-transform:uppercase; font-size:0.8rem; padding:8px 12px; height:38px;" />
+                <button type="button" class="btn-primary" id="btn-apply-cust-promo" onclick="applyCustomerBookingPromo()" style="padding:0 14px; height:38px; font-size:0.75rem; font-weight:700;">Apply</button>
+              </div>
+              <div id="cust-promo-status" style="font-size:0.72rem; margin-top:4px; display:none;"></div>
+            </div>
+
+            <!-- Payment Method Selector -->
+            <div style="margin-bottom:14px;">
+              <label class="f-label" style="font-size:0.75rem; color:var(--text-secondary); margin-bottom:6px; display:block;">Payment Method</label>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px;">
+                <label style="display:flex; align-items:center; gap:6px; font-size:0.75rem; background:var(--bg-elevated); padding:8px 10px; border-radius:6px; border:1px solid var(--border-subtle); cursor:pointer;">
+                  <input type="radio" name="cust_pay_method" id="pay-method-cash" value="cash" checked onchange="onCustomerPayMethodChange('cash')" /> Cash Chauffeur
+                </label>
+                <label style="display:flex; align-items:center; gap:6px; font-size:0.75rem; background:var(--bg-elevated); padding:8px 10px; border-radius:6px; border:1px solid var(--border-subtle); cursor:pointer;">
+                  <input type="radio" name="cust_pay_method" id="pay-method-mfs" value="mfs" onchange="onCustomerPayMethodChange('mfs')" /> bKash / Nagad
+                </label>
+              </div>
+            </div>
+
+            <!-- Fare Line Items -->
+            <div class="sp-row" style="font-size:0.8rem; color:var(--text-secondary);">
+              <div>Base Tariff</div>
+              <div id="cust-base-fare">৳ 2,000</div>
+            </div>
+            <div class="sp-row" id="cust-discount-row" style="font-size:0.8rem; color:var(--accent); display:none;">
+              <div>Voucher Discount</div>
+              <div id="cust-discount-val">-৳ 0</div>
+            </div>
+            <div class="sp-row" style="font-size:0.8rem; color:var(--text-secondary);">
+              <div>Govt VAT (5%)</div>
+              <div id="cust-vat-val">৳ 100</div>
+            </div>
+
+            <div class="sp-divider"></div>
+
+            <div class="sp-total">
+              <span>Total Payable</span>
+              <span id="cust-booking-total">৳ 2,100</span>
+            </div>
+            <div class="sp-note" id="cust-booking-note">Real-time estimate synced with Admin Tariff.</div>
+
+            <button class="btn-submit" id="btn-submit" onclick="submitForm(this)">
+              Confirm Booking <i class="ph ph-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== PANEL: TRIPS ===================== -->
+    <div class="panel" id="pnl-trips">
+      <div class="page-heading animate-slide">
+        <h1 class="ph-title">My Trips.</h1>
+        <p class="ph-subtitle">Manage your upcoming and past bookings.</p>
+      </div>
+
+      <!-- Reservation Confirmed Notification Banner -->
+      <div id="booking-confirmed-alert" style="display:none;background:rgba(48,209,88,0.12);border:1px solid rgba(48,209,88,0.35);color:#30d158;padding:14px 18px;border-radius:10px;margin-bottom:20px;align-items:center;justify-content:space-between;font-size:0.9rem;font-weight:600;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <i class="ph-fill ph-check-circle" style="font-size:1.4rem;"></i>
+          <span>Reservation <strong id="bca-trip-id">#BK-CONFIRMED</strong> Confirmed! Your dedicated chauffeur allocation is now active in your customer panel.</span>
+        </div>
+        <button onclick="document.getElementById('booking-confirmed-alert').style.display='none'" style="background:none;border:none;color:#30d158;cursor:pointer;font-size:1.1rem;"><i class="ph ph-x"></i></button>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:20px; flex-wrap:wrap;">
+        <div class="tabs animate-slide d-1" style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn btn-outline btn-sm active" style="border-radius:20px; padding:6px 16px;" onclick="filterCustomerTrips('', this)">All Trips</button>
+          <button class="btn btn-outline btn-sm" style="border-radius:20px; padding:6px 16px;" onclick="filterCustomerTrips('Pending', this)">Pending</button>
+          <button class="btn btn-outline btn-sm" style="border-radius:20px; padding:6px 16px;" onclick="filterCustomerTrips('Confirmed', this)">Confirmed</button>
+          <button class="btn btn-outline btn-sm" style="border-radius:20px; padding:6px 16px;" onclick="filterCustomerTrips('Completed', this)">Completed</button>
+          <button class="btn btn-outline btn-sm" style="border-radius:20px; padding:6px 16px;" onclick="filterCustomerTrips('Cancelled', this)">Cancelled</button>
+        </div>
+        <div style="position:relative; width:100%; max-width:320px;">
+          <input type="text" id="cust-trips-search" class="f-input" placeholder="Search trips by destination, car, or ID..." oninput="onCustomerTripSearch(this.value)" style="width:100%; padding-left:36px; padding-right:12px; height:38px; font-size:0.85rem;" />
+          <i class="ph ph-magnifying-glass" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text-tertiary);"></i>
+        </div>
+      </div>
+
+      <div class="trip-list animate-slide d-1" id="my-trips-list">
+        <!-- Rendered by JS -->
+      </div>
+      <div id="customer-trips-pagination" style="padding:16px; display:flex; justify-content:space-between; align-items:center; color:var(--text-secondary); font-size:0.9rem;"></div>
+    </div>
+
+    <!-- ===================== PANEL: FLEET ===================== -->
+    <div class="panel" id="pnl-fleet">
+      <div class="page-heading animate-slide">
+        <h1 class="ph-title">Browse Fleet.</h1>
+        <p class="ph-subtitle">Premium vehicles available for your journeys.</p>
+      </div>
+
+      <div style="position:relative; width:100%; max-width:380px; margin-bottom:20px;">
+        <input type="text" id="cust-fleet-search" class="f-input" placeholder="Search fleet by model, category, or features..." oninput="onCustomerFleetSearch(this.value)" style="width:100%; padding-left:36px; padding-right:12px; height:40px; font-size:0.85rem;" />
+        <i class="ph ph-magnifying-glass" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text-tertiary);"></i>
+      </div>
+
+      <div class="fleet-grid animate-slide d-1" id="customer-fleet-grid">
+        <!-- Rendered by JS -->
+      </div>
+      <div id="customer-fleet-pagination" style="padding:16px; display:flex; justify-content:space-between; align-items:center; color:var(--text-secondary); font-size:0.9rem;"></div>
+    </div>
+
+    <!-- ===================== PANEL: PROFILE ===================== -->
+    <div class="panel" id="pnl-profile">
+      <div class="page-heading animate-slide">
+        <h1 class="ph-title">Profile & Settings.</h1>
+        <p class="ph-subtitle">Manage your account details and preferences.</p>
+      </div>
+
+      <div class="animate-slide d-1" style="max-width:600px; background:var(--bg-panel); border:1px solid var(--border-subtle); border-radius:var(--border-rad); padding:32px">
+        <div id="cust-profile-msg" style="padding:10px; border-radius:6px; margin-bottom:16px; font-size:0.9rem; display:none;"></div>
+        <div class="f-group" style="margin-bottom:16px">
+          <label class="f-label" style="display:block;margin-bottom:8px;font-size:0.85rem;color:var(--text-secondary)">Full Name</label>
+          <input type="text" id="cust-profile-name" class="f-input" value="Faisal Ahmed" style="width:100%;padding:10px;background:var(--bg-elevated);border:1px solid var(--border-strong);color:#fff;border-radius:6px;"/>
+        </div>
+        <div class="f-group" style="margin-bottom:16px">
+          <label class="f-label" style="display:block;margin-bottom:8px;font-size:0.85rem;color:var(--text-secondary)">Email / Username</label>
+          <input type="text" id="cust-profile-username" class="f-input" value="customer" readonly style="width:100%;padding:10px;background:var(--bg-elevated);border:1px solid var(--border-strong);color:var(--text-tertiary);border-radius:6px;"/>
+        </div>
+        <div class="f-group" style="margin-bottom:16px">
+          <label class="f-label" style="display:block;margin-bottom:8px;font-size:0.85rem;color:var(--text-secondary)">Phone Number</label>
+          <input type="tel" id="cust-profile-phone" class="f-input" value="+880 1711 000000" style="width:100%;padding:10px;background:var(--bg-elevated);border:1px solid var(--border-strong);color:#fff;border-radius:6px;"/>
+        </div>
+        
+        <div style="margin-top:24px; border-top:1px solid var(--border-subtle); padding-top:24px;">
+           <h3 style="font-family:var(--font-display);font-size:1.1rem;margin-bottom:16px;">Preferences</h3>
+           <div class="f-group" style="margin-bottom:16px">
+             <label class="f-label" for="cust-profile-language" style="display:block;margin-bottom:8px;font-size:0.85rem;color:var(--text-secondary)">Language</label>
+             <select id="cust-profile-language" class="f-input" style="width:100%;padding:10px;background:var(--bg-elevated);border:1px solid var(--border-strong);color:#fff;border-radius:6px;">
+               <option value="en">English (Default)</option>
+               <option value="bn">Bengali (বাংলা)</option>
+             </select>
+           </div>
+        </div>
+
+        <button class="btn-primary" id="btnSaveProfile" style="margin-top:24px; width:100%" onclick="saveCustomerProfile()">Save Changes</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// Navigation Logic
+const titles = { dashboard: 'Overview', book: 'New Booking', trips: 'My Trips', fleet: 'Browse Fleet', profile: 'Profile & Settings' };
+function switchTab(id, elDesktop = null, elMobile = null) {
+  // If only one element was passed (e.g. from inline onclick switchTab('xyz', this))
+  if (elDesktop && elDesktop.classList.contains('mn-item')) {
+    elMobile = elDesktop;
+    elDesktop = null;
+  }
+
+  // Desktop Nav
+  if(elDesktop) {
+    document.querySelectorAll('.sidebar .nav-item').forEach(n => n.classList.remove('active'));
+    elDesktop.classList.add('active');
+  } else {
+    document.querySelectorAll('.sidebar .nav-item').forEach(n => {
+      n.classList.remove('active');
+      if(n.getAttribute('onclick') && n.getAttribute('onclick').includes(`'${id}'`)) n.classList.add('active');
+    });
+  }
+  
+  // Mobile Nav
+  if(elMobile) {
+    document.querySelectorAll('.mobile-nav .mn-item').forEach(n => n.classList.remove('active'));
+    elMobile.classList.add('active');
+  } else {
+    document.querySelectorAll('.mobile-nav .mn-item').forEach(n => {
+      n.classList.remove('active');
+      if(n.getAttribute('onclick') && n.getAttribute('onclick').includes(`'${id}'`)) n.classList.add('active');
+    });
+  }
+  
+  if (titles[id]) document.getElementById('head-title').textContent = titles[id];
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  const pnl = document.getElementById('pnl-' + id);
+  if (pnl) pnl.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// Booking Form Logic
+const svcs = {
+  airport: { name: 'Airport Transfer', icon: 'ph-airplane-tilt' },
+  hourly: { name: 'Hourly Rental', icon: 'ph-clock' },
+  intercity: { name: 'Intercity Travel', icon: 'ph-path' },
+  corporate: { name: 'Corporate Fleet', icon: 'ph-buildings' },
+  tour: { name: 'Travel & Tour', icon: 'ph-mountains' }
+};
+
+function setService(id, el) {
+  document.querySelectorAll('.s-tab').forEach(t => t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  
+  document.querySelectorAll('.svc-form').forEach(f => f.classList.remove('active'));
+  const targetFrm = document.getElementById('frm-' + id);
+  if (targetFrm) targetFrm.classList.add('active');
+  
+  const sumSvc = document.getElementById('sum-svc');
+  if (sumSvc && svcs[id]) {
+    sumSvc.innerHTML = `<i class="ph ${svcs[id].icon}" style="margin-right:6px"></i> ${svcs[id].name}`;
+  }
+  if (typeof calculateCustomerBookingFare === 'function') calculateCustomerBookingFare();
+}
+
+function openBook(id) {
+  switchTab('book');
+  setTimeout(() => {
+    const tab = document.querySelector(`.s-tab[onclick*="'${id}'"]`);
+    if(tab) setService(id, tab);
+  }, 100);
+}
+
+// Active Trip State & Voucher Cache
+let activeAirportDirection = 'to_airport';
+let activeIntercityTripType = 'one_way';
+let activeAppliedVoucher = null;
+let activePaymentMethod = 'cash';
+
+function setAirportDirection(dir, el) {
+  activeAirportDirection = dir;
+  if (el) {
+    const parent = el.parentElement;
+    parent.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  }
+  
+  const dirLabel = document.getElementById('sum-dir');
+  const lblPickup = document.getElementById('lbl-air-pickup');
+  const lblDropoff = document.getElementById('lbl-air-dropoff');
+  const flightGrp = document.getElementById('grp-air-flight');
+
+  if (dir === 'to_airport') {
+    if (dirLabel) dirLabel.textContent = 'To Airport (Departure)';
+    if (lblPickup) lblPickup.innerHTML = 'Pickup Area in Dhaka <span class="req">*</span>';
+    if (lblDropoff) lblDropoff.innerHTML = 'Airport Destination <span class="req">*</span>';
+    if (flightGrp) flightGrp.style.display = 'none';
+  } else if (dir === 'from_airport') {
+    if (dirLabel) dirLabel.textContent = 'From Airport (Arrival)';
+    if (lblPickup) lblPickup.innerHTML = 'Drop-off Area in Dhaka <span class="req">*</span>';
+    if (lblDropoff) lblDropoff.innerHTML = 'Airport Terminal Pickup <span class="req">*</span>';
+    if (flightGrp) flightGrp.style.display = 'block';
+  } else if (dir === 'round_trip') {
+    if (dirLabel) dirLabel.textContent = 'Round Trip (+৳500)';
+    if (lblPickup) lblPickup.innerHTML = 'Pickup Area in Dhaka <span class="req">*</span>';
+    if (lblDropoff) lblDropoff.innerHTML = 'Airport <span class="req">*</span>';
+    if (flightGrp) flightGrp.style.display = 'block';
+  }
+
+  const selectVal = document.getElementById('air-pickup-select')?.value;
+  onAirportPickupChange(selectVal);
+  if (typeof calculateCustomerBookingFare === 'function') calculateCustomerBookingFare();
+}
+
+function onAirportPickupChange(val) {
+  const sumPick = document.getElementById('sum-pick');
+  if (!sumPick) return;
+  if (!val) {
+    sumPick.textContent = 'Not Set';
+    sumPick.classList.add('empty');
+    return;
+  }
+  sumPick.classList.remove('empty');
+  if (activeAirportDirection === 'from_airport') {
+    sumPick.textContent = `Airport → ${val}, Dhaka`;
+  } else if (activeAirportDirection === 'round_trip') {
+    sumPick.textContent = `${val} ⇄ Airport (Round Trip)`;
+  } else {
+    sumPick.textContent = `${val} → Airport`;
+  }
+  if (typeof calculateCustomerBookingFare === 'function') calculateCustomerBookingFare();
+}
+
+function onAirportTerminalChange(val) {
+  onAirportPickupChange(document.getElementById('air-pickup-select')?.value);
+}
+
+function setIntercityTripType(type, el) {
+  activeIntercityTripType = type;
+  if (el) {
+    const parent = el.parentElement;
+    parent.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  const dirLabel = document.getElementById('sum-dir');
+  const nightsGrp = document.getElementById('grp-ic-nights');
+
+  if (type === 'one_way') {
+    if (dirLabel) dirLabel.textContent = 'One-Way Highway';
+    if (nightsGrp) nightsGrp.style.display = 'none';
+  } else if (type === 'same_day') {
+    if (dirLabel) dirLabel.textContent = 'Same-Day Return (+50%)';
+    if (nightsGrp) nightsGrp.style.display = 'none';
+  } else if (type === 'multi_day') {
+    if (dirLabel) dirLabel.textContent = 'Multi-Day Round Trip';
+    if (nightsGrp) nightsGrp.style.display = 'block';
+  }
+
+  onIntercityRouteChanged();
+}
+
+function onIntercityRouteChanged() {
+  const orig = document.getElementById('ic-origin')?.value || 'Dhaka';
+  const dest = document.getElementById('ic-dest')?.value || 'Chittagong';
+  const sumPick = document.getElementById('sum-pick');
+  if (sumPick) {
+    sumPick.classList.remove('empty');
+    if (activeIntercityTripType === 'one_way') {
+      sumPick.textContent = `${orig} → ${dest}`;
+    } else {
+      sumPick.textContent = `${orig} ⇄ ${dest}`;
+    }
+  }
+  if (typeof calculateCustomerBookingFare === 'function') calculateCustomerBookingFare();
+}
+
+function updateHourlyLocation(val) {
+  const sumPick = document.getElementById('sum-pick');
+  if (sumPick) {
+    if (val && val.trim()) {
+      sumPick.textContent = val.trim();
+      sumPick.classList.remove('empty');
+    } else {
+      sumPick.textContent = 'Not Set';
+      sumPick.classList.add('empty');
+    }
+  }
+}
+
+function updateCorporateLocation(val) {
+  const sumPick = document.getElementById('sum-pick');
+  if (sumPick) {
+    if (val && val.trim()) {
+      sumPick.textContent = `Corporate: ${val.trim()}`;
+      sumPick.classList.remove('empty');
+    } else {
+      sumPick.textContent = 'Not Set';
+      sumPick.classList.add('empty');
+    }
+  }
+}
+
+function onCustomerPayMethodChange(method) {
+  activePaymentMethod = method;
+  window.activePaymentMethod = method;
+}
+
+function applyCustomerBookingPromo() {
+  const input = document.getElementById('cust-promo');
+  const statusEl = document.getElementById('cust-promo-status');
+  if (!input || !statusEl) return;
+
+  const code = (input.value || '').trim().toUpperCase();
+  if (!code) {
+    statusEl.style.display = 'block';
+    statusEl.style.color = '#ef4444';
+    statusEl.textContent = 'Please enter a voucher code.';
+    return;
+  }
+
+  const VOUCHERS = {
+    'ROWNAA20': { type: 'pct', value: 0.20, label: '20% Special Discount' },
+    'WELCOME50': { type: 'flat', value: 250, label: '৳250 Welcome Voucher' },
+    'AIRPORTVIP': { type: 'flat', value: 300, label: '৳300 Airport VIP Rebate' },
+    'EID100': { type: 'flat', value: 500, label: '৳500 Festival Discount' },
+    'INTERCITY15': { type: 'pct', value: 0.15, label: '15% Intercity Highway Discount' }
+  };
+
+  if (VOUCHERS[code]) {
+    activeAppliedVoucher = { code, ...VOUCHERS[code] };
+    window.activeAppliedVoucher = activeAppliedVoucher;
+    statusEl.style.display = 'block';
+    statusEl.style.color = 'var(--accent)';
+    statusEl.textContent = `✓ Applied: ${activeAppliedVoucher.label}`;
+    input.disabled = true;
+    const btn = document.getElementById('btn-apply-cust-promo');
+    if (btn) btn.textContent = 'Applied';
+  } else {
+    activeAppliedVoucher = null;
+    statusEl.style.display = 'block';
+    statusEl.style.color = '#ef4444';
+    statusEl.textContent = 'Invalid promo code. Try ROWNAA20 or WELCOME50.';
+  }
+  calculateCustomerBookingFare();
+}
+
+function toggleSeg(el) {
+  const p = el.parentElement;
+  p.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  if (typeof calculateCustomerBookingFare === 'function') calculateCustomerBookingFare();
+}
+
+function updateDateTime() {
+  const activeForm = document.querySelector('.svc-form.active') || document.getElementById('frm-airport');
+  if (!activeForm) return;
+
+  const dateInput = activeForm.querySelector('input[type="date"]');
+  const timeInput = activeForm.querySelector('input[type="time"]');
+  const dateStr = dateInput ? dateInput.value : '';
+  const timeStr = timeInput ? timeInput.value : '';
+  const el = document.getElementById('sum-dt');
+  
+  if (el) {
+    if (dateStr && timeStr) {
+      el.textContent = dateStr + ' at ' + timeStr;
+      el.classList.remove('empty');
+    } else if (dateStr) {
+      el.textContent = dateStr;
+      el.classList.remove('empty');
+    } else {
+      el.textContent = 'Select Date';
+      el.classList.add('empty');
+    }
+  }
+  if (typeof calculateCustomerBookingFare === 'function') calculateCustomerBookingFare();
+}
+
+function calculateCustomerBookingFare() {
+  if (!window.PricingEngine) return;
+
+  let activeSvcId = 'airport';
+  document.querySelectorAll('.svc-form').forEach(f => {
+    if (f.classList.contains('active')) {
+      activeSvcId = f.id.replace('frm-', '');
+    }
+  });
+
+  const carSelect = document.getElementById('book-car-select');
+  const cat = carSelect ? carSelect.value : 'sedan_standard';
+
+  const baseFareEl = document.getElementById('cust-base-fare');
+  const discRow = document.getElementById('cust-discount-row');
+  const discValEl = document.getElementById('cust-discount-val');
+  const vatEl = document.getElementById('cust-vat-val');
+  const totalEl = document.getElementById('cust-booking-total');
+  const noteEl = document.getElementById('cust-booking-note');
+  if (!totalEl) return;
+
+  let baseAmount = 2000;
+  let noteText = '';
+
+  if (activeSvcId === 'airport') {
+    const pickupVal = document.getElementById('air-pickup-select')?.value || 'Gulshan';
+    const isRound = activeAirportDirection === 'round_trip';
+    const direction = isRound ? 'Round Trip' : 'Airport Drop-off';
+    
+    const normZone = window.PricingEngine._normalizeZone(pickupVal);
+    const p = window.PricingEngine.calculateAirport(normZone, cat, direction, false);
+    if (p) {
+      baseAmount = p.total;
+      noteText = `Zone flat fare: ৳${p.baseFare}${p.roundTripSurcharge ? ' + Round Trip Surcharge: ৳' + p.roundTripSurcharge : ''} (${p.freeWaitMinutes}m free wait).`;
+    }
+  } else if (activeSvcId === 'hourly') {
+    const durVal = document.getElementById('hourly-dur')?.value || '4h';
+    const is10h = durVal === '10h';
+    
+    const p = window.PricingEngine.calculateHourly(cat, is10h, 0, 0);
+    if (p) {
+      baseAmount = p.total;
+      noteText = `${p.package} includes ${p.includedDistance}km inside Dhaka Metro. Extra hr: ৳${p.extraHourCharge || 0}, Extra km: ৳${p.extraKmCharge || 0}.`;
+    }
+  } else if (activeSvcId === 'intercity') {
+    const orig = document.getElementById('ic-origin')?.value || 'Dhaka';
+    const dest = document.getElementById('ic-dest')?.value || 'Chittagong';
+    let dist = 240;
+    if (dest.includes('Chittagong')) dist = 250;
+    else if (dest.includes('Sylhet')) dist = 240;
+    else if (dest.includes('Cox')) dist = 400;
+    else if (dest.includes('Rajshahi')) dist = 250;
+    else if (dest.includes('Khulna')) dist = 260;
+    else if (dest.includes('Bogura')) dist = 210;
+
+    const isSameDay = activeIntercityTripType === 'same_day';
+    const isMultiDay = activeIntercityTripType === 'multi_day';
+    const nights = isMultiDay ? (parseInt(document.getElementById('ic-nights')?.value, 10) || 1) : 0;
+
+    const p = window.PricingEngine.calculateIntercity(cat, dist, isSameDay, nights);
+    if (p) {
+      baseAmount = p.total;
+      noteText = `Base Fare: ৳${p.baseFare} + Road Distance (${dist}km × ৳${p.perKm}/km)${p.sameDayReturnSurcharge ? ' + Same-Day 50% Surcharge' : ''}${p.waitingNightsCharge ? ' + Waiting (' + nights + 'n × ৳2000)' : ''}.`;
+    }
+  } else if (activeSvcId === 'corporate') {
+    const days = parseInt(document.getElementById('corp-contract')?.value, 10) || 1;
+    const p = window.PricingEngine.calculateCorporate(cat, days);
+    if (p) {
+      baseAmount = p.total;
+      noteText = `Fixed Daily Rate: ৳${p.dailyRate}/day for ${days} day(s) contract. Fuel, maintenance & driver included.`;
+    }
+  } else if (activeSvcId === 'tour') {
+    const routeId = document.getElementById('tour-route')?.value || 'rt_cox';
+    const extraDays = parseInt(document.getElementById('tour-extra-days')?.value, 10) || 0;
+    const p = window.PricingEngine.calculateTour(routeId, cat, extraDays);
+    if (p) {
+      baseAmount = p.total;
+      noteText = `${p.route} (${p.days} Days All-Inclusive)${extraDays > 0 ? ' + ' + extraDays + ' Extra Day(s)' : ''}. Includes fuel, tolls & chauffeur allowance.`;
+    }
+  }
+
+  // Calculate Voucher Discount
+  let discountAmount = 0;
+  if (activeAppliedVoucher) {
+    if (activeAppliedVoucher.type === 'pct') {
+      discountAmount = Math.round(baseAmount * activeAppliedVoucher.value);
+    } else {
+      discountAmount = Math.min(baseAmount, activeAppliedVoucher.value);
+    }
+  }
+
+  const subtotalAfterDiscount = Math.max(0, baseAmount - discountAmount);
+  const vat = Math.round(subtotalAfterDiscount * 0.05);
+  const finalTotal = subtotalAfterDiscount + vat;
+
+  if (baseFareEl) baseFareEl.textContent = `৳ ${baseAmount.toLocaleString()}`;
+  if (discRow && discValEl) {
+    if (discountAmount > 0) {
+      discRow.style.display = 'flex';
+      discValEl.textContent = `-৳ ${discountAmount.toLocaleString()}`;
+    } else {
+      discRow.style.display = 'none';
+    }
+  }
+  if (vatEl) vatEl.textContent = `৳ ${vat.toLocaleString()}`;
+  if (totalEl) totalEl.textContent = `৳ ${finalTotal.toLocaleString()}`;
+  if (noteEl) noteEl.textContent = noteText;
+}
+
+function submitForm(btn) {
+  if (btn.disabled) return;
+  const orig = btn.innerHTML;
+  
+  // Figure out active service
+  let activeSvcId = 'airport';
+  document.querySelectorAll('.svc-form').forEach(f => {
+    if (f.classList.contains('active')) {
+      activeSvcId = f.id.replace('frm-', '');
+    }
+  });
+
+  let pickup = '';
+  let dropoff = '';
+  let dt = '';
+
+  const parent = document.getElementById('frm-' + activeSvcId);
+  if (!parent) return;
+
+  const dateInput = parent.querySelector('input[type="date"]');
+  const timeInput = parent.querySelector('input[type="time"]');
+  const dateVal = dateInput ? dateInput.value : '';
+  const timeVal = (timeInput && timeInput.value) ? timeInput.value : '09:00';
+  
+  if (!dateVal) {
+    alert("Please select a trip date.");
+    if (dateInput) dateInput.focus();
+    return;
+  }
+
+  // Validate Past Date Booking
+  const tripDateTime = new Date(`${dateVal}T${timeVal}`);
+  if (!isNaN(tripDateTime.getTime())) {
+    const minAllowed = new Date(Date.now() - 300000); // 5 min grace
+    if (tripDateTime < minAllowed) {
+      alert("Invalid travel schedule: Selected pickup date and time is in the past. Please choose a future schedule.");
+      if (dateInput) dateInput.focus();
+      return;
+    }
+  }
+
+  dt = `${dateVal} ${timeVal}`;
+  
+  if (activeSvcId === 'airport') {
+    const area = document.getElementById('air-pickup-select')?.value || 'Gulshan';
+    const airport = document.getElementById('air-airport-select')?.value || 'Hazrat Shahjalal (DAC)';
+    const flight = document.getElementById('air-flight-no')?.value?.trim();
+    if (activeAirportDirection === 'from_airport') {
+      pickup = `${airport}${flight ? ' (Flight: ' + flight + ')' : ''}`;
+      dropoff = `${area}, Dhaka`;
+    } else if (activeAirportDirection === 'round_trip') {
+      pickup = `${area}, Dhaka`;
+      dropoff = `${airport} (Round Trip)`;
+    } else {
+      pickup = `${area}, Dhaka`;
+      dropoff = airport;
+    }
+  } else if (activeSvcId === 'corporate') {
+    const comp = document.getElementById('corp-company')?.value?.trim() || 'Corporate Client';
+    const days = document.getElementById('corp-contract')?.value || '1';
+    pickup = `Corporate HQ: ${comp}`;
+    dropoff = `Dedicated Fleet (${days} Days Contract)`;
+  } else if (activeSvcId === 'intercity') {
+    const orig = document.getElementById('ic-origin')?.value || 'Dhaka';
+    const dest = document.getElementById('ic-dest')?.value || 'Chittagong';
+    pickup = `${orig} City Terminal`;
+    dropoff = `${dest} City Terminal (${activeIntercityTripType})`;
+  } else if (activeSvcId === 'hourly') {
+    const addr = document.getElementById('hourly-pickup')?.value?.trim() || 'Dhaka Metro';
+    const dur = document.getElementById('hourly-dur')?.value || '4h';
+    pickup = addr;
+    dropoff = `Hourly Rental (${dur === '10h' ? '10h Full Day' : '4h Standard'})`;
+  } else if (activeSvcId === 'tour') {
+    const routeSelect = document.getElementById('tour-route');
+    const routeText = routeSelect ? routeSelect.options[routeSelect.selectedIndex].text : "Dhaka ↔ Cox's Bazar";
+    const pickupLoc = document.getElementById('tour-pickup')?.value?.trim() || 'Gulshan 2, Dhaka';
+    const extraDays = document.getElementById('tour-extra-days')?.value || '0';
+    pickup = pickupLoc;
+    dropoff = `${routeText}${parseInt(extraDays) > 0 ? ' (+' + extraDays + ' Extra Days)' : ''}`;
+  }
+  
+  const currentUser = (window.AppState && window.AppState.user) || window.rownaaSession;
+  const customerName = document.getElementById('book-rider-name')?.value.trim() || currentUser?.name || 'Customer';
+  const customerPhone = document.getElementById('book-rider-phone')?.value.trim() || currentUser?.phone || '';
+
+  // Validate Bangladesh Phone Number Regex
+  const bdPhoneRegex = /^(?:\+?880|0)?1[3-9]\d{8}$/;
+  if (!customerPhone || !bdPhoneRegex.test(customerPhone.replace(/[\s-]/g, ''))) {
+    alert("Please enter a valid Bangladesh contact phone number (e.g. +8801711000000 or 01711000000).");
+    const phoneInput = document.getElementById('book-rider-phone');
+    if (phoneInput) phoneInput.focus();
+    return;
+  }
+
+  const vehicle = document.getElementById('sum-car')?.textContent || 'Standard Sedan';
+  const price = document.getElementById('cust-booking-total')?.textContent || '৳ 2,100';
+
+  const customerId = currentUser?.id || currentUser?.userId || ('cust-' + Date.now());
+
+  const payload = {
+    customerId: customerId,
+    customerName,
+    customerPhone,
+    service: activeSvcId,
+    pickupLocation: pickup,
+    dropoffLocation: dropoff,
+    dateTime: dt,
+    vehicle: vehicle,
+    price: price,
+    paymentMethod: activePaymentMethod,
+    voucherCode: activeAppliedVoucher ? activeAppliedVoucher.code : null,
+    ownerId: 'fleet-rownaa-official'
+  };
+
+  btn.disabled = true;
+  btn.innerHTML = `<i class="ph ph-spinner" style="animation:spin 1s linear infinite"></i> Processing...`;
+  
+  window.BookingsManager.add(payload).then((success) => {
+    if (success) {
+      btn.style.background = 'var(--success)';
+      btn.style.color = '#fff';
+      btn.innerHTML = `<i class="ph ph-check-circle"></i> Booking Confirmed`;
+      
+      setTimeout(() => {
+        if (typeof renderTrips === 'function') renderTrips();
+        switchTab('trips');
+        btn.disabled = false;
+        btn.style.background = '';
+        btn.style.color = '';
+        btn.innerHTML = orig;
+      }, 1500);
+    } else {
+      alert("Booking failed. Try again.");
+      btn.disabled = false;
+      btn.innerHTML = orig;
+    }
+  });
+}
+
+// Polyfill for spin animation
+const style = document.createElement('style');
+style.innerHTML = `@keyframes spin { 100% { transform: rotate(360deg); } }`;
+document.head.appendChild(style);
+
+// Auto-injected to fix Vite module scoping
+window.switchTab = switchTab;
+window.setService = setService;
+window.openBook = openBook;
+window.toggleSeg = toggleSeg;
+window.updateDateTime = updateDateTime;
+window.submitForm = submitForm;
+window.calculateCustomerBookingFare = calculateCustomerBookingFare;
+
+// Real-time Pricing Sync Listeners
+window.addEventListener('pricingUpdated', () => {
+  if (typeof calculateCustomerBookingFare === 'function') calculateCustomerBookingFare();
+  if (typeof renderCustomerFleet === 'function') renderCustomerFleet();
+});
+window.addEventListener('storage', (e) => {
+  if (e.key === 'rownaa_master_pricing') {
+    if (typeof calculateCustomerBookingFare === 'function') calculateCustomerBookingFare();
+    if (typeof renderCustomerFleet === 'function') renderCustomerFleet();
+  }
+});
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof calculateCustomerBookingFare === 'function') calculateCustomerBookingFare();
+});
+// Global Exports
+window.setAirportDirection = setAirportDirection;
+window.onAirportPickupChange = onAirportPickupChange;
+window.onAirportTerminalChange = onAirportTerminalChange;
+window.setIntercityTripType = setIntercityTripType;
+window.onIntercityRouteChanged = onIntercityRouteChanged;
+window.updateHourlyLocation = updateHourlyLocation;
+window.updateCorporateLocation = updateCorporateLocation;
+window.onCustomerPayMethodChange = onCustomerPayMethodChange;
+window.applyCustomerBookingPromo = applyCustomerBookingPromo;
+
+  const customerState = {
+    trips: { page: 1, limit: 10, search: '', status: '', includeDeleted: false, customerId: '' },
+    fleet: { page: 1, limit: 8, search: '', type: '', includeDeleted: false }
+  };
+
+  async function renderTrips() {
+    if (!window.BookingsManager) return;
+    
+    const currentUser = (window.AppState && window.AppState.user) || window.rownaaSession;
+    if (currentUser) {
+        customerState.trips.customerId = currentUser ? (currentUser.id || currentUser.userId || '') : '';
+    }
+    // customerId set from session
+    
+    // Dashboard: Latest 5
+    const dashBooks = (await window.BookingsManager.getAll()).filter(b => b.customerId === customerState.trips.customerId || (customerState.trips.customerId === 'cust-1' && (b.customerId === 'cust-demo-001' || b.customerId === 'cust-1'))).reverse().slice(0, 5);
+    const dtList = document.getElementById('dashboard-trips');
+    if (dtList) {
+      if (dashBooks.length === 0) dtList.innerHTML = '<div style="color:var(--text-tertiary);padding:24px">No bookings found.</div>';
+      else dtList.innerHTML = _generateTripsHtml(dashBooks);
+    }
+    
+    // My Trips Tab: Paginated
+    const res = await window.BookingsManager.getPaginated(customerState.trips);
+    const mtList = document.getElementById('my-trips-list');
+    const pag = document.getElementById('customer-trips-pagination');
+    
+    if (mtList) {
+      if (res.data.length === 0) {
+        mtList.innerHTML = '<div style="color:var(--text-tertiary);padding:24px">No bookings found.</div>';
+        if(pag) pag.innerHTML = '';
+      } else {
+        mtList.innerHTML = _generateTripsHtml(res.data);
+        if(pag) {
+          pag.innerHTML = `
+            <div>Showing ${((res.page-1)*res.limit)+1} to ${Math.min(res.page*res.limit, res.total)} of ${res.total}</div>
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn-outline btn-sm" ${res.page === 1 ? 'disabled' : ''} onclick="changeCustomerTripsPage(${res.page - 1})">Prev</button>
+              <button class="btn btn-outline btn-sm" ${res.page === res.totalPages ? 'disabled' : ''} onclick="changeCustomerTripsPage(${res.page + 1})">Next</button>
+            </div>
+          `;
+        }
+      }
+    }
+  }
+
+  function changeCustomerTripsPage(p) { customerState.trips.page = p; renderTrips(); }
+
+  function _generateTripsHtml(books) {
+    let html = '';
+    books.forEach(b => {
+      let icon = 'ph-car';
+      if (b.service === 'airport') icon = 'ph-airplane-tilt';
+      else if (b.service === 'intercity') icon = 'ph-path';
+      else if (b.service === 'corporate') icon = 'ph-buildings';
+      
+      let badgeCls = 'pending';
+      let badgeTxt = 'Pending';
+      if (b.status === 'Confirmed') { badgeCls = 'confirmed'; badgeTxt = 'Confirmed'; }
+      if (b.status === 'Completed') { badgeCls = ''; badgeTxt = 'Completed'; }
+
+      let actionBtnHtml = '';
+      if (b.status === 'Pending' || b.status === 'Confirmed') {
+         actionBtnHtml += `<button class="btn btn-outline btn-sm" style="margin-right:8px; border-color:var(--danger); color:var(--danger)" onclick="cancelCustomerBooking('${b.id}')">Cancel</button>`;
+      }
+      if (b.status === 'Completed') {
+         if (window.ReviewsManager) {
+            const hasReview = window.ReviewsManager.getByBookingId(b.id);
+            if (!hasReview) {
+               actionBtnHtml += `<button class="btn btn-accent btn-sm" style="margin-right:8px" onclick="openReviewModal('${b.id}')">Rate Trip</button>`;
+            } else {
+               actionBtnHtml += `<span style="color:var(--success);font-size:0.8rem;margin-right:8px;font-weight:600"><i class="ph-fill ph-star"></i> Rated</span>`;
+            }
+         }
+      }
+      if (b.status !== 'Pending' && b.status !== 'Cancelled') {
+         actionBtnHtml += `<a href="invoice.html?id=${b.id}" target="_blank" class="btn btn-outline btn-sm" style="text-decoration:none" title="View Invoice"><i class="ph ph-receipt"></i></a>`;
+      }
+
+      const driverInfo = b.driverName ? `<div style="font-size:0.8rem; color:var(--success); margin-top:2px"><i class="ph-fill ph-steering-wheel"></i> Driver: <strong>${b.driverName}</strong> (${b.driverPhone || 'Contact assigned'})</div>` : '';
+      const routeInfo = b.pickupLocation ? `${b.pickupLocation} → ${b.dropoffLocation || 'Destination'}` : (b.vehicle || b.service || 'Standard Sedan');
+
+      const existingRev = window.ReviewsManager ? window.ReviewsManager.getByBookingId(b.id) : null;
+      let reviewDisplayHtml = '';
+      if (existingRev) {
+         const ratingNum = parseInt(existingRev.rating) || 5;
+         const stars = '★'.repeat(ratingNum);
+         const sent = (existingRev.sentiment || 'positive').toUpperCase();
+         reviewDisplayHtml = `
+           <div style="margin-top:10px; padding:10px 14px; background:var(--bg-elevated); border:1px solid var(--border-subtle); border-radius:6px; font-size:0.85rem">
+             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px">
+               <span style="color:var(--accent); font-weight:700">${stars} Rated (${ratingNum}/5)</span>
+               <span style="font-size:0.7rem; letter-spacing:0.05em; color:var(--text-tertiary); background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:3px">${sent}</span>
+             </div>
+             <div style="color:var(--text-secondary); font-style:italic">"${existingRev.userFeeling || existingRev.comment || 'Trip completed smoothly.'}"</div>
+             ${existingRev.adminResponse ? `
+               <div style="margin-top:8px; padding:8px 12px; background:rgba(212,255,0,0.06); border-left:3px solid var(--accent); border-radius:4px">
+                 <div style="font-weight:700; color:var(--accent); font-size:0.75rem; display:flex; align-items:center; gap:6px">
+                   <i class="ph-fill ph-shield-check"></i> Official Admin Response (${existingRev.adminRespondedBy || 'Operations'})
+                 </div>
+                 <div style="color:var(--text-primary); font-size:0.85rem; margin-top:2px;">"${existingRev.adminResponse}"</div>
+                 ${existingRev.actionTaken ? `<div style="font-size:0.75rem; color:var(--success); margin-top:3px;"><strong>Action Taken:</strong> ${existingRev.actionTaken}</div>` : ''}
+               </div>
+             ` : ''}
+           </div>
+         `;
+      }
+
+      html += `
+      <div class="trip-row">
+        <div class="tr-icon"><i class="ph ${icon}"></i></div>
+        <div class="tr-body">
+          <div class="tr-title">${b.service ? b.service.toUpperCase() : 'UNKNOWN'} <span class="badge ${badgeCls}">${badgeTxt}</span></div>
+          <div class="tr-route">${routeInfo}</div>
+          ${driverInfo}
+          <div style="font-size:0.85rem; color:var(--text-tertiary); margin-top:4px">Vehicle: ${b.vehicle || 'Standard'} · Total: ${b.price || '৳0'}</div>
+          ${reviewDisplayHtml}
+        </div>
+        <div class="tr-meta" style="margin-right:24px">
+          <div class="tr-date">${b.dateTime}</div>
+          <div class="tr-id">${b.id.slice(0, 8)}</div>
+        </div>
+        <div class="tr-actions" style="display:flex; align-items:center; margin-left: auto;">
+          ${actionBtnHtml}
+        </div>
+      </div>`;
+    });
+    return html;
+  }
+
+  function filterCustomerTrips(status, btn) {
+    if (btn) {
+      btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    customerState.trips.status = status;
+    customerState.trips.page = 1;
+    renderTrips();
+  }
+
+  function onCustomerTripSearch(query) {
+    customerState.trips.search = query.trim();
+    customerState.trips.page = 1;
+    renderTrips();
+  }
+  window.onCustomerTripSearch = onCustomerTripSearch;
+
+  function onCustomerFleetSearch(query) {
+    customerState.fleet.search = query.trim();
+    customerState.fleet.page = 1;
+    renderCustomerFleet();
+  }
+  window.onCustomerFleetSearch = onCustomerFleetSearch;
+  
+  async function renderCustomerFleet() {
+    if(!window.InventoryManager) return;
+    
+    const res = await window.InventoryManager.getPaginated(customerState.fleet);
+    const grid = document.getElementById('customer-fleet-grid');
+    const pag = document.getElementById('customer-fleet-pagination');
+    if(!grid || !pag) return;
+
+    if(res.data.length === 0) {
+      grid.innerHTML = '<div style="color:var(--text-tertiary);padding:24px">No vehicles available.</div>';
+      pag.innerHTML = '';
+      return;
+    }
+
+    let html = '';
+    res.data.forEach(car => {
+      // Must be Active
+      if (car.isActive === 0 || car.isActive === false) return;
+      const vehicleName = car.name || `${car.brand || ''} ${car.model || ''}`.trim() || 'Vehicle';
+      const category = car.category || car.type || 'Sedan';
+      let baseRate = car.baseRate || car.rate_daily || 2000;
+      if (window.PricingEngine) {
+        const norm = window.PricingEngine._normalizeCategory(category || vehicleName);
+        const hourly = window.PricingEngine.calculateHourly(norm, false, 0, 0);
+        if (hourly) baseRate = hourly.baseFare;
+      }
+      const seats = car.seats || 4;
+
+      html += `
+        <div class="car-card">
+          <div class="cc-img">
+            <img src="${car.image || 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80'}" alt="${vehicleName}" onerror="this.src='https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80'"/>
+            <div class="cc-badge">${category}</div>
+          </div>
+          <div class="cc-body">
+            <div class="cc-title">${vehicleName}</div>
+            <div class="cc-specs">
+              <span class="cc-spec"><i class="ph ph-users"></i> ${seats} Seats</span>
+              <span class="cc-spec"><i class="ph ph-wind"></i> ${car.hasAc ? 'AC' : 'Non-AC'}</span>
+              <span class="cc-spec"><i class="ph ph-map-pin"></i> Dhaka</span>
+            </div>
+            <div class="cc-foot">
+              <div class="cc-price">৳ ${baseRate.toLocaleString()} <span>/ 4h base</span></div>
+              <button class="btn-primary" style="height:32px;padding:0 16px;font-size:0.75rem" onclick="window.location.href='checkout.html?car=${encodeURIComponent(vehicleName)}'">Book</button>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    
+    grid.innerHTML = html;
+    
+    pag.innerHTML = `
+      <div>Showing ${((res.page-1)*res.limit)+1} to ${Math.min(res.page*res.limit, res.total)} of ${res.total}</div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-outline btn-sm" ${res.page === 1 ? 'disabled' : ''} onclick="changeCustomerFleetPage(${res.page - 1})">Prev</button>
+        <button class="btn btn-outline btn-sm" ${res.page === res.totalPages ? 'disabled' : ''} onclick="changeCustomerFleetPage(${res.page + 1})">Next</button>
+      </div>
+    `;
+  }
+  
+  function changeCustomerFleetPage(p) { customerState.fleet.page = p; renderCustomerFleet(); }
+
+  
+  function openReviewModal(bookingId) {
+    document.getElementById('rev-booking-id').value = bookingId;
+    document.getElementById('rev-rating').value = '5';
+    if (document.getElementById('rev-sentiment')) document.getElementById('rev-sentiment').value = 'positive';
+    if (document.getElementById('rev-category')) document.getElementById('rev-category').value = 'overall';
+    document.getElementById('rev-comment').value = '';
+    const ov = document.getElementById('review-modal-overlay');
+    const pnl = document.getElementById('review-modal-panel');
+    if (ov) { ov.style.display = 'block'; ov.classList.add('active'); }
+    if (pnl) { pnl.style.display = 'flex'; pnl.classList.add('active'); }
+  }
+
+  function closeReviewModal() {
+    const ov = document.getElementById('review-modal-overlay');
+    const pnl = document.getElementById('review-modal-panel');
+    if (ov) { ov.style.display = 'none'; ov.classList.remove('active'); }
+    if (pnl) { pnl.style.display = 'none'; pnl.classList.remove('active'); }
+  }
+
+  async function submitReview() {
+    const bookingId = document.getElementById('rev-booking-id').value;
+    const rating = document.getElementById('rev-rating').value;
+    const sentiment = document.getElementById('rev-sentiment')?.value || 'positive';
+    const category = document.getElementById('rev-category')?.value || 'overall';
+    const comment = document.getElementById('rev-comment').value;
+    
+    if (window.ReviewsManager) {
+       await window.ReviewsManager.addReview({
+         bookingId,
+         customerId: customerState.trips.customerId,
+         rating: parseInt(rating),
+         sentiment,
+         category,
+         userFeeling: comment,
+         comment
+       });
+       if (typeof window.showDevDockToast === 'function') {
+         window.showDevDockToast('Thank you for sharing your experience and personal feelings!');
+       }
+       closeReviewModal();
+       await renderTrips(); // refresh to show rated status
+    }
+  }
+
+  async function saveCustomerProfile() {
+    const name = document.getElementById('cust-profile-name').value.trim();
+    const phone = document.getElementById('cust-profile-phone')?.value.trim() || '';
+    const msg = document.getElementById('cust-profile-msg');
+    const btn = document.getElementById('btnSaveProfile');
+    if (!name) {
+      if (msg) {
+        msg.style.display = 'block';
+        msg.style.background = 'rgba(239, 68, 68, 0.15)';
+        msg.style.color = '#ef4444';
+        msg.textContent = 'Name is required.';
+      }
+      return;
+    }
+    const userId = (window.AppState && window.AppState.user) ? (window.AppState.user.id || window.AppState.user.userId || '') : '';
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+    try {
+      const res = await fetch('/api/users/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ id: userId, name, phone })
+      });
+      const data = await res.json();
+      btn.disabled = false;
+      btn.textContent = 'Save Changes';
+      if (data.success) {
+        if (msg) {
+          msg.style.display = 'block';
+          msg.style.background = 'rgba(16, 185, 129, 0.15)';
+          msg.style.color = '#10b981';
+          msg.textContent = 'Profile updated successfully!';
+        }
+        if (window.AppState?.user) {
+          window.AppState.user.name = name;
+          window.AppState.user.phone = phone;
+        }
+        const nameDisplay = document.querySelector('.user-name');
+        if (nameDisplay) nameDisplay.textContent = name;
+        const bookName = document.getElementById('book-rider-name');
+        if (bookName) bookName.value = name;
+        const bookPhone = document.getElementById('book-rider-phone');
+        if (bookPhone && phone) bookPhone.value = phone;
+      } else {
+        if (msg) {
+          msg.style.display = 'block';
+          msg.style.background = 'rgba(239, 68, 68, 0.15)';
+          msg.style.color = '#ef4444';
+          msg.textContent = data.error || 'Failed to update profile.';
+        }
+      }
+    } catch (e) {
+      btn.disabled = false;
+      btn.textContent = 'Save Changes';
+      if (msg) {
+        msg.style.display = 'block';
+        msg.style.background = 'rgba(239, 68, 68, 0.15)';
+        msg.style.color = '#ef4444';
+        msg.textContent = 'Error connecting to server.';
+      }
+    }
+  }
+
+  window.cancelCustomerBooking = async function(id) {
+    if (confirm("Are you sure you want to cancel this booking?")) {
+      const ok = await window.BookingsManager.updateStatus(id, 'Cancelled');
+      if (ok) {
+        alert("Booking cancelled successfully.");
+        renderTrips();
+      } else {
+        alert("Failed to cancel booking. Please try again.");
+      }
+    }
+  };
+
+  window.toggleCustomerNotifs = function() {
+    const dd = document.getElementById('notif-dropdown');
+    if (dd) {
+      const isHidden = dd.style.display === 'none' || !dd.style.display;
+      dd.style.display = isHidden ? 'flex' : 'none';
+      if (isHidden && window.renderNotifications) {
+        const uid = window.AppState?.user?.id || customerState.trips.customerId || '';
+        window.renderNotifications(uid, 'notif-list', 'notif-badge');
+      }
+    }
+  };
+
+  // Render trips when tab is switched or page loads
+  document.addEventListener('DOMContentLoaded', async () => {
+    // Handle URL navigation params (e.g., from checkout redirect)
+    const urlParams = new URLSearchParams(window.location.search);
+    const requestedTab = urlParams.get('tab');
+    if (requestedTab === 'trips' || requestedTab === 'book' || requestedTab === 'fleet' || requestedTab === 'profile') {
+      switchTab(requestedTab);
+    }
+    if (urlParams.get('booked') === 'true') {
+      switchTab('trips');
+      const tripId = urlParams.get('id') || 'BK-CONFIRMED';
+      const alertEl = document.getElementById('booking-confirmed-alert');
+      const tripIdEl = document.getElementById('bca-trip-id');
+      if (alertEl) {
+        if (tripIdEl) tripIdEl.textContent = `#${tripId}`;
+        alertEl.style.display = 'flex';
+      }
+    }
+    const u = (window.AppState && window.AppState.user) || window.rownaaSession;
+    if (u) {
+      if (document.getElementById('cust-profile-name')) document.getElementById('cust-profile-name').value = u.name || '';
+      if (document.getElementById('cust-profile-username')) document.getElementById('cust-profile-username').value = u.username || u.name || '';
+      if (document.getElementById('cust-profile-phone') && u.phone) document.getElementById('cust-profile-phone').value = u.phone;
+      if (document.getElementById('book-rider-name')) document.getElementById('book-rider-name').value = u.name || '';
+      if (document.getElementById('book-rider-phone') && u.phone) document.getElementById('book-rider-phone').value = u.phone;
+      const nameDisplay = document.getElementById('user-sidebar-name') || document.querySelector('.user-name');
+      if (nameDisplay && u.name) nameDisplay.textContent = u.name;
+      const avatarEl = document.getElementById('user-avatar-initials') || document.querySelector('.avatar');
+      if (avatarEl && u.name) {
+        const initials = u.name.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase();
+        avatarEl.textContent = initials;
+      }
+      const welcomeEl = document.getElementById('user-welcome-heading') || document.querySelector('.ph-title');
+      if (welcomeEl && u.name) welcomeEl.textContent = `Welcome back, ${u.name.split(' ')[0]}.`;
+      customerState.trips.customerId = u.id || u.userId || '';
+    }
+    
+    await renderTrips();
+    renderCustomerFleet();
+
+    // Dynamically calculate and display real stats on the dashboard
+    if (window.BookingsManager) {
+      const uid = window.AppState?.user?.id || window.AppState?.user?.userId || customerState.trips.customerId;
+      const allBooks = uid ? (await window.BookingsManager.getAll()).filter(b => b.customerId === uid || (uid === 'cust-1' && (b.customerId === 'cust-demo-001' || b.customerId === 'cust-1'))) : [];
+      const totalTrips = allBooks.length;
+      const upcoming = allBooks.filter(b => b.status === 'Confirmed' || b.status === 'Pending').length;
+      let totalSpend = 0;
+      allBooks.forEach(b => {
+        const val = parseInt((b.price || '0').replace(/[^0-9]/g, '')) || 0;
+        totalSpend += val;
+      });
+
+      // Calculate dynamic average rating given
+      let avgRatingStr = '5.0';
+      if (window.ReviewsManager && typeof window.ReviewsManager.getAll === 'function') {
+        const userReviews = (await window.ReviewsManager.getAll()).filter(r => r.customerId === uid);
+        if (userReviews.length > 0) {
+          const sum = userReviews.reduce((acc, r) => acc + (parseFloat(r.rating) || 5), 0);
+          avgRatingStr = (sum / userReviews.length).toFixed(1);
+        }
+      }
+
+      const statVals = document.querySelectorAll('.stat-val');
+      if (statVals.length >= 4) {
+        statVals[0].textContent = totalTrips;
+        statVals[1].textContent = upcoming;
+        statVals[2].textContent = totalSpend >= 1000 ? `৳ ${(totalSpend/1000).toFixed(1)}K` : `৳ ${totalSpend}`;
+        statVals[3].textContent = avgRatingStr;
+      }
+    }
+
+    if(window.renderNotifications) window.renderNotifications(customerState.trips.customerId || '', 'notif-list', 'notif-badge');
+  });
+
+// =========================================================
+// CUSTOMER PORTAL INTERACTIVE MAP & PRESENT LOCATION ENGINE
+// Aligned with Pathao & Uber MapLibre GL Vector Standards
+// =========================================================
+let custMapInstance = null;
+let custMapTileLayer = null;
+let custActiveMapTheme = 'voyager';
+let isCustMap3D = false;
+let custActiveService = 'hourly';
+let custSelectedLocation = { name: 'Gulshan 2 Circle, Dhaka', lat: 23.7936, lng: 90.4137 };
+
+const CUST_CARTO_API_KEY = 'cb1_50vc_1_90f5d3acb895d00d75d0c680';
+const CUST_CARTO_VECTOR_STYLES = {
+  voyager: `https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json?key=${CUST_CARTO_API_KEY}`,
+  dark: `https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json?key=${CUST_CARTO_API_KEY}`,
+  light: `https://basemaps.cartocdn.com/gl/positron-gl-style/style.json?key=${CUST_CARTO_API_KEY}`
+};
+const CUST_CARTO_RASTER_FALLBACK = {
+  voyager: `https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=${CUST_CARTO_API_KEY}`,
+  dark: `https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png?key=${CUST_CARTO_API_KEY}`,
+  light: `https://basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png?key=${CUST_CARTO_API_KEY}`
+};
+
+function detectCustomerGPSLocation(target) {
+  const btn = document.getElementById(target === 'airport' ? 'btn-air-gps' : (target === 'hourly' ? 'btn-hourly-gps' : 'btn-modal-gps'));
+  if (btn) btn.classList.add('loading');
+
+  if (!navigator.geolocation) {
+    if (btn) btn.classList.remove('loading');
+    alert('Geolocation is not supported by your browser.');
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      if (btn) btn.classList.remove('loading');
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      custSelectedLocation.lat = lat;
+      custSelectedLocation.lng = lng;
+
+      // Distance from Hazrat Shahjalal International Airport (23.8433, 90.4048) in km
+      const dKm = Math.hypot((lat - 23.8433) * 111, (lng - 90.4048) * 102);
+      
+      let matchedZone = 'Gulshan';
+      if (dKm <= 8) matchedZone = 'Uttara';
+      else if (dKm <= 12) matchedZone = 'Khilkhet';
+      else if (dKm <= 16) matchedZone = 'Gulshan';
+      else if (dKm <= 20) matchedZone = 'Badda';
+      else if (dKm <= 25) matchedZone = 'Mirpur';
+      else if (dKm <= 30) matchedZone = 'Motijheel';
+      else if (dKm <= 35) matchedZone = 'Old Dhaka';
+      else matchedZone = 'Savar';
+
+      if (target === 'airport') {
+        const airSel = document.getElementById('air-pickup-select');
+        if (airSel) {
+          airSel.value = matchedZone;
+          onAirportPickupChange(matchedZone);
+        }
+      } else if (target === 'hourly') {
+        const hrInp = document.getElementById('hourly-pickup');
+        const locLabel = `${matchedZone} (${lat.toFixed(4)}° N, ${lng.toFixed(4)}° E)`;
+        if (hrInp) {
+          hrInp.value = locLabel;
+          updateHourlyLocation(locLabel);
+        }
+      } else if (target === 'modal') {
+        if (custMapInstance) {
+          if (typeof custMapInstance.flyTo === 'function') {
+            custMapInstance.flyTo({ center: [lng, lat], zoom: 15, duration: 600 });
+          } else if (typeof custMapInstance.setView === 'function') {
+            custMapInstance.setView([lat, lng], 15);
+          }
+        }
+        reverseGeocodeCustomerLocation(lat, lng);
+      }
+    },
+    (err) => {
+      if (btn) btn.classList.remove('loading');
+      console.warn('[GPS] Position error:', err.message);
+      if (target === 'airport') onAirportPickupChange('Gulshan');
+      else if (target === 'hourly') updateHourlyLocation('Gulshan 2, Dhaka');
+    },
+    { timeout: 7000, enableHighAccuracy: true }
+  );
+}
+
+async function reverseGeocodeCustomerLocation(lat, lng) {
+  try {
+    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`, {
+      headers: { 'Accept-Language': 'en' }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.display_name) {
+        const parts = data.display_name.split(', ');
+        const shortName = parts.slice(0, 3).join(', ');
+        custSelectedLocation.name = shortName;
+        const addrEl = document.getElementById('cust-modal-address');
+        const pinLabel = document.getElementById('cust-pin-label');
+        if (addrEl) addrEl.textContent = shortName;
+        if (pinLabel) pinLabel.textContent = shortName;
+        return;
+      }
+    }
+  } catch(e) {}
+
+  custSelectedLocation.name = `Location (${lat.toFixed(4)}° N, ${lng.toFixed(4)}° E), Dhaka`;
+  const addrEl = document.getElementById('cust-modal-address');
+  const pinLabel = document.getElementById('cust-pin-label');
+  if (addrEl) addrEl.textContent = custSelectedLocation.name;
+  if (pinLabel) pinLabel.textContent = custSelectedLocation.name;
+}
+
+function openCustomerMapModal(service = 'hourly') {
+  custActiveService = service;
+  const modal = document.getElementById('custMapModal');
+  if (modal) modal.style.display = 'flex';
+  setTimeout(() => {
+    initOrRefreshCustomerMap();
+  }, 100);
+}
+
+function closeCustomerMapModal() {
+  const modal = document.getElementById('custMapModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function initOrRefreshCustomerMap() {
+  const container = document.getElementById('cust-map-canvas');
+  if (!container) return;
+
+  if (typeof maplibregl === 'undefined' && typeof window.L === 'undefined') {
+    container.innerHTML = `
+      <div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;color:var(--text-secondary);">
+        <i class="ph ph-map-pin" style="font-size:3rem;color:var(--accent);margin-bottom:10px;"></i>
+        <h4 style="color:#fff;margin-bottom:6px;">Interactive Vector Map Active</h4>
+        <p style="font-size:0.85rem;max-width:380px;">Type in the search bar or pan the map to set your pickup location.</p>
+      </div>
+    `;
+    return;
+  }
+
+  if (!custMapInstance) {
+    let custMapLibreSuccess = false;
+    const canUseMapLibre = typeof maplibregl !== 'undefined' && (typeof maplibregl.supported === 'function' ? maplibregl.supported() : true);
+
+    if (canUseMapLibre) {
+      try {
+        custMapInstance = new maplibregl.Map({
+          container: 'cust-map-canvas',
+          style: CUST_CARTO_VECTOR_STYLES[custActiveMapTheme] || CUST_CARTO_VECTOR_STYLES.voyager,
+          center: [custSelectedLocation.lng, custSelectedLocation.lat],
+          zoom: 15,
+          pitch: isCustMap3D ? 45 : 0,
+          attributionControl: false
+        });
+
+        custMapInstance.addControl(new maplibregl.NavigationControl({ showCompass: true }), 'top-left');
+        custMapInstance.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-left');
+
+        custMapInstance.on('moveend', () => {
+          const center = custMapInstance.getCenter();
+          custSelectedLocation.lat = center.lat;
+          custSelectedLocation.lng = center.lng;
+          reverseGeocodeCustomerLocation(center.lat, center.lng);
+        });
+
+        custMapLibreSuccess = true;
+      } catch (e) {
+        console.warn('[Customer Map] MapLibre WebGL unavailable, falling back to Leaflet raster engine:', e);
+        custMapLibreSuccess = false;
+        custMapInstance = null;
+      }
+    }
+
+    if (!custMapLibreSuccess && typeof window.L !== 'undefined') {
+      custMapInstance = L.map('cust-map-canvas', {
+        center: [custSelectedLocation.lat, custSelectedLocation.lng],
+        zoom: 14,
+        zoomControl: false,
+        attributionControl: false
+      });
+      L.control.attribution({ position: 'bottomleft', prefix: false }).addTo(custMapInstance);
+      L.control.zoom({ position: 'topleft' }).addTo(custMapInstance);
+      custMapTileLayer = L.tileLayer(CUST_CARTO_RASTER_FALLBACK[custActiveMapTheme] || CUST_CARTO_RASTER_FALLBACK.voyager, {
+        attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+        maxZoom: 20
+      }).addTo(custMapInstance);
+
+      setTimeout(() => {
+        if (custMapInstance && typeof custMapInstance.invalidateSize === 'function') {
+          custMapInstance.invalidateSize();
+        }
+      }, 150);
+      setTimeout(() => {
+        if (custMapInstance && typeof custMapInstance.invalidateSize === 'function') {
+          custMapInstance.invalidateSize();
+        }
+      }, 350);
+    }
+  } else {
+    if (typeof custMapInstance.resize === 'function') custMapInstance.resize();
+    else if (typeof custMapInstance.invalidateSize === 'function') custMapInstance.invalidateSize();
+  }
+}
+
+function toggleCustMapPitch() {
+  if (!custMapInstance || typeof custMapInstance.easeTo !== 'function') return;
+  isCustMap3D = !isCustMap3D;
+  custMapInstance.easeTo({
+    pitch: isCustMap3D ? 45 : 0,
+    duration: 600
+  });
+  const label = document.getElementById('cust-pitch-label');
+  if (label) label.textContent = isCustMap3D ? '2D' : '3D';
+}
+
+function toggleCustMapTheme() {
+  if (!custMapInstance) return;
+  const THEME_CYCLE = ['voyager', 'dark', 'light'];
+  const currentIdx = THEME_CYCLE.indexOf(custActiveMapTheme);
+  custActiveMapTheme = THEME_CYCLE[(currentIdx + 1) % THEME_CYCLE.length];
+
+  if (typeof custMapInstance.setStyle === 'function') {
+    custMapInstance.setStyle(CUST_CARTO_VECTOR_STYLES[custActiveMapTheme]);
+  } else if (custMapTileLayer && typeof window.L !== 'undefined') {
+    custMapInstance.removeLayer(custMapTileLayer);
+    custMapTileLayer = L.tileLayer(CUST_CARTO_RASTER_FALLBACK[custActiveMapTheme] || CUST_CARTO_RASTER_FALLBACK.voyager).addTo(custMapInstance);
+  }
+
+  const themeIcon = document.getElementById('cust-theme-icon');
+  const themeLabel = document.getElementById('cust-theme-label');
+  if (themeLabel) {
+    themeLabel.textContent = custActiveMapTheme === 'voyager' ? 'Voyager' : (custActiveMapTheme === 'dark' ? 'Dark' : 'Positron');
+  }
+  if (themeIcon) {
+    themeIcon.className = custActiveMapTheme === 'dark' ? 'ph-bold ph-moon' : (custActiveMapTheme === 'voyager' ? 'ph-bold ph-sun' : 'ph-bold ph-map-trifold');
+  }
+}
+
+function confirmCustomerMapLocation() {
+  const chosen = custSelectedLocation.name;
+  if (custActiveService === 'hourly') {
+    const hrInp = document.getElementById('hourly-pickup');
+    if (hrInp) {
+      hrInp.value = chosen;
+      updateHourlyLocation(chosen);
+    }
+  }
+  closeCustomerMapModal();
+}
+
+window.detectCustomerGPSLocation = detectCustomerGPSLocation;
+window.openCustomerMapModal = openCustomerMapModal;
+window.closeCustomerMapModal = closeCustomerMapModal;
+window.confirmCustomerMapLocation = confirmCustomerMapLocation;
+window.toggleCustMapPitch = toggleCustMapPitch;
+window.toggleCustMapTheme = toggleCustMapTheme;
+
+// Auto-injected to fix Vite module scoping
+window.renderTrips = renderTrips;
+window.changeCustomerTripsPage = changeCustomerTripsPage;
+window._generateTripsHtml = _generateTripsHtml;
+window.renderCustomerFleet = renderCustomerFleet;
+window.changeCustomerFleetPage = changeCustomerFleetPage;
+window.openReviewModal = openReviewModal;
+window.closeReviewModal = closeReviewModal;
+window.submitReview = submitReview;
+window.saveCustomerProfile = saveCustomerProfile;
+window.cancelCustomerBooking = cancelCustomerBooking;
+window.toggleCustomerNotifs = toggleCustomerNotifs;
+window.filterCustomerTrips = filterCustomerTrips;
+</script>
+
+  <div class="overlay" id="review-modal-overlay" onclick="closeReviewModal()" style="display:none;"></div>
+  <div class="slide-panel" id="review-modal-panel" style="display:none;">
+    <div class="sp-head">
+      <div class="sp-title"><i class="ph-fill ph-star" style="color:var(--accent);"></i> Rate Your Journey</div>
+      <button class="btn-icon" style="border:none" onclick="closeReviewModal()" title="Close"><i class="ph ph-x"></i></button>
+    </div>
+    <div class="sp-body">
+      <input type="hidden" id="rev-booking-id" />
+      <div class="f-group">
+        <label class="f-label">Rating (1-5)</label>
+        <select id="rev-rating" class="f-input" aria-label="Trip Rating">
+          <option value="5">⭐⭐⭐⭐⭐ 5 - Excellent Chauffeur Service</option>
+          <option value="4">⭐⭐⭐⭐ 4 - Very Good Experience</option>
+          <option value="3">⭐⭐⭐ 3 - Average / Satisfactory</option>
+          <option value="2">⭐⭐ 2 - Poor Service</option>
+          <option value="1">⭐ 1 - Terrible / Unacceptable</option>
+        </select>
+      </div>
+      <div class="f-group">
+        <label class="f-label">How did you feel about this journey?</label>
+        <select id="rev-sentiment" class="f-input" aria-label="Customer Feeling Sentiment">
+          <option value="delighted">😊 Delighted / Flawless Ride</option>
+          <option value="positive" selected>👍 Satisfied / Good Experience</option>
+          <option value="constructive">😐 Constructive / Suggestions</option>
+          <option value="frustrated">😠 Frustrated / Problem Encountered</option>
+        </select>
+      </div>
+      <div class="f-group">
+        <label class="f-label">Feedback Category</label>
+        <select id="rev-category" class="f-input" aria-label="Feedback Category">
+          <option value="overall">Overall Journey Experience</option>
+          <option value="driver_service">Driver Courtesy & Punctuality</option>
+          <option value="vehicle_condition">Car Cleanliness & Comfort</option>
+          <option value="ac_cooling">AC Cooling & Temperature</option>
+          <option value="pricing_surge">Fare & Rush-Hour Surge</option>
+          <option value="app_experience">Booking & App Usability</option>
+        </select>
+      </div>
+      <div class="f-group" style="margin-bottom:0;">
+        <label class="f-label">Your Personal Feelings & Review Details</label>
+        <textarea id="rev-comment" class="f-input" rows="4" aria-label="Customer Personal Review Comment" placeholder="Share your honest feelings about the trip, driver, car, or route..."></textarea>
+      </div>
+    </div>
+    <div class="sp-foot">
+      <button type="button" class="btn btn-outline" onclick="closeReviewModal()">Cancel</button>
+      <button type="button" class="btn-primary" onclick="submitReview()"><i class="ph-bold ph-paper-plane-tilt"></i> Submit Review</button>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       CUSTOMER PORTAL INTERACTIVE MAP MODAL (#custMapModal)
+       ========================================================= -->
+  <div class="map-modal-overlay" id="custMapModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+    <div class="map-modal-box" style="background:#111113; border:1px solid rgba(255,255,255,0.15); border-radius:16px; width:100%; max-width:680px; overflow:hidden; box-shadow:0 24px 60px rgba(0,0,0,0.8); display:flex; flex-direction:column;">
+      <div style="padding:16px 20px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1);">
+        <div style="display:flex; align-items:center; gap:8px; font-weight:700; color:#fff;">
+          <i class="ph-fill ph-map-pin" style="color:var(--accent);"></i>
+          <span>Select Pickup Spot on Map</span>
+        </div>
+        <button type="button" onclick="closeCustomerMapModal()" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:1.2rem;"><i class="ph ph-x"></i></button>
+      </div>
+
+      <!-- Quick Location Search Bar -->
+      <div style="padding:12px 20px; background:#161618; border-bottom:1px solid rgba(255,255,255,0.06); display:flex; gap:10px;">
+        <div style="flex:1; position:relative;">
+          <input type="text" id="cust-map-search" class="f-input" placeholder="Search Dhaka landmark, area, or street..." style="width:100%; padding-left:36px;" oninput="onCustMapSearch(this.value)"/>
+          <i class="ph ph-magnifying-glass" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text-tertiary);"></i>
+        </div>
+        <button type="button" class="btn-location-action" id="btn-modal-gps" onclick="detectCustomerGPSLocation('modal')" style="padding:8px 14px; white-space:nowrap;">
+          <i class="ph-bold ph-crosshair"></i> GPS Center
+        </button>
+      </div>
+
+      <!-- Map Canvas & Interactive Center Pin -->
+      <div style="position:relative; width:100%; height:380px; background:#18181b; overflow:hidden;" id="cust-map-container">
+        <div id="cust-map-canvas" style="width:100%; height:100%;"></div>
+        
+        <!-- Center Pin Marker -->
+        <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -100%); z-index:900; pointer-events:none; display:flex; flex-direction:column; align-items:center;">
+          <div style="background:#111113; border:1px solid var(--accent); color:#fff; font-size:0.75rem; font-weight:700; padding:4px 10px; border-radius:12px; margin-bottom:4px; box-shadow:0 4px 12px rgba(0,0,0,0.6);" id="cust-pin-label">Gulshan 2, Dhaka</div>
+          <div style="width:36px; height:36px; border-radius:50%; background:var(--accent); border:3px solid #000; box-shadow:0 0 16px rgba(212,255,0,0.8); display:flex; align-items:center; justify-content:center; color:#000; font-size:16px;">
+            <i class="ph-bold ph-map-pin"></i>
+          </div>
+        </div>
+
+        <!-- Clean Floating Controls (Top Right: 3D + Theme pill bar, Bottom Right: Locate) -->
+        <div style="position:absolute; top:14px; right:14px; display:flex; flex-direction:row; align-items:center; gap:8px; z-index:1000;">
+          <button type="button" class="btn-floating-pitch" onclick="toggleCustMapPitch()" title="Toggle 3D" style="background:#141416; border:1px solid rgba(255,255,255,0.2); color:#fff; padding:6px 12px; border-radius:8px; font-size:0.75rem; font-weight:700; cursor:pointer;">
+            <i class="ph-bold ph-cube"></i> <span id="cust-pitch-label">3D</span>
+          </button>
+          <button type="button" class="btn-floating-theme" onclick="toggleCustMapTheme()" title="Switch Theme" style="background:#141416; border:1px solid rgba(255,255,255,0.2); color:#fff; padding:6px 12px; border-radius:8px; font-size:0.75rem; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px;">
+            <i class="ph-bold ph-sun" id="cust-theme-icon"></i> <span id="cust-theme-label">Voyager</span>
+          </button>
+        </div>
+
+        <button type="button" onclick="detectCustomerGPSLocation('modal')" title="Center to GPS" style="position:absolute; bottom:20px; right:20px; width:44px; height:44px; border-radius:50%; background:#141416; border:1px solid rgba(255,255,255,0.2); color:#fff; font-size:1.2rem; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,0.6); z-index:1000; cursor:pointer;">
+          <i class="ph-bold ph-crosshair"></i>
+        </button>
+      </div>
+
+      <!-- Confirmation Bar -->
+      <div style="padding:16px 20px; background:#141416; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:space-between; align-items:center; gap:16px;">
+        <div style="display:flex; flex-direction:column; min-width:0;">
+          <span style="font-size:0.72rem; color:var(--text-tertiary); text-transform:uppercase; font-weight:600;">Selected Location</span>
+          <div style="font-size:0.9rem; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" id="cust-modal-address">Gulshan 2 Circle, Dhaka</div>
+        </div>
+        <button type="button" class="btn-primary" onclick="confirmCustomerMapLocation()" style="padding:10px 20px; font-size:0.85rem; font-weight:700; border-radius:8px; white-space:nowrap;">
+          <i class="ph-bold ph-check"></i> Set Location
+        </button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>List Your Car — Rownaa</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/design.css"/>
+<style>
+  .wizard-page { min-height: 100vh; padding: 160px 4vw 80px; background: var(--bg-color); }
+  .wizard-inner { max-width: 800px; margin: 0 auto; }
+  .wizard-header { text-align: center; margin-bottom: 4rem; }
+  .wizard-header h1 { font-size: clamp(2rem, 4vw, 3rem); text-transform: uppercase; margin-bottom: 1rem; }
+  .wizard-header p { color: var(--text-muted); font-size: 1.125rem; max-width: 500px; margin: 0 auto; }
+  
+  .w-progress { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4rem; position: relative; }
+  .w-line { position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border); z-index: 1; }
+  .w-step { position: relative; z-index: 2; background: var(--bg-color); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; border: 1px solid var(--border); color: var(--text-muted); transition: all 0.4s; }
+  .w-step.active { background: var(--surface); color: var(--text-main); border-color: var(--text-main); transform: scale(1.1); }
+  .w-step.done { background: var(--accent); color: #000; border-color: var(--accent); }
+  
+  .w-card { background: var(--surface); border: 1px solid var(--border); border-radius: 1.5rem; padding: 4rem; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
+  .w-card h2 { font-size: 2rem; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .w-card p.w-hint { color: var(--text-muted); margin-bottom: 3rem; }
+  
+  .w-form { display: flex; flex-direction: column; gap: 1.5rem; }
+  .wf-row { display: flex; gap: 1rem; }
+  .wf-field { flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
+  .wf-field label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+  .wf-field input, .wf-field select { background: var(--bg-color); border: 1px solid var(--border); padding: 1rem; border-radius: 0.5rem; color: var(--text-main); font-family: var(--font-body); font-size: 1rem; transition: border-color 0.3s; outline: none; width: 100%; }
+  .wf-field input:focus, .wf-field select:focus { border-color: var(--accent); }
+  
+  .w-upload { border: 1px dashed var(--border); border-radius: 0.5rem; padding: 2rem; text-align: center; background: rgba(255,255,255,0.02); transition: all 0.3s; }
+  .w-upload:hover { border-color: var(--accent); background: rgba(212, 255, 0, 0.05); }
+  .w-upload p { font-weight: 500; margin-bottom: 0.25rem; }
+  .w-upload small { color: var(--text-muted); font-size: 0.75rem; }
+  
+  .w-actions { display: flex; gap: 1rem; margin-top: 3rem; }
+  .btn-prev { flex: 1; padding: 1.25rem; background: transparent; border: 1px solid var(--border); color: var(--text-main); font-family: var(--font-display); font-weight: 700; text-transform: uppercase; border-radius: 0.5rem; transition: background 0.3s; }
+  .btn-prev:hover { background: rgba(255,255,255,0.05); }
+  .btn-next { flex: 2; padding: 1.25rem; background: var(--text-main); border: none; color: var(--bg-color); font-family: var(--font-display); font-weight: 700; text-transform: uppercase; border-radius: 0.5rem; transition: background 0.3s, transform 0.2s; }
+  .btn-next:hover { background: var(--accent); transform: translateY(-2px); }
+  
+  @media (max-width: 768px) {
+    .w-card { padding: 2rem; }
+    .wf-row { flex-direction: column; gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-nav scrolled" id="site-nav">
+  <div class="nav-wrap">
+    <a href="index.html" class="wordmark">Rownaa<sup>®</sup></a>
+    <div class="nav-right">
+      <a href="login.html" class="nav-text-link">Sign In</a>
+    </div>
+  </div>
+</header>
+
+<div class="wizard-page">
+  <div class="wizard-inner" data-reveal>
+    <div class="wizard-header">
+      <h1>Partner with Rownaa</h1>
+      <p>Join Bangladesh's premium car rental network. High-quality clients, verified trips, reliable payouts.</p>
+    </div>
+    
+    <div class="w-progress">
+      <div class="w-line"></div>
+      <div class="w-step active" id="ws-ind-1">1</div>
+      <div class="w-step" id="ws-ind-2">2</div>
+      <div class="w-step" id="ws-ind-3">3</div>
+    </div>
+    
+    <!-- STEP 1 -->
+    <div class="w-card" id="w-step-1">
+      <h2>Owner Information</h2>
+      <p class="w-hint">Details about you or your rental agency.</p>
+      <div class="w-form">
+        <div class="wf-field"><label>Full Name / Agency Name</label><input type="text" placeholder="Enter name"/></div>
+        <div class="wf-row">
+          <div class="wf-field"><label>Phone Number</label><input type="tel" placeholder="+880"/></div>
+          <div class="wf-field"><label>Business Type</label><select><option>Individual Owner</option><option>Rental Agency</option></select></div>
+        </div>
+        <div class="wf-field"><label>Primary Operating Zone</label><input type="text" placeholder="e.g. Dhaka (Gulshan)"/></div>
+        <div class="w-actions">
+          <button class="btn-next" onclick="goStep(2)">Continue →</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- STEP 2 -->
+    <div class="w-card" id="w-step-2" style="display:none">
+      <h2>Vehicle Details</h2>
+      <p class="w-hint">Information about the primary vehicle you are listing.</p>
+      <div class="w-form">
+        <div class="wf-row">
+          <div class="wf-field"><label>Car Model</label><input type="text" placeholder="e.g. Toyota Axio"/></div>
+          <div class="wf-field"><label>Year</label><input type="number" placeholder="2018"/></div>
+        </div>
+        <div class="wf-row">
+          <div class="wf-field"><label>Registration No.</label><input type="text" placeholder="DHA-GA-1234"/></div>
+          <div class="wf-field"><label>Seats</label><select><option>4</option><option>6</option><option>10</option></select></div>
+        </div>
+        <div class="wf-field"><label>Car Photos</label><div class="w-upload"><p>Click to upload photos</p><small>Front, back, and interior required.</small></div></div>
+        <div class="w-actions">
+          <button class="btn-prev" onclick="goStep(1)">← Back</button>
+          <button class="btn-next" onclick="goStep(3)">Continue →</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- STEP 3 -->
+    <div class="w-card" id="w-step-3" style="display:none">
+      <h2>Verification & Payout</h2>
+      <p class="w-hint">Upload documents and set up how you get paid.</p>
+      <div class="w-form">
+        <div class="wf-field"><label>NID / Trade License</label><div class="w-upload"><p>Upload Document</p></div></div>
+        <div class="wf-row">
+          <div class="wf-field"><label>Payout Method</label><select><option>bKash</option><option>Nagad</option><option>Bank Transfer</option></select></div>
+          <div class="wf-field"><label>Account Number</label><input type="text" placeholder="Enter number"/></div>
+        </div>
+        <div class="w-actions">
+          <button class="btn-prev" onclick="goStep(2)">← Back</button>
+          <button class="btn-next" style="background:var(--accent);color:#000" onclick="alert('Application Submitted successfully! Our team will review within 24 hours.')">Submit Application</button>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  function goStep(n) {
+    document.querySelectorAll('.w-card').forEach(c => c.style.display = 'none');
+    document.getElementById('w-step-' + n).style.display = 'block';
+    
+    for(let i=1; i<=3; i++) {
+      const ind = document.getElementById('ws-ind-' + i);
+      ind.classList.remove('active', 'done');
+      if (i < n) ind.classList.add('done');
+      if (i === n) ind.classList.add('active');
+    }
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+</script>
+</body>
+</html>

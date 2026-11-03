@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | JKH Jesan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Manrope', 'sans-serif'], display: ['Syne', 'sans-serif'], serif: ['Playfair Display', 'serif'] },
+                    colors: { dark: '#050505', surface: '#121212', accent: '#FF4500' }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+    <style>
+        body { background-color: #050505; color: #ffffff; overflow-x: hidden; }
+        ::selection { background: #FF4500; color: #fff; }
+        .noise::before {
+            content: ""; position: fixed; inset: 0;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.05; pointer-events: none; z-index: 9999;
+        }
+        .hover-flip { position: relative; overflow: hidden; display: inline-block; padding-bottom: 2px; }
+        .hover-flip span { display: inline-block; transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1); }
+        .hover-flip::after { content: attr(data-text); position: absolute; top: 100%; left: 0; width: 100%; height: 100%; color: #FF4500; transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1); }
+        .hover-flip:hover span { transform: translateY(-100%); }
+        .hover-flip:hover::after { transform: translateY(-100%); }
+        ::-webkit-scrollbar { width: 0px; }
+        
+        .bento-border { border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; background: #121212; transition: border-color 0.4s ease; }
+        .bento-border:hover { border-color: rgba(255, 69, 0, 0.4); }
+
+        /* Input Styles */
+        input, textarea {
+            background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2);
+            color: white; font-family: 'Syne', sans-serif; font-size: 1.5rem; padding: 1.5rem 0; width: 100%;
+            transition: border-color 0.3s;
+        }
+        input:focus, textarea:focus { outline: none; border-bottom-color: #FF4500; }
+        input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.2); font-weight: 600; }
+        
+        .btn-oryzo {
+            background: transparent; border: 1px solid rgba(255, 255, 255, 0.2); color: white;
+            padding: 1.5rem 4rem; border-radius: 100px; font-family: 'Manrope', sans-serif;
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.2em; font-weight: 600;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden;
+            width: max-content; margin-top: 3rem; cursor: pointer;
+        }
+        .btn-oryzo::before {
+            content: ''; position: absolute; top: 100%; left: 0; width: 100%; height: 100%;
+            background: #FF4500; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: -1;
+        }
+        .btn-oryzo:hover { border-color: #FF4500; }
+        .btn-oryzo:hover::before { transform: translateY(-100%); }
+    </style>
+</head>
+<body class="noise">
+
+    <!-- Image Logo -->
+    <div class="fixed top-8 left-8 z-40 hidden md:block mix-blend-screen w-32">
+        <a href="index - Copy (2).html">
+            <img src="../JKH_ART_WORK-removebg-preview.png" alt="JKH Logo" class="w-full h-auto filter brightness-0 invert opacity-90 hover:opacity-100 transition-opacity">
+        </a>
+    </div>
+
+    <nav class="fixed top-8 left-1/2 -translate-x-1/2 z-50 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-full px-8 py-4 flex items-center gap-10 text-[10px] font-bold uppercase tracking-[0.2em] text-white shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+        <a href="index - Copy (2).html" class="hover-flip" data-text="HOME"><span>HOME</span></a>
+        <a href="about.html" class="hover-flip" data-text="ABOUT"><span>ABOUT</span></a>
+        <a href="works.html" class="hover-flip" data-text="WORKS"><span>WORKS</span></a>
+        <a href="gallery.html" class="hover-flip" data-text="ARCHIVE"><span>ARCHIVE</span></a>
+        <a href="contact.html" class="hover-flip" data-text="CONTACT"><span class="text-accent">CONTACT</span></a>
+    </nav>
+
+    <!-- 1. MASSIVE CONTACT HERO -->
+    <section class="pt-48 pb-20 px-4 md:px-12 relative z-20 min-h-[70vh] flex flex-col justify-center border-b border-white/5">
+        <div class="container mx-auto max-w-[1600px] text-center">
+            <h1 class="font-display font-extrabold text-[12vw] md:text-[8vw] leading-none uppercase tracking-tighter text-white gs-reveal break-words">
+                Let's <span class="text-transparent" style="-webkit-text-stroke: 1px rgba(255,255,255,0.2);">Talk.</span>
+            </h1>
+            <p class="font-sans text-gray-400 text-xl max-w-2xl mx-auto mt-12 gs-reveal">Looking for a world-class audio architect for your next major project? Fill out the form below or reach out directly.</p>
+        </div>
+    </section>
+
+    <!-- 2. CONTACT DETAILS & FORM -->
+    <section class="py-32 px-4 md:px-12 relative z-20 min-h-screen">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent/5 rounded-full blur-[150px] pointer-events-none"></div>
+
+        <div class="container mx-auto max-w-[1600px]">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-20">
+                
+                <!-- Left Details Box -->
+                <div class="lg:col-span-5 bento-border p-12 bg-dark gs-reveal flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-display font-bold text-4xl uppercase mb-12">Direct Lines</h3>
+                        
+                        <div class="space-y-12">
+                            <div>
+                                <p class="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-gray-500 mb-2">Email Address</p>
+                                <a href="mailto:jkhjesan@gmail.com" class="font-display text-2xl md:text-3xl font-bold uppercase hover:text-accent transition-colors">jkhjesan@gmail.com</a>
+                            </div>
+                            
+                            <div>
+                                <p class="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-gray-500 mb-2">WhatsApp / Phone</p>
+                                <a href="https://wa.me/8801938172454" class="font-display text-2xl md:text-3xl font-bold uppercase hover:text-accent transition-colors">+88 01938 172454</a>
+                            </div>
+
+                            <div>
+                                <p class="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-gray-500 mb-2">Location</p>
+                                <p class="font-display text-xl font-bold uppercase">Niketon, Dhaka</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-20 flex gap-8 border-t border-white/10 pt-8">
+                        <a href="https://www.facebook.com/jkh.jesan.9/" target="_blank" class="text-white hover:text-accent text-2xl transition-colors"><i class="fab fa-facebook"></i></a>
+                        <a href="https://youtube.com/@jkhjesan?si=00dHez7xnIWZATza" target="_blank" class="text-white hover:text-accent text-2xl transition-colors"><i class="fab fa-youtube"></i></a>
+                        <a href="https://open.spotify.com/artist/1vglzg9TEGd8oZGOyuNQ94?si=etdauentSBmpLOu87YKOnQ" target="_blank" class="text-white hover:text-accent text-2xl transition-colors"><i class="fab fa-spotify"></i></a>
+                    </div>
+                </div>
+
+                <!-- Right Form Box -->
+                <div class="lg:col-span-7 bento-border p-12 lg:p-20 bg-surface gs-reveal">
+                    <h3 class="font-display font-bold text-4xl uppercase mb-12">Project Inquiry</h3>
+                    <form class="flex flex-col gap-12">
+                        <div class="relative">
+                            <input type="text" placeholder="YOUR NAME" required>
+                        </div>
+                        <div class="relative">
+                            <input type="email" placeholder="EMAIL ADDRESS" required>
+                        </div>
+                        <div class="relative">
+                            <input type="text" placeholder="BUDGET RANGE (OPTIONAL)">
+                        </div>
+                        <div class="relative">
+                            <textarea placeholder="PROJECT DETAILS" rows="3" required></textarea>
+                        </div>
+                        <button type="button" class="btn-oryzo">Submit Inquiry</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <section class="py-12 px-4 md:px-12 bg-white text-black relative z-30">
+        <div class="w-full pt-8 flex flex-col md:flex-row justify-between items-center text-[10px] font-bold uppercase tracking-[0.2em] font-sans text-gray-500">
+            <p>&copy; 2026 JKH JESAN</p>
+            <p>DESIGNED IN DHAKA</p>
+        </div>
+    </section>
+
+    <script>
+        const lenis = new Lenis({ duration: 1.2, smooth: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.utils.toArray('.gs-reveal').forEach(elem => {
+            gsap.fromTo(elem, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out", scrollTrigger: { trigger: elem, start: "top 85%" }});
+        });
+    </script>
+</body>
+</html>

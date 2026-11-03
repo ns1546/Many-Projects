@@ -1,0 +1,101 @@
+/* ====================================================
+   CRZ TRAVEL — pages.css
+   Styles for Visas, Packages, Contact sub-pages
+   ==================================================== */
+
+/* ===== PAGE HERO ===== */
+.page-hero{padding:160px 0 80px;text-align:center;position:relative;overflow:hidden;background:linear-gradient(180deg,#f8fafc,#fff)}
+.page-hero h1{font-family:'Plus Jakarta Sans',serif;font-size:clamp(2.2rem,5vw,3.4rem);font-weight:900;color:#0f172a;margin-bottom:14px}
+.page-hero p{font-size:1.05rem;color:#64748b;max-width:500px;margin:0 auto}
+.page-hero-blob{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.1),transparent 70%);top:-150px;right:-100px;pointer-events:none}
+
+/* ===== VISA FULL CARDS ===== */
+.visa-full-card{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-bottom:80px;padding:48px;background:#fff;border-radius:8px;border:1px solid #e2e8f0;opacity:0;transform:translateY(30px);transition:all .6s cubic-bezier(.4,0,.2,1)}
+.visa-full-card.visible{opacity:1;transform:translateY(0)}
+.visa-full-card:hover{box-shadow:0 10px 30px rgba(15,23,42,.08);border-color:transparent}
+.visa-full-card.reverse{direction:rtl}
+.visa-full-card.reverse>*{direction:ltr}
+.vfc-img{border-radius:8px;overflow:hidden}
+.vfc-img img{width:100%;height:320px;object-fit:cover;transition:transform .6s}
+.visa-full-card:hover .vfc-img img{transform:scale(1.06)}
+.vfc-flag{font-size:2.5rem;margin-bottom:8px}
+.vfc-body h2{font-family:'Plus Jakarta Sans',serif;font-size:1.8rem;font-weight:800;color:var(--c-dark);margin-bottom:10px;line-height:1.3}
+.vfc-tag{display:inline-block;background:var(--c-accent);color:#fff;font-size:.72rem;font-weight:700;padding:5px 14px;border-radius:4px;margin-bottom:14px;letter-spacing:1px;text-transform:uppercase}
+.vfc-body p{color:#64748b;font-size:.92rem;margin-bottom:20px;line-height:1.8}
+.vfc-list{margin-bottom:24px}
+.vfc-list li{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:.88rem;color:#334155}
+.vfc-list li i{color:#10b981;font-size:.8rem}
+
+/* ===== PACKAGES GRID ===== */
+.pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.pkg-card{background:#fff;border-radius:8px;overflow:hidden;border:1px solid #e2e8f0;opacity:0;transform:translateY(30px);transition:all .5s cubic-bezier(.4,0,.2,1)}
+.pkg-card.visible{opacity:1;transform:translateY(0)}
+.pkg-card:hover{transform:translateY(-10px)!important;box-shadow:0 10px 30px rgba(15,23,42,.08);border-color:transparent}
+.pkg-img-wrap{position:relative;height:220px;overflow:hidden}
+.pkg-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.pkg-card:hover .pkg-img-wrap img{transform:scale(1.08)}
+.pkg-img-tag{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.95);padding:5px 12px;border-radius:4px;font-size:.72rem;font-weight:700;color:var(--c-accent);letter-spacing:1px;text-transform:uppercase}
+.pkg-body{padding:24px}
+.pkg-body h3{font-family:var(--font-sans);font-size:1.1rem;font-weight:700;color:var(--c-dark);margin-bottom:10px}
+.pkg-body>p{font-size:.85rem;color:#64748b;margin-bottom:16px;line-height:1.7}
+.pkg-body ul{margin-bottom:20px}
+.pkg-body ul li{display:flex;align-items:center;gap:8px;font-size:.82rem;color:#475569;padding:3px 0}
+.pkg-body ul li i{color:#10b981;font-size:.7rem}
+.pkg-foot{display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid #e2e8f0}
+.pkg-price{font-size:.82rem;color:#94a3b8;font-weight:600}
+
+/* ===== CONTACT LAYOUT ===== */
+.contact-layout{display:grid;grid-template-columns:1.3fr .7fr;gap:40px;align-items:start}
+.contact-form-card{background:#fff;border-radius:8px;padding:44px;border:1px solid #e2e8f0;box-shadow:0 4px 12px rgba(15,23,42,.04)}
+.contact-form-card h3{font-family:var(--font-sans);font-size:1.2rem;font-weight:700;color:var(--c-dark);margin-bottom:28px;display:flex;align-items:center;gap:10px}
+.contact-form-card h3 i{color:var(--c-accent)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fg{margin-bottom:18px}
+.fg label{display:block;font-size:.78rem;font-weight:700;color:#64748b;margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase}
+.fg input,.fg select,.fg textarea{width:100%;padding:14px 18px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:4px;color:var(--c-dark);font-size:.9rem;font-family:var(--font-sans);transition:all .3s;outline:none}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--c-accent);background:#fff;box-shadow:0 0 0 4px rgba(15,82,186,.08)}
+.fg input::placeholder,.fg textarea::placeholder{color:#94a3b8}
+.fg select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2394a3b8' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:20px}
+.fg textarea{resize:vertical;min-height:100px}
+.btn-full{width:100%;justify-content:center}
+.form-success{text-align:center;padding:60px 20px}
+.form-success i{font-size:3.5rem;color:#10b981;margin-bottom:16px;animation:pop .5s cubic-bezier(.4,0,.2,1)}
+@keyframes pop{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+.form-success h3{font-size:1.3rem;color:#0f172a;margin-bottom:6px}
+.form-success p{color:#64748b}
+
+/* Contact Info Side */
+.contact-info-side{display:flex;flex-direction:column;gap:20px}
+.ci-card{background:#fff;border-radius:8px;padding:28px;border:1px solid #e2e8f0}
+.ci-card h4{font-family:var(--font-sans);font-size:.95rem;font-weight:700;color:var(--c-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.ci-card h4 i{color:var(--c-accent)}
+.ci-wa h4 i{color:#25d366}
+.ci-em h4 i{color:#3b82f6}
+.ci-item{display:block;padding:8px 0;color:#475569;transition:all .3s}
+.ci-item:hover{color:var(--c-accent);transform:translateX(4px)}
+.ci-item strong{font-size:.88rem}
+.contact-social-row{display:flex;gap:12px}
+.cs-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:4px;font-weight:600;font-size:.88rem;transition:all .35s}
+.cs-btn.fb{background:#f8fafc;color:#1877f2;border:1px solid #e2e8f0}
+.cs-btn.fb:hover{background:#1877f2;color:#fff;border-color:#1877f2}
+.cs-btn.wa{background:#f8fafc;color:#25d366;border:1px solid #e2e8f0}
+.cs-btn.wa:hover{background:#25d366;color:#fff;border-color:#25d366}
+.ci-note{display:flex;gap:12px;padding:20px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0}
+.ci-note i{color:var(--c-accent);font-size:1.1rem;flex-shrink:0;margin-top:2px}
+.ci-note p{font-size:.82rem;color:#475569;line-height:1.6}
+.ci-note strong{color:var(--c-dark)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+  .visa-full-card{grid-template-columns:1fr;gap:24px;padding:28px}
+  .visa-full-card.reverse{direction:ltr}
+  .vfc-img img{height:240px}
+  .pkg-grid{grid-template-columns:repeat(2,1fr)}
+  .contact-layout{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .pkg-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .contact-social-row{flex-direction:column}
+  .contact-form-card{padding:28px 20px}
+}

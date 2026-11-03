@@ -1,0 +1,25 @@
+TAWSIF MAHBUB OFFICIAL WEBSITE — NETLIFY DEPLOYMENT GUIDE
+=============================================================
+
+HOW TO DEPLOY ONLINE IN 30 SECONDS:
+
+METHOD 1: DRAG & DROP (Fastest & Free)
+1. Go to https://app.netlify.com/drop in your web browser.
+2. Sign in to your Netlify account (or sign up for free).
+3. Drag and drop this entire "netlify-deploy" folder (or the "netlify-deploy.zip" file) onto the upload box on the Netlify Drop page.
+4. Netlify will deploy your site instantly and give you a live URL (e.g., https://tawsif-mahbub-official.netlify.app).
+5. (Optional) In Site Settings > Domain Management, you can connect your custom domain name (e.g., tawsifmahbub.com).
+
+METHOD 2: CONNECT VIA GITHUB / GIT REPOSITORY
+1. Push this project to GitHub.
+2. In Netlify, click "Add new site" > "Import an existing project".
+3. Select your GitHub repository.
+4. Netlify will automatically detect:
+   - Build command: npm run build
+   - Publish directory: dist
+   (Configured via the included netlify.toml)
+5. Click "Deploy site". Every git push will now automatically re-deploy your site!
+
+INCLUDED CONFIGURATIONS:
+- _redirects: Configured with "/* /index.html 200" so all SPA sub-pages (/biography, /filmography, /archive, /contact) work without 404 errors on page reload.
+- netlify.toml: Configures immutable asset caching and modern security headers.

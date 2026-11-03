@@ -1,0 +1,1633 @@
+/* ── LedgerX Mobile Design System (bKash Ergonomic Fintech Architecture) ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap');
+
+:root {
+  /* bKash Signature Crimson / Vivid Pink Palette */
+  --bk-pink: #E2136E;
+  --bk-pink-dark: #C2185B;
+  --bk-pink-light: #F0287D;
+  --bk-pink-soft: #FFF0F6;
+  --bk-pink-tint: #FCE7F3;
+  --bk-pink-glow: rgba(226, 19, 110, 0.25);
+  --bk-pink-gradient: linear-gradient(180deg, #E2136E 0%, #D81B60 100%);
+  --bk-pink-h-gradient: linear-gradient(135deg, #E2136E 0%, #C2185B 100%);
+
+  /* Accent Colors */
+  --bk-green: #00A86B;
+  --bk-green-soft: #ECFDF5;
+  --bk-blue: #1E60D5;
+  --bk-blue-soft: #EFF6FF;
+  --bk-purple: #7C3AED;
+  --bk-purple-soft: #F5F3FF;
+  --bk-amber: #F59E0B;
+  --bk-amber-soft: #FFFBEB;
+  --bk-coral: #E11D48;
+  --bk-coral-soft: #FFF1F2;
+  --bk-teal: #0D9488;
+  --bk-teal-soft: #F0FDFA;
+
+  /* Light Theme (Authentic bKash Default) */
+  --bk-bg: #F4F6F9;
+  --bk-surface: #FFFFFF;
+  --bk-card: #FFFFFF;
+  --bk-card-hover: #F8FAFC;
+  --bk-border: #EEEEEE;
+  --bk-border-light: #F3F4F6;
+  --bk-text-primary: #1C1C1E;
+  --bk-text-secondary: #4B5563;
+  --bk-text-muted: #9CA3AF;
+  --bk-header-text: #FFFFFF;
+  --bk-header-sub: rgba(255, 255, 255, 0.82);
+
+  /* Radius & Shadows */
+  --bk-radius-sm: 8px;
+  --bk-radius-md: 14px;
+  --bk-radius-lg: 18px;
+  --bk-radius-xl: 24px;
+  --bk-radius-full: 9999px;
+
+  --bk-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --bk-shadow-card: 0 4px 16px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+  --bk-shadow-float: 0 8px 24px rgba(226, 19, 110, 0.28);
+  --bk-shadow-modal: 0 -8px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Dark Theme Overrides (Optional User Toggle) */
+.lx-mobile-app.theme-dark {
+  --bk-bg: #0B0F19;
+  --bk-surface: #111827;
+  --bk-card: #162032;
+  --bk-card-hover: #1D2A42;
+  --bk-border: rgba(255, 255, 255, 0.08);
+  --bk-border-light: rgba(255, 255, 255, 0.04);
+  --bk-text-primary: #F9FAFB;
+  --bk-text-secondary: #9CA3AF;
+  --bk-text-muted: #6B7280;
+  --bk-header-text: #FFFFFF;
+  --bk-header-sub: rgba(255, 255, 255, 0.75);
+}
+
+/* Base App Setup */
+.lx-mobile-app {
+  font-family: 'Inter', 'Noto Sans Bengali', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+  background: var(--bk-bg);
+  color: var(--bk-text-primary);
+}
+
+.lx-font-display {
+  font-family: 'Outfit', 'Inter', 'Noto Sans Bengali', sans-serif;
+}
+
+/* Tactile Mobile Touch Physics & Spring Hand-Feel */
+.lx-touch-btn {
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s ease, filter 0.15s ease !important;
+  will-change: transform;
+}
+
+.lx-touch-btn:active {
+  transform: scale(0.93) translateY(2px) !important;
+  filter: brightness(0.92) contrast(1.05) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18) !important;
+}
+
+.lx-touch-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.lx-touch-btn:active::after {
+  opacity: 1;
+}
+
+/* Device Shell & Frame */
+.lx-device-wrapper {
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 10%, #FFFFFF 0%, #F1F5F9 60%, #E2E8F0 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.lx-top-showcase-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 480px;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 6px 14px;
+  border-radius: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+.full-presentation .lx-top-showcase-bar {
+  max-width: 720px;
+}
+
+.lx-brand-indicator-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--bk-pink);
+  box-shadow: 0 0 8px var(--bk-pink);
+}
+
+.lx-edition-badge {
+  font-size: 9.5px;
+  font-weight: 800;
+  background: #FFF0F6;
+  color: var(--bk-pink);
+  padding: 1px 6px;
+  border-radius: 8px;
+  border: 1px solid #FCE7F3;
+}
+
+.lx-active-screen-chip {
+  font-size: 11px;
+  font-weight: 700;
+  color: #4B5563;
+  background: #F3F4F6;
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+
+.lx-home-pill-btn {
+  background: var(--bk-pink-soft);
+  border: 1px solid var(--bk-pink-tint);
+  color: var(--bk-pink);
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 12px;
+  padding: 3px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.lx-tool-btn {
+  background: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 4px 9px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #4B5563;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.lx-tool-btn.active-mode {
+  background: #FFF0F6;
+  border-color: #FCE7F3;
+  color: var(--bk-pink);
+}
+
+.lx-device-frame {
+  width: 100%;
+  max-width: 416px;
+  height: 840px;
+  max-height: calc(100vh - 70px);
+  background: var(--bk-bg);
+  color: var(--bk-text-primary);
+  border-radius: 44px;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.22), 0 0 0 8px #0F172A, 0 0 0 10px #334155;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateZ(0);
+}
+
+.lx-device-frame.full-screen-mode {
+  max-width: 720px;
+  height: 94vh;
+  max-height: 94vh;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+.lx-device-frame.phone-frame-mode {
+  max-width: 416px;
+  height: 840px;
+  max-height: calc(100vh - 70px);
+}
+
+/* Robust Containment: Keep all drawers, modals, and backdrops strictly inside device frame */
+.lx-device-frame {
+  contain: paint layout;
+  isolation: isolate;
+}
+
+.lx-device-frame .bk-slide-drawer-backdrop,
+.lx-device-frame .bk-modal-backdrop,
+.lx-device-frame [data-backdrop="modal"] {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  border-radius: inherit !important;
+  z-index: 9999 !important;
+}
+
+/* Ensure toast notifications inside phone frame stay centered and never go out of screen */
+.lx-device-frame .lx-toast-banner {
+  position: absolute !important;
+  top: 16px !important;
+  left: 14px !important;
+  right: 14px !important;
+  max-width: 388px !important;
+  margin: 0 auto !important;
+  transform: none !important;
+  z-index: 999999 !important;
+}
+
+/* True Native Fullscreen Responsiveness on Real Mobile Screens (<= 640px) */
+@media (max-width: 640px) {
+  .lx-device-wrapper {
+    padding: 0 !important;
+    background: var(--bk-bg) !important;
+    min-height: 100dvh !important;
+    height: 100dvh !important;
+    justify-content: flex-start !important;
+  }
+
+  .lx-top-showcase-bar {
+    display: none !important;
+  }
+
+  .lx-device-frame {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .lx-device-notch-bar {
+    display: none !important;
+  }
+
+  .lx-screen-body {
+    height: 100% !important;
+  }
+
+  /* Status Bar Safe Area Padding for Notch & Status Bar */
+  .bk-header-container {
+    padding-top: max(calc(env(safe-area-inset-top, 0px) + 16px), 54px) !important;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+    padding-bottom: 22px !important;
+  }
+
+  .lx-subpage-header {
+    padding-top: max(calc(env(safe-area-inset-top, 0px) + 16px), 54px) !important;
+    padding-left: 14px !important;
+    padding-right: 16px !important;
+    padding-bottom: 14px !important;
+  }
+
+  /* Bottom Navigation Safe Area for Android Gesture Bar */
+  .bk-bottom-nav {
+    height: calc(66px + max(env(safe-area-inset-bottom, 0px), 20px)) !important;
+    padding-bottom: max(env(safe-area-inset-bottom, 0px), 20px) !important;
+  }
+
+  .lx-screen-body.has-bottom-nav {
+    padding-bottom: calc(88px + max(env(safe-area-inset-bottom, 0px), 20px)) !important;
+  }
+}
+
+/* Also apply safe area for native mobile platform at any viewport width */
+.is-native-mobile.lx-device-wrapper {
+  padding: 0 !important;
+  margin: 0 !important;
+  background: var(--bk-bg) !important;
+  min-height: 100dvh !important;
+  height: 100dvh !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+}
+
+.is-native-mobile.lx-device-frame,
+.lx-device-frame.is-native-mobile {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.is-native-mobile .bk-header-container {
+  padding-top: max(calc(env(safe-area-inset-top, 0px) + 16px), 54px) !important;
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+  padding-bottom: 22px !important;
+}
+
+.is-native-mobile .lx-subpage-header {
+  padding-top: max(calc(env(safe-area-inset-top, 0px) + 16px), 54px) !important;
+  padding-left: 14px !important;
+  padding-right: 16px !important;
+  padding-bottom: 14px !important;
+}
+
+.is-native-mobile .bk-bottom-nav {
+  height: calc(66px + max(env(safe-area-inset-bottom, 0px), 20px)) !important;
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 20px) !important;
+}
+
+.is-native-mobile .lx-screen-body.has-bottom-nav {
+  padding-bottom: calc(88px + max(env(safe-area-inset-bottom, 0px), 20px)) !important;
+}
+
+.lx-subpage-header {
+  padding: 12px 16px 14px 12px;
+}
+
+.lx-screen-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.lx-screen-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.lx-screen-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+
+/* Top Status Bar (Inside pink header) */
+.lx-device-notch-bar {
+  height: 40px;
+  padding: 8px 24px 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFFFFF;
+  z-index: 50;
+  flex-shrink: 0;
+  background: var(--bk-pink);
+}
+
+.lx-island-notch {
+  width: 105px;
+  height: 22px;
+  background: #000000;
+  border-radius: 16px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 7px;
+}
+
+/* Screen Body Scroll Container */
+.lx-screen-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 20px;
+  position: relative;
+  scrollbar-width: none;
+}
+
+.lx-screen-body.has-bottom-nav {
+  padding-bottom: 86px;
+}
+
+.lx-screen-body.subpage-view {
+  padding-bottom: 24px;
+}
+
+.lx-screen-body::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── bKash Top Header & Curved Overlap ───────────────────────────────── */
+.bk-header-container {
+  background: var(--bk-pink-gradient);
+  padding: 12px 18px 26px 18px;
+  position: relative;
+  color: #FFFFFF;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  box-shadow: 0 4px 15px rgba(226, 19, 110, 0.15);
+}
+
+/* Subtle background geometric watermark */
+.bk-header-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 140px;
+  background: radial-gradient(circle at 100% 20%, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.bk-user-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 14px;
+}
+
+.bk-avatar-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  color: var(--bk-pink);
+  font-weight: 800;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.bk-verified-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  background: #00D09C;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bk-icon-btn {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: all 0.2s;
+  backdrop-filter: blur(8px);
+}
+
+.bk-icon-btn:active {
+  transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.bk-lang-pill {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--bk-radius-full);
+  padding: 5px 10px;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ── The Signature bKash Tap for Balance (ব্যালেন্স দেখুন) Button ─────── */
+.bk-balance-pill-btn {
+  background: #FFFFFF;
+  color: var(--bk-pink);
+  border-radius: var(--bk-radius-full);
+  height: 40px;
+  padding: 0 16px 0 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  z-index: 2;
+  user-select: none;
+}
+
+.bk-balance-pill-btn:active {
+  transform: scale(0.96);
+}
+
+.bk-coin-badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--bk-pink-h-gradient);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 15px;
+  box-shadow: 0 2px 6px rgba(226, 19, 110, 0.3);
+  flex-shrink: 0;
+  perspective: 600px;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.bk-coin-badge.flip {
+  animation: lxCoinFlip3D 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.bk-balance-text-hidden {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--bk-pink);
+  letter-spacing: -0.1px;
+  white-space: nowrap;
+}
+
+.bk-balance-revealed-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: bkSlideIn 0.25s ease-out;
+}
+
+.bk-balance-amount {
+  font-size: 15.5px;
+  font-weight: 800;
+  color: var(--bk-pink);
+  letter-spacing: -0.3px;
+  line-height: 1.1;
+  font-family: 'Outfit', sans-serif;
+}
+
+.bk-balance-sublabel {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #6B7280;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+@keyframes bkSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Translucent Drawer When Balance is Revealed */
+.bk-balance-drawer {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 14px;
+  margin-top: 14px;
+  padding: 10px 14px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  animation: bkFadeDown 0.25s ease-out;
+}
+
+@keyframes bkFadeDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 8-Tile Action Grid (Clean bKash 4x2 Grid) ───────────────────────── */
+.bk-action-grid-card {
+  background: var(--bk-surface);
+  margin: -14px 14px 14px 14px;
+  border-radius: 18px;
+  padding: 18px 12px 14px 12px;
+  box-shadow: var(--bk-shadow-card);
+  border: 1px solid var(--bk-border);
+  position: relative;
+  z-index: 10;
+}
+
+.bk-action-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: 16px;
+  column-gap: 8px;
+}
+
+.bk-tile-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  position: relative;
+}
+
+.bk-tile-item:active {
+  transform: scale(0.92);
+}
+
+.bk-tile-icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 7px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04);
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.bk-tile-item:hover .bk-tile-icon-circle {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.bk-tile-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  background: var(--bk-pink);
+  color: #FFFFFF;
+  font-size: 8.5px;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 8px;
+  border: 1.5px solid #FFFFFF;
+  box-shadow: 0 2px 4px rgba(226, 19, 110, 0.3);
+}
+
+.bk-tile-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+  line-height: 1.25;
+  text-align: center;
+}
+
+/* ── Recent Customers / My LedgerX Carousel ──────────────────────────── */
+.bk-section-card {
+  background: var(--bk-surface);
+  margin: 0 14px 14px 14px;
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: var(--bk-shadow-card);
+  border: 1px solid var(--bk-border);
+}
+
+.bk-section-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.bk-section-heading {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--bk-text-primary);
+}
+
+.bk-section-action-link {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bk-pink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.bk-recent-scroll-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.bk-recent-scroll-row::-webkit-scrollbar {
+  display: none;
+}
+
+.bk-contact-bubble {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 62px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.bk-contact-bubble:active {
+  transform: scale(0.93);
+}
+
+.bk-contact-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 16px;
+  color: #FFFFFF;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 6px;
+  position: relative;
+}
+
+.bk-due-chip {
+  position: absolute;
+  bottom: -4px;
+  background: #EF4444;
+  color: #FFFFFF;
+  font-size: 7.5px;
+  font-weight: 800;
+  padding: 0 4px;
+  border-radius: 6px;
+  border: 1px solid #FFFFFF;
+  white-space: nowrap;
+}
+
+.bk-paid-chip {
+  position: absolute;
+  bottom: -4px;
+  background: #10B981;
+  color: #FFFFFF;
+  font-size: 7.5px;
+  font-weight: 800;
+  padding: 0 4px;
+  border-radius: 6px;
+  border: 1px solid #FFFFFF;
+  white-space: nowrap;
+}
+
+.bk-contact-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--bk-text-primary);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+/* ── Promotional Offer Banner Slider ─────────────────────────────────── */
+.bk-banner-slider {
+  margin: 0 14px 14px 14px;
+  position: relative;
+}
+
+.bk-banner-card {
+  border-radius: 16px;
+  padding: 16px;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  min-height: 84px;
+  cursor: pointer;
+}
+
+/* ── Bento Financial Services (অন্যান্য সেবা) ────────────────────────── */
+.bk-bento-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 0 14px 14px 14px;
+}
+
+.bk-bento-card {
+  background: var(--bk-surface);
+  border: 1px solid var(--bk-border);
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 85px;
+  box-shadow: var(--bk-shadow-card);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.bk-bento-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(226, 19, 110, 0.3);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+}
+
+.bk-bento-card:active {
+  transform: scale(0.97);
+}
+
+/* ── Bottom Navigation Bar (Authentic bKash Floating QR Style) ───────── */
+.bk-bottom-nav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 72px;
+  background: var(--bk-surface);
+  border-top: 1px solid var(--bk-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 8px;
+  z-index: 45;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.bk-nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  color: var(--bk-text-muted);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 6px 10px;
+  transition: all 0.15s ease;
+}
+
+.bk-nav-btn.active {
+  color: var(--bk-pink);
+}
+
+.bk-nav-btn:active {
+  transform: scale(0.9);
+}
+
+/* Center Floating Elevated QR Scan Button */
+.bk-qr-fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--bk-pink-h-gradient);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid var(--bk-surface);
+  box-shadow: var(--bk-shadow-float);
+  cursor: pointer;
+  position: relative;
+  top: -18px;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.bk-qr-fab:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 10px 28px rgba(226, 19, 110, 0.45);
+}
+
+.bk-qr-fab:active {
+  transform: scale(0.92);
+}
+
+/* ── The Signature "Tap and Hold to Confirm" (ট্যাপ করে ধরে রাখুন) ────── */
+.bk-hold-container {
+  width: 100%;
+  margin-top: 20px;
+  position: relative;
+}
+
+.bk-hold-btn {
+  width: 100%;
+  height: 58px;
+  border-radius: var(--bk-radius-full);
+  background: var(--bk-pink-h-gradient);
+  color: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 18px rgba(226, 19, 110, 0.35);
+  border: none;
+  user-select: none;
+  transition: transform 0.1s ease;
+}
+
+.bk-hold-btn:active {
+  transform: scale(0.98);
+}
+
+/* Left Circle with arrow and circular ripple */
+.bk-hold-circle-arrow {
+  position: absolute;
+  left: 6px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  color: var(--bk-pink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 4;
+}
+
+/* Filling Progress Layer across button */
+.bk-hold-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, #A20D4E 0%, #C2185B 100%);
+  z-index: 2;
+  transition: width 0.05s linear;
+}
+
+.bk-hold-text {
+  position: relative;
+  z-index: 3;
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  margin-left: 28px;
+}
+
+/* ── Fullscreen Modal Bottom Sheets ──────────────────────────────────── */
+.bk-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  animation: bkModalFade 0.2s ease-out;
+}
+
+.bk-modal-sheet {
+  background: var(--bk-surface);
+  border-top-left-radius: 26px;
+  border-top-right-radius: 26px;
+  padding: 20px 20px 30px 20px;
+  max-height: 88%;
+  overflow-y: auto;
+  box-shadow: var(--bk-shadow-modal);
+  animation: bkSheetUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border-top: 1px solid var(--bk-border);
+}
+
+@keyframes bkModalFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes bkSheetUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* ── Iconic Success Screen (লেনদেন সফল হয়েছে) ────────────────────────── */
+.bk-success-screen {
+  position: absolute;
+  inset: 0;
+  background: var(--bk-bg);
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  animation: bkModalFade 0.3s ease;
+  overflow-y: auto;
+}
+
+.bk-success-header {
+  background: var(--bk-pink-gradient);
+  padding: 36px 20px 30px 20px;
+  text-align: center;
+  color: #FFFFFF;
+  border-bottom-left-radius: 28px;
+  border-bottom-right-radius: 28px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(226, 19, 110, 0.25);
+}
+
+.bk-success-check-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  color: var(--bk-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px auto;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  animation: bkPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes bkPop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.bk-voucher-card {
+  background: var(--bk-surface);
+  margin: -16px 16px 20px 16px;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: var(--bk-shadow-card);
+  border: 1px solid var(--bk-border);
+  position: relative;
+  z-index: 2;
+}
+
+/* Digital Soundbox Physical Device Terminal */
+.bk-soundbox-chassis {
+  background: linear-gradient(145deg, #182236 0%, #0F172A 100%);
+  border-radius: 24px;
+  padding: 20px;
+  color: #FFFFFF;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Sticky POS Cart & Checkout Bar ──────────────────────────────────── */
+.bk-sticky-cart-bar {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, #1E1B4B 0%, #0F172A 100%);
+  color: #FFFFFF;
+  border-radius: 20px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.12);
+  z-index: 40;
+  animation: bkPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bk-cart-icon-bubble {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--bk-pink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  position: relative;
+  flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(226, 19, 110, 0.4);
+}
+
+.bk-cart-count-badge {
+  position: absolute;
+  top: -4px;
+  right: -5px;
+  background: #FFFFFF;
+  color: var(--bk-pink);
+  font-size: 10px;
+  font-weight: 900;
+  padding: 1px 5px;
+  border-radius: 10px;
+  border: 1.5px solid var(--bk-pink);
+  line-height: 1.1;
+}
+
+.bk-checkout-trigger-btn {
+  background: var(--bk-pink-h-gradient);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 14px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(226, 19, 110, 0.35);
+  transition: transform 0.15s ease;
+}
+
+.bk-checkout-trigger-btn:active {
+  transform: scale(0.95);
+}
+
+/* ── Slide Up Drawer System ─────────────────────────────────────────── */
+.bk-slide-drawer-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  animation: bkFade 0.2s ease-out;
+}
+
+@keyframes bkFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.bk-slide-drawer {
+  background: #FFFFFF;
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
+  padding: 16px 18px 24px 18px;
+  width: 100%;
+  max-width: 420px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.25);
+  animation: bkSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+@keyframes bkSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.bk-drawer-handle {
+  width: 44px;
+  height: 5px;
+  border-radius: 3px;
+  background: #E5E7EB;
+  margin: 0 auto 14px auto;
+}
+
+/* ── Tactile Micro-Animations & Flying Particle Badges ───────────────── */
+@keyframes flyUpAndFade {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(0.85);
+  }
+  45% {
+    opacity: 1;
+    transform: translate(-50%, -22px) scale(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -40px) scale(0.9);
+  }
+}
+
+.lx-flying-chip-plus {
+  position: absolute;
+  left: 50%;
+  top: -12px;
+  background: var(--bk-pink);
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 2px 7px;
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 60;
+  box-shadow: 0 4px 12px rgba(226, 19, 110, 0.45);
+  animation: flyUpAndFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  white-space: nowrap;
+}
+
+@keyframes flyDownAndFade {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 18px) scale(0.75);
+  }
+}
+
+.lx-flying-chip-minus {
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  background: #E11D48;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 2px 7px;
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 60;
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.45);
+  animation: flyDownAndFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  white-space: nowrap;
+}
+
+@keyframes cartBouncePop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.22); }
+  65% { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+.bk-cart-bounce {
+  animation: cartBouncePop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* Universal tactile button compression on press */
+button, [role="button"], .bk-tile-item, .bk-nav-btn {
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease;
+}
+
+button:active, [role="button"]:active {
+  transform: scale(0.94);
+}
+
+@keyframes scannerLaser {
+  0% {
+    top: 5%;
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    top: 92%;
+    opacity: 0.8;
+  }
+}
+
+/* ── Enterprise Mobile Delight & Success Animations ── */
+@keyframes lxSuccessPop {
+  0% {
+    transform: scale(0.65);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.08);
+  }
+  75% {
+    transform: scale(0.96);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes lxCheckPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 16px rgba(16, 185, 129, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+@keyframes lxSlideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes lxPulseLiveBadge {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.03);
+    filter: brightness(1.08);
+  }
+}
+
+.lx-success-card-animate {
+  animation: lxSuccessPop 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.lx-success-badge-pulse {
+  animation: lxCheckPulse 1.8s infinite;
+}
+
+.lx-live-calc-pulse {
+  animation: lxPulseLiveBadge 2s infinite ease-in-out;
+}
+
+.lx-dropdown-animated {
+  animation: lxSlideUpFade 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Smooth active press feedback on touch */
+.lx-touch-btn {
+  transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.lx-touch-btn:active {
+  transform: scale(0.95);
+}
+
+/* ── Sleek Compact TallyKhata Action Capsule Dock ─────────────────────── */
+.lx-action-capsule-dock {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  gap: 7px !important;
+  width: 100% !important;
+  background: #FFFFFF;
+  padding: 8px;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+  border: 1px solid #F1F5F9;
+  box-sizing: border-box;
+}
+
+.lx-action-capsule-btn {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  height: 52px;
+  border-radius: 13px;
+  padding: 0 6px;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justifyContent: center !important;
+  gap: 6px !important;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease, filter 0.12s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.lx-action-capsule-btn:active {
+  transform: scale(0.92) translateY(1.5px) !important;
+  filter: brightness(0.92) contrast(1.08) !important;
+}
+
+/* Subtle Shimmer highlight sweep across capsule buttons */
+.lx-action-capsule-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+  transform: skewX(-20deg);
+  animation: lxCapsuleShimmer 4s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes lxCapsuleShimmer {
+  0% { left: -120%; }
+  30%, 100% { left: 180%; }
+}
+
+.lx-capsule-due {
+  background: linear-gradient(135deg, #BE123C 0%, #9F1239 100%) !important;
+  box-shadow: 0 4px 14px -2px rgba(190, 18, 60, 0.42);
+}
+
+.lx-capsule-collect {
+  background: linear-gradient(135deg, #047857 0%, #065F46 100%) !important;
+  box-shadow: 0 4px 14px -2px rgba(4, 120, 87, 0.42);
+}
+
+.lx-capsule-expense {
+  background: linear-gradient(135deg, #B45309 0%, #78350F 100%) !important;
+  box-shadow: 0 4px 14px -2px rgba(180, 83, 9, 0.42);
+}
+
+.lx-capsule-icon-wrap {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.22);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  flex-shrink: 0;
+}
+
+.lx-capsule-text-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  line-height: 1.15;
+  text-align: left;
+}
+
+.lx-capsule-title {
+  font-size: 11px;
+  font-weight: 900;
+  color: #FFFFFF;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.lx-capsule-sub {
+  font-size: 8.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+/* ── Extraordinary Sensory Keyframe Animations ────────────────────────── */
+
+/* 1. 3D Coin Flip with Perspective */
+@keyframes lxCoinFlip3D {
+  0% {
+    transform: rotateY(0deg) scale(1);
+  }
+  40% {
+    transform: rotateY(360deg) scale(1.25);
+  }
+  75% {
+    transform: rotateY(540deg) scale(1.1);
+  }
+  100% {
+    transform: rotateY(720deg) scale(1);
+  }
+}
+
+/* 2. Festive Falling Confetti & Golden ৳ Coins */
+@keyframes lxConfettiFall {
+  0% {
+    transform: translateY(-20px) rotate(0deg) scale(0.8);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(60px) rotate(120deg) scale(1.15);
+  }
+  50% {
+    transform: translateY(320px) rotate(360deg) scale(1);
+    opacity: 0.95;
+  }
+  80% {
+    transform: translateY(580px) rotate(540deg) scale(0.9);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(850px) rotate(720deg) scale(0.65);
+    opacity: 0;
+  }
+}
+
+/* 3. Pulsing Celebratory Shockwave Ring */
+@keyframes lxShockwave {
+  0% {
+    transform: scale(0.88);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.45);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.95);
+    opacity: 0;
+  }
+}
+
+/* 4. Pop & Bounce Spring In */
+@keyframes lxPopBounce {
+  0% {
+    transform: scale(0.2) rotate(-20deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.22) rotate(4deg);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(0.94) rotate(-2deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* 5. Radial Glow Pulse */
+@keyframes lxPulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(226, 19, 110, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(226, 19, 110, 0);
+  }
+}
+
+/* 6. Universal Tactile Spring Feedback */
+.lx-touch-btn {
+  transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lx-touch-btn:active {
+  transform: scale(0.94) translateY(1.5px) !important;
+}
+
+.lx-keypad-btn {
+  transition: all 0.08s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lx-keypad-btn:active {
+  transform: scale(0.9) !important;
+  background: #E2E8F0 !important;
+}

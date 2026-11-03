@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "pet-lover-bd-501620",
+  "private_key_id": "4cbb1d23db16a41dba97659b83ec2be2bd2c2054",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDqUgh6KApo/0In\nGIlJ6EmPC2d+jD2kDwYsp6SHuhR2R7LR/122RYe5lb40ZDjLdK93LVLuW8t9uI11\nRWguo5gRtSppMQuEpbzdeWq1Aw5/ZZCy/JeZ3Nha28msqHkH0ku49s5QoiR3zJR2\n7q0F+QaBnrtWVk8ODfmerF3OcQ+ykmkzyK8BFEJFUfsx3mz9CtslLw283ZwbF9/P\n3GpQB7hxQ9UNpu+uSSiGikixy+xbEK6nmagGEcJIQk0LJlZK6ryu66n4SrX8wBk1\ncsQ+UpbAtLUeFxTkmyp7p/eOHc7XwpciO18LwmezpxPSaaS5NE3VBXRZKQQHhMBU\njSU3CheNAgMBAAECggEANKIil1XhKL6VnHSNehV8WG5GXA2iVvSs/WDWu0oYCI2I\nZFVJNoUdvJkfNWOBwmm+dDWxGCt0ZRQMalgh08AZi3i3QxOqM6yK5PC+AFTkb8df\nnmTQpNYPnzEZdvgM363kJnMB2ujg6iwA+UoZgWrzhDAkgns2nMCU3oh3NcT9sq10\nfhb6wgpRsMBD2/44VZhTLGWhPYca5BuMlD+X2BWHn54HkxjS6bv76w/+W+k1CHfR\n7iGQiVvxmkpF/ac1o47FuFJwEPo5VInqH1iZLYm0gscuRh1QOyxjAERlwbuGIZYS\nOOHlmoeQ7pVfKdJAluW5chySgVsHCltRSI7+JnoTXQKBgQD16d8U2eYIUiyoLen2\n1PGupEgxhFgWtNNHK9rGNbd88Ho8aaZPqC2kxV6PUBIjIOv6E5h6LZcc8LfOzlNE\nIL24wXBAaLOT0YJ2AAmlUr9P51grJLdV3zACewJyVzwYyfhR9vlvtYHXc16ONMcc\n7CuI91QtZ/07O6xykEu2c/WQbwKBgQDz7m6oGX5CqTid4BzNCnizqhXEiF76MBcO\nlYADcOjjVSTxd5k5Js19wRFn0t+X2EY6A26RmMDZt4lgESeHmrM+r++JbgW6s6l6\nxaYvj2jg+CW5casts2nU4j3f9CsVGzqqd52SiSrjKiPwAVNCV5fiPaIr+KO3lzvM\nhn+bf6edwwKBgQCC9GxL2k3ZmIkXdnvlajjZ27pmRCf0z47Dk+MJMonoCtfNXCWo\nvdKwsDpO70D5XArOPakxRx3112rKwq0s1pKx1LFGW3tl+GgVFqgMVihzEKuvLfpD\nzHrwlzkSUso6GTQX0gG7L1lZtqJf8FMoX8w/QBafp4T/CiQnThhDrTTUGQKBgDYM\nOXaDl4c7qXDJrHf9/vqIECSotqqmpyUzGNcqWF+uiO37uvZ/034uniWsAqDJad4G\nzqPx/aD/2q9vfZu9OkQEhYWk3B4fGsk6K/VTyEA4m1s4hV4t56AktOL/XeBiVSBa\nOo6yV89XkfjmwkTr1ZpqX5lwkQ3ns3dAwdt5cHEzAoGAeX8kpwS44QuuF477WUWD\nbtG5HLbPg5YU2Ubfl28tRTZg4kq/9XbogLYjxR4SiKS5UWqIMrryZY0ndaeni4iI\nyCv/0+AF1xXbtKEWwqM/MuCLVjctqimzVBCuhcDmfGJD0u+SC+Fd273bF6iNxRuI\nfoEsPpPZn1spCUW15C8DMg8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "pet-lover-bd@pet-lover-bd-501620.iam.gserviceaccount.com",
+  "client_id": "117754687397637348783",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/pet-lover-bd%40pet-lover-bd-501620.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

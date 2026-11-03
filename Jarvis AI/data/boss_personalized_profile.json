@@ -1,0 +1,59 @@
+{
+  "name": "running",
+  "title": "Sir",
+  "role": "Master Commander / Chief Architect",
+  "tone_preference": "refined_british_crisp",
+  "focus_rhythm": {
+    "ultradian_deep_work_minutes": 90,
+    "break_minutes": 15,
+    "preferred_start_hour": 8,
+    "preferred_wind_down_hour": 22
+  },
+  "core_priorities": [
+    "Project EXODUS Hyper-Scale Mesh",
+    "Autonomous Multi-Agent Swarm",
+    "J.A.R.V.I.S. Autonomous Evolution",
+    "Sub-Branch Operational Excellence",
+    "High-Velocity Engineering Execution"
+  ],
+  "vip_network": [
+    {
+      "name": "Pepper Potts",
+      "relation": "Chief Executive / Partner",
+      "priority": "highest"
+    },
+    {
+      "name": "James Rhodes",
+      "relation": "Liaison / Colonel",
+      "priority": "high"
+    },
+    {
+      "name": "Happy Hogan",
+      "relation": "Head of Security",
+      "priority": "high"
+    },
+    {
+      "name": "Rhodey",
+      "relation": "Military Strategic Liaison",
+      "priority": "high"
+    },
+    {
+      "name": "General Ross",
+      "relation": "Department of Defense Liaison",
+      "priority": "highest"
+    }
+  ],
+  "lifestyle_habits": {
+    "coffee_preference": "Black Double Espresso",
+    "workspace_environment": "Dark mode holographic terminal, multi-monitor",
+    "music_preference": "Classic Rock & Ambient Cinematic Electronic",
+    "notification_policy": "Strict buffer during deep focus blocks"
+  },
+  "learned_preferences": {},
+  "active_projects": [
+    "Mark 85 Architecture",
+    "LifeGraph Expansion",
+    "Hermes Agent Harness"
+  ],
+  "last_interaction": 1791911163.6710458
+}

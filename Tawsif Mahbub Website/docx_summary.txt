@@ -1,0 +1,188 @@
+Total tables: 1
+
+=== TABLE 0 ===
+
+--- ROW 0 (cells: 4) ---
+Col 0:
+Text:
+SN
+Images (0): []
+
+Col 1:
+Text:
+Title
+Images (0): []
+
+Col 2:
+Text:
+Image
+Images (0): []
+
+Col 3:
+Text:
+Update
+Images (0): []
+
+
+--- ROW 1 (cells: 4) ---
+Col 0:
+Text:
+1
+Images (0): []
+
+Col 1:
+Text:
+Solo Photo
+Images (0): []
+
+Col 2:
+Text:
+
+Images (15): ['media/image8.png', 'media/image24.png', 'media/image4.png', 'media/image15.png', 'media/image16.png', 'media/image2.png', 'media/image5.png', 'media/image9.png', 'media/image3.png', 'media/image11.png', 'media/image6.png', 'media/image1.png', 'media/image12.png', 'media/image7.png', 'media/image10.png']
+
+Col 3:
+Text:
+
+Images (0): []
+
+
+--- ROW 2 (cells: 4) ---
+Col 0:
+Text:
+2
+Images (0): []
+
+Col 1:
+Text:
+Natok Poster
+Images (0): []
+
+Col 2:
+Text:
+
+Images (14): ['media/image20.png', 'media/image18.png', 'media/image23.png', 'media/image28.png', 'media/image26.png', 'media/image13.png', 'media/image21.png', 'media/image19.png', 'media/image17.png', 'media/image25.png', 'media/image27.png', 'media/image14.png', 'media/image29.png', 'media/image22.png']
+
+Col 3:
+Text:
+
+Images (0): []
+
+
+--- ROW 3 (cells: 4) ---
+Col 0:
+Text:
+3
+Images (0): []
+
+Col 1:
+Text:
+YouTube Natok Link
+Images (0): []
+
+Col 2:
+Text:
+
+Images (0): []
+
+Col 3:
+Text:
+Chuye Dilam Tomay | Full Drama | Tawsif & Totini | Niha | Capital Drama | New Natok 2026
+Amar Rajje Tumi | আমার রাজ্যে তুমি |Full Drama | Tawsif Mahbub | Keya Payel | Malaika |Capital Drama
+Aponpor | আপনপর | Full Natok | Tawsif Mahbub | Sadnima | Rubel Hasan | New Bangla Natok 2026
+Warish | ওয়ারিশ | Full Natok | Tawsif Mahbub, Yash Rohan, Safa Kabir, Priyontee | Bangla Natok 2026
+Moneri Ronge Rangiye | Valentine Special Drama | Tawsif Mahbub | Porshi | KM Sohag Rana | New Natok
+Emon Dine Tare Bola Jay | Full Drama | Tawsif Mahbub | Priyontee Urbee | Mir Rabby | New Natok 2025
+অকারণে ভালোবাসি | Okarone Bhalobashi | Tawsif Mahbub | Keya Payel | Exclusive Bangla Natok 2026
+Mon Dewana | মন দিওয়ানা | Full Natok | Tawsif Mahbub | Totini | Eid Natok | New Bangla Natok 2025
+Images (0): []
+
+
+--- ROW 4 (cells: 4) ---
+Col 0:
+Text:
+4
+Images (0): []
+
+Col 1:
+Text:
+Song Link
+Images (0): []
+
+Col 2:
+Text:
+
+Images (0): []
+
+Col 3:
+Text:
+Sokhi Tomare Badibo | Imran Mahmudul  | Kona | Tawsif Mahbub | Payel | Ural Pakhi Natok Song
+Adore Astin | আদরে আস্তিন (Full Song) |  Riyad | Kona |  Tawsif Mahbub | Sadnima |  Bangla New Song
+আমার দিন গুলো সব যায় হারিয়ে আঁধারে | Habib Wahid | Nancy | Imran | OST Of Hridoy Er Kotha
+Amar Ful Tumi | আমার ফুল তুমি | Dorodia | Tawsif | Niha | Imran | Atiya Anisha | Bangla Song 2026
+Jonak Jola Rate | Imran & Porshi | Tawsif Mahbub | Naznin Niha | Tui Theke Tumi Natok Song
+Bhalobasha Govir (Full Song) | Jokhom | Imran, Haimanti | Tawsif, Totini | CMV | Bangla Song 2026
+Images (0): []
+
+
+--- ROW 5 (cells: 4) ---
+Col 0:
+Text:
+5
+Images (0): []
+
+Col 1:
+Text:
+Media News
+Images (0): []
+
+Col 2:
+Text:
+
+Images (0): []
+
+Col 3:
+Text:
+https://www.prothomalo.com/topic/%E0%A6%A4%E0%A7%8C%E0%A6%B8%E0%A6%BF%E0%A6%AB
+https://www.dhakapost.com/topic/%E0%A6%A4%E0%A7%87%E0%A7%97%E0%A6%B8%E0%A6%BF%E0%A6%AB-%E0%A6%AE%E0%A6%BE%E0%A6%B9%E0%A6%AC%E0%A7%81%E0%A6%AC
+https://kaleralo.com/393827/2026/
+https://www.thedailystar.net/culture/entertainment/news/tawsif-mahbub-extends-support-flood-affected-communities-4223441
+https://tob.news/which-tawsif-mahbub-dramas-does-his-wife-love-most/
+https://www.bd24live.com/tag/tawsif-mahbub/
+Images (0): []
+
+
+=== ALL PARAGRAPHS ===
+P: Tawsif Website
+P: SN
+P: Title
+P: Image
+P: Update
+P: 1
+P: Solo Photo
+P: 2
+P: Natok Poster
+P: 3
+P: YouTube Natok Link
+P: Chuye Dilam Tomay | Full Drama | Tawsif & Totini | Niha | Capital Drama | New Natok 2026
+P: Amar Rajje Tumi | আমার রাজ্যে তুমি |Full Drama | Tawsif Mahbub | Keya Payel | Malaika |Capital DramaAponpor | আপনপর | Full Natok | Tawsif Mahbub | Sadnima | Rubel Hasan | New Bangla Natok 2026
+P: Warish | ওয়ারিশ | Full Natok | Tawsif Mahbub, Yash Rohan, Safa Kabir, Priyontee | Bangla Natok 2026
+P: Moneri Ronge Rangiye | Valentine Special Drama | Tawsif Mahbub | Porshi | KM Sohag Rana | New Natok
+P: Emon Dine Tare Bola Jay | Full Drama | Tawsif Mahbub | Priyontee Urbee | Mir Rabby | New Natok 2025
+P: অকারণে ভালোবাসি | Okarone Bhalobashi | Tawsif Mahbub | Keya Payel | Exclusive Bangla Natok 2026
+P: Mon Dewana | মন দিওয়ানা | Full Natok | Tawsif Mahbub | Totini | Eid Natok | New Bangla Natok 2025
+P: 4
+P: Song Link
+P: Sokhi Tomare Badibo | Imran Mahmudul  | Kona | Tawsif Mahbub | Payel | Ural Pakhi Natok Song
+P: Adore Astin | আদরে আস্তিন (Full Song) |  Riyad | Kona |  Tawsif Mahbub | Sadnima |  Bangla New Song
+P: আমার দিন গুলো সব যায় হারিয়ে আঁধারে | Habib Wahid | Nancy | Imran | OST Of Hridoy Er Kotha
+P: Amar Ful Tumi | আমার ফুল তুমি | Dorodia | Tawsif | Niha | Imran | Atiya Anisha | Bangla Song 2026
+P: Jonak Jola Rate | Imran & Porshi | Tawsif Mahbub | Naznin Niha | Tui Theke Tumi Natok Song
+P: Bhalobasha Govir (Full Song) | Jokhom | Imran, Haimanti | Tawsif, Totini | CMV | Bangla Song 2026
+P: 5
+P: Media News
+P: https://www.prothomalo.com/topic/%E0%A6%A4%E0%A7%8C%E0%A6%B8%E0%A6%BF%E0%A6%AB
+P: https://www.dhakapost.com/topic/%E0%A6%A4%E0%A7%87%E0%A7%97%E0%A6%B8%E0%A6%BF%E0%A6%AB-%E0%A6%AE%E0%A6%BE%E0%A6%B9%E0%A6%AC%E0%A7%81%E0%A6%AC
+P: https://kaleralo.com/393827/2026/
+P: https://www.thedailystar.net/culture/entertainment/news/tawsif-mahbub-extends-support-flood-affected-communities-4223441
+P: https://tob.news/which-tawsif-mahbub-dramas-does-his-wife-love-most/
+P: https://www.bd24live.com/tag/tawsif-mahbub/

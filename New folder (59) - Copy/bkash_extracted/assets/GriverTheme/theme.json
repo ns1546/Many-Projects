@@ -1,0 +1,20 @@
+{
+    "light": {
+        "containerBackgroundColor": "#FFFFFF",
+        "backgroundColor": "#FFFFFF",
+        "titleBarColor": "#FFFFFF",
+        "titleColor": "#000000",
+        "backButtonColor": "#000000",
+        "closeButtonColor": "#000000",
+        "optionMenuColor": "#000000"
+    },
+    "dark": {
+        "containerBackgroundColor": "#101314",
+        "backgroundColor": "#101314",
+        "titleBarColor": "#101314",
+        "titleColor": "#FFFFFFFF",
+        "backButtonColor": "#FFFFFF",
+        "closeButtonColor": "#FFFFFF",
+        "optionMenuColor": "#FFFFFF"
+    }
+}

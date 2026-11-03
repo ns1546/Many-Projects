@@ -1,0 +1,412 @@
+\documentclass[12pt,a4paper]{report}
+
+%==========================
+% Packages
+%==========================
+\usepackage[a4paper,left=1.25in,right=1in,top=1in,bottom=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tabularx}
+\usepackage{ragged2e}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue
+}
+
+% Format section titles
+\titleformat{\chapter}{\normalfont\Huge\bfseries}{\thechapter.}{20pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{-20pt}{20pt}
+
+% Table padding
+\renewcommand{\arraystretch}{1.5}
+
+% Code snippet styling
+\definecolor{codegray}{rgb}{0.95,0.95,0.95}
+\lstset{
+    backgroundcolor=\color{codegray},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny
+}
+
+\begin{document}
+
+%==========================
+% Title Page
+%==========================
+\begin{titlepage}
+    \singlespacing
+    \begin{center}
+        \vspace*{0.5cm}
+        
+        {\LARGE \textbf{BANGLADESH UNIVERSITY OF BUSINESS AND TECHNOLOGY}}\\[0.5cm]
+        {\Large \textbf{Department of Computer Science and Engineering}}\\[2cm]
+        
+        {\Huge \textbf{PROJECT PROPOSAL}}\\[2cm]
+        
+        {\LARGE \textbf{Smart Air Quality Monitoring \& Health Risk Prediction System}}\\[0.5cm]
+        {\Large \textbf{Using ESP32, Edge ML, Gemini 2.5 Pro AI, and IoT Mapping}}\\[2cm]
+        
+        \begin{table}[H]
+            \centering
+            \large
+            \begin{tabular}{|l|l|}
+                \hline
+                \textbf{Course Name:} & Internet of Things (IoT) Lab \\ \hline
+                \textbf{Course Code:} & CSE-342 \\ \hline
+                \textbf{Session:} & 2026 FALL \\ \hline
+                \textbf{Semester:} & Fall 2026 \\ \hline
+            \end{tabular}
+        \end{table}
+        
+        \vspace{2cm}
+        
+        \begin{table}[H]
+            \centering
+            \begin{minipage}[t]{0.55\textwidth}
+                \textbf{\Large Submitted By:}\\[0.2cm]
+                \large
+                \begin{tabular}{|l|l|}
+                    \hline
+                    \multicolumn{2}{|c|}{\textbf{Section:} 04 \quad \textbf{Intake:} 52} \\ \hline
+                    \textbf{Student Name} & \textbf{Student ID} \\ \hline
+                    Mohammad Zunayed & 20234103328 \\ \hline
+                    Najmush Shakib & 20234103357 \\ \hline
+                    Omar Faruk Jihad & 20234103145 \\ \hline
+                    Munim Halder & 20234103351 \\ \hline
+                \end{tabular}
+            \end{minipage}
+            \hfill
+            \begin{minipage}[t]{0.4\textwidth}
+                \textbf{\Large Submitted To:}\\[0.2cm]
+                \large
+                \begin{tabular}{|l|}
+                    \hline
+                    \multicolumn{1}{|c|}{\textbf{Course Instructor}} \\ \hline
+                    \textbf{Sudipa Saha} \\ \hline
+                    Lecturer \\ \hline
+                    Department of CSE \\ \hline
+                    BUBT \\ \hline
+                \end{tabular}
+            \end{minipage}
+        \end{table}
+        
+        \vfill
+        
+        {\Large \textbf{Submission Date: \today}}
+        
+    \end{center}
+\end{titlepage}
+
+\onehalfspacing
+
+%==========================
+% Preliminary Pages
+%==========================
+\pagenumbering{roman}
+\tableofcontents
+\newpage
+\listoftables
+\newpage
+\pagenumbering{arabic}
+
+%==========================
+% Chapter 1: Introduction
+%==========================
+\chapter{Introduction}
+\section{Background of the Study}
+Air pollution represents one of the most pressing environmental and public health crises of the 21st century. Rapid industrialization, exponential population growth, and uncontrolled vehicular emissions have severely compromised the quality of ambient air, particularly in developing nations. Bangladesh, and specifically its capital city, Dhaka, consistently ranks among the most polluted cities globally according to the IQAir World Air Quality Report. The concentrations of Particulate Matter (PM2.5 and PM10), Carbon Monoxide (CO), Carbon Dioxide (CO2), and Volatile Organic Compounds (VOCs) frequently exceed the safe limits established by the World Health Organization (WHO) by terrifying margins.
+
+Prolonged exposure to these toxic pollutants results in severe health complications. While the macro-level statistics are alarming, the micro-level reality is even more concerning. Citizens spend the vast majority of their time indoors or in highly localized environments where air quality can differ drastically from the generalized data provided by the few centralized government monitoring stations.
+
+\section{The Role of IoT, Edge ML, and Generative AI}
+The advent of the Internet of Things (IoT) has revolutionized environmental monitoring. However, raw data alone is insufficient. To transform sensor readings into actionable intelligence, a hybrid Artificial Intelligence (AI) approach must be integrated. 
+
+This project uses a dual-intelligence architecture: \textbf{Edge Machine Learning (ML)} handles the numerical prediction (predicting AQI 1-hour into the future using Linear Regression, binary emergency alerting using Logistic Regression, and categorical risk via Decision Trees directly on the device), while \textbf{Generative Cloud AI (Gemini 2.5 Pro)} handles advanced cognitive tasks (natural language reports, mitigation verification, and actionable recommendations).
+
+\section{Motivation and Scope}
+The primary motivation behind this research is the democratization of predictive environmental health data. Currently, high-end, AI-powered air quality monitors are prohibitively expensive. Conversely, cheap DIY monitors are entirely reactive. This project aims to provide predictive warnings via Edge ML, actionable mitigation strategies via Gemini 2.5 Pro, and crowd-sourced community mapping via GPS—all housed within a highly affordable ESP32-based node.
+
+%==========================
+% Chapter 2: Literature Review
+%==========================
+\chapter{Literature Review}
+\section{Evolution of Air Quality Monitoring Systems}
+Traditionally, air quality monitoring has been the exclusive domain of governmental agencies using heavy, expensive, and stationary equipment. In recent years, the market has seen an influx of consumer-grade IoT air monitors using microcontrollers. However, these systems generally suffer from two critical flaws: they are entirely reactive (no predictive algorithms) and they lack context (raw AQI numbers instead of actionable advice).
+
+\section{Integration of Machine Learning and LLMs}
+Recent academic literature has focused on integrating Machine Learning (ML) into IoT networks. Traditional ML approaches (such as Linear Regression, Logistic Regression, or Decision Trees) have been used to predict future AQI values or classify hazard states. While highly useful for numerical forecasting, these models output rigid numerical predictions that are hard for laymen to interpret.
+
+The introduction of Large Language Models (LLMs) like Gemini 2.5 Pro represents a paradigm shift. This project leverages the best of both worlds: it uses \textbf{scikit-learn} trained Linear Regression, Logistic Regression, and Decision Tree models on the Edge for fast, offline prediction, and delegates complex, contextual reasoning (like verifying if an air purifier worked) to the Gemini 2.5 Pro cloud API.
+
+\section{Summary of Relevant Works}
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|c|X|X|}
+        \hline
+        \textbf{Reference Type} & \textbf{Approach / Methodology} & \textbf{Limitations Identified} \\ \hline
+        \textbf{Govt. Stations} & Large scale chemical analysis, static reporting. & Extremely high cost, no micro-level data, purely retroactive reporting. \\ \hline
+        \textbf{DIY IoT Monitors} & ESP8266/Arduino with single PM2.5 sensors triggering basic buzzer alarms. & No multi-pollutant correlation. No predictive ML. No advanced AI guidance. \\ \hline
+        \textbf{Commercial Units} & High-end devices (e.g., Dyson, Awair) with proprietary cloud analytics. & Cost-prohibitive for Bangladesh. Closed ecosystems without community mapping capabilities. \\ \hline
+    \end{tabularx}
+    \caption{Comparative Literature Review of Existing Monitoring Paradigms}
+\end{table}
+
+%==========================
+% Chapter 3: Problem Statement
+%==========================
+\chapter{Problem Statement}
+This project specifically identifies and addresses the following critical problems preventing citizens from protecting their respiratory health:
+
+\begin{itemize}[leftmargin=*, itemsep=12pt]
+    \item \textbf{Problem 1: Absence of Micro-Level Data.} Government stations measure macro-environments. The air quality inside specific micro-environments remains unmonitored.
+    \item \textbf{Problem 2: Reactive Instead of Predictive Warning.} Existing affordable sensors act like smoke alarms; they only trigger when danger is present. There is a critical lack of embedded ML models to predict deteriorating conditions before they happen.
+    \item \textbf{Problem 3: Single-Pollutant Myopia.} Many devices only measure PM2.5, ignoring the synergistic toxicity of combined CO2, CO, heat, and humidity.
+    \item \textbf{Problem 4: Lack of Actionable AI Guidance.} Raw data (e.g., "80 µg/m³ PM2.5") does not tell a user \textit{how} to fix the air.
+    \item \textbf{Problem 5: Inability to Verify Mitigation.} Users cannot mathematically verify if their air purifiers are actually improving the air quality.
+    \item \textbf{Problem 6: Lack of Community Pollution Mapping.} There is no crowd-sourced, GPS-based map to identify local street-level pollution hotspots.
+\end{itemize}
+
+%==========================
+% Chapter 4: Proposed Solution & Features
+%==========================
+\chapter{Proposed Solution \& Core Features}
+This project proposes a comprehensive paradigm shift, merging low-cost edge hardware, embedded Machine Learning, and bleeding-edge Cloud AI.
+
+\section{Core System Features}
+\begin{itemize}[leftmargin=*, itemsep=12pt]
+    \item \textbf{Multi-Pollutant Synergistic Sensing:} The ESP32 continuously polls four different sensors (MQ-135, MQ-7, GP2Y1010, DHT22).
+    \item \textbf{Standardized AQI Calculation:} Raw data is mathematically converted into the US EPA Air Quality Index (AQI) score.
+    \item \textbf{Embedded Edge ML Prediction:} A pre-trained Linear Regression model, Decision Tree classifier, and \textbf{Logistic Regression} model run locally on the ESP32 to predict the AQI value 1 hour into the future, classify basic health risk, and determine binary emergency alert states entirely offline.
+    \item \textbf{Gemini 2.5 Pro Advanced Analytics:} The system transmits data to the cloud, where Gemini 2.5 Pro performs advanced cognitive tasks: generating natural language health assessments and actionable recommendations (e.g., "Open windows to reduce CO2").
+    \item \textbf{Mitigation Verification Engine:} Gemini compares "Baseline" readings with "Retest" readings (after the user applies a treatment like an exhaust fan) to calculate the exact percentage of air quality improvement.
+    \item \textbf{GPS-Based Community Mapping:} A NEO-6M GPS module plots live readings onto an interactive Leaflet.js map on the web dashboard.
+\end{itemize}
+
+%==========================
+% Chapter 5: Objectives
+%==========================
+\chapter{Objectives}
+\section{Main Objective}
+The central objective is to design and deploy an affordable IoT air quality monitoring node that utilizes Edge Machine Learning for local predictions and Gemini 2.5 Pro AI for advanced mitigation verification and actionable advice, alongside a GPS-based community pollution map.
+
+\section{Specific Objectives}
+\begin{enumerate}[label=\textbf{O\arabic*.}, leftmargin=*, itemsep=10pt]
+    \item To successfully interface the ESP32 with MQ-135, MQ-7, GP2Y1010, DHT22 sensors, and a NEO-6M GPS module.
+    \item To implement the US EPA formulas to calculate the real-time AQI score.
+    \item To collect training data and embed a \textbf{Linear Regression} model, a \textbf{Logistic Regression} model, and a \textbf{Decision Tree} classifier into the ESP32 firmware for offline prediction of future AQI and emergency alerts.
+    \item To integrate the \textbf{Gemini 2.5 Pro API} on the cloud backend to generate advanced natural language health assessments and specific mitigation actions.
+    \item To develop a "Mitigation Verification" pipeline allowing users to calculate the mathematical improvement percentage before and after treatments.
+    \item To flawlessly separate the UI: configuring the local 0.96" OLED for urgent alerts/ML predictions, and a PC Web Dashboard for the GPS map and full Gemini AI reports.
+\end{enumerate}
+
+%==========================
+% Chapter 6: Mathematical Framework
+%==========================
+\chapter{Theoretical and Mathematical Framework}
+\section{The AQI Calculation Equation}
+The AQI is a piecewise linear function. The formula is as follows:
+\begin{equation}
+    I = \frac{I_{high} - I_{low}}{C_{high} - C_{low}} \times (C - C_{low}) + I_{low}
+\end{equation}
+Where $C$ is the pollutant concentration, and the overall AQI is the maximum of all sub-indices:
+\begin{equation}
+    AQI_{overall} = \max(I_{PM2.5}, I_{CO2}, I_{CO})
+\end{equation}
+
+\section{Mitigation Improvement Formula}
+When a user applies a treatment and triggers a "Retest", Gemini mathematically calculates the improvement:
+\begin{equation}
+    Improvement (\%) = \left( \frac{AQI_{baseline} - AQI_{retest}}{AQI_{baseline}} \right) \times 100
+\end{equation}
+
+%==========================
+% Chapter 7: Hybrid AI & Machine Learning Architecture
+%==========================
+\chapter{Hybrid AI \& Machine Learning Architecture}
+The true innovation of this project is its dual-intelligence approach: dividing labor between Edge ML (for fast, offline numerical prediction) and Cloud LLMs (for complex contextual reasoning).
+
+\section{Edge ML Model 1: Linear Regression (Numerical Prediction)}
+\begin{itemize}
+    \item \textbf{Purpose:} Predict the exact future AQI value 1 hour in advance.
+    \item \textbf{Algorithm:} Linear Regression (trained via Python scikit-learn).
+    \item \textbf{Input Features:} Current AQI, Temp, Humidity, Dust Density, CO Level.
+    \item \textbf{Deployment:} The trained coefficients ($y = mx + b$) are hardcoded directly into the ESP32 firmware.
+\end{itemize}
+
+\section{Edge ML Model 2: Logistic Regression (Binary Emergency Alert)}
+\begin{itemize}
+    \item \textbf{Purpose:} Determine if the environment has reached a critical threshold requiring immediate physical evacuation.
+    \item \textbf{Algorithm:} Logistic Regression (trained via Python scikit-learn).
+    \item \textbf{Output Classes:} 1 = CRITICAL (Evacuate/Sound Alarm), 0 = SAFE.
+    \item \textbf{Deployment:} The sigmoid function $\sigma(z) = \frac{1}{1 + e^{-z}}$ calculates the probability of critical danger locally on the ESP32. If the probability exceeds 85\%, it instantly triggers the hardware active buzzer—no internet required.
+\end{itemize}
+
+\section{Edge ML Model 3: Decision Tree (Categorical Classification)}
+\begin{itemize}
+    \item \textbf{Purpose:} Classify the general health risk level into distinct categories.
+    \item \textbf{Algorithm:} Decision Tree Classifier.
+    \item \textbf{Output Classes:} GOOD, MODERATE, UNHEALTHY, HAZARDOUS.
+    \item \textbf{Deployment:} The decision boundaries (If-Else logic derived from the tree branches) are embedded in the ESP32 to drive the local RGB LED colors.
+\end{itemize}
+
+\section{Cloud AI: Gemini 2.5 Pro (Advanced Reasoning)}
+While the Edge ML predicts the numbers and handles emergencies, Gemini handles the context. The cloud backend sends the raw data vector to Gemini 2.5 Pro to:
+\begin{enumerate}
+    \item Analyze the interplay between pollutants (e.g., high humidity makes high PM2.5 more dangerous).
+    \item Generate human-readable reports and domain suitability flags (e.g., "Not safe for asthma patients").
+    \item Provide actionable mitigation recommendations (e.g., "Turn on HEPA purifier").
+    \item Perform the Mitigation Verification calculations.
+\end{enumerate}
+
+%==========================
+% Chapter 8: Hardware Architecture & Pin Mapping
+%==========================
+\chapter{Hardware Architecture \& Pin Mapping}
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|c|X|c|c|}
+        \hline
+        \textbf{Component} & \textbf{Pin Function} & \textbf{ESP32 Connection} & \textbf{Signal Type} \\ \hline
+        \textbf{MQ-135} & Analog Output (A0) & GPIO 34 (ADC1\_CH6) & Analog Input \\ \hline
+        \textbf{MQ-7} & Analog Output (A0) & GPIO 35 (ADC1\_CH7) & Analog Input \\ \hline
+        \multirow{2}{*}{\textbf{GP2Y1010}} & Analog Measure (Vo) & GPIO 32 (ADC1\_CH4) & Analog Input \\ \cline{2-4}
+        & LED Pulse Control & GPIO 14 & Digital Output \\ \hline
+        \textbf{DHT22} & Data Signal & GPIO 4 & Digital I/O \\ \hline
+        \multirow{2}{*}{\textbf{NEO-6M GPS}} & TX Data Transmit & GPIO 16 (RX2) & UART Receive \\ \cline{2-4}
+        & RX Data Receive & GPIO 17 (TX2) & UART Transmit \\ \hline
+        \multirow{2}{*}{\textbf{OLED}} & SDA (I2C Data) & GPIO 21 & I2C Bus \\ \cline{2-4}
+        & SCL (I2C Clock) & GPIO 22 & I2C Bus \\ \hline
+        \textbf{Active Buzzer} & Trigger Pin & GPIO 26 & Digital Output \\ \hline
+    \end{tabularx}
+    \caption{Detailed Hardware Pin Mapping Configuration}
+\end{table}
+
+%==========================
+% Chapter 9: Data Distribution \& UI Strategy
+%==========================
+\chapter{Data Distribution \& UI Strategy}
+\section{Local Device (0.96" OLED Display)}
+The physical device uses three rotating pages displaying Edge-computed data:
+\begin{itemize}
+    \item \textbf{Page 1:} Current AQI Score \& Health Risk Level.
+    \item \textbf{Page 2:} ML Prediction (e.g., \texttt{Predicted 1-Hr AQI: 165}).
+    \item \textbf{Page 3:} The absolute top-priority AI mitigation action.
+\end{itemize}
+
+\section{PC Web Dashboard (Powered by Gemini 2.5 Pro)}
+The web frontend handles all heavy visualizations:
+\begin{itemize}
+    \item \textbf{Interactive GPS Air Map:} Leaflet.js-powered crowd-sourced map.
+    \item \textbf{Gemini AI Report Panel:} Full natural-language health analysis.
+    \item \textbf{Verification \& Improvement Module:} "Before" and "After" bar charts with percentage improvements.
+    \item \textbf{Suitability Gauges:} Safe/Unsafe for Asthma, Exercise, or Infants.
+\end{itemize}
+
+%==========================
+% Chapter 10: Course Outcome Alignment
+%==========================
+\chapter{Course Outcome Alignment}
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|c|X|X|}
+        \hline
+        \textbf{CO Code} & \textbf{Official Course Outcome} & \textbf{Project Implementation \& Fulfillment} \\ \hline
+        \textbf{CO1} & Demonstrate the functionality of Arduino/ESP32 programmed in Arduino IDE. & Utilizes complex C++ programming to manage analog reads, I2C (OLED), UART (GPS), and embedded ML models. \\ \hline
+        \textbf{CO2} & Analyze various IoT techniques and apply to real-life problems. & Employs IoT techniques (RESTful APIs, cloud databases) and hybrid AI to solve Dhaka's air pollution crisis. \\ \hline
+        \textbf{CO3} & Design and implement a complete IoT project. & Delivers an end-to-end system from bare components to an Edge ML/Cloud AI integrated full-stack dashboard. \\ \hline
+    \end{tabularx}
+    \caption{Course Outcome Matrix}
+\end{table}
+
+%==========================
+% Chapter 11: Budget and Component Costs
+%==========================
+\chapter{Budget and Component Costs}
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|c|X|c|c|}
+        \hline
+        \textbf{S.N.} & \textbf{Component Name and Specification} & \textbf{Qty} & \textbf{Estimated Price (BDT)} \\ \hline
+        1 & ESP32 DevKit V1 (ESP-WROOM-32) & 1 & 650 -- 900 \\ \hline
+        2 & MQ-135 Gas Sensor Module (CO2/VOC) & 1 & 150 -- 250 \\ \hline
+        3 & MQ-7 Sensor Module (Carbon Monoxide) & 1 & 200 -- 300 \\ \hline
+        4 & Sharp GP2Y1010AU0F Dust/PM2.5 Sensor & 1 & 450 -- 600 \\ \hline
+        5 & DHT22 Digital Temp \& Humidity Sensor & 1 & 300 -- 400 \\ \hline
+        6 & Ublox NEO-6M GPS Module with Antenna & 1 & 400 -- 550 \\ \hline
+        7 & 0.96 inch OLED Display (I2C, SSD1306) & 1 & 250 -- 350 \\ \hline
+        8 & Miscellaneous (RGB LED, Buzzer, Wires, Box) & 1 Set & 700 -- 1000 \\ \hline
+        \multicolumn{3}{|r|}{\textbf{Total Estimated Budget (Per Node):}} & \textbf{3,100 -- 4,350 BDT} \\ \hline
+    \end{tabularx}
+    \caption{Comprehensive Bill of Materials (BOM) and Budget}
+\end{table}
+
+%==========================
+% Chapter 12: Implementation Timeline
+%==========================
+\chapter{Implementation Timeline}
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|c|l|X|}
+        \hline
+        \textbf{Phase} & \textbf{Timeline} & \textbf{Specific Milestones and Deliverables} \\ \hline
+        \textbf{1} & \textbf{Week 1 (Logistics)} & Finalize architecture. Procure hardware. Setup Google Colab for ML training. \\ \hline
+        \textbf{2} & \textbf{Week 2 (Hardware)} & Breadboard assembly. Write test scripts for sensors and GPS. \\ \hline
+        \textbf{3} & \textbf{Week 3 (Edge ML \& Firmware)} & Train Linear Regression, Logistic Regression, \& Decision Tree models. Embed ML coefficients into ESP32 firmware. Establish WiFi/Cloud link. \\ \hline
+        \textbf{4} & \textbf{Week 4 (Gemini AI \& Web)} & Develop PC Dashboard. Integrate Gemini 2.5 Pro API. Implement Mitigation Verification logic. \\ \hline
+        \textbf{5} & \textbf{Week 5 (Testing)} & Conduct end-to-end testing (simulating pollution). Finalize report and live demonstration. \\ \hline
+    \end{tabularx}
+    \caption{5-Week Implementation Schedule}
+\end{table}
+
+%==========================
+% Chapter 13: Expected Outcomes
+%==========================
+\chapter{Expected Outcomes}
+\section{Technical and Academic Outcomes}
+This project will prove that sophisticated, AI-driven environmental analytics can be achieved affordably by utilizing a \textbf{Hybrid AI approach}. Edge ML models running on a sub-5000 BDT microcontroller provide offline numerical resilience, while intelligently offloading natural language generation to the Gemini 2.5 Pro API provides enterprise-grade analytical depth. 
+
+\section{Socio-Environmental Impact in Bangladesh}
+By empowering citizens with predictive democratized data, telling them exactly when it is unsafe, mapping pollution across communities via GPS, and mathematically verifying their air purifier investments, this project moves IoT from a theoretical academic exercise to a life-saving daily utility for the people of Bangladesh.
+
+%==========================
+% Chapter 14: Risk Assessment & Mitigation
+%==========================
+\chapter{Risk Assessment \& Mitigation Strategy}
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|X|X|}
+        \hline
+        \textbf{Identified Risk Factor} & \textbf{Engineered Mitigation Strategy} \\ \hline
+        \textbf{Loss of Internet / WiFi Disconnection} & The embedded Edge ML models (Linear Regression, Logistic Regression, \& Decision Tree) continue running locally on the ESP32, ensuring predictive warnings and alarms never stop, even offline. \\ \hline
+        \textbf{Inconsistent Sensor Readings (Noise)} & The firmware uses a 10-sample moving average algorithm to eliminate voltage spikes. \\ \hline
+        \textbf{Gemini API Rate Limiting} & API calls are heavily debounced. The system only queries Gemini once every 5 minutes or during manual "Retest" triggers. \\ \hline
+    \end{tabularx}
+    \caption{Comprehensive Risk Mitigation Plan}
+\end{table}
+
+%==========================
+% Chapter 15: Conclusion
+%==========================
+\chapter{Conclusion}
+The \textbf{Smart Air Quality Monitoring and Health Risk Prediction System} represents a monumental leap forward in environmental monitoring technology. By embracing a dual-intelligence architecture, this project delivers the best of both worlds: robust offline prediction via embedded \textbf{Edge Machine Learning}, and advanced contextual reasoning, mitigation verification, and actionable intelligence via the \textbf{Gemini 2.5 Pro} cloud API.
+
+Coupled with a crowd-sourced GPS Community Mapping feature and carefully separated UI duties between the OLED display and the PC web dashboard, this project guarantees both immediate safety alerts and deep analytical insights. At an estimated cost of under 4,400 BDT, this system provides a highly scalable, academically rigorous, and immensely impactful solution to one of Bangladesh's most critical public health crises.
+
+\end{document}

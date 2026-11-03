@@ -1,0 +1,90 @@
+[
+  {
+    "id": 1,
+    "name": "Ziaul Hoque Polash",
+    "role": "Actor / Director",
+    "photo": "/gallery/kabila.jpg",
+    "projects": ["Bachelor Point", "Hotel Relax", "Oshomoy", "Underworld"],
+    "description": "Widely famous for playing 'Kabila' in Bachelor Point, Polash is a regular collaborator with Ome and also a director himself.",
+    "directorMemory": "Polash is like family. His dedication to character work, particularly with Kabila, brought a completely new flavor to Bangladeshi comedy.",
+    "interviewLink": "https://www.thedailystar.net/entertainment/tv-film/news/ziaul-hoque-polash-the-man-behind-kabila-2059349",
+    "notableWork": "Bachelor Point"
+  },
+  {
+    "id": 2,
+    "name": "Mishu Sabbir",
+    "role": "Actor",
+    "photo": "/gallery/shuvo.jpg",
+    "projects": ["Bachelor Point", "Oshomoy"],
+    "description": "Known for his role as 'Shuvo' in Bachelor Point, Mishu's natural comedic timing and delivery have made him a staple in Ome's ensemble.",
+    "directorMemory": "Mishu understands the rhythm of my writing perfectly. He knows exactly when to pause and when to deliver the punchline.",
+    "interviewLink": "https://www.thedailystar.net/",
+    "notableWork": "Bachelor Point"
+  },
+  {
+    "id": 3,
+    "name": "Marzuk Russell",
+    "role": "Actor / Poet",
+    "photo": "/gallery/pasha.jpg",
+    "projects": ["Bachelor Point", "Hotel Relax"],
+    "description": "Playing the iconic 'Pasha Bhai', Marzuk Russell is a poet and actor whose unique persona became one of the biggest attractions of Ome's works.",
+    "directorMemory": "Marzuk Bhai brings an eccentricity to the set that you can't write into a script. Pasha Bhai was a cultural phenomenon because of him.",
+    "interviewLink": "https://www.thedailystar.net/",
+    "notableWork": "Bachelor Point"
+  },
+  {
+    "id": 4,
+    "name": "Chashi Alam",
+    "role": "Actor",
+    "photo": "/gallery/habu.jpg",
+    "projects": ["Bachelor Point", "Hotel Relax"],
+    "description": "Known as 'Habu Bhai', Chashi Alam's expressions and comedic innocence won the hearts of millions of viewers.",
+    "directorMemory": "Chashi Bhai's facial expressions alone can carry a scene. The audience loves him because his innocence is absolutely genuine.",
+    "interviewLink": "https://www.thedailystar.net/",
+    "notableWork": "Bachelor Point"
+  },
+  {
+    "id": 5,
+    "name": "Afran Nisho",
+    "role": "Actor",
+    "photo": "/gallery/photo-2.jpg",
+    "projects": ["Sorry Sir", "Various Dramas"],
+    "description": "A superstar of Bangladeshi television and cinema, Nisho's performance in 'Sorry Sir' is considered one of his most emotionally impactful roles.",
+    "directorMemory": "Nisho Bhai dives deep into the psychology of the character. When we did Sorry Sir, he completely transformed into that broken student.",
+    "interviewLink": "https://en.prothomalo.com/entertainment",
+    "notableWork": "Sorry Sir"
+  },
+  {
+    "id": 6,
+    "name": "Tanjin Tisha",
+    "role": "Actress",
+    "photo": "/gallery/photo-3.jpg",
+    "projects": ["Sorry Sir", "The Secret"],
+    "description": "Tanjin Tisha has collaborated with Ome on several emotional and romantic dramas, bringing depth to her characters.",
+    "directorMemory": "Tisha has this ability to convey profound sadness with just her eyes. She grounds the emotional weight of my stories.",
+    "interviewLink": "https://www.dhakatribune.com/",
+    "notableWork": "Sorry Sir"
+  },
+  {
+    "id": 7,
+    "name": "Ziaul Faruq Apurba",
+    "role": "Actor",
+    "photo": "/gallery/photo-4.jpg",
+    "projects": ["The Secret", "Arekti Shondeher Golpo"],
+    "description": "The king of romance in Bangladeshi TV, Apurba has worked with Ome on several hit romantic dramas.",
+    "directorMemory": "Apurba Bhai is a true professional. He understands the romantic genre better than anyone and always delivers what the audience wants.",
+    "interviewLink": "https://www.thedailystar.net/",
+    "notableWork": "The Secret"
+  },
+  {
+    "id": 8,
+    "name": "Tariq Anam Khan",
+    "role": "Actor",
+    "photo": "/gallery/photo-5.jpg",
+    "projects": ["Oshomoy"],
+    "description": "A legendary actor who brought incredible gravitas and weight to Ome's tragedy web film 'Oshomoy'.",
+    "directorMemory": "Working with a legend like Tariq Sir on Oshomoy was a masterclass. His screen presence anchored the entire film.",
+    "interviewLink": "https://www.thedailystar.net/",
+    "notableWork": "Oshomoy"
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "crashId": "CRASH_1792772807618_iwfd",
+  "timestamp": "2026-10-23T16:26:47.618Z",
+  "tenantId": "DEFAULT_STORE",
+  "appVersion": "6.0.0",
+  "error": "ChevronDown is not defined",
+  "stack": "ReferenceError: ChevronDown is not defined\n    at AddProductModal (http://localhost:5173/src/ledgerx/pages/Inventory.jsx?t=1792772497828:3077:43)\n    at Object.react_stack_bottom_frame (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=94e8e04f:12866:12)\n    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=94e8e04f:4213:19)\n    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=94e8e04f:5569:16)\n    at beginWork (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=94e8e04f:6140:20)\n    at runWithFiberInDEV (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=94e8e04f:851:66)\n    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=94e8e04f:8429:92)\n    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=94e8e04f:8325:37)\n    at renderRootSync (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=94e8e04f:8309:6)\n    at performWorkOnRoot (http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=94e8e04f:7994:27)",
+  "systemInfo": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+    "screenWidth": 1536,
+    "screenHeight": 730,
+    "url": "http://localhost:5173/inventory",
+    "memory": {
+      "usedJSHeapSize": 105110708,
+      "totalJSHeapSize": 136599392
+    }
+  }
+}

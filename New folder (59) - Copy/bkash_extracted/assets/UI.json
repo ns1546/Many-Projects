@@ -1,0 +1,10 @@
+{
+  "tasks": [
+    {
+      "name": "uploadSignature",
+      "H5Config": {
+        "landscape": "landscape"
+      }
+    }
+  ]
+}

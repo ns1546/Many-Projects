@@ -1,0 +1,12 @@
+﻿const fs = require('fs');
+const cheerio = require('cheerio');
+const html = fs.readFileSync('g:/Download Official/Rownaa Website/owner-register.html', 'utf8');
+const $ = cheerio.load(html);
+console.log('Title:', $('title').text());
+console.log('Wizard page exists:', $('.wizard-page').length);
+console.log('Wizard inner exists:', $('.wizard-inner').length);
+console.log('W-card exists:', $('.w-card').length);
+console.log('Step 1 style:', $('#w-step-1').attr('style'));
+console.log('Step 2 style:', $('#w-step-2').attr('style'));
+console.log('Step 3 style:', $('#w-step-3').attr('style'));
+console.log('Wizard header H1 text:', $('.wizard-header h1').text());

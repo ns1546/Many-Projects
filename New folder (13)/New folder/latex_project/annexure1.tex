@@ -1,0 +1,12 @@
+\chapter*{Annexure I}
+\addcontentsline{toc}{chapter}{Annexure I}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{A.\arabic{figure}}
+
+\begin{figure}[H]
+    \centering
+    \IfFileExists{a.png}
+    {\includegraphics[width=0.8\textwidth]{a.png}}
+    {\framebox[0.8\textwidth]{\rule{0pt}{10cm} Placeholder for a.png}}
+    \caption{Placeholder image a.png}
+\end{figure}

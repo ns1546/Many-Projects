@@ -1,0 +1,437 @@
+\chapter{Research Methodology}
+
+This chapter presents the complete research methodology of FEDMED-X. The
+methodology is designed as a systems pipeline rather than a single-model
+experiment. It combines data partitioning, lightweight neural architecture
+design, federated optimization, formal privacy accounting, communication
+compression, and evaluation protocol design under one reproducible
+framework. The guiding principle is that medical federated learning must be
+assessed under joint constraints of non-IID heterogeneity, privacy, bandwidth
+limitation, and edge-oriented deployability~\cite{guan2024federated,
+ghosh2026advancements,zhou2025federated}. Figure~\ref{fig:framework}
+illustrates the end-to-end methodological flow used in this project.
+
+% =====================================================
+% PROFESSIONAL WORKFLOW DIAGRAM
+% =====================================================
+\begin{figure}[!htbp]
+\centering
+\begin{tikzpicture}[
+  node distance = 7mm and 10mm,
+  every node/.style = {font=\footnotesize},
+  stage/.style = {rectangle, rounded corners=3pt, draw=black!70,
+                  minimum width=5.6cm, minimum height=8mm,
+                  align=center, thick, drop shadow},
+  data/.style   = {stage, fill=green!15},
+  train/.style  = {stage, fill=orange!20},
+  priv/.style   = {stage, fill=red!15},
+  comm/.style   = {stage, fill=blue!12},
+  serv/.style   = {stage, fill=violet!15},
+  eval/.style   = {stage, fill=teal!15},
+  arrow/.style  = {-{Latex[length=2mm]}, thick, black!70}
+]
+\node[data]  (d1) {MedMNIST PneumoniaMNIST (5{,}856 images)};
+\node[data,  below=of d1] (d2) {Dirichlet Partition ($\alpha=0.5$)};
+\node[data,  below=of d2] (d3) {5 Simulated Hospital Clients (Non-IID)};
+\node[train, below=of d3] (t1) {MedNet-CBAM Local Training + Focal Loss ($\gamma=2.0$)};
+\node[priv,  below=of t1] (p1) {DP-SGD Privacy Engine ($\epsilon=1.0$, $\delta=10^{-5}$)};
+\node[comm,  below=of p1] (c1) {TopK 50\% Sparsification + INT8 Quantization ($\sim$90\% BW$\downarrow$)};
+\node[serv,  below=of c1] (s1) {Server: Weighted FedProx Aggregation ($\mu=0.01$)};
+\node[eval,  below=of s1] (e1) {Evaluation: Accuracy, Macro-F1, Precision, Recall};
+\node[eval,  below=of e1] (e2) {Edge Benchmark: NVIDIA Jetson Nano (target 0.20\,ms/img)};
+
+\draw[arrow] (d1) -- (d2);
+\draw[arrow] (d2) -- (d3);
+\draw[arrow] (d3) -- (t1);
+\draw[arrow] (t1) -- (p1);
+\draw[arrow] (p1) -- (c1);
+\draw[arrow] (c1) -- (s1);
+\draw[arrow] (s1) -- (e1);
+\draw[arrow] (e1) -- (e2);
+
+% Feedback loop
+\draw[arrow, dashed, black!55]
+  (s1.east) .. controls +(2.5,0) and +(2.5,0) .. (t1.east)
+  node[midway, right=2pt, font=\scriptsize]{Global Model Broadcast};
+\end{tikzpicture}
+\caption{Proposed FEDMED-X methodological workflow showing data
+partitioning, local training, privacy accounting, compression, server
+aggregation, evaluation, and edge-oriented benchmarking. The dashed arrow
+represents the recurring global-model broadcast at every federated round.}
+\label{fig:framework}
+\end{figure}
+
+\noindent\emph{Figure Explanation:} Figure~\ref{fig:framework} depicts the
+six functional layers of FEDMED-X: (i)~data layer, (ii)~local training layer,
+(iii)~privacy layer, (iv)~compression layer, (v)~aggregation layer, and
+(vi)~evaluation layer. Each layer corresponds to a toggleable module in the
+implementation, allowing the ablation configurations A1--A5 described in
+Section~3.3.7 to reuse the same infrastructure without modification.
+\FloatBarrier
+
+% -------------------------------------------------
+\section{Proposed Framework}
+FEDMED-X is formulated as a multi-hospital federated learning framework with
+five simulated clients. In every communication round, each client receives
+the current global model, performs local training on its private partition,
+optionally applies differentially private optimization, compresses the
+outgoing update, and sends the update to the server. The server aggregates
+client updates by sample-size-weighted averaging and broadcasts the new
+global model. The framework is deliberately modular so that each design
+choice can be isolated in ablation experiments:
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Baseline aggregation path:} FedAvg without privacy or
+        compression;
+  \item \textbf{Non-IID robust path:} FedProx with proximal regularization;
+  \item \textbf{Privacy path:} FedProx + DP-SGD;
+  \item \textbf{Compression path:} FedProx + TopK/INT8;
+  \item \textbf{Full systems path:} FedProx + DP-SGD + TopK/INT8 (FEDMED-X).
+\end{enumerate}
+This factorial structure is essential for scientific interpretability. It
+allows the project to measure not only final accuracy, but also the marginal
+effect of privacy and compression under the same data split, model family,
+and training protocol~\cite{zhou2025federated}.
+
+\subsection{Design Principles}
+The proposed framework follows four engineering principles:
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Privacy by design:} raw images never leave the client
+        boundary;
+  \item \textbf{Robustness to heterogeneity:} local optimization is
+        constrained to reduce harmful drift;
+  \item \textbf{Communication realism:} update payloads are compressed
+        before server transmission;
+  \item \textbf{Edge eligibility:} the backbone remains lightweight enough
+        for resource-constrained deployment targets such as NVIDIA Jetson
+        Nano class devices~\cite{shabarinath2025efficacy}.
+\end{itemize}
+
+% -------------------------------------------------
+\section{Data Set Analysis / Software Project Requirement}
+
+\subsection{Dataset Selection}
+The primary dataset used in this study is PneumoniaMNIST from MedMNIST
+v2~\cite{yang2023medmnist}. MedMNIST is selected because it is a
+standardized, reproducible biomedical benchmark that supports controlled
+methodological comparison. PneumoniaMNIST is a binary classification task
+with labels:
+\begin{itemize}[leftmargin=*]
+  \item Class 0: Normal
+  \item Class 1: Pneumonia
+\end{itemize}
+All images are grayscale with resolution $28 \times 28$.
+
+\begin{table}[!htbp]
+\centering
+\caption{Dataset summary for PneumoniaMNIST.}
+\label{tab:dataset}
+\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Split} & \textbf{Description} & \textbf{Samples} & \textbf{Classes} \\
+\midrule
+Train      & Client partitioning source  & 4{,}708 & 2 \\
+Validation & Model monitoring split      & 524     & 2 \\
+Test       & Final held-out evaluation   & 624     & 2 \\
+\midrule
+Total      & Full PneumoniaMNIST task    & 5{,}856 & 2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\emph{Table Explanation:} Table~\ref{tab:dataset} shows the
+official PneumoniaMNIST split used throughout FEDMED-X. The training split
+is further redistributed across five clients using Dirichlet sampling.
+
+\begin{table}[!htbp]
+\centering
+\caption{Class definition used in FEDMED-X.}
+\label{tab:classes}
+\small
+\begin{tabular}{@{}cl@{}}
+\toprule
+\textbf{Label} & \textbf{Clinical Meaning} \\
+\midrule
+0 & Normal chest X-ray \\
+1 & Pneumonia-positive chest X-ray \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\emph{Table Explanation:} Table~\ref{tab:classes} defines the two
+diagnostic labels used for both training and evaluation.
+\FloatBarrier
+
+\subsection{Non-IID Client Partitioning}
+To simulate multi-hospital heterogeneity, the training set is partitioned
+across five clients using a Dirichlet distribution with concentration
+parameter $\alpha = 0.5$. Lower $\alpha$ produces stronger label skew, which
+better reflects realistic institutional
+imbalance~\cite{riyadi2026comparative,alekseenko2024distance}. Each client
+$k$ receives a private index subset $\mathcal{D}_k$ such that:
+\begin{equation}
+\bigcup_{k=1}^{5} \mathcal{D}_k = \mathcal{D}_{\text{train}}, \qquad
+\mathcal{D}_i \cap \mathcal{D}_j = \emptyset \quad (i \neq j).
+\end{equation}
+This creates uneven local class distributions and unequal local dataset
+sizes, which stress-test federated optimization.
+
+\subsection{Software and System Requirements}
+Table~\ref{tab:software} summarizes the implementation stack.
+
+\begin{table}[!htbp]
+\centering
+\caption{Software and environment requirements.}
+\label{tab:software}
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Component} & \textbf{Specification} \\
+\midrule
+Language              & Python 3.x \\
+Deep learning         & PyTorch \\
+Privacy engine        & Opacus (DP-SGD, R\'enyi accounting) \\
+Dataset API           & MedMNIST v2 \\
+Training hardware     & Google Colab NVIDIA T4 GPU \\
+Target edge device    & NVIDIA Jetson Nano 4\,GB class \\
+Experiment tracking   & CSV logs + saved model checkpoints \\
+Report toolchain      & VS Code + LaTeX Workshop \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\emph{Table Explanation:} Table~\ref{tab:software} lists the tools
+and hardware used across training, privacy accounting, and reproducibility.
+\FloatBarrier
+
+\subsection{Functional Requirements}
+From a software engineering perspective, the system must satisfy:
+\begin{enumerate}[leftmargin=*]
+  \item load and preprocess PneumoniaMNIST images;
+  \item partition training data into five non-IID clients;
+  \item support FedAvg and FedProx training modes;
+  \item optionally enable DP-SGD with configurable $\epsilon$;
+  \item optionally compress updates using TopK and INT8 simulation;
+  \item aggregate client updates on the server;
+  \item evaluate Accuracy, Precision, Recall, and Macro-F1;
+  \item export ablation results for report-level analysis.
+\end{enumerate}
+
+\subsection{Non-Functional Requirements}
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Reproducibility:} fixed seeds and identical protocol across
+        ablation runs;
+  \item \textbf{Modularity:} privacy and compression can be toggled
+        independently;
+  \item \textbf{Efficiency:} lightweight backbone for constrained
+        deployment;
+  \item \textbf{Auditability:} quantitative logs for every experimental
+        configuration.
+\end{itemize}
+
+% -------------------------------------------------
+\section{Algorithm / Model Analysis}
+
+\subsection{MedNet-CBAM Backbone}
+The classification backbone is a custom lightweight CNN named MedNet,
+augmented with CBAM attention~\cite{woo2018cbam}. The network is
+intentionally compact to remain eligible for edge deployment. Important
+implementation choices include:
+\begin{itemize}[leftmargin=*]
+  \item GroupNorm instead of BatchNorm for DP compatibility;
+  \item non-inplace ReLU activations for stable autograd under Opacus;
+  \item CBAM blocks after early convolutional stages to emphasize
+        informative regions.
+\end{itemize}
+A simplified forward path is:
+$x \rightarrow \text{ConvBlock1} + \text{CBAM} \rightarrow
+\text{ConvBlock2} + \text{CBAM} \rightarrow \text{ConvBlock3}
+\rightarrow \text{Classifier}$.
+
+\subsection{Local Objective and Focal Loss}
+Because medical class distributions can be imbalanced, local training uses
+Focal Loss~\cite{lin2017focal}:
+\begin{equation}
+\mathcal{L}_{\text{focal}} = -\alpha_t (1 - p_t)^{\gamma} \log(p_t),
+\end{equation}
+with $\gamma = 2.0$. This down-weights easy examples and focuses learning on
+harder samples.
+
+\subsection{FedAvg Baseline}
+In FedAvg, client $k$ minimizes its local empirical loss and returns updated
+parameters $w_k$. The server aggregates~\cite{mcmahan2017communication}:
+\begin{equation}
+w^{t+1} = \sum_{k=1}^{K} \frac{n_k}{n} \, w_k^{t+1},
+\end{equation}
+where $n_k = |\mathcal{D}_k|$ and $n = \sum_k n_k$. FedAvg is effective
+under mild heterogeneity but can degrade under strong non-IID skew.
+
+\subsection{FedProx Optimization}
+FedProx extends local training with a proximal
+penalty~\cite{li2020fedprox,yuan2022convergence}:
+\begin{equation}
+\mathcal{L}_{\text{FedProx}}(w; w^t) = \mathcal{L}_{\text{local}}(w)
++ \frac{\mu}{2} \| w - w^t \|_2^2,
+\end{equation}
+where $\mu = 0.01$ in this project. The proximal term limits client drift
+and stabilizes aggregation under heterogeneous partitions. This choice is
+supported by comparative medical FL evidence on MedMNIST-style
+tasks~\cite{riyadi2026comparative}.
+
+\subsection{DP-SGD Privacy Mechanism}
+When privacy mode is enabled, local optimization uses
+DP-SGD~\cite{abadi2016deep}. Per-sample gradients are clipped to a maximum
+norm $C$ and Gaussian noise is added before parameter update. The
+implemented target budget is
+\begin{equation}
+\epsilon = 1.0, \quad \delta = 1 \times 10^{-5}.
+\end{equation}
+Privacy accounting is handled through Opacus with R\'enyi Differential
+Privacy~\cite{mironov2017renyi}. This provides a formal interpretation of
+privacy loss rather than an informal claim of
+confidentiality~\cite{ziller2021differentially,hou2023improving}.
+
+\subsection{TopK + INT8 Compression}
+To reduce communication cost, outgoing updates are compressed in two stages:
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{TopK sparsification (50\%):} only the highest-magnitude half
+        of coefficients are retained~\cite{habib2025cflsparsemed};
+  \item \textbf{INT8 quantization simulation:} retained values are quantized
+        to 8-bit scale and dequantized for aggregation
+        compatibility~\cite{asad2024fesec,sun2025medfd}.
+\end{enumerate}
+The combined scheme is designed to approximate substantial payload
+reduction. In this project, the full compressed setting is associated with a
+90\% bandwidth-saving target relative to dense full-precision update
+exchange.
+
+\subsection{Server Aggregation and Evaluation Protocol}
+After local training and optional compression, the server performs weighted
+aggregation and evaluates the global model on the held-out test set. The
+main metrics are Accuracy, Macro-F1, Precision, and Recall. The
+methodological evaluation is organized as a five-run factorial ablation:
+
+\begin{table}[!htbp]
+\centering
+\caption{Factorial ablation configurations used in FEDMED-X.}
+\label{tab:ablation}
+\small
+\begin{tabular}{@{}clccc@{}}
+\toprule
+\textbf{Run} & \textbf{Configuration} & \textbf{FedProx} & \textbf{DP-SGD} & \textbf{TopK/INT8} \\
+\midrule
+A1 & FedAvg baseline    & No  & No  & No  \\
+A2 & FedProx baseline   & Yes & No  & No  \\
+A3 & Privacy path       & Yes & Yes & No  \\
+A4 & Compression path   & Yes & No  & Yes \\
+A5 & Full FEDMED-X      & Yes & Yes & Yes \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\emph{Table Explanation:} Table~\ref{tab:ablation} defines the five
+controlled ablation runs. This protocol is the methodological core of the
+project because it enables causal interpretation of component effects under
+one shared experimental family.
+\FloatBarrier
+
+% -------------------------------------------------
+\section{Explanation of Different Modules}
+FEDMED-X is implemented as a set of interdependent modules. Each module
+encapsulates one responsibility in the pipeline.
+
+\subsection{Data Module}
+The data module performs dataset download, tensor transformation,
+normalization, and Dirichlet partitioning. Normalization uses mean and
+standard deviation of 0.5 for grayscale inputs. Outputs include: client-wise
+training dataloaders, a global validation loader, and a global test loader.
+
+\subsection{Model Module}
+The model module defines MedNet-CBAM and exposes a common interface for
+training and inference. GroupNorm and non-inplace activations are mandatory
+design decisions for DP compatibility and stable backward computation under
+privacy engines.
+
+\subsection{Federated Training Module}
+This module coordinates communication rounds. For each round it:
+(i)~broadcasts global weights; (ii)~trains selected clients locally;
+(iii)~collects updates; (iv)~aggregates weights; (v)~evaluates global
+performance.
+
+\subsection{Privacy Module}
+The privacy module wraps local training with Opacus DP-SGD when enabled. It
+controls clipping, noise assignment, and target $\epsilon$. In full-stack
+mode, privacy is applied \emph{before} update compression to preserve the
+declared privacy budget.
+
+\subsection{Compression Module}
+The compression module applies TopK masking and INT8 quantization simulation
+on model updates. It can be disabled for baseline runs to measure
+compression-only effects.
+
+\subsection{Evaluation and Logging Module}
+The evaluation module computes metrics and stores experiment-level
+summaries, including accuracy, F1-score, precision, recall, privacy mode,
+compression mode, and runtime. These logs are used in later chapters for
+result analysis and discussion.
+
+\subsection{Edge-Oriented Deployment Module}
+Although training is performed in a GPU cloud environment, the methodology
+includes an edge-oriented deployment perspective. The model footprint and
+inference-oriented design choices are aligned with NVIDIA Jetson Nano class
+constraints~\cite{song2025edgecloud,shabarinath2025efficacy,memon2024edge}.
+The intended inference target characteristics used in this project are
+ultra-low per-image latency and high throughput on constrained hardware.
+
+\begin{figure}[!htbp]
+\centering
+\begin{tikzpicture}[
+  node distance = 8mm and 12mm,
+  every node/.style = {font=\footnotesize},
+  mod/.style = {rectangle, rounded corners=3pt, draw=black!70,
+                minimum width=3.2cm, minimum height=8mm,
+                align=center, thick, fill=blue!10, drop shadow},
+  arrow/.style = {-{Latex[length=2mm]}, thick, black!70}
+]
+\node[mod] (dm) {Data Module};
+\node[mod, right=of dm] (mm) {Model Module};
+\node[mod, right=of mm] (ft) {FL Trainer};
+
+\node[mod, below=of dm, fill=red!12]     (pm) {Privacy Module};
+\node[mod, below=of mm, fill=blue!12]    (cm) {Compression Module};
+\node[mod, below=of ft, fill=violet!12]  (ag) {Aggregation};
+
+\node[mod, below=of cm, fill=teal!12]    (ev) {Evaluation \& Logging};
+\node[mod, right=of ev, fill=orange!15]  (edge) {Edge Target Profile};
+
+\draw[arrow] (dm) -- (mm);
+\draw[arrow] (mm) -- (ft);
+\draw[arrow] (ft) -- (pm);
+\draw[arrow] (ft) -- (cm);
+\draw[arrow] (ft) -- (ag);
+\draw[arrow] (pm) -- (cm);
+\draw[arrow] (cm) -- (ag);
+\draw[arrow] (ag) -- (ev);
+\draw[arrow] (ev) -- (edge);
+\end{tikzpicture}
+\caption{Module-level architecture of the FEDMED-X software pipeline.}
+\label{fig:modules}
+\end{figure}
+
+\noindent\emph{Figure Explanation:} Figure~\ref{fig:modules} shows the
+module-level dependency structure of the implementation. Each block maps
+directly to a source file in the codebase and can be toggled independently
+during ablation.
+\FloatBarrier
+
+\nocite{*}
+
+\chaptersummary{This chapter presented the methodology of FEDMED-X as a
+complete systems pipeline. PneumoniaMNIST from MedMNIST v2 is partitioned
+into five Dirichlet non-IID hospital clients. A lightweight MedNet-CBAM
+model is trained under FedAvg and FedProx modes, with optional DP-SGD
+privacy and TopK/INT8 compression. The methodology emphasizes modular design
+and factorial ablation so that non-IID robustness, privacy cost, and
+communication reduction can be measured under one controlled protocol. The
+next chapter reports implementation details and experimental results
+obtained from this methodology.}

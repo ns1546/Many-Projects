@@ -1,0 +1,262 @@
+\chapter{Introduction}
+
+Artificial Intelligence (AI) has transformed medical image analysis by enabling
+automated detection of diseases from radiological scans such as chest X-rays.
+Deep learning models can support clinicians in identifying pneumonia and
+related abnormalities with high speed and consistency. However, building robust
+medical AI systems requires large and diverse datasets collected across
+multiple hospitals. In practice, hospitals cannot freely pool patient images
+into a single central repository because of legal, ethical, and security
+constraints. Privacy regulations such as the Health Insurance Portability and
+Accountability Act (HIPAA) and the General Data Protection Regulation (GDPR)
+restrict the transfer of identifiable medical data. As a result, conventional
+centralized machine learning pipelines face a fundamental conflict: high model
+performance requires multi-institutional data, while privacy law requires data
+localization. Federated Learning (FL) was introduced to resolve this conflict
+by allowing institutions to train a shared model collaboratively while keeping
+raw patient data inside each hospital~\cite{mcmahan2017communication,
+guan2024federated,li2020fedprox}.
+
+Despite strong theoretical promise, real-world medical FL deployments remain
+difficult. Recent multi-center studies report that hospital firewalls,
+bandwidth limits, non-Independent and Identically Distributed (non-IID) data
+drift, and residual gradient leakage frequently block practical
+translation~\cite{bujotzek2024real,schoenpflug2025navigating,
+koutsoubis2024future,hindawi2025federated}. In resource-constrained settings
+such as rural Bangladesh, these barriers are more severe because clinics often
+lack high-end computing infrastructure and stable high-bandwidth networks.
+Therefore, medical FL systems must be simultaneously accurate, private,
+communication-efficient, and edge-deployable.
+
+This capstone project presents FEDMED-X, a unified federated learning pipeline
+for medical image classification that jointly integrates FedProx
+optimization~\cite{li2020fedprox,yuan2022convergence}, Differential Privacy
+via DP-SGD~\cite{abadi2016deep,mironov2017renyi,ziller2021differentially},
+TopK+INT8 compression~\cite{habib2025cflsparsemed,zhou2022communication}, and
+a lightweight MedNet-CBAM neural
+backbone~\cite{woo2018cbam,yang2023medmnist} for edge-oriented deployment.
+Rather than proposing an isolated algorithm, FEDMED-X contributes a
+systems-level evaluation of the privacy--utility--communication trade-off
+under realistic non-IID hospital partitions.
+
+% -------------------------------------------------
+\section{Problem Statement}
+The central problem addressed in this research is the absence of a practical,
+end-to-end federated medical imaging pipeline that can operate under joint
+real-world constraints. Existing solutions typically optimize only one
+dimension of the problem. Some methods improve non-IID
+robustness~\cite{li2020fedprox,alekseenko2024distance,maleki2025handling},
+some add privacy noise~\cite{abadi2016deep,ziller2021differentially}, some
+compress communication payloads~\cite{habib2025cflsparsemed,asad2024fesec},
+and some evaluate edge inference~\cite{vincent2026federated,
+song2025edgecloud}. Very few systems evaluate all of these requirements
+together under a common experimental protocol.
+
+In clinical environments, this gap creates four concrete failures:
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Privacy failure:} Centralized training requires raw image
+        aggregation and increases exposure to data breaches.
+  \item \textbf{Heterogeneity failure:} Hospital datasets differ by patient
+        population, scanner type, and disease prevalence, causing standard
+        FedAvg models to drift~\cite{riyadi2026comparative}.
+  \item \textbf{Communication failure:} Full-precision gradient exchange is
+        expensive and often blocked by institutional
+        firewalls~\cite{schoenpflug2025navigating}.
+  \item \textbf{Deployment failure:} Heavy models and privacy mechanisms are
+        difficult to run on low-cost edge devices suitable for rural
+        clinics~\cite{shabarinath2025efficacy,memon2024edge}.
+\end{enumerate}
+
+Therefore, the research problem is not only to classify medical images, but to
+design a federated system that remains usable when privacy, non-IID drift,
+bandwidth limits, and edge hardware constraints are enforced at the same
+time.
+
+% -------------------------------------------------
+\section{Problem Background}
+Medical imaging AI has achieved strong benchmark performance under centralized
+training. However, healthcare data are naturally fragmented. Each hospital
+stores its own patient records, and cross-hospital transfer is restricted by
+regulation and institutional policy~\cite{guan2024federated}. FL addresses
+this by exchanging model updates instead of raw
+images~\cite{mcmahan2017communication}. Unfortunately, recent clinical
+evidence shows that FL prototypes often fail during translation. Bujotzek
+\emph{et al.} demonstrated that infrastructure, governance, and
+data-management bottlenecks remain major obstacles in multi-hospital
+radiology FL~\cite{bujotzek2024real}. Schoenpflug \emph{et al.} reported
+that network restrictions and long communication delays significantly affect
+multi-country pathology FL deployments~\cite{schoenpflug2025navigating}.
+Koutsoubis \emph{et al.} further emphasized that keeping data local is not
+equivalent to full privacy, because shared gradients can still leak sensitive
+information~\cite{koutsoubis2024future,wei2025medical}.
+
+From an algorithmic perspective, non-IID data remains a dominant challenge.
+Riyadi \emph{et al.} showed that FedProx is more robust than FedAvg under
+Dirichlet label skew on MedMNIST tasks~\cite{riyadi2026comparative}. At the
+same time, surveys highlight weak clinical and edge deployment benchmarks in
+current medical FL literature~\cite{ghosh2026advancements,
+zhou2025federated}. These findings collectively motivate a system that
+combines non-IID-aware optimization, formal privacy, communication
+compression, and edge-oriented model design.
+
+% -------------------------------------------------
+\section{Research Objectives}
+The objectives of this study are as follows:
+\begin{enumerate}[label=(\roman*),leftmargin=*]
+  \item To design a federated learning framework that enables multiple
+        simulated hospitals to collaboratively train a shared medical image
+        classifier without exchanging raw patient data.
+  \item To mitigate non-IID client drift using FedProx regularization with
+        proximal coefficient $\mu = 0.01$.
+  \item To enforce formal privacy protection through DP-SGD with target
+        privacy budget $\epsilon = 1.0$ and $\delta = 1 \times 10^{-5}$.
+  \item To reduce communication overhead by applying TopK 50\% gradient
+        sparsification and INT8 quantization, targeting approximately 90\%
+        bandwidth reduction.
+  \item To evaluate the complete pipeline through a factorial ablation study
+        and assess edge-oriented deployability using a lightweight
+        MedNet-CBAM model suitable for NVIDIA Jetson Nano class hardware.
+\end{enumerate}
+
+% -------------------------------------------------
+\section{Motivations}
+This research is motivated by three complementary needs.
+
+\textbf{Clinical motivation.} Bangladesh and many low-resource regions face
+shortages of specialist radiologists. Affordable AI tools deployed at the edge
+can support faster triage of chest X-rays in rural clinics, provided patient
+privacy is preserved~\cite{vincent2026federated,shabarinath2025efficacy}.
+
+\textbf{Technical motivation.} Most published medical FL studies evaluate
+components in isolation. A practical system must quantify what happens when
+privacy noise, compression, and non-IID optimization are applied
+together~\cite{yesmin2025medhe,pachlasiya2026fedhealth}. Without this joint
+evaluation, reported accuracies can be misleading for real deployment.
+
+\textbf{Academic and societal motivation.} Trustworthy AI, privacy-preserving
+learning, and edge intelligence are priority themes in modern computing
+research and graduate study pathways. FEDMED-X is designed as a reproducible
+systems benchmark that connects algorithm design with deployment reality.
+
+% -------------------------------------------------
+\section{Significance of the Research}
+The significance of FEDMED-X can be summarized in four dimensions:
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Scientific significance:} It provides a controlled
+        multi-objective evaluation of accuracy, privacy budget, communication
+        cost, and edge suitability under non-IID medical FL settings.
+  \item \textbf{Engineering significance:} It converts known components
+        (FedProx, DP-SGD, TopK, CBAM) into a coherent pipeline with explicit
+        trade-off measurement.
+  \item \textbf{Healthcare significance:} It supports privacy-preserving
+        collaborative learning that can benefit hospitals unwilling or unable
+        to share raw data.
+  \item \textbf{Educational significance:} It demonstrates complex engineering
+        problem-solving across machine learning, distributed systems, privacy
+        mathematics, and embedded deployment constraints.
+\end{itemize}
+
+% -------------------------------------------------
+\section{Research Contributions}
+The major contributions of this capstone research are:
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Unified systems pipeline:} Development of FEDMED-X,
+        integrating FedProx, DP-SGD, TopK+INT8 compression, and MedNet-CBAM
+        in one reproducible federated medical classification framework.
+  \item \textbf{Factorial ablation protocol:} Design and execution of a
+        five-run ablation matrix (FedAvg, FedProx, FedProx+DP,
+        FedProx+TopK/INT8, and full FEDMED-X) to isolate privacy and
+        compression effects.
+  \item \textbf{Empirical trade-off evidence:} Demonstration that FedProx
+        improves non-IID robustness over FedAvg (85.58\% vs 84.46\%
+        accuracy), while full privacy and compression constraints yield
+        75.16\% accuracy with 90\% bandwidth reduction under
+        $\epsilon = 1.0$.
+  \item \textbf{Edge-oriented design:} Construction of a lightweight,
+        Opacus-compatible GroupNorm-based MedNet-CBAM backbone targeting
+        resource-constrained deployment scenarios such as NVIDIA Jetson
+        Nano~\cite{shabarinath2025efficacy}.
+  \item \textbf{Deployment-aware framing:} Positioning the work as a systems
+        evaluation contribution rather than an unsupported absolute ``first
+        invention'' claim, aligned with current literature gaps in edge and
+        clinical translation~\cite{ghosh2026advancements,zhou2025federated}.
+\end{enumerate}
+
+% -------------------------------------------------
+\section{Complex Engineering Analysis}
+FEDMED-X qualifies as a complex engineering project because it cannot be
+solved by a single textbook method. It requires concurrent reasoning over
+conflicting objectives, multi-disciplinary knowledge, and interdependent
+subsystems.
+
+\subsection{Complex Engineering Problems}
+The project maps to the following complex engineering problem attributes:
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Depth of knowledge:} The solution requires machine learning,
+        distributed optimization, differential privacy, medical data
+        handling, and edge computing.
+  \item \textbf{Conflicting requirements:} Higher privacy noise and stronger
+        compression generally reduce accuracy; higher accuracy often
+        increases communication and compute cost.
+  \item \textbf{Depth of analysis:} Multiple design alternatives exist
+        (FedAvg vs FedProx, DP vs no DP, compressed vs uncompressed
+        updates), requiring controlled ablation rather than one-shot
+        implementation.
+  \item \textbf{Unfamiliarity:} Formal DP accounting~\cite{mironov2017renyi},
+        non-IID federated optimization~\cite{yuan2022convergence}, and edge
+        deployment constraints are beyond routine undergraduate coursework.
+  \item \textbf{Stakeholder diversity:} Patients, clinicians, hospital IT
+        units, regulators, and rural health workers impose different success
+        criteria.
+  \item \textbf{Interdependence:} Model architecture, privacy engine,
+        compression module, and communication protocol affect one another
+        and must be calibrated jointly.
+\end{itemize}
+
+\subsection{Complex Engineering Activities}
+The complex engineering activities performed in this project include:
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Resource integration:} Combining Colab GPU training,
+        MedMNIST datasets, PyTorch/Opacus tooling, and edge-oriented model
+        constraints.
+  \item \textbf{Trade-off resolution:} Measuring privacy tax, compression
+        effects, and joint utility loss through factorial experiments.
+  \item \textbf{Innovation through synthesis:} Building an end-to-end
+        evaluation framework that connects algorithm choice to deployment
+        metrics.
+  \item \textbf{Consequence analysis:} Assessing societal impact for
+        privacy-preserving healthcare AI in low-resource environments.
+  \item \textbf{Extended practice:} Applying research literature synthesis,
+        reproducible experimental design, and professional technical
+        documentation.
+\end{itemize}
+
+% -------------------------------------------------
+\section{Thesis/Project Organization}
+The remainder of this report is organized as follows:
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Chapter 2 -- Background Study} reviews related literature on
+        medical FL, privacy, communication efficiency, and edge deployment,
+        and analyzes the research gap.
+  \item \textbf{Chapter 3 -- Research Methodology} presents the FEDMED-X
+        framework, dataset setup, algorithms, and module-level design.
+  \item \textbf{Chapter 4 -- Implementation and Result Analysis} describes
+        the experimental environment, preprocessing, evaluation metrics,
+        ablation results, and discussion.
+  \item \textbf{Chapter 5 -- Standards, Constraints, and Milestones}
+        discusses ethics, societal impact, sustainability, challenges,
+        constraints, and project timeline.
+  \item \textbf{Chapter 6 -- Conclusion} summarizes findings, limitations,
+        and future research directions.
+\end{itemize}
+
+\chaptersummary{This chapter introduced the motivation and problem foundation
+of FEDMED-X. Medical AI systems need multi-hospital data, but privacy laws
+restrict centralized aggregation. Federated learning offers a promising
+alternative, yet practical deployments still face non-IID drift, communication
+barriers, residual leakage risks, and edge-resource limitations. To address
+these challenges, this project develops a unified FedProx-based pipeline with
+DP-SGD privacy, TopK+INT8 compression, and a lightweight MedNet-CBAM
+backbone. The chapter also defined objectives, contributions, and complex
+engineering justification, and outlined the structure of the remaining
+report.}

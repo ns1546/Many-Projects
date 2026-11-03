@@ -1,0 +1,180 @@
+% ============================================================
+% FEDMED-X CAPSTONE REPORT — MAIN DRIVER FILE
+% Bangladesh University of Business and Technology (BUBT)
+% Compiled with: pdflatex -> biber -> pdflatex -> pdflatex
+% ============================================================
+
+\documentclass[12pt,a4paper,oneside]{report}
+
+% ──────────────────────────────────────────────────────────
+% PACKAGES (same as preamble.tex, inlined for flat compile)
+% ──────────────────────────────────────────────────────────
+\usepackage[a4paper,top=1in,bottom=1in,left=1.25in,right=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% Spacing
+\usepackage{setspace}
+\onehalfspacing
+\setlength{\parskip}{4pt plus 1pt minus 1pt}
+
+% Math + graphics
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{placeins}
+
+% TikZ
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric,arrows.meta,positioning,fit,calc,backgrounds,shadows}
+
+% Tables
+\usepackage{booktabs,tabularx,longtable,multirow,array,makecell}
+\usepackage{ragged2e}
+
+% Lists
+\usepackage{enumitem}
+\setlist{itemsep=2pt,topsep=3pt}
+
+% Captions
+\usepackage[labelfont=bf,font=small,justification=centering]{caption}
+
+% Headers/footers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small\itshape FEDMED-X}
+\fancyhead[R]{\small\itshape BUBT Capstone 2026}
+\fancyfoot[C]{\thepage}
+
+% ──────────────────────────────────────────────────────────
+% TOC / LOF / LOT FORMATTING  (matching report theme)
+% ──────────────────────────────────────────────────────────
+\usepackage{tocloft}
+
+% --- Table of Contents ---
+\renewcommand{\cfttoctitlefont}{\normalfont\Large\bfseries}
+\renewcommand{\cftaftertoctitle}{\par\nobreak\vskip 6pt%
+  \hrule height 0.4pt \vskip 10pt}
+\setlength{\cftbeforetoctitleskip}{0pt}
+\setlength{\cftaftertoctitleskip}{6pt}
+
+% --- List of Figures ---
+\renewcommand{\cftloftitlefont}{\normalfont\Large\bfseries}
+\renewcommand{\cftafterloftitle}{\par\nobreak\vskip 6pt%
+  \hrule height 0.4pt \vskip 10pt}
+\setlength{\cftbeforeloftitleskip}{0pt}
+\setlength{\cftafterloftitleskip}{6pt}
+
+% --- List of Tables ---
+\renewcommand{\cftlottitlefont}{\normalfont\Large\bfseries}
+\renewcommand{\cftafterlottitle}{\par\nobreak\vskip 6pt%
+  \hrule height 0.4pt \vskip 10pt}
+\setlength{\cftbeforelottitleskip}{0pt}
+\setlength{\cftafterlottitleskip}{6pt}
+
+% Dot leaders for all list levels
+\renewcommand{\cftchapdotsep}{\cftdotsep}
+\renewcommand{\cftsecdotsep}{\cftdotsep}
+
+% Chapter title formatting (matches BUBT template)
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+  {\normalfont\Large\bfseries\centering}
+  {Chapter \thechapter}{12pt}{\Large}
+\titlespacing*{\chapter}{0pt}{-10pt}{20pt}
+
+% Hyperlinks
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=blue,
+  pdftitle={FEDMED-X Capstone Report},
+  pdfauthor={Mohammad Zunayed and Team}
+}
+
+% Bibliography (IEEE style)
+\usepackage[backend=biber,style=ieee,sorting=none,maxbibnames=99]{biblatex}
+\addbibresource{references.bib}
+
+% Custom Summary command (chapter-end)
+\newcommand{\chaptersummary}[1]{%
+  \vspace{6pt}\noindent\textbf{Summary}\\[2pt]#1\par\vspace{6pt}
+}
+
+% ──────────────────────────────────────────────────────────
+\begin{document}
+
+% ── COVER PAGE ──────────────────────────────────────────
+\pagestyle{empty}
+\input{cover_page}   % uncomment if cover_page.tex exists
+\clearpage
+
+% ── FRONT MATTER (roman numerals) ───────────────────────
+\pagenumbering{roman}
+\setcounter{page}{2}
+\pagestyle{plain}
+
+\input{declaration}
+\input{approval}
+\input{dedication}
+\input{acknowledgement}
+\input{abstract}
+
+% ──────────────────────────────────────────────────────────
+% TABLE OF CONTENTS
+% ──────────────────────────────────────────────────────────
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Table of Contents}
+\tableofcontents
+
+% ──────────────────────────────────────────────────────────
+% LIST OF FIGURES
+% ──────────────────────────────────────────────────────────
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{List of Figures}
+\listoffigures
+
+% ──────────────────────────────────────────────────────────
+% LIST OF TABLES
+% ──────────────────────────────────────────────────────────
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{List of Tables}
+\listoftables
+
+% ── ABBREVIATIONS ────────────────────────────────────────
+\clearpage
+\input{acronyms}
+
+% ── MAIN CHAPTERS (arabic page numbers) ─────────────────
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\pagestyle{fancy}
+
+\input{chapter1}
+\input{chapter2}
+\input{chapter3}
+
+% ── REFERENCES ──────────────────────────────────────────
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{References}
+\nocite{*}
+\printbibliography[title={References}]
+
+\clearpage
+\input{annexure1}
+\clearpage
+\input{annexure2}
+
+\end{document}

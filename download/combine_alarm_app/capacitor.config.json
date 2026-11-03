@@ -1,0 +1,14 @@
+{
+  "appId": "com.combinealarm.squad",
+  "appName": "Evo Alarm",
+  "webDir": "public",
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
+  },
+  "plugins": {
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
+    }
+  }
+}

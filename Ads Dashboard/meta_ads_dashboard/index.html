@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Evorise Solutions | Ads Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mobile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div id="globalLoader" class="glass-loader">
+        <div class="loader-content">
+            <i class="fa-brands fa-meta meta-logo-spin"></i>
+            <h3>Syncing Graph API...</h3>
+        </div>
+    </div>
+    <!-- Global Brand Bar - always visible on all devices -->
+    <header class="global-brand-bar">
+        <div class="global-brand-inner">
+            <div class="brand-logo">
+                <div class="brand-icon"><i class="fa-solid fa-bolt"></i></div>
+                <div>
+                    <span class="brand-name">Evorise Solutions</span>
+                    <span class="brand-sub">Ads Manager</span>
+                </div>
+            </div>
+            <div class="brand-live">
+                <span class="live-dot"></span>
+                Live Data
+            </div>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar clay-panel">
+            <nav class="nav-menu" id="mainNav">
+                <a href="javascript:void(0)" onclick="switchView('overview')" class="active" id="nav-overview"><i
+                        class="fa-solid fa-chart-line"></i> Overview</a>
+                <a href="javascript:void(0)" onclick="switchView('campaigns')" id="nav-campaigns"><i
+                        class="fa-solid fa-layer-group"></i> Campaigns</a>
+                <a href="javascript:void(0)" onclick="switchView('ad-universe')" id="nav-ad-universe"><i
+                        class="fa-solid fa-meteor"></i> Analytics</a>
+                <a href="javascript:void(0)" onclick="switchView('billing')" id="nav-billing"><i
+                        class="fa-solid fa-file-invoice-dollar"></i> Billing</a>
+                <a href="javascript:void(0)" onclick="refreshAllData()" id="nav-refresh" style="color: var(--primary);"><i
+                        class="fa-solid fa-rotate-right" id="refreshIcon"></i> Sync</a>
+            </nav>
+            <!-- Client View - API Auth is automatically handled in the background -->
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="main-content clay-panel">
+
+            <!-- OVERVIEW VIEW -->
+            <div id="view-overview" class="view-section active">
+                <header class="top-header">
+                    <div>
+                        <h1>Account Level Insights</h1>
+                        <p class="subtitle" id="accountSubtitle">Aggregated performance across all campaigns.</p>
+                    </div>
+                </header>
+
+
+
+                <div class="kpi-grid" id="accountKpis" style="margin-top: 24px;">
+                    <!-- Injected via JS -->
+                    <div style="grid-column: 1 / -1; padding: 40px; text-align: center; color: #718096;" id="loadingIndicator">
+                        <i class="fa-solid fa-spinner fa-spin" style="font-size: 32px; margin-bottom: 16px; opacity: 0.5;"></i>
+                        <p>Loading Dashboard Data...</p>
+                    </div>
+                </div>
+
+                <div class="chart-container clay-panel-inset" style="margin-top: 24px; padding: 24px; display: none;"
+                    id="chartContainer">
+                    <canvas id="performanceChart" height="80"></canvas>
+                </div>
+            </div>
+
+            <!-- CAMPAIGNS & EXPLORER VIEW -->
+            <div id="view-campaigns" class="view-section" style="display: none;">
+                <header class="top-header">
+                    <div>
+                        <h1>Campaigns & Ads</h1>
+                        <p class="subtitle">View all campaigns and access ads directly.</p>
+                    </div>
+                </header>
+
+                <div class="explorer-controls" style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0;">
+                    <div style="display: flex; gap: 16px; align-items: center;">
+                        <button id="explorerBackBtn" class="clay-btn" style="display: none; padding: 8px 16px;"
+                            onclick="navigateExplorerBack()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                        <div class="breadcrumb" id="explorerBreadcrumb"
+                            style="font-weight: 600; color: var(--primary);">
+                            Root / Campaigns
+                        </div>
+                    </div>
+                    <div class="search-bar clay-panel-inset"
+                        style="padding: 8px 16px; display: flex; gap: 12px; align-items: center; width: 300px;">
+                        <i class="fa-solid fa-search" style="color: var(--text-muted);"></i>
+                        <input type="text" id="campaignSearch" placeholder="Search..." class="clay-input"
+                            style="box-shadow: none; padding: 0; background: transparent; border: none; flex: 1;"
+                            onkeyup="filterExplorer()">
+                    </div>
+                </div>
+
+                <div class="table-wrapper clay-panel-inset">
+                    <table id="explorerTable">
+                        <thead>
+                            <tr id="explorerHeaders">
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Spend</th>
+                                <th>Impressions</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="explorerBody">
+                            <tr>
+                                <td colspan="5" style="text-align:center; padding: 30px;"><i class="fa-solid fa-spinner fa-spin"></i> Fetching Data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- AD UNIVERSE VIEW -->
+            <div id="view-ad-universe" class="view-section" style="display: none;">
+                <header class="top-header" style="margin-bottom: 24px;">
+                    <div>
+                        <h1 id="universeAdName">Ad Analytics Interface</h1>
+                        <p class="subtitle" id="universeAdId">Deep performance metrics for your ads.</p>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="clay-btn" onclick="clearAdSelection()"><i
+                                class="fa-solid fa-list"></i> View All Ads</button>
+                        <button class="clay-btn" id="syncAdDataBtn" style="display:none;" onclick="fetchAdUniverseData()"><i class="fa-solid fa-rotate"></i> Sync
+                            Ad Data</button>
+                    </div>
+                </header>
+
+                <div id="universeContent" style="display: none;">
+                    <div class="universe-grid">
+                        <!-- Creative Preview -->
+                        <div class="clay-panel-inset"
+                            style="padding: 24px; display: flex; flex-direction: column; gap: 16px; background: rgba(255,255,255,0.7);">
+                            <h3 style="margin-bottom: 8px;"><i class="fa-solid fa-image"></i> Ad Creative Preview</h3>
+                            
+                            <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1);">
+                                <div style="padding: 12px; display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white;"><i class="fa-brands fa-meta"></i></div>
+                                    <div>
+                                        <div style="font-weight: 700; font-size: 14px;">Sponsored Brand</div>
+                                        <div style="font-size: 12px; color: var(--text-muted);">Sponsored <i class="fa-solid fa-earth-americas" style="font-size:10px;"></i></div>
+                                    </div>
+                                </div>
+                                <div style="padding: 0 12px 12px 12px; font-size: 14px; color: #1c1e21; white-space: pre-wrap;" id="uniBody">--</div>
+                                <img id="uniImage" src=""
+                                    style="width: 100%; object-fit: cover; max-height: 400px; display: none;"
+                                    alt="Ad Creative">
+                                <div id="uniNoImage"
+                                    style="background: rgba(0,0,0,0.05); padding: 60px 20px; text-align:center;">
+                                    <i class="fa-solid fa-image" style="font-size: 32px; color: #bbb; margin-bottom: 12px;"></i><br>
+                                    No Image Available</div>
+                                <div style="padding: 12px; background: #f0f2f5; display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="display:flex; flex-direction:column;">
+                                        <span style="font-size: 12px; text-transform: uppercase; color: var(--text-muted);">WEBSITE.COM</span>
+                                        <strong style="font-size: 15px; color: #1c1e21;" id="uniTitle">--</strong>
+                                    </div>
+                                    <button style="padding: 6px 12px; background: transparent; border: 1px solid #ccd0d5; border-radius: 4px; font-weight: 600; cursor: pointer; color: #4b4f56;">Learn More</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Deep Metrics -->
+                        <div class="clay-panel-inset" style="padding: 24px;">
+                            <h3><i class="fa-solid fa-microscope"></i> Deep Metrics</h3>
+                            <div class="kpi-grid" style="grid-template-columns: 1fr 1fr; margin-top: 16px;"
+                                id="uniKpis">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Ad Level Analytics Chart -->
+                    <div class="chart-container clay-panel-inset"
+                        style="margin-top: 24px; padding: 24px; display: none;" id="adChartContainer">
+                        <h3><i class="fa-solid fa-chart-column"></i> Ad Performance Analytics</h3>
+                        <canvas id="adUniverseChart" height="80" style="margin-top: 16px;"></canvas>
+                    </div>
+                </div>
+
+                <div id="universeEmpty" style="padding: 100px; text-align: center; color: #718096;">
+                    <i class="fa-solid fa-meteor" style="font-size: 64px; margin-bottom: 24px; opacity: 0.2;"></i>
+                    <h2>No Ad Selected</h2>
+                    <p>Navigate to "All Campaigns", drill down to an Ad, and click "View Analytics" to unlock deep
+                        details.</p>
+                </div>
+            </div>
+
+            <!-- BILLING VIEW -->
+            <div id="view-billing" class="view-section" style="display: none;">
+                <header class="top-header">
+                    <div>
+                        <h1>Billing & Account Limits</h1>
+                        <p class="subtitle">Financial health and constraints.</p>
+                    </div>
+                </header>
+                <div class="clay-panel-inset" style="margin-top:24px; padding:24px;" id="billingContent">
+                    <p style="text-align:center; color:#718096; padding: 40px;"><i class="fa-solid fa-spinner fa-spin"></i> Fetching billing details...
+                    </p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,4 @@
+\contentsline {figure}{\numberline {1}{\ignorespaces Comprehensive IoT System Topology highlighting the Edge, Cloud, and Client abstractions.}}{3}{}%
+\contentsline {figure}{\numberline {2}{\ignorespaces Simplified visualization of the quantized C++ embedded Decision Tree logic.}}{7}{}%
+\contentsline {figure}{\numberline {3}{\ignorespaces Finite State Machine (FSM) representation of the ESP32 main execution and network loop.}}{9}{}%
+\contentsline {figure}{\numberline {4}{\ignorespaces Empirical comparison of the actual recorded AQI versus the Edge-ML predicted AQI during a controlled particulate injection event. Notice the prediction curve breaches the threshold prior to the actual event.}}{10}{}%

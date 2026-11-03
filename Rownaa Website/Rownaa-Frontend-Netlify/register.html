@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Create Account — Rownaa</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/design.css"/>
+<style>
+  .auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 120px 4vw; background: var(--surface); }
+  .auth-card { background: var(--bg-color); border: 1px solid var(--border); border-radius: 1.5rem; padding: 4rem; width: 100%; max-width: 540px; box-shadow: 0 30px 60px rgba(0,0,0,0.5); opacity: 1 !important; transform: none !important; }
+  .auth-card h1 { font-size: 2.5rem; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .auth-card p { color: var(--text-muted); margin-bottom: 3rem; }
+  .auth-form { display: flex; flex-direction: column; gap: 1.5rem; }
+  .af-row { display: flex; gap: 1rem; }
+  .af-field { flex: 1; display: flex; flex-direction: column; gap: 0.5rem; position: relative; }
+  .af-field label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+  .af-field input { background: var(--surface); border: 1px solid var(--border); padding: 1rem; border-radius: 0.5rem; color: var(--text-main); font-family: var(--font-body); font-size: 1rem; transition: border-color 0.3s; outline: none; width: 100%; }
+  .af-field input:focus { border-color: var(--accent); }
+  .af-submit { background: var(--text-main); color: var(--bg-color); padding: 1.25rem; font-family: var(--font-display); font-weight: 700; font-size: 1rem; text-transform: uppercase; border: none; border-radius: 0.5rem; margin-top: 1rem; transition: background 0.3s, transform 0.2s; }
+  .af-submit:hover { background: var(--accent); transform: translateY(-2px); }
+  .auth-links { margin-top: 2rem; text-align: center; font-size: 0.875rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.5rem; }
+  .auth-links a { color: var(--text-main); font-weight: 500; transition: color 0.3s; }
+  .auth-links a:hover { color: var(--accent); }
+  
+  .input-with-btn { display: flex; gap: 0.5rem; }
+  .input-with-btn button { background: var(--surface-hover); color: var(--text-main); border: 1px solid var(--border); padding: 0 1rem; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem; transition: background 0.3s; white-space: nowrap; }
+  .input-with-btn button:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+  
+  @media (max-width: 768px) { 
+    .auth-card { padding: 2rem; } 
+    .af-row { flex-direction: column; gap: 1.5rem; } 
+  }
+</style>
+</head>
+<body>
+
+<header class="site-nav scrolled" id="site-nav">
+  <div class="nav-wrap">
+    <a href="index.html" class="wordmark">Rownaa<sup>®</sup></a>
+    <div class="nav-right">
+      <a href="login-sliding.html" class="nav-text-link">Sign In →</a>
+    </div>
+  </div>
+</header>
+
+<div class="auth-page">
+  <div class="auth-card revealed">
+    <h1>Create account</h1>
+    <p>Book your first ride in minutes. No hidden fees.</p>
+    <form class="auth-form" onsubmit="event.preventDefault(); 
+      const name = this.querySelector('input[type=text]').value;
+      const phone = document.getElementById('reg-phone').value;
+      const passwords = this.querySelectorAll('input[type=password]');
+      if (passwords[0].value !== passwords[1].value) return alert('Passwords do not match');
+      
+      const submitBtn = this.querySelector('button[type=submit]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Creating Account...';
+      }
+
+      fetch('/api/register', { credentials: 'include',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: phone, password: passwords[0].value, name: name, role: 'customer' })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success || data.token) {
+          if (data.token) {
+            try { localStorage.setItem('rownaa_session_token', data.token); } catch (e) {}
+          }
+          if (data.user) {
+            try { localStorage.setItem('rownaa_user', JSON.stringify(data.user)); } catch (e) {}
+            window.rownaaSession = data.user;
+          }
+          const urlParams = new URLSearchParams(window.location.search);
+          const redirectUrl = urlParams.get('redirect');
+          if (redirectUrl) {
+            window.location.href = redirectUrl;
+            return;
+          }
+          window.location.href = 'customer-panel.html';
+        } else {
+          alert(data.error || 'Registration failed');
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'Join Rownaa';
+          }
+        }
+      })
+      .catch(err => {
+        console.error('Registration network error:', err);
+        alert('Unable to connect to server. Please try again.');
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerText = 'Join Rownaa';
+        }
+      });
+    ">
+      <div class="af-field">
+        <label>Full Name</label>
+        <input type="text" placeholder="Enter your full name" required />
+      </div>
+      <div class="af-field">
+        <label>Mobile Number</label>
+        <div class="input-with-btn">
+          <input type="tel" id="reg-phone" placeholder="+880 1XXXXXXXXX" required />
+          <button type="button" onclick="document.getElementById('otp-wrap').style.display='flex'">Send OTP</button>
+        </div>
+      </div>
+      <div class="af-field" id="otp-wrap" style="display:none">
+        <label style="color:var(--accent)">Enter OTP Code</label>
+        <input type="text" placeholder="6-digit code" maxlength="6" style="border-color:var(--accent)"/>
+      </div>
+      <div class="af-row">
+        <div class="af-field">
+          <label>Password</label>
+          <input type="password" placeholder="Min 8 characters" required />
+        </div>
+        <div class="af-field">
+          <label>Confirm Password</label>
+          <input type="password" placeholder="Repeat password" required />
+        </div>
+      </div>
+      <button type="submit" class="af-submit">Join Rownaa</button>
+    </form>
+    <div class="auth-links">
+      <span>Already have an account? <a href="login-sliding.html">Sign in</a></span>
+      <span>Want to list your car? <a href="owner-register.html">Register as owner</a></span>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+# ROWNAA — Phase 2: Customer Panel & Booking Flow
+
+> This phase covers every screen a customer sees. Every field, every button, every state is explicitly defined. No placeholder forms.
+
+---
+
+## 1. Homepage Layout (Desktop)
+
+### Section 1 — Sticky Navbar
+- Logo (left): "ROWNAA" in `Outfit 700`, `var(--color-brand-accent)` color
+- Nav links (center): Home | Services | How It Works | About | Contact
+- Right side: `Login` button (ghost style) + `Sign Up` button (accent style)
+- Background: `var(--color-brand-primary)` with `border-bottom: 1px solid rgba(255,255,255,0.07)`
+- Sticky on scroll: adds `backdrop-filter: blur(12px)` + glassmorphism background
+- Height: `68px`
+
+### Section 2 — Hero
+- Full-width, height `90vh` minimum
+- Background: `var(--gradient-hero)` with a subtle car silhouette image overlay (low opacity 15%)
+- H1: "Book a car, anywhere you're headed." — `var(--text-hero)`, `var(--font-display)`
+- Subtext: "6 services. Verified drivers. Your schedule." — `var(--text-h3)`, `var(--color-text-secondary)`
+- Below subtext: Quick search bar (see Section 3 below)
+- Floating stats below hero text (glassmorphism cards): "500+ Verified Cars" | "6 Services" | "Dhaka & Beyond"
+
+### Section 3 — Quick Service Selector (Hero Embedded)
+- A row of 6 icon-card tabs below the hero text
+- Each card: Service icon (32px) + service name label
+- Selected state: card gets `var(--color-brand-accent)` border + background tint
+- Clicking a card = scrolls to / reveals the booking form for that service
+
+### Section 4 — How It Works
+- 3-column layout: "Choose Service" → "Book & Pay 20%" → "Driver Comes to You"
+- Each step: numbered circle icon + heading + 2-line description
+
+### Section 5 — Service Showcase Cards
+- Grid: 3 columns × 2 rows = 6 cards
+- Each card: background image (dark overlay), service name, 1-line description, "Book Now" button
+- Services: Airport Transfer | Corporate | Car Rental | Intercity | Travel & Tour | Event & Wedding
+
+### Section 6 — Footer
+- Logo + tagline | Service links | Contact (phone, email) | Social media icons
+- Dark background matching brand primary
+- Copyright line at bottom
+
+---
+
+## 2. Auth Pages
+
+### Login Page
+- Centered card on `var(--gradient-hero)` background
+- Title: "Welcome back"
+- Field 1: Phone number input (auto-formats as user types)
+- OR divider
+- Field 2: Email input (alternative)
+- Password field (if email login)
+- "Send OTP" button (if phone) — triggers SMS OTP
+- OTP input: 4-digit boxes (separate inputs, auto-tab between them)
+- "Verify & Login" button
+- Link: "New here? Register" | "Are you a car owner? Register your vehicle"
+
+### Register Page (Customer)
+- Name, Phone, Email (optional), Password
+- OTP verification step after form submit
+- After verification → redirect to homepage
+
+---
+
+## 3. The 6 Booking Forms
+
+**Layout Rule:** When a service card is clicked on the homepage, a full-page booking form appears. The form has two parts:
+- **Part A:** Common fields (always visible)
+- **Part B:** Service-specific fields (change based on service)
+
+All forms must have a sticky "Book Now" button at the bottom that stays visible as user scrolls.
+
+---
+
+### Common Fields (Part A) — present on ALL 6 services
+
+| Field | Type | Validation |
+|---|---|---|
+| Full Name | Text input | Required, min 3 chars |
+| Mobile Number | Tel input with +880 prefix | Required, exactly 11 digits |
+| Pickup Location | Structured dropdown (Google Places area select) | Required — NEVER free text |
+| Pickup Date | Date picker — no past dates | Required |
+| Pickup Time | Time picker (15-min intervals) | Required |
+| Car Type Preference | Segmented buttons: Sedan / SUV / Microbus / Noah-Hiace / Any | Default = "Any" |
+| Number of Passengers | Number stepper (+/- buttons) min=1 | Required for seat matching |
+| Special Note | Textarea, max 300 chars | Optional |
+
+---
+
+### Service 01 — Car Rental with Hourly (service_data JSONB)
+
+| Field | Type | Notes |
+|---|---|---|
+| Rental Mode | Toggle: "Hourly" / "Daily" | Changes the next fields |
+| Start Date & Time | DateTime picker | Required |
+| End Date & Time | DateTime picker OR "I'll estimate" checkbox | Required (or estimated flag set) |
+| Estimated Duration | Auto-calculated from start/end, shown as "X hours / Y days" | Read-only display |
+| Trip Scope | Toggle: "Within City" / "Outside City" | Affects pricing guidance |
+
+**UI Behavior:** Selecting "I'll estimate" on end time hides the end date picker and shows a duration input (hours stepper). Selecting "Outside City" shows an additional destination area dropdown.
+
+---
+
+### Service 02 — Airport Transfer (service_data JSONB)
+
+| Field | Type | Notes |
+|---|---|---|
+| Pickup Direction | Toggle: "FROM Airport" / "TO Airport" | Changes next fields |
+| Airport Name | Dropdown: Hazrat Shahjalal / Shah Amanat / Osmani / Other | Required |
+| Trip Type | Toggle: "One-way" / "Round Trip" | |
+| Drop Location | Structured area dropdown (appears if "From Airport") | Required if from airport |
+| Pickup Location (alternate) | Structured area dropdown (appears if "To Airport") | Common field merges here |
+| Return Date & Time | DateTime picker | Appears ONLY if Round Trip |
+| Flight Details | Text input (optional) — "PG101 arriving 3PM" | Optional, for driver planning |
+
+**UI Behavior:** The "FROM Airport" vs "TO Airport" toggle dynamically swaps which location field is labeled "Pickup" vs "Drop". The common Pickup Location field from Part A relabels itself accordingly.
+
+---
+
+### Service 03 — Intercity Travel (service_data JSONB)
+
+> **CRITICAL NOTE:** This is NOT the same as Travel & Tour. Intercity = one city to another, point-to-point, no multi-day itinerary.
+
+| Field | Type | Notes |
+|---|---|---|
+| From City | Dropdown (list of cities) | Required |
+| To City | Dropdown (list of cities) | Required, must differ from From |
+| Trip Type | Toggle: "One-way" / "Round Trip" | |
+| Return Date & Time | DateTime picker | Appears ONLY if Round Trip |
+| Preferred Pickup Point | Text/area input within the origin city | Required |
+| Drop Point | Text/area input within the destination city | Required |
+
+---
+
+### Service 04 — Travel & Tour (service_data JSONB)
+
+> **CRITICAL NOTE:** This is NOT Intercity. Tour = multi-destination, multi-day package with itinerary.
+
+| Field | Type | Notes |
+|---|---|---|
+| From City | Dropdown | Required |
+| Destination(s) | Multi-select tag input (add multiple cities) | Required, min 1 destination |
+| Trip Type | Toggle: "One-way" / "Round Trip" | |
+| Trip Duration | Number stepper (days) min=1 | Required |
+| Itinerary Detail | Large textarea "List places you want to visit" | Optional |
+
+---
+
+### Service 05 — Event & Wedding Transport (service_data JSONB)
+
+| Field | Type | Notes |
+|---|---|---|
+| Event Type | Dropdown: Wedding / Family Function / Corporate Event / Other | Required |
+| Event Date | Date picker | Required, must be future |
+| Venue Location | Structured area dropdown | Required |
+| Duration | Number stepper (hours) min=1 | Required |
+| Multiple Cars? | Toggle: "Yes" / "No" | Default = No |
+| Number of Cars | Number stepper (appears ONLY if Multiple = Yes) | Min=2 |
+| Guest Count | Number input (optional, helps suggest car count) | Optional |
+
+**UI Behavior:** When "Multiple Cars = Yes" is selected, the Number of Cars stepper fades in. If Guest Count is entered, the system shows a suggestion: "Suggested: 2 cars based on guest count."
+
+---
+
+### Service 06 — Corporate Transport (service_data JSONB)
+
+| Field | Type | Notes |
+|---|---|---|
+| Company Name | Text input | Required |
+| Office Pickup Point | Structured area dropdown | Required |
+| Drop Location | Structured area dropdown | Required |
+| Booking Type | Toggle: "One-time" / "Recurring" | Default = One-time |
+| Recurring Frequency | Dropdown: Daily / Weekly / Monthly (appears if Recurring) | Required if recurring |
+| Number of Days | Number stepper (appears if Recurring) | Required if recurring |
+| Which Days | Multi-checkbox: Mon/Tue/Wed/Thu/Fri/Sat/Sun (appears if Weekly) | Required if weekly |
+| Number of Passengers | Number stepper min=1 | Required |
+
+---
+
+## 4. Seat Matching Algorithm (After Form Submission)
+
+This runs on the BACKEND (`GET /api/cars/match`) and the result is shown on a confirmation preview screen before final payment.
+
+### Algorithm Logic
+```
+Input: passenger_count (N), pickup_area, service_type
+
+1. Query cars WHERE status='active' AND business.status='approved' AND is_available=true AND operating_zone MATCHES pickup_area
+
+2. Group available cars by type and get seat counts:
+   - sedan_count: cars where car_type='sedan' (4 seats each)
+   - suv_count: cars where car_type='suv' (6 seats each)
+   - microbus_count: cars where car_type='microbus' (10 seats each)
+   - noah_hiace_count: cars where car_type='noah_hiace' (11 seats each)
+
+3. Find optimal combination to cover N passengers with fewest cars:
+   - Start with largest car type first
+   - Fill remaining seats with next largest
+   - Example: N=10 → 1 Microbus (10 seats) = 1 car. OR 1 SUV (6) + 1 Sedan (4) = 2 cars
+   - Prefer fewest cars, then biggest car types
+
+4. Return: { total_passengers: N, cars_needed: X, combination: [{type, count, seats}], total_seats: Y }
+```
+
+### UI Display (Confirmation Preview Screen)
+- Box labeled "Seat Suggestion" with gold accent border
+- Row: "Total Passengers: 10"
+- Row: "Cars Needed: 2"
+- Row: "Suggested: 1 × SUV (6 seats) + 1 × Sedan (4 seats)"
+- Row: "Total Seats: 10"
+- Note: "Final assignment confirmed by our team"
+
+---
+
+## 5. Car Listing View
+
+After form submission and seat matching, show available cars matching the criteria.
+
+### Car Card Layout
+- Car photo (front, aspect ratio 16:9, rounded corners)
+- Car model name (e.g. "Toyota Axio") — `var(--text-h3)`
+- Tags row: [Sedan] [4 Seats] [Silver]
+- Driver rating: ★ 4.8 (based on reviews)
+- Owner name
+- Rate: "৳ 2,500 / trip" (if estimate available) or "Price on confirmation"
+- "Select This Car" button — accent style
+
+### Filtering (Desktop sidebar / Mobile bottom sheet)
+- Filter by: Car type (Sedan/SUV/Microbus/Noah-Hiace)
+- Sort by: Rating (High→Low) | Price (Low→High)
+
+---
+
+## 6. Booking Confirmation Flow
+
+1. Customer selects a car → "Review Booking" screen
+2. Shows summary of all filled fields + selected car
+3. Shows advance amount: "Pay ৳500 now to confirm (20% advance)"
+4. Payment method selector: bKash | Bank Transfer | SSLCommerz
+5. "Confirm & Pay" button → triggers payment gateway
+6. On payment success → booking created in DB with `advance_paid = true`, status = `pending`
+7. Customer sees "Booking Confirmed!" screen with booking ID
+
+---
+
+## 7. My Bookings Page
+
+### Tab Bar: All | Pending | Confirmed | Ongoing | Completed | Cancelled
+
+### Booking Card (per booking)
+- Service type tag (e.g. "Airport Transfer")
+- Pickup date & time
+- Pickup location
+- Car assigned (if confirmed) — shows car model + driver name
+- Status badge — color coded (see Phase 0 status colors)
+- "View Details" button → booking detail page
+
+### Booking Detail Page
+- Full form data summary
+- Payment status (advance paid? remaining amount?)
+- Driver contact (shown after confirmed)
+- "Rate Driver" button — appears ONLY when status = `completed` AND no review yet
+
+---
+
+## 8. Review & Rating (After Completed Trip)
+
+- Star rating (1–5, clickable stars) — required
+- Text comment — optional, max 300 chars
+- "Submit Review" → POST `/api/reviews` with `booking_id`
+- After submit → stars locked, comment shown as submitted
+- Each car's average rating computed from all reviews on the listing card

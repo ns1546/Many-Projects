@@ -1,0 +1,276 @@
+/* CLAYMORPHISM DESIGN SYSTEM */
+:root {
+  /* Premium Soft Color Palette */
+  --bg-color: #e2e8f0; /* Soft slate gray */
+  --surface-color: #f1f5f9; /* Lighter surface */
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  
+  --accent-color: #3b82f6; /* Blue */
+  --accent-hover: #2563eb;
+  
+  --danger-color: #ef4444;
+  --success-color: #10b981;
+
+  /* Claymorphism Tokens */
+  --clay-radius: 28px;
+  --clay-radius-sm: 16px;
+  
+  /* The Clay Effect: 
+     1. Outer dark shadow (depth)
+     2. Outer light shadow (pop)
+     3. Inner light shadow (top highlight)
+     4. Inner dark shadow (bottom curve)
+  */
+  --clay-shadow: 
+    10px 10px 20px rgba(163, 177, 198, 0.4), 
+    -10px -10px 20px rgba(255, 255, 255, 1),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.8),
+    inset -2px -2px 4px rgba(163, 177, 198, 0.2);
+
+  --clay-shadow-hover: 
+    12px 12px 24px rgba(163, 177, 198, 0.5), 
+    -12px -12px 24px rgba(255, 255, 255, 1),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.9),
+    inset -2px -2px 5px rgba(163, 177, 198, 0.3);
+
+  --clay-shadow-pressed: 
+    inset 6px 6px 12px rgba(163, 177, 198, 0.4),
+    inset -6px -6px 12px rgba(255, 255, 255, 1);
+
+  --clay-btn-primary:
+    6px 6px 12px rgba(59, 130, 246, 0.3),
+    -4px -4px 10px rgba(255, 255, 255, 0.8),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.4),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.1);
+
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-family: 'Inter', 'Outfit', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.app-container {
+  max-width: 1700px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* CLAY COMPONENTS */
+.clay-card {
+  background-color: var(--surface-color);
+  border-radius: var(--clay-radius);
+  padding: 2rem;
+  box-shadow: var(--clay-shadow);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+
+.clay-card:hover {
+  box-shadow: var(--clay-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.clay-btn {
+  background-color: var(--surface-color);
+  color: var(--text-primary);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--clay-radius-sm);
+  cursor: pointer;
+  font-weight: 700;
+  font-family: inherit;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  box-shadow: var(--clay-shadow);
+}
+
+.clay-btn:hover:not(:disabled) {
+  box-shadow: var(--clay-shadow-hover);
+  transform: translateY(-2px);
+  color: var(--accent-color);
+}
+
+.clay-btn:active:not(:disabled) {
+  box-shadow: var(--clay-shadow-pressed);
+  transform: translateY(0);
+}
+
+.clay-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.clay-btn-primary {
+  background-color: var(--accent-color);
+  color: white;
+  box-shadow: var(--clay-btn-primary);
+}
+
+.clay-btn-primary:hover:not(:disabled) {
+  background-color: var(--accent-hover);
+  box-shadow: 
+    8px 8px 16px rgba(59, 130, 246, 0.4),
+    -4px -4px 10px rgba(255, 255, 255, 0.9),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.5),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  color: white;
+}
+
+.clay-btn-primary:active:not(:disabled) {
+  box-shadow: inset 4px 4px 8px rgba(0,0,0,0.2), inset -4px -4px 8px rgba(255,255,255,0.2);
+}
+
+.clay-input {
+  background-color: var(--surface-color);
+  border: none;
+  color: var(--text-primary);
+  padding: 1rem 1.25rem;
+  border-radius: var(--clay-radius-sm);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: var(--transition);
+  box-shadow: var(--clay-shadow-pressed); /* Inputs look pushed in */
+}
+
+.clay-input:focus {
+  outline: none;
+  box-shadow: 
+    var(--clay-shadow-pressed),
+    0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* LAYOUT */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-primary);
+  text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: 320px 1fr 340px;
+  gap: 2rem;
+  flex: 1;
+  min-height: 0;
+}
+
+@media (max-width: 1300px) {
+  .workspace {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.input-group label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 700;
+  margin-left: 0.5rem;
+}
+
+/* DOCUMENT PREVIEW */
+.document-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem;
+  background-color: transparent;
+  border-radius: var(--clay-radius);
+  box-shadow: var(--clay-shadow-pressed); /* Inner shadow for the viewport */
+}
+
+.document-paper {
+  width: 100%;
+  max-width: 210mm; /* A4 width */
+  min-height: 297mm; /* A4 height */
+  height: max-content;
+  margin: 0 auto;
+  background: white;
+  color: black;
+  padding: 30mm 25mm;
+  box-shadow: 
+    0 20px 40px rgba(0,0,0,0.08),
+    0 1px 3px rgba(0,0,0,0.05);
+  border-radius: 8px; /* Real paper has sharpish edges */
+  font-family: '"Times New Roman", Times, serif';
+  line-height: 1.6;
+}
+
+.toolbar-btn {
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  padding: 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.toolbar-btn:hover {
+  background-color: rgba(0,0,0,0.05);
+  color: var(--accent-color);
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent; 
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(163, 177, 198, 0.5); 
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(163, 177, 198, 0.8); 
+}

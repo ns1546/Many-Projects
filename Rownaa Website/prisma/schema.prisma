@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  name      String
+  role      String   @default("customer")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bookings  Booking[] @relation("CustomerBookings")
+  inventory Inventory[] @relation("OwnerInventory")
+}
+
+model Booking {
+  id           String    @id @default(uuid())
+  service      String
+  customerName String
+  customerId   String
+  ownerId      String
+  price        String
+  status       String    @default("Pending")
+  dateTime     String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  customer User @relation("CustomerBookings", fields: [customerId], references: [id])
+}
+
+model Inventory {
+  id          String    @id @default(uuid())
+  name        String
+  category    String
+  image       String
+  seats       Int
+  bags        Int
+  hasAc       Boolean   @default(true)
+  serviceTags String    // JSON string for now
+  baseRate    Float
+  isActive    Boolean   @default(true)
+  ownerId     String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  owner User @relation("OwnerInventory", fields: [ownerId], references: [id])
+}

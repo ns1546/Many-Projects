@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Selected Works & Discography | JKH Jesan</title>
+
+    <!-- InfinityFree Anti-Bot / Security Query Parameter Cleaner -->
+    <script>
+        (function() {
+            if (window.location.search && (window.location.search.includes('i=') || window.location.search.includes('__test'))) {
+                var newSearch = window.location.search.replace(/[?&](i|__test)=[^&]*/g, '').replace(/^&/, '?');
+                var cleanUrl = window.location.pathname + (newSearch && newSearch !== '?' ? newSearch : '') + window.location.hash;
+                window.history.replaceState(null, document.title, cleanUrl);
+            }
+        })();
+    </script>
+
+    <meta name="description" content="Explore the official discography and portfolio of JKH Jesan — Hit Bangla drama OSTs, cinematic background scores, and high-fidelity mixing & mastering productions.">
+    <link rel="canonical" href="https://jkhjesan.com/works">
+
+    <!-- Google Search & Browser Identity (Favicon) -->
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <link rel="icon" type="image/png" sizes="48x48" href="./favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="./favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./favicon-192x192.png">
+    <link rel="shortcut icon" href="./favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+    <link rel="manifest" href="./site.webmanifest">
+
+    <!-- Search Engine Directives -->
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="author" content="JKH Jesan">
+    <meta name="keywords" content="JKH Jesan Works, Bangla Drama OST, Music Director Bangladesh, Tomake Paoar Baji, Bosh Korila Mon, Aponjon, Film Scoring Dhaka">
+
+    <!-- OpenGraph & Twitter Social Cards -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Selected Works & Discography | JKH Jesan">
+    <meta property="og:description" content="Hit Bengali drama OSTs, cinematic scores, and audio architecture by JKH Jesan. Explore 300+ projects and 5M+ streams.">
+    <meta property="og:url" content="https://jkhjesan.com/works">
+    <meta property="og:image" content="./drive-download-20260503T111429Z-3-001/JKh%20PIc.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Selected Works & Discography | JKH Jesan">
+    <meta name="twitter:description" content="Hit Bengali drama OSTs and cinematic soundscapes produced by JKH Jesan.">
+    <!-- Geographical & Local SEO -->
+    <meta name="geo.region" content="BD-13">
+    <meta name="geo.placename" content="House 127, Road 10, Block C, Niketon, Gulshan 1, Dhaka 1212, Bangladesh">
+    <meta name="geo.position" content="23.7744;90.4078">
+    <meta name="ICBM" content="23.7744, 90.4078">
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          "@id": "https://jkhjesan.com/works#webpage",
+          "url": "https://jkhjesan.com/works",
+          "name": "Selected Works & Discography | JKH Jesan",
+          "description": "Selected musical recordings, drama OSTs, and background scores produced by JKH Jesan."
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://jkhjesan.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Works", "item": "https://jkhjesan.com/works" }
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Manrope', 'sans-serif'], display: ['Syne', 'sans-serif'], serif: ['Playfair Display', 'serif'] },
+                    colors: { dark: '#050505', surface: '#121212', accent: '#FF4500' }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+    <style>
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background: #FF4500;
+            color: #fff;
+        }
+
+        .noise::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: url("grain.png");
+            background-repeat: repeat;
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .hover-flip {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            padding-bottom: 2px;
+        }
+
+        .hover-flip span {
+            display: inline-block;
+            transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+
+        .hover-flip::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: #FF4500;
+            transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+
+        .hover-flip:hover span {
+            transform: translateY(-100%);
+        }
+
+        .hover-flip:hover::after {
+            transform: translateY(-100%);
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+        }
+
+        .img-scale img {
+            transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .img-scale:hover img {
+            transform: scale(1.05);
+        }
+
+        .bento-border {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            background: #121212;
+            transition: border-color 0.4s ease;
+        }
+
+        .bento-border:hover {
+            border-color: rgba(255, 69, 0, 0.4);
+        }
+    </style>
+    <!-- Master Styling & 3D Perspective System -->
+    <link rel="stylesheet" href="styles.css?v=2.1">
+    <!-- Dedicated Master Mobile Design System (Loaded Last for Full Precedence) -->
+    <link rel="stylesheet" href="mobile.css?v=2.1">
+</head>
+
+<body class="noise">
+
+    <!-- Static Image Logo -->
+    <div class="absolute top-8 left-8 z-40 hidden md:block mix-blend-screen w-32">
+        <a href="./">
+            <img src="./JKH_ART_WORK-removebg-preview.png" alt="JKH Logo"
+                class="w-full h-auto filter brightness-0 invert opacity-90 hover:opacity-100 transition-opacity">
+        </a>
+    </div>
+
+    <!-- Dedicated Mobile Header Bar (Visible on mobile <= 768px) -->
+    <header id="mobile-header" class="flex md:hidden items-center justify-between">
+        <a href="./" class="flex items-center gap-2.5">
+            <img src="./JKH_ART_WORK-removebg-preview.png" alt="JKH Logo" class="w-8 h-8 object-contain filter brightness-0 invert">
+            <span class="font-display font-extrabold text-sm tracking-wider text-white uppercase">JKH JESAN</span>
+        </a>
+        <button id="mobile-menu-toggle" aria-label="Toggle Navigation Menu" aria-expanded="false">
+            <span class="hamburger-line hamburger-line-1"></span>
+            <span class="hamburger-line hamburger-line-2"></span>
+            <span class="hamburger-line hamburger-line-3"></span>
+        </button>
+    </header>
+
+    <!-- Dedicated Fullscreen Mobile Navigation Drawer -->
+    <div id="mobile-nav-drawer" class="md:hidden">
+        <div class="flex flex-col gap-6">
+            <div class="flex items-center justify-between pb-2 border-b border-white/10">
+                <span class="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-accent">Selected Works</span>
+                <span class="font-sans text-[10px] text-gray-500 font-bold uppercase tracking-widest">Dhaka, BD</span>
+            </div>
+            <nav class="flex flex-col">
+                <a href="./" class="mobile-drawer-link">
+                    <span>HOME</span>
+                    <span class="link-num">01</span>
+                </a>
+                <a href="about" class="mobile-drawer-link">
+                    <span>ABOUT</span>
+                    <span class="link-num">02</span>
+                </a>
+                <a href="works" class="mobile-drawer-link active-page">
+                    <span>WORKS</span>
+                    <span class="link-num">03</span>
+                </a>
+                <a href="studio" class="mobile-drawer-link">
+                    <span>STUDIO</span>
+                    <span class="link-num">04</span>
+                </a>
+                <a href="gallery" class="mobile-drawer-link">
+                    <span>ARCHIVE</span>
+                    <span class="link-num">05</span>
+                </a>
+                <a href="contact" class="mobile-drawer-link">
+                    <span>CONTACT</span>
+                    <span class="link-num">06</span>
+                </a>
+            </nav>
+        </div>
+
+        <div class="flex flex-col gap-4 pt-6 border-t border-white/10">
+            <a href="contact" class="w-full text-center py-3.5 rounded-full bg-accent text-white font-sans text-xs font-bold uppercase tracking-widest shadow-[0_0_20px_rgba(255,69,0,0.4)]">Start a Project</a>
+            <div class="flex justify-around items-center pt-2 text-gray-400 text-xs font-bold uppercase tracking-widest">
+                <a href="https://wa.me/8801938172454" target="_blank" class="hover:text-accent flex items-center gap-1.5"><i class="fab fa-whatsapp text-accent"></i> WhatsApp</a>
+                <a href="https://www.facebook.com/jkh.jesan.9/" target="_blank" class="hover:text-accent flex items-center gap-1.5"><i class="fab fa-facebook text-accent"></i> Facebook</a>
+                <a href="https://youtube.com/@jkhjesan?si=00dHez7xnIWZATza" target="_blank" class="hover:text-accent flex items-center gap-1.5"><i class="fab fa-youtube text-accent"></i> YouTube</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop Floating Pill Navigation (Hidden on Mobile) -->
+    <nav id="desktop-nav"
+        class="fixed top-6 md:top-8 left-1/2 -translate-x-1/2 z-50 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-full px-8 py-3 hidden md:flex items-center justify-center gap-8 text-[10px] font-bold uppercase tracking-[0.2em] text-white shadow-[0_0_30px_rgba(0,0,0,0.5)] w-auto overflow-hidden">
+        <a href="./" class="hover-flip" data-text="HOME"><span id="nav-home">HOME</span></a>
+        <a href="about" class="hover-flip" data-text="ABOUT"><span id="nav-about">ABOUT</span></a>
+        <a href="works" class="hover-flip" data-text="WORKS"><span class="text-accent" id="nav-works">WORKS</span></a>
+        <a href="studio" class="hover-flip" data-text="STUDIO"><span id="nav-studio">STUDIO</span></a>
+        <a href="gallery" class="hover-flip" data-text="ARCHIVE"><span id="nav-archive">ARCHIVE</span></a>
+        <a href="contact" class="hover-flip" data-text="CONTACT"><span id="nav-contact">CONTACT</span></a>
+    </nav>
+
+    <!-- 1. WORKS HERO -->
+    <section
+        class="pt-24 md:pt-40 pb-12 md:pb-16 px-4 md:px-12 relative z-20 flex flex-col justify-center border-b border-white/5">
+        <div class="container mx-auto max-w-[1400px]">
+            <p id="works-hero-kicker"
+                class="font-sans text-[clamp(8px,1vw,10px)] uppercase tracking-[0.4em] font-bold text-accent mb-4 md:mb-6 gs-reveal">
+                Selected Works</p>
+            <h1 id="works-hero-title"
+                class="font-display font-extrabold text-2xl sm:text-4xl md:text-5xl uppercase tracking-tight mb-4 text-white gs-reveal">
+                The Audio Portfolio
+            </h1>
+        </div>
+    </section>
+
+    <!-- 2. FEATURED GRID -->
+    <section class="py-16 md:py-20 px-4 md:px-12 relative z-20 bg-dark min-h-screen">
+        <div class="container mx-auto max-w-[1600px]">
+
+            <!-- Categories / Filters (Mix Master removed as requested) -->
+            <div class="flex justify-center flex-wrap gap-4 mb-12 gs-reveal" id="work-filters">
+                <button
+                    class="filter-btn active px-6 py-2 rounded-full border border-accent bg-accent text-white font-sans text-xs uppercase tracking-widest font-bold transition-all"
+                    data-filter="all">All</button>
+                <button
+                    class="filter-btn px-6 py-2 rounded-full border border-white/20 text-white font-sans text-xs uppercase tracking-widest font-bold hover:border-accent hover:text-accent transition-all"
+                    data-filter="songs">Songs</button>
+                <button
+                    class="filter-btn px-6 py-2 rounded-full border border-white/20 text-white font-sans text-xs uppercase tracking-widest font-bold hover:border-accent hover:text-accent transition-all"
+                    data-filter="bgm">BGM</button>
+            </div>
+
+            <div id="dynamic-works-grid" class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8">
+<a href="https://www.youtube.com/watch?v=M2D5lK2l6V4&list=RDM2D5lK2l6V4&start_radio=1" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/M2D5lK2l6V4/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/M2D5lK2l6V4/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Tomake Paoar Baji | তোমাকে পাওয়ার বাজি | Apurbo & Totini | Pinky & Jesan | New Song | Capital Music">Tomake Paoar Baji | তোমাকে পাওয়ার বাজি | Apurbo & Totini | Pinky & Jesan | New Song | Capital Music</h3>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/watch?v=f6Gg23HC7JY" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/f6Gg23HC7JY/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/f6Gg23HC7JY/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Bosh Korila Mon (বশ করিলা মন) Jkh Jesan | Saad Naovi | Sadnima Binte Noman | New Song 2026">Bosh Korila Mon (বশ করিলা মন) Jkh Jesan | Saad Naovi | Sadnima Binte Noman | New Song 2026</h3>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/watch?v=FnsjJAc6j18" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/FnsjJAc6j18/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/FnsjJAc6j18/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Ek Jibone Eto Betha (এক জীবনে এত ব্যথা) Khairul Wasi | Naovi | Priyontee | Ojana Maya | Natok Song">Ek Jibone Eto Betha (এক জীবনে এত ব্যথা) Khairul Wasi | Naovi | Priyontee | Ojana Maya | Natok Song</h3>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/watch?v=hO7xP4xwPzQ" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/hO7xP4xwPzQ/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/hO7xP4xwPzQ/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Premer Meye | প্রেমের মেয়ে | Mahtim Shakib | Sabbir Ahmed MS | Bangla Official Music Video 2026">Premer Meye | প্রেমের মেয়ে | Mahtim Shakib | Sabbir Ahmed MS | Bangla Official Music Video 2026</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/f023KdTlYBk?si=43XzOfpfUN1Eupmv" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/f023KdTlYBk/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/f023KdTlYBk/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Kothay Pabo Tare | JKH Jesan">Kothay Pabo Tare | JKH Jesan</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/PwU--Y4GWJg?si=70dm8Zn5PtMLtS81" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/PwU--Y4GWJg/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/PwU--Y4GWJg/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Hridoy Nayer Boitha | JKH Jesan">Hridoy Nayer Boitha | JKH Jesan</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/yKhV_1lLE0Q?si=Zj4QPqcy6RnhTckf" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/yKhV_1lLE0Q/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/yKhV_1lLE0Q/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Firbo Na Tomar Kosom | Video Song | Tawsif Mahbub | Tanjin Tisha | Abanti Sithi | Jesan | Telepathy">Firbo Na Tomar Kosom | Video Song | Tawsif Mahbub | Tanjin Tisha | Abanti Sithi | Jesan | Telepathy</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/u3iIPmQJS4s?si=7DXk4ktRgb9gR991" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/u3iIPmQJS4s/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/u3iIPmQJS4s/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Diler Darwaja | Pollobi Roy | JKH Jesan | Huda Nishan | Jovan | Mahi | By Mistake Natok Song">Diler Darwaja | Pollobi Roy | JKH Jesan | Huda Nishan | Jovan | Mahi | By Mistake Natok Song</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/W9lTUy8p47I?si=UQs3qMl4PaZuox81" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/W9lTUy8p47I/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/W9lTUy8p47I/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Tomar Chul Jeno Megh | JKH Jesan | Partho Sheikh | Tania Brishty | Pashani | Natok song">Tomar Chul Jeno Megh | JKH Jesan | Partho Sheikh | Tania Brishty | Pashani | Natok song</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/ybNJSAGuB4A?si=E2cpLroc4xR9pFFD" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/ybNJSAGuB4A/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/ybNJSAGuB4A/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Nodi Hoye Jao। নদী হয়ে যাও। জিসান ।  Jesan । Lutfor Hasan। Bangla New Song 2025">Nodi Hoye Jao। নদী হয়ে যাও। জিসান ।  Jesan । Lutfor Hasan। Bangla New Song 2025</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/k8Xo24X8BHI?si=5IS70pcbbQpa-4Ed" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/k8Xo24X8BHI/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/k8Xo24X8BHI/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Khub Nervous Lage | Atiya Anisha">Khub Nervous Lage | Atiya Anisha</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/Es5JDBkuwc8?si=BfYfQyhz_X1dz8lU" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/Es5JDBkuwc8/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/Es5JDBkuwc8/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="MOHAMAYA || মহামায়া || Official song || Dr.Priyanka GOPE || নিকুঞ্জ প্রেজেন্টস">MOHAMAYA || মহামায়া || Official song || Dr.Priyanka GOPE || নিকুঞ্জ প্রেজেন্টস</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/PArY5IlUv-M?si=QMb3g1MYis-xh6qM" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/PArY5IlUv-M/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/PArY5IlUv-M/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="ইয়া নবী ( সাঃ ) | Ya Nabi ( SAW) | JKH Jesan | New Islamic Song 2026">ইয়া নবী ( সাঃ ) | Ya Nabi ( SAW) | JKH Jesan | New Islamic Song 2026</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/rzEDueOImBw?si=McBNHUagC5L8yCMq" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/rzEDueOImBw/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/rzEDueOImBw/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Jkh Jesan - Kivabe Boli Ami Pari Ni | Official AI Music Video">Jkh Jesan - Kivabe Boli Ami Pari Ni | Official AI Music Video</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/ud_wbIJC8rA?si=K_bA2ihGj73oUCHk" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/ud_wbIJC8rA/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/ud_wbIJC8rA/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="ভীষণ একা | Bhison Eka | Flop Music | Jkh Jesan">ভীষণ একা | Bhison Eka | Flop Music | Jkh Jesan</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/Ge8M1ftv-Iw?si=KsD1ASlWaG-BK8pk" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/Ge8M1ftv-Iw/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/Ge8M1ftv-Iw/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Mombati | মোমবাতি | Jkh Jesan | Flop Music">Mombati | মোমবাতি | Jkh Jesan | Flop Music</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/yZepliCx834?si=PATfrFp7bloGhl-Q" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/yZepliCx834/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/yZepliCx834/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="আবছা আলো | Abcha Alo | Jkh Jesan | Flop Music">আবছা আলো | Abcha Alo | Jkh Jesan | Flop Music</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/1YXws-tgfIg?si=ce8-5KC0vC6yDx5H" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/1YXws-tgfIg/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/1YXws-tgfIg/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Bola Hoye Othe na | বলা হয়ে ওঠে না  | Jkh Jesan | Flop Music">Bola Hoye Othe na | বলা হয়ে ওঠে না  | Jkh Jesan | Flop Music</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/clDnz-5Gsic?si=HvmyvtR9D6xrpL15" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/clDnz-5Gsic/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/clDnz-5Gsic/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Valobashi Tomay (ভালোবাসি তোমায়) | Official Music Video | Jkh Jesan X Nuzhat Rahnuma">Valobashi Tomay (ভালোবাসি তোমায়) | Official Music Video | Jkh Jesan X Nuzhat Rahnuma</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/MIV7qttqZZQ?si=CCj6qOjRalTC6Ybh" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/MIV7qttqZZQ/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/MIV7qttqZZQ/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="একলা লাগে খুব | Ekla Lage Khub | Jkh Jesan | Afris | Bumble Bee Productions | New Song">একলা লাগে খুব | Ekla Lage Khub | Jkh Jesan | Afris | Bumble Bee Productions | New Song</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/h8-KRFGaqHM?si=c5RRV1IHULJUfIVB" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/h8-KRFGaqHM/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/h8-KRFGaqHM/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="HEIYA RE | হেইয়া রে | Sporsho | JKH Jesan | Bumble Bee Productions">HEIYA RE | হেইয়া রে | Sporsho | JKH Jesan | Bumble Bee Productions</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/9DYNfWq6MOY?si=vUS9uUYVuNRWJ6bU" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="songs">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/9DYNfWq6MOY/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/9DYNfWq6MOY/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">Songs</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Tomar Chokhe Amar E Mon | তোমার চোখে আমার এ মন | Jkh Jesan | Arpita Roy | Sunglass | Natok Song 2026">Tomar Chokhe Amar E Mon | তোমার চোখে আমার এ মন | Jkh Jesan | Arpita Roy | Sunglass | Natok Song 2026</h3>
+                    </div>
+                </a>
+
+                <a href="https://www.youtube.com/watch?v=_cqPDqx54RE" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="bgm">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/_cqPDqx54RE/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/_cqPDqx54RE/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">BGM</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Aponjon | আপনজন | Full Natok | Nirjon Nahuel | Arohi Mim | Prio Ahmed | Bangla New Natok 2026">Aponjon | আপনজন | Full Natok | Nirjon Nahuel | Arohi Mim | Prio Ahmed | Bangla New Natok 2026</h3>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/watch?v=80opMhwlldo" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="bgm">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/80opMhwlldo/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/80opMhwlldo/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">BGM</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Anarkoli (আনারকলি ) Saad Naovi | Sadnima Binte Noman | L R Sohel | New Natok 2026">Anarkoli (আনারকলি ) Saad Naovi | Sadnima Binte Noman | L R Sohel | New Natok 2026</h3>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/watch?v=D9vDMc9_2AE&t=2529s" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="bgm">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/D9vDMc9_2AE/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/D9vDMc9_2AE/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">BGM</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Ojana Maya | অজানা মায়া | Saad Naovi | Priyontee Urbee | Naresh Bhuiyan | Sohel | New Natok 2026">Ojana Maya | অজানা মায়া | Saad Naovi | Priyontee Urbee | Naresh Bhuiyan | Sohel | New Natok 2026</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/iE6oGjaQS1M?si=0MM3OjD0s3-ec-Nj" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="bgm">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/iE6oGjaQS1M/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/iE6oGjaQS1M/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">BGM</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Kothay Pabo Tare | কোথায় পাবো তারে | Nirjon Nahuel | Arohi Mim | Full Natok | Bangla New Natok 2025">Kothay Pabo Tare | কোথায় পাবো তারে | Nirjon Nahuel | Arohi Mim | Full Natok | Bangla New Natok 2025</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/-Ce-mXLqzJw?si=cysqV1XOyEnxcASq" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="bgm">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/-Ce-mXLqzJw/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/-Ce-mXLqzJw/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">BGM</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Kothay Pabo Tare Full BGM 🎶 Heart-Touching Bengali Background Music | Romantic Instrumental Theme">Kothay Pabo Tare Full BGM 🎶 Heart-Touching Bengali Background Music | Romantic Instrumental Theme</h3>
+                    </div>
+                </a>
+                <a href="https://youtu.be/fC4N3rGwyzI?si=yOPgeLSFVTzQP1vX" target="_blank" class="work-item block bento-border overflow-hidden group gs-reveal" data-category="bgm">
+                    <div class="w-full aspect-video relative overflow-hidden img-scale">
+                        <img src="https://img.youtube.com/vi/fC4N3rGwyzI/maxresdefault.jpg" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0" onerror="this.src='https://img.youtube.com/vi/fC4N3rGwyzI/hqdefault.jpg'">
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-500">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="p-3 md:p-5 bg-dark border-t border-white/5">
+                        <span class="inline-block px-2 py-0.5 md:px-3 md:py-1 bg-white/10 rounded-full font-sans text-[7px] md:text-[8px] uppercase tracking-widest text-accent font-bold mb-1.5 md:mb-3">BGM</span>
+                        <h3 class="font-display text-xs sm:text-sm md:text-lg font-bold uppercase text-white group-hover:text-accent transition-colors line-clamp-1" title="Sunglass | সানগ্লাস | Saad Naovi | Mariya Shanto | New Natok 2026">Sunglass | সানগ্লাস | Saad Naovi | Mariya Shanto | New Natok 2026</h3>
+                    </div>
+                </a>
+            </div>
+
+            <div class="mt-16 text-center w-full">
+                <button id="load-more-btn"
+                    class="inline-block border border-white/20 px-8 py-4 rounded-full font-sans text-xs font-bold uppercase tracking-widest hover:bg-accent hover:border-accent hover:text-black transition-all gs-reveal">See
+                    More</button>
+            </div>
+
+            <div class="mt-24 text-center gs-reveal">
+                <a href="https://youtube.com/@jkhjesan?si=00dHez7xnIWZATza" target="_blank"
+                    class="inline-block border border-white/20 px-12 py-6 rounded-full font-sans text-sm font-bold uppercase tracking-widest hover:bg-accent hover:border-accent hover:text-black transition-colors">Listen
+                    on YouTube</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. MASSIVE FOOTER CTA -->
+    <section
+        class="min-h-[70vh] md:min-h-screen flex flex-col justify-between pt-20 md:pt-32 px-4 md:px-12 bg-white text-black relative z-30">
+        <div class="container mx-auto max-w-[1600px] flex-grow flex flex-col justify-center text-center gs-reveal">
+            <p id="footer-cta-sub"
+                class="font-sans font-bold text-[clamp(8px,1vw,12px)] uppercase tracking-[0.4em] text-gray-400 mb-6 md:mb-10">
+                Ready to build the sound?</p>
+            <a href="contact" class="hover-flip" data-text="START A PROJECT">
+                <span id="footer-cta-main"
+                    class="font-display font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight uppercase tracking-tight text-black mix-blend-difference break-words block px-4">START
+                    A PROJECT</span>
+            </a>
+
+            <div class="mt-20 flex flex-wrap justify-center gap-8 md:gap-16">
+                <a href="https://wa.me/8801938172454" target="_blank" id="footer-wa"
+                    class="font-sans font-bold text-sm uppercase tracking-widest hover:text-accent transition-colors">WhatsApp</a>
+                <a href="https://www.facebook.com/jkh.jesan.9/" target="_blank" id="footer-fb"
+                    class="font-sans font-bold text-sm uppercase tracking-widest hover:text-accent transition-colors">Facebook</a>
+                <a href="https://youtube.com/@jkhjesan?si=00dHez7xnIWZATza" target="_blank" id="footer-yt"
+                    class="font-sans font-bold text-sm uppercase tracking-widest hover:text-accent transition-colors">YouTube</a>
+            </div>
+        </div>
+        <div
+            class="w-full py-8 border-t border-black/10 flex flex-col md:flex-row justify-between items-center text-[10px] font-bold uppercase tracking-[0.2em] font-sans text-gray-500 relative">
+            <p id="copyright">&copy; 2026 JKH JESAN</p>
+        </div>
+    </section>
+
+    <script>
+        const lenis = new Lenis({
+            duration: 1.1,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            gestureOrientation: 'vertical',
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            touchMultiplier: 1.6,
+            infinite: false
+        });
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+        ScrollTrigger.config({ limitCallbacks: true, ignoreMobileResize: true });
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.utils.toArray('.gs-reveal').forEach(elem => {
+            gsap.fromTo(elem, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out", scrollTrigger: { trigger: elem, start: "top 85%" } });
+        });
+
+        fetch('/api/data')
+            .then(res => res.json())
+            .then(data => {
+                if (data.branding && data.branding.logo) document.querySelectorAll('img[alt="JKH Logo"]').forEach(img => img.src = data.branding.logo);
+
+                const setHtml = (id, val) => { const el = document.getElementById(id); if (el && val) el.innerHTML = val; };
+
+                if (data.content && data.content.Global) {
+                    setHtml('nav-home', data.content.Global.nav_home); setHtml('nav-about', data.content.Global.nav_about); setHtml('nav-works', data.content.Global.nav_works); setHtml('nav-archive', data.content.Global.nav_archive); setHtml('nav-contact', data.content.Global.nav_contact);
+                    setHtml('footer-cta-sub', data.content.Global.footer_cta_sub); setHtml('footer-cta-main', data.content.Global.footer_cta_main); setHtml('footer-wa', data.content.Global.footer_wa); setHtml('footer-fb', data.content.Global.footer_fb); setHtml('footer-yt', data.content.Global.footer_yt); setHtml('copyright', data.content.Global.copyright);
+                }
+
+                if (data.content && data.content.Works) {
+                    const wk = data.content.Works;
+                    setHtml('works-hero-kicker', wk.hero_kicker); setHtml('works-hero-title', wk.hero_title);
+                }
+            }).catch(e => console.log("Static mode"));
+
+        const style = document.createElement('style');
+        style.innerHTML = `@keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }`;
+        document.head.appendChild(style);
+
+        // Filter and Pagination Logic
+        function initFiltersAndPagination() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const workItems = document.querySelectorAll('.work-item');
+            const loadMoreBtn = document.getElementById('load-more-btn');
+            let visibleCount = 6;
+
+            function updateVisibility() {
+                const activeBtn = document.querySelector('.filter-btn.active');
+                if (!activeBtn) return;
+                const activeFilter = activeBtn.getAttribute('data-filter');
+                let count = 0;
+                let totalMatched = 0;
+
+                workItems.forEach(item => {
+                    const category = item.getAttribute('data-category');
+                    if (activeFilter === 'all' || category === activeFilter) {
+                        totalMatched++;
+                        if (count < visibleCount) {
+                            item.style.display = 'block';
+                            setTimeout(() => {
+                                item.style.opacity = '1';
+                                item.style.transform = 'translateY(0)';
+                            }, 50);
+                            count++;
+                        } else {
+                            item.style.opacity = '0';
+                            item.style.transform = 'translateY(20px)';
+                            setTimeout(() => {
+                                item.style.display = 'none';
+                            }, 300);
+                        }
+                    } else {
+                        item.style.opacity = '0';
+                        item.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            item.style.display = 'none';
+                        }, 300);
+                    }
+                });
+
+                if (totalMatched > visibleCount) {
+                    loadMoreBtn.style.display = 'inline-block';
+                } else {
+                    loadMoreBtn.style.display = 'none';
+                }
+
+                setTimeout(() => ScrollTrigger.refresh(), 350);
+            }
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => {
+                        b.classList.remove('active', 'bg-accent', 'border-accent');
+                        b.classList.add('border-white/20');
+                    });
+
+                    btn.classList.add('active', 'bg-accent', 'border-accent');
+                    btn.classList.remove('border-white/20');
+
+                    visibleCount = 6; // Reset to 6 when filter changes
+                    updateVisibility();
+                });
+            });
+
+            if (loadMoreBtn) {
+                loadMoreBtn.addEventListener('click', () => {
+                    visibleCount += 100; // Show all remaining
+                    updateVisibility();
+                });
+            }
+
+            // Initial call
+            updateVisibility();
+        }
+
+        document.addEventListener('DOMContentLoaded', initFiltersAndPagination);
+    </script>
+    <script src="mobile.js"></script>
+    <!-- EvoRise Solutions Creator Tag -->
+    <a href="https://www.facebook.com/EvoRiseSolutions/" target="_blank"
+        class="block relative w-full border-t border-white/10 bg-[#050505] overflow-hidden group py-10 cursor-pointer z-50 hover:bg-[#0a0a0a] transition-colors duration-500">
+        <!-- Animated Background Gradient -->
+        <div
+            class="absolute inset-0 bg-gradient-to-r from-accent/0 via-accent/10 to-accent/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out">
+        </div>
+        <div
+            class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KPC9zdmc+')] opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        </div>
+
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-center gap-6 relative z-10">
+            <span
+                class="font-sans text-[10px] md:text-xs uppercase tracking-[0.5em] text-gray-500 group-hover:text-white transition-colors duration-300">Engineered
+                & Designed By</span>
+
+            <div class="relative inline-flex items-center justify-center">
+                <span
+                    class="font-display font-extrabold text-2xl md:text-4xl uppercase tracking-widest text-transparent group-hover:scale-105 transition-transform duration-500 ease-out"
+                    style="-webkit-text-stroke: 1px rgba(255,255,255,0.4);">
+                    <span
+                        class="text-white group-hover:text-accent transition-colors duration-500 drop-shadow-[0_0_15px_rgba(255,69,0,0)] group-hover:drop-shadow-[0_0_25px_rgba(255,69,0,0.8)]">EvoRise</span>
+                    Solutions
+                </span>
+
+                <!-- Glowing Particle (Animated) -->
+                <div
+                    class="absolute -right-6 top-0 w-3 h-3 rounded-full bg-accent opacity-0 group-hover:opacity-100 group-hover:animate-ping">
+                </div>
+                <div class="absolute -left-6 bottom-0 w-2 h-2 rounded-full bg-white opacity-0 group-hover:opacity-100 group-hover:animate-ping"
+                    style="animation-delay: 0.3s"></div>
+            </div>
+        </div>
+    </a>
+
+    <!-- Floating Instant WhatsApp Quick-Connect Button (Bulletproof Cache-Resistant Inline & Utility Styles) -->
+    <a href="https://wa.me/8801938172454?text=Hello%20JKH%20Jesan,%20I%20would%20like%20to%20collaborate%20on%20an%20audio%20project." 
+       target="_blank" 
+       rel="noopener noreferrer" 
+       aria-label="Direct WhatsApp Chat" 
+       id="floating-whatsapp-btn" 
+       title="Chat with JKH Jesan on WhatsApp"
+       class="fixed bottom-6 left-5 z-[99999] inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-[#0f0f0f]/95 border border-[#25D366]/50 text-white shadow-2xl backdrop-blur-md transition-all hover:scale-105 hover:bg-[#25D366] hover:text-black group"
+       style="position: fixed !important; bottom: 24px !important; left: 20px !important; z-index: 99999 !important; display: inline-flex !important; align-items: center !important; gap: 9px !important; padding: 10px 16px !important; background: rgba(15, 15, 15, 0.95) !important; border: 1px solid rgba(37, 211, 102, 0.5) !important; border-radius: 9999px !important; color: #ffffff !important; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(37, 211, 102, 0.3) !important; backdrop-filter: blur(16px) !important; text-decoration: none !important;">
+        <div class="relative flex items-center justify-center">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#25D366] animate-ping absolute"></span>
+            <span class="w-2 h-2 rounded-full bg-[#25D366] group-hover:bg-black transition-colors"></span>
+        </div>
+        <i class="fab fa-whatsapp text-lg text-[#25D366] group-hover:text-black transition-colors" style="color: #25D366 !important; font-size: 1.25rem !important;"></i>
+        <span class="font-sans text-[11px] font-bold tracking-wider uppercase hidden sm:inline-block">WhatsApp</span>
+    </a>
+</body>
+
+</html>

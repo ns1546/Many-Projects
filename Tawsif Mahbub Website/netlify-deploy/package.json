@@ -1,0 +1,9 @@
+{
+  "name": "tawsif-mahbub-official-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pre-built production deploy for Tawsif Mahbub Official Website",
+  "scripts": {
+    "build": "echo 'Pre-built production assets ready for instant deployment'"
+  }
+}

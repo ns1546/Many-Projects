@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo Manager - Admin Only</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  
+  <link rel="stylesheet" href="admin.css">
+  <style>
+    body { padding: 20px; max-width: 800px; margin: 0 auto; background: var(--admin-bg); }
+    @media (min-width: 640px) { body { padding: 40px; } }
+    .card { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 24px; }
+    .session-item { display: flex; flex-direction: column; gap: 16px; padding: 16px; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 12px; }
+    @media (min-width: 640px) { .session-item { flex-direction: row; justify-content: space-between; align-items: center; gap: 0; } }
+    .session-info { flex: 1; }
+    .session-id { font-weight: 600; color: #111827; font-size: 18px; margin-bottom: 4px; }
+    .session-link { color: var(--color-primary); font-size: 14px; word-break: break-all; }
+  </style>
+</head>
+<body>
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+    <a href="/admin/index.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; background: var(--admin-surface, #ffffff); border: 1px solid var(--admin-border, #d1d5db); color: var(--admin-text, #1f2937); box-shadow: 0 1px 3px rgba(0,0,0,0.06); font-size: 14px; transition: all 0.2s ease;">
+      <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
+      <span>Back to Admin Dashboard</span>
+    </a>
+    <span style="font-size: 12px; color: var(--admin-text-muted, #64748b); font-weight: 600;">Evorise Restaurant Admin</span>
+  </div>
+
+  <h2>Sandbox Demo Manager</h2>
+  <p style="color: #6b7280; margin-bottom: 24px;">Manage isolated tenant sandboxes for prospective clients. Demo environments cannot affect production data.</p>
+
+  <div class="card">
+    <h3 style="margin-bottom: 16px;">Create New Demo Session</h3>
+    <button class="btn btn-primary" id="btnCreateDemo">Generate Sandbox Session</button>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom: 16px;">Active Demo Sessions</h3>
+    <div id="demoList">Loading...</div>
+  </div>
+
+  <script src="../db.js"></script>
+  <script src="../auth.js"></script>
+  <script>
+    // Enforce high-level admin only
+    enforceAdminAccess();
+    
+    lucide.createIcons();
+
+    const demoList = document.getElementById('demoList');
+    
+    // Create new demo
+    document.getElementById('btnCreateDemo').addEventListener('click', async () => {
+      const demoId = 'demo-' + Math.random().toString(36).substr(2, 9);
+      try {
+        // Create a root document to track it
+        await firestoreDB.collection('demos').doc(demoId).set({
+          createdAt: new Date().toISOString(),
+          status: 'active'
+        });
+        alert(`Demo Session Created: ${demoId}`);
+        loadDemos();
+      } catch (e) {
+        alert("Failed to create demo: " + e.message);
+      }
+    });
+
+    async function loadDemos() {
+      try {
+        const snapshot = await firestoreDB.collection('demos').get();
+        if (snapshot.empty) {
+          demoList.innerHTML = "<p style='color:#6b7280;'>No active demo sessions.</p>";
+          return;
+        }
+        
+        let html = '';
+        const baseUrl = window.location.origin + window.location.pathname.replace('/admin/demo.html', '/');
+        
+        snapshot.docs.forEach(doc => {
+          const data = doc.data();
+          const clientLink = `${baseUrl}index.html?demo=${doc.id}`;
+          const adminLink = `${baseUrl}admin/index.html?demo=${doc.id}`;
+          
+          html += `
+            <div class="session-item">
+              <div class="session-info">
+                <div class="session-id">${doc.id}</div>
+                <div style="font-size: 12px; color: #6b7280; margin-bottom: 8px;">Created: ${new Date(data.createdAt).toLocaleString()}</div>
+                <div><a href="${clientLink}" target="_blank" class="session-link">Client View: ${clientLink}</a></div>
+                <div><a href="${adminLink}" target="_blank" class="session-link" style="color: #4f46e5;">Admin View: ${adminLink}</a></div>
+              </div>
+              <button class="btn btn-secondary" style="color: #dc2626; border-color: #fca5a5;" onclick="wipeDemo('${doc.id}')">
+                Wipe & Delete Session
+              </button>
+            </div>
+          `;
+        });
+        demoList.innerHTML = html;
+      } catch (e) {
+        demoList.innerHTML = "<p style='color:red;'>Error loading demos.</p>";
+      }
+    }
+
+    window.wipeDemo = async function(demoId) {
+      if (!confirm(`Are you sure you want to permanently delete all data in the ${demoId} sandbox?`)) return;
+      
+      try {
+        const collections = ['items', 'orders', 'config'];
+        for (const col of collections) {
+          const snap = await firestoreDB.collection(`demos/${demoId}/${col}`).get();
+          if (!snap.empty) {
+            const batch = firestoreDB.batch();
+            snap.forEach(doc => {
+              batch.delete(doc.ref);
+            });
+            await batch.commit();
+          }
+        }
+        await firestoreDB.collection('demos').doc(demoId).delete();
+        alert(`Sandbox ${demoId} wiped successfully.`);
+        loadDemos();
+      } catch (e) {
+        alert("Wipe failed: " + e.message);
+      }
+    }
+
+    // Initialize
+    onAuthChange(user => {
+      if (user) loadDemos();
+    });
+  </script>
+</body>
+</html>

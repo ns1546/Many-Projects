@@ -1,0 +1,148 @@
+                    setTimeout(() => {
+                        btn.classList.remove('loading');
+                        btn.innerHTML = '↻ Load / Refresh Content';
+                    }, 500);
+                }
+            } catch (error) {
+                console.error("Error loading content into editor:", error);
+                if (currentWorld === 'proposal' && sunEditorProposal) {
+                    sunEditorProposal.setContents(`<p style="color: red;">Error loading content. Please check the form for missing data and try again.</p>`);
+                } else if (currentWorld === 'agreement' && sunEditorAgreement) {
+                    sunEditorAgreement.setContents(`<p style="color: red;">Error loading content. Please check the form for missing data and try again.</p>`);
+                }
+            }
+        }
+
+        // --- PROPOSAL: Download ---
+
+        function generateDocx() {
+            const data = collectData(); 
+            const clientNameForFilename = data.clientBrand.replace(/[^a-z0-9]/gi, '_');
+
+            autoConvertProposalToAgreement(true);
+            saveNamedDraft(clientNameForFilename + '_Auto_Draft', true);
+
+            if (!sunEditorProposal) return;
+            const editedContent = sunEditorProposal.getContents(true);
+
+            const content = `
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        /* ... (Styles remain the same as v3) ... */
+                        body { font-family: Calibri, sans-serif; line-height: 1.6; margin: 40px; color: #000000; }
+                        h1 { font-size: 22pt; color: #000000; border-bottom: 2px solid #000000; padding-bottom: 5px; margin-top: 30px; margin-bottom: 15px; }
+                        h2 { font-size: 16pt; color: #000000; margin-top: 25px; margin-bottom: 10px; page-break-after: avoid; }
+                        h3 { font-size: 12pt; color: #000000; margin-top: 15px; margin-bottom: 5px; }
+                        table { border-collapse: collapse; width: 100%; margin-bottom: 20px; font-size: 10pt; page-break-inside: avoid; }
+                        th, td { border: 1px solid #d1d5db; padding: 8px; text-align: left; }
+                        thead tr { background-color: #f3f4f6; }
+                        ol { margin-left: 20px; padding-left: 0; font-size: 10pt; page-break-inside: avoid; }
+                        ol li { margin-bottom: 8px; }
+                        strong { font-weight: bold; }
+                        /* REMOVED: img { max-width: 100%; height: auto; } */
+                    </style>
+                </head>
+                <body>
+                    ${editedContent} <!-- Inject the edited HTML directly -->
+                </body>
+                </html>
+            `;
+            const blob = new Blob([content], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${clientNameForFilename}_Proposal_${data.date.replace(/[^a-z0-9]/gi, '')}.doc`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function generateHtml() {
+            const data = collectData();
+            const clientNameForFilename = data.clientBrand.replace(/[^a-z0-9]/gi, '_');
+
+            autoConvertProposalToAgreement(true);
+            saveNamedDraft(clientNameForFilename + '_Auto_Draft', true);
+
+            if (!sunEditorProposal) return;
+            const editedContent = sunEditorProposal.getContents(true);
+
+            const content = `
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Marketing Proposal for ${data.clientBrand}</title>
+                    <style>
+                        /* ... (Styles remain the same as v3) ... */
+                        body { font-family: Calibri, sans-serif; line-height: 1.6; margin: 40px; color: #000000; max-width: 800px; margin-left: auto; margin-right: auto; }
+                        h1 { font-size: 22pt; color: #000000; border-bottom: 2px solid #000000; padding-bottom: 5px; margin-top: 30px; margin-bottom: 15px; }
+                        h2 { font-size: 16pt; color: #000000; margin-top: 25px; margin-bottom: 10px; }
+                        h3 { font-size: 12pt; color: #000000; margin-top: 15px; margin-bottom: 5px; }
+                        table { border-collapse: collapse; width: 100%; margin-bottom: 20px; font-size: 10pt; }
+                        th, td { border: 1px solid #d1d5db; padding: 8px; text-align: left; }
+                        thead tr { background-color: #f3f4f6; }
+                        ol { margin-left: 20px; padding-left: 0; font-size: 10pt; }
+                        ol li { margin-bottom: 8px; }
+                        strong { font-weight: bold; }
+                        /* REMOVED: img { max-width: 100%; height: auto; } */
+                    </style>
+                </head>
+                <body>
+                    ${editedContent} <!-- Inject the edited HTML directly -->
+                </body>
+                </html>
+            `;
+            const blob = new Blob([content], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.download = `${clientNameForFilename}_Proposal_${data.date.replace(/[^a-z0-9]/gi, '')}.html`;
+            a.href = url;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // --- AGREEMENT: Dynamic Table/List Management ---
+        // All functions (renderAgreementServicesTable, updateAgreementService, addAgreementServiceRow, etc.)
+        // remain exactly the same as v3.
+        function renderAgreementServicesTable() {
+            const tbody = document.getElementById('agreement-services-tbody');
+            tbody.innerHTML = '';
+            editableAgreementServices.forEach((item, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td class="px-3 py-2"><input type="text" class="feature-input w-full" value="${item.feature}" oninput="updateAgreementService(${index}, 'feature', this.value)"></td>
+                    <td class="px-3 py-2"><input type="text" class="feature-input w-full" value="${item.quantity}" oninput="updateAgreementService(${index}, 'quantity', this.value)"></td>
+                    <td class="px-3 py-2"><textarea class="feature-input w-full" oninput="updateAgreementService(${index}, 'description', this.value)">${item.description}</textarea></td>
+                    <td class="px-3 py-2 text-center">
+                        <button onclick="insertAgreementServiceRow(${index})" class="text-blue-600 hover:text-blue-900 text-sm font-medium mr-2" title="Insert Below" style="margin-right: 5px;">+ Add</button>
+                        <button onclick="deleteAgreementServiceRow(${index})" class="text-red-600 hover:text-red-900 text-sm font-medium disabled:opacity-50">Delete</button>
+                    </td>
+                `;
+            });
+            toggleSensitiveEditing(document.getElementById('input-sensitiveEdit').checked);
+        }
+        function insertAgreementServiceRow(index) {
+            if (!document.getElementById('input-sensitiveEdit').checked) return;
+            editableAgreementServices.splice(index + 1, 0, { feature: 'New Service', quantity: 'Ongoing', description: 'New service description.' });
+            renderAgreementServicesTable();
+        }
+        function updateAgreementService(index, key, value) {
+            if (editableAgreementServices[index]) {
+                editableAgreementServices[index][key] = value;
+            }
+        }
+        function addAgreementServiceRow() {
+            editableAgreementServices.push({ feature: 'New Service', quantity: 'Ongoing', description: 'New service description.' });
+            renderAgreementServicesTable();
+        }
+        function deleteAgreementServiceRow(index) {
+            if (editableAgreementServices.length > 1) {
+                editableAgreementServices.splice(index, 1);
+                renderAgreementServicesTable();
+            }
+        }

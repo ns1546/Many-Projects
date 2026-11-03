@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Create Account — Rownaa</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>.auth-page{background:var(--surface);justify-content:center;align-items:center;min-height:100vh;padding:120px 4vw;display:flex}.auth-card{background:var(--bg-color);border:1px solid var(--border);border-radius:1.5rem;width:100%;max-width:540px;padding:4rem;box-shadow:0 30px 60px #00000080}.auth-card h1{text-transform:uppercase;margin-bottom:.5rem;font-size:2.5rem}.auth-card p{color:var(--text-muted);margin-bottom:3rem}.auth-form{flex-direction:column;gap:1.5rem;display:flex}.af-row{gap:1rem;display:flex}.af-field{flex-direction:column;flex:1;gap:.5rem;display:flex;position:relative}.af-field label{text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);font-size:.75rem;font-weight:600}.af-field input{background:var(--surface);border:1px solid var(--border);color:var(--text-main);font-family:var(--font-body);border-radius:.5rem;outline:none;width:100%;padding:1rem;font-size:1rem;transition:border-color .3s}.af-field input:focus{border-color:var(--accent)}.af-submit{background:var(--text-main);color:var(--bg-color);font-family:var(--font-display);text-transform:uppercase;border:none;border-radius:.5rem;margin-top:1rem;padding:1.25rem;font-size:1rem;font-weight:700;transition:background .3s,transform .2s}.af-submit:hover{background:var(--accent);transform:translateY(-2px)}.auth-links{text-align:center;color:var(--text-muted);flex-direction:column;gap:.5rem;margin-top:2rem;font-size:.875rem;display:flex}.auth-links a{color:var(--text-main);font-weight:500;transition:color .3s}.auth-links a:hover{color:var(--accent)}.input-with-btn{gap:.5rem;display:flex}.input-with-btn button{background:var(--surface-hover);color:var(--text-main);border:1px solid var(--border);white-space:nowrap;border-radius:.5rem;padding:0 1rem;font-size:.875rem;font-weight:600;transition:background .3s}.input-with-btn button:hover{background:var(--accent);color:#000;border-color:var(--accent)}@media (width<=768px){.auth-card{padding:2rem}.af-row{flex-direction:column;gap:1.5rem}}</style>
+  <script type="module" crossorigin src="/assets/auth.NDAxA9_W.js"></script>
+  <script type="module" crossorigin src="/assets/app.Qptzu_6g.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/register.FxHMIduQ.css">
+</head>
+<body>
+
+<header class="site-nav scrolled" id="site-nav">
+  <div class="nav-wrap">
+    <a href="index.html" class="wordmark">Rownaa<sup>®</sup></a>
+    <div class="nav-right">
+      <a href="login-sliding.html" class="nav-text-link">Sign In →</a>
+    </div>
+  </div>
+</header>
+
+<div class="auth-page">
+  <div class="auth-card" data-reveal>
+    <h1>Create account</h1>
+    <p>Book your first ride in minutes. No hidden fees.</p>
+    <form class="auth-form" onsubmit="event.preventDefault(); 
+      const name = this.querySelector('input[type=text]').value;
+      const phone = document.getElementById('reg-phone').value;
+      const passwords = this.querySelectorAll('input[type=password]');
+      if (passwords[0].value !== passwords[1].value) return alert('Passwords do not match');
+      
+      fetch('/api/register', { credentials: 'include',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: phone, password: passwords[0].value, name: name, role: 'customer' })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.token) {
+          /* Migrated to HttpOnly */
+          window.location.href = 'customer-panel.html';
+        } else {
+          alert(data.error || 'Registration failed');
+        }
+      });
+    ">
+      <div class="af-field">
+        <label>Full Name</label>
+        <input type="text" placeholder="Enter your full name" required />
+      </div>
+      <div class="af-field">
+        <label>Mobile Number</label>
+        <div class="input-with-btn">
+          <input type="tel" id="reg-phone" placeholder="+880 1XXXXXXXXX" required />
+          <button type="button" onclick="document.getElementById('otp-wrap').style.display='flex'">Send OTP</button>
+        </div>
+      </div>
+      <div class="af-field" id="otp-wrap" style="display:none">
+        <label style="color:var(--accent)">Enter OTP Code</label>
+        <input type="text" placeholder="6-digit code" maxlength="6" style="border-color:var(--accent)"/>
+      </div>
+      <div class="af-row">
+        <div class="af-field">
+          <label>Password</label>
+          <input type="password" placeholder="Min 8 characters" required />
+        </div>
+        <div class="af-field">
+          <label>Confirm Password</label>
+          <input type="password" placeholder="Repeat password" required />
+        </div>
+      </div>
+      <button type="submit" class="af-submit">Join Rownaa</button>
+    </form>
+    <div class="auth-links">
+      <span>Already have an account? <a href="login-sliding.html">Sign in</a></span>
+      <span>Want to list your car? <a href="owner-register.html">Register as owner</a></span>
+    </div>
+  </div>
+</div>
+
+<script>(function() {
+    const originalFetch = window.fetch;
+    window.fetch = async function(...args) {
+        let url = args[0];
+        if (url instanceof Request) {
+            url = url.url;
+        }
+
+        if (typeof url === 'string' && url.includes('/api/')) {
+            // DEMO AUTH MOCKS
+            if (url.includes('/api/login')) {
+                let role = 'customer';
+                try {
+                    const options = args[1];
+                    const body = options && options.body ? JSON.parse(options.body) : {};
+                    if (body.username === 'admin') role = 'admin';
+                    if (body.username === 'owner') role = 'owner';
+                } catch(e) {}
+                
+                const fakeUser = { userId: 'demo', role, name: 'Demo User' };
+                localStorage.setItem('demo_user', JSON.stringify(fakeUser));
+                
+                return new Response(JSON.stringify({ success: true, role, name: 'Demo User' }), { status: 200 });
+            }
+            if (url.includes('/api/logout')) {
+                localStorage.removeItem('demo_user');
+                return new Response(JSON.stringify({ success: true }), { status: 200 });
+            }
+            if (url.includes('/api/me')) {
+                const demoUser = localStorage.getItem('demo_user');
+                if (demoUser) {
+                    return new Response(JSON.stringify({ success: true, user: JSON.parse(demoUser) }), { status: 200 });
+                }
+                return new Response(JSON.stringify({ error: 'No active session' }), { status: 401 });
+            }
+
+            try {
+                const response = await originalFetch(...args);
+                if (!response.ok) {
+                    showUnderConstruction();
+                }
+                return response;
+            } catch (e) {
+                showUnderConstruction();
+                return Promise.reject(e);
+            }
+        }
+        return originalFetch(...args);
+    };
+
+    function showUnderConstruction() {
+        if (document.getElementById('under-construction-overlay')) return;
+
+        const overlay = document.createElement('div');
+        overlay.id = 'under-construction-overlay';
+        Object.assign(overlay.style, {
+            position: 'fixed',
+            top: '0', left: '0', width: '100vw', height: '100vh',
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            backdropFilter: 'blur(10px)',
+            zIndex: '999999',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            color: '#fff',
+            fontFamily: 'Inter, sans-serif'
+        });
+
+        overlay.innerHTML = `
+            <div style="background: #1a1a1a; padding: 3rem; border-radius: 1rem; border: 1px solid #333; text-align: center; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d4ff00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem;">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <h2 style="margin: 0 0 1rem 0; font-size: 1.5rem; color: #fff;">Under Construction</h2>
+                <p style="margin: 0 0 2rem 0; color: #aaa; font-size: 0.9rem; line-height: 1.5;">This backend feature is currently under development. The live demo is showcasing the frontend interface.</p>
+                <button id="close-uc-btn" style="background: #d4ff00; color: #000; border: none; padding: 0.75rem 2rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: transform 0.2s;">Got it</button>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        document.getElementById('close-uc-btn').addEventListener('click', () => {
+            overlay.remove();
+        });
+    }
+})();
+</script></body>
+</html>
+

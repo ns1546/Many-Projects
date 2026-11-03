@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kajal Arefin Ome | Director</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #050505;
+      color: #f5f5f5;
+      overflow-x: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .font-heading {
+      font-family: 'Bebas Neue', cursive;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #050505;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #E50914;
+      border-radius: 10px;
+    }
+
+    /* ── Film grain ────────────────────────────────────────── */
+    @keyframes grain {
+
+      0%,
+      100% {
+        transform: translate(0, 0);
+      }
+
+      10% {
+        transform: translate(-3%, -4%);
+      }
+
+      20% {
+        transform: translate(-6%, 2%);
+      }
+
+      30% {
+        transform: translate(4%, -5%);
+      }
+
+      40% {
+        transform: translate(-4%, 6%);
+      }
+
+      50% {
+        transform: translate(5%, 1%);
+      }
+
+      60% {
+        transform: translate(-3%, 4%);
+      }
+
+      70% {
+        transform: translate(3%, -3%);
+      }
+
+      80% {
+        transform: translate(-5%, 2%);
+      }
+
+      90% {
+        transform: translate(2%, 5%);
+      }
+    }
+
+    .hero-grain {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      /* Removed infinite grain animation for 60FPS scrolling performance */
+    }
+
+    /* ── Scanline sweep ────────────────────────────────────── */
+    @keyframes scanline {
+      0% {
+        transform: translateY(-100%);
+        opacity: 0.08;
+      }
+
+      50% {
+        opacity: 0.04;
+      }
+
+      100% {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
+    }
+
+    .hero-scanline::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom,
+          transparent 0%,
+          rgba(229, 9, 20, 0.04) 49%,
+          transparent 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+    }
+
+    .hero-scanline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: linear-gradient(to bottom,
+          transparent,
+          rgba(229, 9, 20, 0.06),
+          transparent);
+      animation: scanline 6s linear infinite;
+      will-change: transform;
+    }
+
+    /* ── Scroll line drop ──────────────────────────────────── */
+    @keyframes scrollDrop {
+      0% {
+        transform: translateY(-100%);
+      }
+
+      100% {
+        transform: translateY(200%);
+      }
+    }
+
+    .scroll-line {
+      animation: scrollDrop 1.8s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    /* ── Subtitle shimmer light pass ───────────────────────── */
+    @keyframes subtitleShimmer {
+      0% {
+        transform: translateX(-140%) skewX(-18deg);
+        opacity: 0;
+      }
+
+      15% {
+        opacity: 1;
+      }
+
+      85% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateX(240%) skewX(-18deg);
+        opacity: 0;
+      }
+    }
+
+    .subtitle-shimmer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .subtitle-shimmer::before {
+      content: '';
+      position: absolute;
+      top: -10%;
+      bottom: -10%;
+      left: 0;
+      width: 40%;
+      background: linear-gradient(90deg,
+          transparent 0%,
+          rgba(255, 160, 160, 0.15) 35%,
+          rgba(255, 255, 255, 0.35) 50%,
+          rgba(255, 160, 160, 0.15) 65%,
+          transparent 100%);
+      animation: subtitleShimmer 3.5s cubic-bezier(0.4, 0, 0.6, 1) 1.8s infinite;
+      will-change: transform, opacity;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.2.0",
+        "react-dom": "https://esm.sh/react-dom@18.2.0",
+        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+        "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
+        "@google/genai": "https://esm.sh/@google/genai",
+        "gsap": "https://esm.sh/gsap",
+        "gsap/ScrollTrigger": "https://esm.sh/gsap/ScrollTrigger",
+        "react-router-dom": "https://esm.sh/react-router-dom@6.22.3"
+      }
+    }
+    </script>
+  <script type="module" crossorigin src="/assets/index-ClVuEQfU.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+</body>
+
+</html>

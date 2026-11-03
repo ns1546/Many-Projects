@@ -1,0 +1,416 @@
+{
+  "rooms": {
+    "ALPHA-7": {
+      "id": "ALPHA-7",
+      "name": "Squad ALPHA-7",
+      "createdAt": "2026-10-28T02:22:31.201Z",
+      "alarms": [
+        {
+          "id": "631f18d0-4414-49ba-ab2f-e0c25ab7628b",
+          "title": "Squad Alarm",
+          "time": "13:40",
+          "enabled": false,
+          "repeatMode": "once",
+          "repeatDays": [],
+          "snoozeDuration": 10,
+          "sound": "nuclear",
+          "challenge": "math",
+          "consensusMode": "any",
+          "targetScope": "all",
+          "targetMembers": [],
+          "crescendo": true,
+          "voiceMemo": "",
+          "status": "DISMISSED",
+          "createdBy": "Android #666",
+          "createdAt": "2026-10-28T07:38:24.335Z"
+        }
+      ],
+      "logs": [
+        {
+          "id": "7ce9158c-1257-41b7-8bb1-80bb56a2a1a0",
+          "text": "Android #888 disconnected",
+          "type": "system",
+          "user": "System",
+          "timestamp": "2026-10-28T07:45:43.370Z"
+        },
+        {
+          "id": "5577bff3-ee29-40ff-b146-305737f3228e",
+          "text": "PC #500 disconnected",
+          "type": "system",
+          "user": "System",
+          "timestamp": "2026-10-28T07:41:07.528Z"
+        },
+        {
+          "id": "7a1a828f-a2ed-4c41-83a9-a7ffa12ee301",
+          "text": "Alarm dismissed for everyone by PC #500",
+          "type": "success",
+          "user": "PC #500",
+          "timestamp": "2026-10-28T07:41:02.572Z"
+        },
+        {
+          "id": "eec49ae8-24da-4cc4-b6b5-0a47d2386714",
+          "text": "Android #888 connected to the room",
+          "type": "success",
+          "user": "Android #888",
+          "timestamp": "2026-10-28T07:40:32.923Z"
+        },
+        {
+          "id": "7572c1b9-f252-4ae7-b2c9-22046aa7d9d5",
+          "text": "Android #419 disconnected",
+          "type": "system",
+          "user": "System",
+          "timestamp": "2026-10-28T07:40:24.862Z"
+        },
+        {
+          "id": "3099ace5-6ea5-4a3c-86f6-a1b2a6efbb02",
+          "text": "Android #419 connected to the room",
+          "type": "success",
+          "user": "Android #419",
+          "timestamp": "2026-10-28T07:40:16.047Z"
+        },
+        {
+          "id": "85c8b181-dc92-477d-8614-97fe83e9ed64",
+          "text": "⏰ Alarm \"Squad Alarm\"  is ringing all connected devices!",
+          "type": "danger",
+          "user": "Alarm Engine",
+          "timestamp": "2026-10-28T07:40:00.088Z"
+        },
+        {
+          "id": "fcd5483d-cd74-4343-9d13-0bd5709f1d49",
+          "text": "Android #196 disconnected",
+          "type": "system",
+          "user": "System",
+          "timestamp": "2026-10-28T07:39:52.993Z"
+        },
+        {
+          "id": "69778817-93b1-4050-8ceb-cae31bc36028",
+          "text": "Android #109 disconnected",
+          "type": "system",
+          "user": "System",
+          "timestamp": "2026-10-28T07:39:49.918Z"
+        },
+        {
+          "id": "93e8cd8e-a6ec-4aaf-85bc-125787975439",
+          "text": "Alarm dismissed for everyone by Android #109",
+          "type": "success",
+          "user": "Android #109",
+          "timestamp": "2026-10-28T07:39:42.620Z"
+        },
+        {
+          "id": "e34c1a24-7831-4dbd-a9bf-aed255839c54",
+          "text": "🚨 INSTANT ALERT broadcasted by Android #109: \"WAKE UP CALL! SQUAD NEEDED NOW!\"",
+          "type": "danger",
+          "user": "Android #109",
+          "timestamp": "2026-10-28T07:39:35.498Z"
+        },
+        {
+          "id": "fbbfd779-24bd-4386-bb37-d133b5cf91cc",
+          "text": "Alarm dismissed for everyone by Android #109",
+          "type": "success",
+          "user": "Android #109",
+          "timestamp": "2026-10-28T07:39:31.692Z"
+        },
+        {
+          "id": "fba87cca-d1c7-4196-ba29-9b7c12727cf5",
+          "text": "Android #196 connected to the room",
+          "type": "success",
+          "user": "Android #196",
+          "timestamp": "2026-10-28T07:39:28.532Z"
+        },
+        {
+          "id": "2451a624-682b-4c3a-9145-e06316afa2fa",
+          "text": "🚨 INSTANT ALERT broadcasted by Android #109: \"WAKE UP CALL! SQUAD NEEDED NOW!\"",
+          "type": "danger",
+          "user": "Android #109",
+          "timestamp": "2026-10-28T07:39:22.497Z"
+        },
+        {
+          "id": "6cf80d81-ce64-4246-8e20-68bfb393299e",
+          "text": "Alarm dismissed for everyone by Android #109",
+          "type": "success",
+          "user": "Android #109",
+          "timestamp": "2026-10-28T07:39:16.947Z"
+        },
+        {
+          "id": "ad89d3ef-d3df-4c7e-a800-556e710a51a8",
+          "text": "🚨 INSTANT ALERT broadcasted by Android #109: \"WAKE UP CALL! SQUAD NEEDED NOW!\"",
+          "type": "danger",
+          "user": "Android #109",
+          "timestamp": "2026-10-28T07:39:11.602Z"
+        },
+        {
+          "id": "5a0c629f-3211-493d-9af4-e59f88bdbd1c",
+          "text": "Android #109 connected to the room",
+          "type": "success",
+          "user": "Android #109",
+          "timestamp": "2026-10-28T07:39:08.822Z"
+        },
+        {
+          "id": "54b31635-511d-4747-97de-b2cb3a2ba630",
+          "text": "Android #682 disconnected",
+          "type": "system",
+          "user": "System",
+          "timestamp": "2026-10-28T07:38:57.795Z"
+        },
+        {
+          "id": "1ea188e3-b83b-487f-af10-9e8cc6671d9a",
+          "text": "Android #682 connected to the room",
+          "type": "success",
+          "user": "Android #682",
+          "timestamp": "2026-10-28T07:38:55.746Z"
+        },
+        {
+          "id": "903835d5-2b81-4ea1-87ca-311908b87d21",
+          "text": "Android #112 disconnected",
+          "type": "system",
+          "user": "System",
+          "timestamp": "2026-10-28T07:38:33.733Z"
+        },
+        {
+          "id": "d18f8fa5-2d26-4ca8-8c6c-1b55dec3c2dc",
+          "text": "Android #666 disconnected",
+          "type": "system",
+          "user": "System",
+          "timestamp": "2026-10-28T07:38:29.805Z"
+        },
+        {
+          "id": "0e1dec03-1dc9-4a23-9998-56604709162e",
+          "text": "Alarm \"Squad Alarm\" at 13:40 created by Android #666",
+          "type": "info",
+          "user": "Android #666",
+          "timestamp": "2026-10-28T07:38:24.339Z"
+        },
+        {
+          "id": "9419c125-ec3c-4a33-b5c0-24c25c8a68bf",
+          "text": "Alarm \"Sunrise Wake Up\" deleted by Android #666",
+          "type": "warning",
+          "user": "Android #666",
+          "timestamp": "2026-10-28T07:37:45.713Z"
+        },
+        {
+          "id": "2edc8a30-0019-4a71-9a89-623cd995bf37",
+          "text": "Alarm \"Mom Morning Wakeup\" deleted by Android #666",
+          "type": "warning",
+          "user": "Android #666",
+          "timestamp": "2026-10-28T07:37:44.163Z"
+        },
+        {
+          "id": "030c2ebd-e719-4dc0-9648-81c392a2ce60",
+          "text": "Alarm \"Dad Flight Wakeup\" deleted by Android #666",
+          "type": "warning",
+          "user": "Android #666",
+          "timestamp": "2026-10-28T07:37:42.617Z"
+        },
+        {
+          "id": "e3bd6541-0974-42fd-9dc5-f4fc945dc591",
+          "text": "Alarm \"Important Flight\" deleted by Android #666",
+          "type": "warning",
+          "user": "Android #666",
+          "timestamp": "2026-10-28T07:37:40.281Z"
+        },
+        {
+          "id": "aa7f8eb7-253a-427e-9191-9564c0eab5d6",
+          "text": "Android #112 connected to the room",
+          "type": "success",
+          "user": "Android #112",
+          "timestamp": "2026-10-28T07:37:22.024Z"
+        },
+        {
+          "id": "c8d61856-fc70-43c0-81a6-bffffeb0e141",
+          "text": "Member \"Dad's Phone\" removed by Android #666",
+          "type": "warning",
+          "user": "Android #666",
+          "timestamp": "2026-10-28T07:35:57.352Z"
+        },
+        {
+          "id": "fecee8f4-debb-4f68-8e37-1ec2eba50739",
+          "text": "Member \"Mom's iPhone\" removed by Android #666",
+          "type": "warning",
+          "user": "Android #666",
+          "timestamp": "2026-10-28T07:35:54.739Z"
+        },
+        {
+          "id": "0b4d1240-c3d4-40f4-8e5a-41b203f90a78",
+          "text": "Android #666 connected to the room",
+          "type": "success",
+          "user": "Android #666",
+          "timestamp": "2026-10-28T07:35:48.489Z"
+        },
+        {
+          "id": "811f0f7c-04c4-4ef1-98a1-11752de47bec",
+          "text": "PC #500 connected to the room",
+          "type": "success",
+          "user": "PC #500",
+          "timestamp": "2026-10-28T07:35:00.689Z"
+        },
+        {
+          "id": "11634624-a200-4a49-9489-cd6f332c75f5",
+          "text": "PC #281 disconnected",
+          "type": "system",
+          "user": "System",
+          "timestamp": "2026-10-28T07:34:59.881Z"
+        },
+        {
+          "id": "d22f2544-2dba-43b1-993c-1589cb61e961",
+          "text": "PC #281 connected to the room",
+          "type": "success",
+          "user": "PC #281",
+          "timestamp": "2026-10-28T07:34:53.266Z"
+        },
+        {
+          "id": "c0d9e059-82aa-4dd8-a55a-179268c93034",
+          "text": "PC #588 disconnected",
+          "type": "system",
+          "user": "System",
+          "timestamp": "2026-10-28T07:34:51.866Z"
+        },
+        {
+          "id": "10a77ed5-427a-4b36-9b8a-109591b02f99",
+          "text": "Remote Phone Verification disconnected",
+          "type": "system",
+          "user": "System",
+          "timestamp": "2026-10-28T07:33:14.420Z"
+        },
+        {
+          "id": "4c764a06-9843-44e4-bfce-b37b0d1343e4",
+          "text": "Remote Phone Verification connected to the room",
+          "type": "success",
+          "user": "Remote Phone Verification",
+          "timestamp": "2026-10-28T07:33:14.266Z"
+        },
+        {
+          "id": "f751bb49-181c-49f4-973d-fac075b7186b",
+          "text": "PC #588 connected to the room",
+          "type": "success",
+          "user": "PC #588",
+          "timestamp": "2026-10-28T07:30:36.891Z"
+        },
+        {
+          "id": "525a6e0d-2039-4776-80cd-4bc09ffe0869",
+          "text": "PC #588 connected to the room",
+          "type": "success",
+          "user": "PC #588",
+          "timestamp": "2026-10-28T07:20:44.224Z"
+        },
+        {
+          "id": "88de2ad7-b9ca-40bf-9c0b-8893819ad30e",
+          "text": "PC #788 disconnected",
+          "type": "system",
+          "user": "System",
+          "timestamp": "2026-10-28T07:20:39.708Z"
+        },
+        {
+          "id": "e015ff5f-8f85-43ac-bcb7-897b7ce32454",
+          "text": "PC #788 connected to the room",
+          "type": "success",
+          "user": "PC #788",
+          "timestamp": "2026-10-28T07:17:47.986Z"
+        },
+        {
+          "id": "247a5ebf-726f-4d93-bbbf-5288747fc1b7",
+          "text": "PC #788 disconnected",
+          "type": "system",
+          "user": "System",
+          "timestamp": "2026-10-28T06:56:11.846Z"
+        },
+        {
+          "id": "c96977e9-fc5c-402e-a476-864f27986227",
+          "text": "PC #537 disconnected",
+          "type": "system",
+          "user": "System",
+          "timestamp": "2026-10-28T06:56:11.845Z"
+        },
+        {
+          "id": "c5983788-53f2-418d-b472-2af6e9259775",
+          "text": "PC #236 disconnected",
+          "type": "system",
+          "user": "System",
+          "timestamp": "2026-10-28T06:56:11.842Z"
+        },
+        {
+          "id": "c5cba0df-187d-4c4d-bf92-d592547bcfdb",
+          "text": "PC #788 connected to the room",
+          "type": "success",
+          "user": "PC #788",
+          "timestamp": "2026-10-28T06:55:33.850Z"
+        },
+        {
+          "id": "bdb1fff2-ecce-4b2f-b74b-dd64e60e1468",
+          "text": "PC #537 connected to the room",
+          "type": "success",
+          "user": "PC #537",
+          "timestamp": "2026-10-28T06:55:07.611Z"
+        },
+        {
+          "id": "351051fe-98de-4307-bb5b-de413f9d9407",
+          "text": "PC #236 connected to the room",
+          "type": "success",
+          "user": "PC #236",
+          "timestamp": "2026-10-28T06:16:26.151Z"
+        },
+        {
+          "id": "38b96b74-a6d5-482f-8b9a-8ed594fee941",
+          "text": "PC #714 disconnected",
+          "type": "system",
+          "user": "System",
+          "timestamp": "2026-10-28T05:53:40.820Z"
+        },
+        {
+          "id": "502cf4ef-2a4f-407f-930a-593b62bb8ef2",
+          "text": "PC #714 connected to the room",
+          "type": "success",
+          "user": "PC #714",
+          "timestamp": "2026-10-28T05:52:44.800Z"
+        },
+        {
+          "id": "afe0702b-692c-48b6-a569-8107ddd8202b",
+          "text": "PC #714 connected to the room",
+          "type": "success",
+          "user": "PC #714",
+          "timestamp": "2026-10-28T05:47:49.177Z"
+        },
+        {
+          "id": "50f14651-87f6-4e3c-906e-233080181623",
+          "text": "PC #571 disconnected",
+          "type": "system",
+          "user": "System",
+          "timestamp": "2026-10-28T05:47:45.559Z"
+        }
+      ],
+      "members": [
+        {
+          "id": "mem-2286b1dd",
+          "name": "PC #792",
+          "deviceId": "dev-64xc01x-mvrholfv",
+          "type": "auto",
+          "joinedAt": "2026-10-28T03:06:30.009Z",
+          "lastSeen": "2026-10-28T07:35:00.683Z",
+          "fcmToken": "{\"endpoint\":\"https://fcm.googleapis.com/fcm/send/f2V8aI6ViIg:APA91bHh0maqsK4HVdKhPzRr0aHGqV7LSZnPPx3Bj1tkS225ARIEUxz5GzK_rCl6F7WYvUgJNVQvXi-c3PqR6ktMui6LQz36ivcWuc8_x-RXJSVLZOV4KGhpVmCx6Rya258f-7sZrkyD\",\"expirationTime\":null,\"keys\":{\"p256dh\":\"BKOc4fR-UaBNlB-qElJAIYZwl5CBL4zr2qlp1_le2_ggXoDBRenOxt_OyyJAnZ-MxECdf3yncBqZ_8XXZs-E0jA\",\"auth\":\"IH6R-598RCsYez8amWRtqw\"}}"
+        },
+        {
+          "id": "mem-de4dd5cf",
+          "name": "Remote Phone Verification",
+          "deviceId": "test-remote-phone",
+          "type": "auto",
+          "joinedAt": "2026-10-28T07:33:14.264Z"
+        },
+        {
+          "id": "mem-5c5bc1cd",
+          "name": "Android #666",
+          "deviceId": "dev-rvflluk-mvrsviq2",
+          "type": "auto",
+          "joinedAt": "2026-10-28T07:35:48.482Z",
+          "lastSeen": "2026-10-28T07:40:32.911Z"
+        },
+        {
+          "id": "mem-a22cf43e",
+          "name": "Android #112",
+          "deviceId": "dev-aae03bn-mvrsxhlr",
+          "type": "auto",
+          "joinedAt": "2026-10-28T07:37:22.017Z",
+          "lastSeen": "2026-10-28T07:40:16.043Z"
+        }
+      ]
+    }
+  }
+}

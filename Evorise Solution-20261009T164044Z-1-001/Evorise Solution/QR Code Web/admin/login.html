@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - Evorise Restaurant</title>
+  
+  <script>
+    // Apply saved theme before paint
+    (function() {
+      var saved = localStorage.getItem('sg_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  
+  <link rel="stylesheet" href="/index.css">
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #FAF7F2 0%, #F3EEE5 100%);
+      font-family: var(--font-sans, 'Plus Jakarta Sans', sans-serif);
+      padding: 20px;
+    }
+    [data-theme="dark"] body {
+      background: linear-gradient(135deg, #090E17 0%, #0F172A 100%);
+      color: #F8FAFC;
+    }
+    .auth-container {
+      background: white;
+      padding: 36px 32px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px -8px rgba(28, 40, 38, 0.12), 0 4px 12px rgba(0,0,0,0.04);
+      width: 100%;
+      max-width: 440px;
+      border: 1px solid #EBE6DD;
+      position: relative;
+    }
+    [data-theme="dark"] .auth-container {
+      background: #131D2E;
+      border-color: #223147;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    [data-theme="dark"] .auth-header h1 {
+      color: #F8FAFC;
+    }
+    [data-theme="dark"] .auth-header p {
+      color: #94A3B8;
+    }
+    [data-theme="dark"] .auth-tabs {
+      background: #0D1522;
+    }
+    [data-theme="dark"] .auth-tab {
+      color: #94A3B8;
+    }
+    [data-theme="dark"] .auth-tab.active {
+      background: #1E293B;
+      color: #F8FAFC;
+    }
+    [data-theme="dark"] .form-input {
+      background: #0D1522;
+      border-color: #2A3A52;
+      color: #F8FAFC;
+    }
+    [data-theme="dark"] .form-label {
+      color: #CBD5E1;
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .auth-icon-wrap {
+      width: 56px;
+      height: 56px;
+      background: #E8F5E9;
+      color: #244638;
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 12px rgba(36, 70, 56, 0.1);
+    }
+    .auth-header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 6px;
+    }
+    .auth-header p {
+      color: #6B7280;
+      font-size: 14px;
+    }
+
+    /* Mode Tabs */
+    .auth-tabs {
+      display: flex;
+      background: #F3F4F6;
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 20px;
+      gap: 4px;
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 8px 12px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: #4B5563;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .auth-tab.active {
+      background: white;
+      color: #244638;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    /* Quick 1-Click Demo Login */
+    .quick-login-card {
+      background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+      border: 1px solid #FDE68A;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .quick-login-info {
+      font-size: 12px;
+      color: #92400E;
+    }
+    .quick-login-info strong {
+      display: block;
+      font-size: 13px;
+      color: #78350F;
+      margin-bottom: 2px;
+    }
+    .btn-quick {
+      background: #D97706;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .btn-quick:hover {
+      background: #B45309;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+    }
+    .input-wrap {
+      position: relative;
+    }
+    .form-control {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid #D1D5DB;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 14px;
+      transition: all 0.2s;
+      background: #FAFAFA;
+      box-sizing: border-box;
+    }
+    .form-control:focus {
+      background: white;
+      border-color: #244638;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(36, 70, 56, 0.15);
+    }
+    .input-wrap .btn-eye {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #9CA3AF;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrap .btn-eye:hover {
+      color: #374151;
+    }
+
+    .btn-auth {
+      width: 100%;
+      padding: 13px;
+      background: #244638;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(36, 70, 56, 0.2);
+    }
+    .btn-auth:hover {
+      background: #1B352B;
+    }
+    .btn-auth.loading {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .btn-google {
+      width: 100%;
+      padding: 11px;
+      background: white;
+      color: #374151;
+      border: 1px solid #D1D5DB;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+    .btn-google:hover {
+      background: #F9FAFB;
+      border-color: #9CA3AF;
+    }
+    .btn-google.loading {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 20px 0;
+      color: #9CA3AF;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #E5E7EB;
+    }
+    .divider:not(:empty)::before { margin-right: 12px; }
+    .divider:not(:empty)::after { margin-left: 12px; }
+    
+    .auth-links {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      font-size: 13px;
+    }
+    .auth-links a {
+      color: #244638;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .auth-links a:hover {
+      text-decoration: underline;
+    }
+
+    .error-msg {
+      color: #991B1B;
+      font-size: 13px;
+      line-height: 1.45;
+      margin-bottom: 16px;
+      display: none;
+      background: #FEF2F2;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #FECACA;
+    }
+    .success-msg {
+      color: #065F46;
+      font-size: 13px;
+      line-height: 1.45;
+      margin-bottom: 16px;
+      display: none;
+      background: #ECFDF5;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #A7F3D0;
+    }
+
+    .auth-footer-help {
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px dashed #E5E7EB;
+      text-align: center;
+      font-size: 12px;
+      color: #6B7280;
+    }
+    .auth-footer-help code {
+      background: #F3F4F6;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      color: #1F2937;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-container">
+    <div class="auth-header">
+      <div class="auth-icon-wrap">
+        <i data-lucide="shield-check" style="width: 28px; height: 28px;"></i>
+      </div>
+      <h1 id="formTitle">Restaurant Portal</h1>
+      <p id="formSubtitle">Sign in to manage menu, orders & settings</p>
+    </div>
+
+    <!-- Mode Selector Tabs -->
+    <div class="auth-tabs" id="authTabs">
+      <button type="button" class="auth-tab active" id="tabLogin">Sign In</button>
+      <button type="button" class="auth-tab" id="tabRegister">Create Account</button>
+    </div>
+
+    <!-- 1-Click Demo Admin Bar -->
+    <div class="quick-login-card" id="quickLoginCard">
+      <div class="quick-login-info">
+        <strong>⚡ Demo Admin Access</strong>
+        <span>admin@evorise.com</span>
+      </div>
+      <button type="button" class="btn-quick" id="btnQuickAdmin">1-Click Login</button>
+    </div>
+
+    <div id="errorMsg" class="error-msg"></div>
+    <div id="successMsg" class="success-msg"></div>
+
+    <form id="authForm">
+      <div class="form-group" id="nameGroup" style="display: none;">
+        <label for="inputName">Full Name</label>
+        <div class="input-wrap">
+          <input type="text" id="inputName" class="form-control" placeholder="e.g. John Doe">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="inputEmail">Email Address</label>
+        <div class="input-wrap">
+          <input type="email" id="inputEmail" class="form-control" required placeholder="admin@evorise.com" value="admin@evorise.com">
+        </div>
+      </div>
+
+      <div class="form-group" id="passwordGroup">
+        <label for="inputPassword">Password</label>
+        <div class="input-wrap">
+          <input type="password" id="inputPassword" class="form-control" required placeholder="••••••••" value="admin123">
+          <button type="button" class="btn-eye" id="btnTogglePassword" title="Show / Hide Password">
+            <i data-lucide="eye" id="eyeIcon" style="width: 18px; height: 18px;"></i>
+          </button>
+        </div>
+      </div>
+      
+      <button type="submit" id="btnSubmit" class="btn-auth">
+        <span id="btnSubmitText">Sign In</span>
+      </button>
+    </form>
+
+    <div class="divider" id="googleDivider">OR</div>
+    
+    <button type="button" class="btn-google" id="btnGoogle">
+      <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.20455C17.64 8.56636 17.5827 7.95273 17.4764 7.36364H9V10.845H13.8436C13.635 11.97 13.0009 12.9232 12.0477 13.5614V15.8195H14.9564C16.6582 14.2527 17.64 11.9455 17.64 9.20455Z" fill="#4285F4"/><path d="M9 18C11.43 18 13.4673 17.1941 14.9564 15.8195L12.0477 13.5614C11.2418 14.1014 10.2109 14.4205 9 14.4205C6.65591 14.4205 4.67182 12.8373 3.96409 10.71H0.957275V13.0418C2.43818 15.9832 5.48182 18 9 18Z" fill="#34A853"/><path d="M3.96409 10.71C3.78409 10.17 3.68182 9.59318 3.68182 9C3.68182 8.40682 3.78409 7.83 3.96409 7.29H0.957275V4.95818C0.347727 6.17318 0 7.54773 0 9C0 10.4523 0.347727 11.8268 0.957275 13.0418L3.96409 10.71Z" fill="#FBBC05"/><path d="M9 3.57955C10.3214 3.57955 11.5077 4.03364 12.4405 4.92545L15.0218 2.34409C13.4632 0.891818 11.4259 0 9 0C5.48182 0 2.43818 2.01682 0.957275 4.95818L3.96409 7.29C4.67182 5.16273 6.65591 3.57955 9 3.57955Z" fill="#EA4335"/></svg>
+      <span>Continue with Google</span>
+    </button>
+
+    <div class="auth-links">
+      <a href="#" id="linkToggle">Need an account? Sign Up</a>
+      <a href="#" id="linkForgot">Forgot Password?</a>
+    </div>
+
+    <div class="auth-footer-help">
+      <span>Any new email entered automatically creates an admin login.</span>
+    </div>
+  </div>
+
+  <script src="/db.js"></script>
+  <script src="/auth.js"></script>
+  <script>
+    lucide.createIcons();
+    
+    // Auth State
+    let currentMode = 'login'; // 'login', 'register', 'reset'
+    
+    // DOM Elements
+    const formTitle = document.getElementById('formTitle');
+    const formSubtitle = document.getElementById('formSubtitle');
+    const nameGroup = document.getElementById('nameGroup');
+    const passwordGroup = document.getElementById('passwordGroup');
+    const btnSubmit = document.getElementById('btnSubmit');
+    const btnSubmitText = document.getElementById('btnSubmitText');
+    const btnGoogle = document.getElementById('btnGoogle');
+    const googleDivider = document.getElementById('googleDivider');
+    const linkToggle = document.getElementById('linkToggle');
+    const linkForgot = document.getElementById('linkForgot');
+    const authForm = document.getElementById('authForm');
+    const btnQuickAdmin = document.getElementById('btnQuickAdmin');
+    const quickLoginCard = document.getElementById('quickLoginCard');
+    const btnTogglePassword = document.getElementById('btnTogglePassword');
+    const eyeIcon = document.getElementById('eyeIcon');
+    const tabLogin = document.getElementById('tabLogin');
+    const tabRegister = document.getElementById('tabRegister');
+    
+    const inputName = document.getElementById('inputName');
+    const inputEmail = document.getElementById('inputEmail');
+    const inputPassword = document.getElementById('inputPassword');
+    
+    const errorMsg = document.getElementById('errorMsg');
+    const successMsg = document.getElementById('successMsg');
+
+    // URL Redirect Parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectUrl = urlParams.get('redirect') || '/admin/index.html';
+
+    function showError(msg) {
+      errorMsg.textContent = msg;
+      errorMsg.style.display = 'block';
+      successMsg.style.display = 'none';
+    }
+
+    function showSuccess(msg) {
+      successMsg.textContent = msg;
+      successMsg.style.display = 'block';
+      errorMsg.style.display = 'none';
+    }
+
+    function clearMsgs() {
+      errorMsg.style.display = 'none';
+      successMsg.style.display = 'none';
+    }
+
+    // Toggle Password Visibility
+    let passwordVisible = false;
+    btnTogglePassword.addEventListener('click', () => {
+      passwordVisible = !passwordVisible;
+      inputPassword.type = passwordVisible ? 'text' : 'password';
+      eyeIcon.setAttribute('data-lucide', passwordVisible ? 'eye-off' : 'eye');
+      lucide.createIcons();
+    });
+
+    // Mode Toggle
+    function toggleMode(mode) {
+      currentMode = mode;
+      clearMsgs();
+      
+      if (mode === 'login') {
+        formTitle.textContent = "Restaurant Portal";
+        formSubtitle.textContent = "Sign in to manage menu, orders & settings";
+        nameGroup.style.display = "none";
+        passwordGroup.style.display = "block";
+        inputPassword.required = true;
+        btnSubmitText.textContent = "Sign In";
+        btnGoogle.style.display = "flex";
+        googleDivider.style.display = "flex";
+        quickLoginCard.style.display = "flex";
+        linkToggle.textContent = "Need an account? Sign Up";
+        linkForgot.style.display = "block";
+        tabLogin.classList.add('active');
+        tabRegister.classList.remove('active');
+      } else if (mode === 'register') {
+        formTitle.textContent = "Create Admin Account";
+        formSubtitle.textContent = "Register credentials to manage your store";
+        nameGroup.style.display = "block";
+        passwordGroup.style.display = "block";
+        inputPassword.required = true;
+        btnSubmitText.textContent = "Create Account";
+        btnGoogle.style.display = "flex";
+        googleDivider.style.display = "flex";
+        quickLoginCard.style.display = "none";
+        linkToggle.textContent = "Already have an account? Sign In";
+        linkForgot.style.display = "none";
+        tabLogin.classList.remove('active');
+        tabRegister.classList.add('active');
+      } else if (mode === 'reset') {
+        formTitle.textContent = "Reset Password";
+        formSubtitle.textContent = "We will send instructions to your email";
+        nameGroup.style.display = "none";
+        passwordGroup.style.display = "none";
+        inputPassword.required = false;
+        btnSubmitText.textContent = "Send Reset Link";
+        btnGoogle.style.display = "none";
+        googleDivider.style.display = "none";
+        quickLoginCard.style.display = "none";
+        linkToggle.textContent = "← Back to Sign In";
+        linkForgot.style.display = "none";
+        tabLogin.classList.remove('active');
+        tabRegister.classList.remove('active');
+      }
+    }
+
+    tabLogin.addEventListener('click', () => toggleMode('login'));
+    tabRegister.addEventListener('click', () => toggleMode('register'));
+
+    linkToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (currentMode === 'login') toggleMode('register');
+      else toggleMode('login');
+    });
+
+    linkForgot.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleMode('reset');
+    });
+
+    // 1-Click Demo Admin Login
+    btnQuickAdmin.addEventListener('click', async () => {
+      clearMsgs();
+      inputEmail.value = 'admin@evorise.com';
+      inputPassword.value = 'admin123';
+      btnQuickAdmin.textContent = "Logging in...";
+      btnQuickAdmin.disabled = true;
+      btnSubmit.classList.add('loading');
+      btnSubmit.disabled = true;
+
+      try {
+        await loginUser('admin@evorise.com', 'admin123');
+        showSuccess("Admin authenticated! Entering dashboard...");
+        setTimeout(() => window.location.href = redirectUrl, 400);
+      } catch (err) {
+        showError(typeof formatAuthError === 'function' ? formatAuthError(err) : (err.message || "Login failed"));
+        btnQuickAdmin.textContent = "1-Click Login";
+        btnQuickAdmin.disabled = false;
+        btnSubmit.classList.remove('loading');
+        btnSubmit.disabled = false;
+      }
+    });
+
+    // Form Submission Handler
+    authForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearMsgs();
+      
+      const email = inputEmail.value.trim();
+      const password = inputPassword.value;
+      const name = inputName.value.trim();
+      
+      btnSubmit.classList.add('loading');
+      btnSubmit.disabled = true;
+      btnSubmitText.textContent = "Please wait...";
+
+      try {
+        if (currentMode === 'login') {
+          await loginUser(email, password);
+          showSuccess("Success! Redirecting to dashboard...");
+          setTimeout(() => window.location.href = redirectUrl, 400);
+        } else if (currentMode === 'register') {
+          await registerUser(email, password, name || email.split('@')[0]);
+          showSuccess("Account created successfully! Redirecting...");
+          setTimeout(() => window.location.href = redirectUrl, 800);
+        } else if (currentMode === 'reset') {
+          await resetPassword(email);
+          showSuccess("Password reset email sent! Check your inbox.");
+          authForm.reset();
+        }
+      } catch (err) {
+        const errorText = typeof formatAuthError === 'function' ? formatAuthError(err) : (err.message || "An error occurred.");
+        showError(errorText);
+      } finally {
+        btnSubmit.classList.remove('loading');
+        btnSubmit.disabled = false;
+        btnSubmitText.textContent = currentMode === 'login' ? "Sign In" : (currentMode === 'register' ? "Create Account" : "Send Reset Link");
+      }
+    });
+
+    // Google Sign In
+    btnGoogle.addEventListener('click', async () => {
+      clearMsgs();
+      btnGoogle.classList.add('loading');
+      btnGoogle.disabled = true;
+      try {
+        const user = await loginWithGoogle();
+        if (user) {
+          showSuccess("Google Sign-in successful! Redirecting...");
+          setTimeout(() => window.location.href = redirectUrl, 400);
+        }
+      } catch (err) {
+        const errorText = typeof formatAuthError === 'function' ? formatAuthError(err) : (err.message || "Google sign-in failed.");
+        showError(errorText);
+        btnGoogle.classList.remove('loading');
+        btnGoogle.disabled = false;
+      }
+    });
+
+    // Check Redirect Auth Result on Load (for mobile/redirect flows)
+    if (typeof firebaseAuth !== 'undefined' && firebaseAuth) {
+      firebaseAuth.getRedirectResult().then(async (result) => {
+        if (result && result.user) {
+          const user = result.user;
+          if (typeof firestoreDB !== 'undefined' && firestoreDB) {
+            try {
+              await firestoreDB.collection('users').doc(user.uid).set({
+                email: user.email || '',
+                displayName: user.displayName || 'Google User',
+                role: 'admin',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+              }, { merge: true });
+            } catch(e) {}
+          }
+          window.location.href = redirectUrl;
+        }
+      }).catch((err) => {
+        if (err && err.code) {
+          showError(typeof formatAuthError === 'function' ? formatAuthError(err) : err.message);
+        }
+      });
+    }
+
+    // Auto-redirect if already logged in
+    onAuthChange((user) => {
+      if (user && currentMode !== 'reset') {
+        window.location.href = redirectUrl;
+      }
+    });
+  </script>
+</body>
+</html>

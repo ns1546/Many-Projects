@@ -1,0 +1,118 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{top=1.0in, bottom=1.0in, left=1.5in, right=1.0in}
+\usepackage{lmodern}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{tabularx}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\centering}{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{-30pt}{30pt}
+
+\onehalfspacing
+
+\begin{document}
+\pagenumbering{roman}
+\setcounter{page}{2}
+
+% Declaration
+\chapter*{Declaration}
+\addcontentsline{toc}{chapter}{Declaration}
+
+We do hereby declare that the research works presented in this thesis entitled, ``FEDMED-X: Communication-Efficient Privacy-Preserving Federated Learning with Real Edge Hardware Deployment for Medical Image Classification'' are the results of our own works. We further declare that the thesis/report has been compiled and written by us, and no part of this thesis/report has been submitted elsewhere for the requirements of any degree, award, diploma, or any other purposes except for publications. The materials that are obtained from other sources are duly acknowledged in this thesis.
+
+\vspace{2cm}
+
+\noindent
+\textbf{Signature of Authors}
+
+\vspace{1.5cm}
+
+\noindent
+\begin{tabularx}{\textwidth}{@{}X X@{}}
+    \rule{6cm}{0.4pt} & \rule{6cm}{0.4pt} \\
+    \textbf{Mohammad Zunayed} & \textbf{Md. Najmush Shakib} \\
+    ID: 20234103328 & ID: 20234103357 \\[1.5cm]
+    
+    \rule{6cm}{0.4pt} & \rule{6cm}{0.4pt} \\
+    \textbf{Munim Halder} & \textbf{Md. Nur Alam} \\
+    ID: 20234103351 & ID: 20234103153 \\[1.5cm]
+    
+    \rule{6cm}{0.4pt} & \\
+    \textbf{Omar Faruk Jihad} & \\
+    ID: 20234103145 & \\
+\end{tabularx}
+
+\clearpage
+
+% Approval
+\chapter*{Approval}
+\addcontentsline{toc}{chapter}{Approval}
+
+It is hereby certified that the research work presented in this thesis entitled, ``FEDMED-X: Communication-Efficient Privacy-Preserving Federated Learning with Real Edge Hardware Deployment for Medical Image Classification,'' is the result of the original work carried out by Mohammad Zunayed, Md. Najmush Shakib, Munim Halder, Md. Nur Alam, and Omar Faruk Jihad. Furthermore, it is certified that this thesis/report satisfies the requirements and standards for the degree of Bachelor of Science in Computer Science and Engineering.
+
+\vspace{2.5cm}
+
+\noindent
+\begin{tabularx}{\textwidth}{@{}X X@{}}
+    \rule{6cm}{0.4pt} & \rule{6cm}{0.4pt} \\
+    \textbf{Md. Saddam Hossain} & \textbf{Dr. Md. Rajibul Islam} \\
+    Supervisor & Member (Internal) \\
+    Assistant Professor, CSE & Associate Professor, Data Science \\
+    Capstone Defense Board & Capstone Defense Board \\
+    BUBT, Dhaka & BUBT, Dhaka \\[2cm]
+    
+    \rule{6cm}{0.4pt} & \rule{6cm}{0.4pt} \\
+    \textbf{External Examiner Name} & \textbf{Prof. Dr. Md. Ahsan Habib} \\
+    Member (External) & Convener \\
+    Professor, CSE & Chairman, CSE \\
+    Capstone Defense Board & Capstone Defense Board \\
+    University Name & BUBT, Dhaka \\
+\end{tabularx}
+
+\clearpage
+
+% Dedication
+\chapter*{Dedication}
+\addcontentsline{toc}{chapter}{Dedication}
+\vspace*{3cm}
+\begin{center}
+    \itshape
+    ``We dedicate this research to our loving parents, \\
+    whose unwavering love, encouragement, sacrifices, \\
+    and constant support have been the foundation of our \\
+    academic journey.\\[1cm]
+    
+    This work is also dedicated to our respected teachers, \\
+    particularly our supervisor Md. Saddam Hossain, \\
+    whose academic vision and mentorship shaped every aspect \\
+    of this research.\\[1cm]
+    
+    Finally, we dedicate this work to the underserved patients \\
+    and rural healthcare workers of Bangladesh, \\
+    whose critical need for affordable, private, and reliable \\
+    diagnostic tools \\
+    motivated the design and development of the FEDMED-X \\
+    system.''
+\end{center}
+
+\clearpage
+
+% Acknowledgement
+\chapter*{Acknowledgement}
+\addcontentsline{toc}{chapter}{Acknowledgement}
+
+We would like to express our heartfelt gratitude to the Almighty Allah, who offered our families and us kind care throughout this journey.
+
+We are deeply thankful to the Bangladesh University of Business and Technology (BUBT) for providing us with an excellent research environment and world-class computing facilities to pursue our capstone project.
+
+We express our sincerest gratitude to our respected supervisor, Md. Saddam Hossain, Assistant Professor, Department of CSE, BUBT. This research would not have been possible without his patient guidance, sharp technical insight, and consistent academic support. He identified the research gap in privacy-preserving federated learning for edge medical devices, guided us through the complex integration of FedProx, Differential Privacy, and gradient compression, and shared many essential research resources. He was disciplined and responsible, always finding time to discuss our progress.
+
+We are also thankful to our course teacher, Dr. Md. Rajibul Islam, Associate Professor and Chairman of the Department of Data Science and Engineering, BUBT, for providing valuable direction and constructive academic feedback throughout the semester. Special appreciation goes to Prof. Dr. Md. Ahsan Habib, Chairman of the CSE Department, and to all our respected faculty members for their consistent inspiration.
+
+We would also like to acknowledge our five-member team for their coordinated technical effort, patience, and mutual encouragement throughout the eight-month development cycle. Finally, we are grateful to our families, well-wishers, and BUBT for granting us this opportunity to contribute to trustworthy artificial intelligence in healthcare.
+
+\end{document}

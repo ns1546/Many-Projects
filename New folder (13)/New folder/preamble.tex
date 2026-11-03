@@ -1,0 +1,73 @@
+% ============================================================
+% FEDMED-X CAPSTONE — PREAMBLE
+% BUBT format (matches supervisor Overleaf template)
+% ============================================================
+
+\usepackage[a4paper,top=1in,bottom=1in,left=1.25in,right=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% Spacing (compact, avoids huge gaps)
+\usepackage{setspace}
+\onehalfspacing
+\setlength{\parskip}{4pt plus 1pt minus 1pt}
+
+% Math + graphics
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{placeins}
+
+% TikZ
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric,arrows.meta,positioning,fit,calc,backgrounds,shadows}
+
+% Tables
+\usepackage{booktabs,tabularx,longtable,multirow,array,makecell}
+\usepackage{ragged2e}
+
+% Lists
+\usepackage{enumitem}
+\setlist{itemsep=2pt,topsep=3pt}
+
+% Captions
+\usepackage[labelfont=bf,font=small,justification=centering]{caption}
+
+% Headers/footers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small\itshape FEDMED-X}
+\fancyhead[R]{\small\itshape BUBT Capstone 2026}
+\fancyfoot[C]{\thepage}
+
+% Chapter title formatting (matches BUBT template)
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+  {\normalfont\Large\bfseries\centering}
+  {Chapter \thechapter}{12pt}{\Large}
+\titlespacing*{\chapter}{0pt}{-10pt}{20pt}
+
+% Hyperlinks
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=blue,
+  pdftitle={FEDMED-X Capstone Report},
+  pdfauthor={Mohammad Zunayed and Team}
+}
+
+% Bibliography (IEEE style)
+\usepackage[backend=biber,style=ieee,sorting=none,maxbibnames=99]{biblatex}
+\addbibresource{backmatter/references.bib}
+
+% Custom Summary command (chapter-end)
+\newcommand{\chaptersummary}[1]{%
+  \vspace{6pt}\noindent\textbf{Summary}\\[2pt]#1\par\vspace{6pt}
+}

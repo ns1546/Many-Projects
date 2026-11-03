@@ -1,0 +1,1564 @@
+[
+  {
+    "id": 1,
+    "slug": "bachelor-point",
+    "title": "Bachelor Point",
+    "banglaTitle": "ব্যাচেলর পয়েন্ট",
+    "type": "Web Series",
+    "category": "web-series",
+    "year": 2018,
+    "endYear": "2022",
+    "genre": [
+      "Comedy",
+      "Drama"
+    ],
+    "platform": "Dhruba Tv",
+    "channel": "Dhruba Tv",
+    "runtime": "22-35 min/episode",
+    "language": "Bangla",
+    "role": "Director, Writer",
+    "poster": "https://img.youtube.com/vi/XQhT0l47iI0/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/XQhT0l47iI0/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/XQhT0l47iI0/hqdefault.jpg",
+      "https://img.youtube.com/vi/XQhT0l47iI0/hqdefault.jpg"
+    ],
+    "synopsis": "A hilarious and heartfelt comedy-drama following a group of bachelors living together in a mess apartment in Dhaka. Through their everyday struggles—love, ambition, friendship, and failure—the show captures the raw and relatable reality of young men navigating life in urban Bangladesh.",
+    "logline": "Six bachelors. One apartment. Infinite chaos.",
+    "concept": "The idea stemmed from the relatable memories of bachelor life in Dhaka.",
+    "directorNote": "Bachelor Point is not just a comedy. It's a love letter to every young man who ever ate cold rice alone and called it dinner.",
+    "inspiration": "Inspired by personal experiences of bachelor life in Dhaka.",
+    "technicalSpecs": {
+      "camera": "Sony",
+      "lenses": "Cinema Primes",
+      "colorGrade": "Vibrant"
+    },
+    "challenges": "Coordinating with a large recurring cast across multiple seasons while maintaining the natural chemistry.",
+    "directorPerspective": "This show taught me that simplicity is the highest form of complexity.",
+    "cast": [
+      "Mishu Sabbir",
+      "Ziaul Hoque Polash",
+      "Marzuk Russell",
+      "Chashi Alam",
+      "Tawsif Mahbub",
+      "Sanajana Sarkar Riya",
+      "Sabiha Jaman",
+      "Sanjira Mitu"
+    ],
+    "crew": {
+      "dop": "Various",
+      "editor": "Various",
+      "music": "Various",
+      "producer": "Dhruba Tv"
+    },
+    "successStats": {
+      "viewership": "500M+ total views",
+      "milestone": "Most popular comedy series in Bangladesh",
+      "audienceRating": "9.5/10",
+      "culturalImpact": "Spawned countless memes, catchphrases ('Pasha Bhai', 'Khabia'), and fan communities.",
+      "seasons": 4
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=XQhT0l47iI0",
+    "featured": true
+  },
+  {
+    "id": 2,
+    "slug": "oshomoy",
+    "title": "Oshomoy",
+    "banglaTitle": "অসময়",
+    "type": "Web Film",
+    "category": "web-film",
+    "year": 2024,
+    "endYear": 2024,
+    "genre": [
+      "Drama",
+      "Tragedy",
+      "Social"
+    ],
+    "platform": "Binge",
+    "channel": "Bongo",
+    "runtime": "90 min",
+    "language": "Bangla",
+    "role": "Director, Writer",
+    "poster": "https://img.youtube.com/vi/OqRg43lXjPM/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/OqRg43lXjPM/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/OqRg43lXjPM/hqdefault.jpg",
+      "https://img.youtube.com/vi/OqRg43lXjPM/hqdefault.jpg"
+    ],
+    "synopsis": "A departure from his usual comedy, Oshomoy explores contemporary societal issues, blending drama, romance, and tragedy. It delves into the harsh realities of modern life, the show-off culture, and the consequences of untimely decisions.",
+    "logline": "A poignant reflection on contemporary societal issues and tragedy.",
+    "concept": "To showcase a different dimension of storytelling, breaking away from the pure comedy genre.",
+    "directorNote": "Oshomoy was a challenge to myself to tell a story that makes people think deeply about the society we live in.",
+    "inspiration": "The changing dynamics of modern society and unexpected turns in human lives.",
+    "technicalSpecs": {
+      "camera": "Cinema Camera",
+      "lenses": "Prime Lenses",
+      "colorGrade": "Cinematic / Serious tone"
+    },
+    "challenges": "Shifting audience expectations from pure comedy to serious drama.",
+    "directorPerspective": "I wanted to prove that a storyteller is not bound by a single genre.",
+    "cast": [
+      "Tasnia Farin",
+      "Runa Khan",
+      "Tariq Anam Khan",
+      "Iresh Zaker",
+      "Ziaul Hoque Polash",
+      "Saraf Ahmed Zibon"
+    ],
+    "crew": {
+      "dop": "N/A",
+      "editor": "N/A",
+      "music": "N/A",
+      "producer": "Binge"
+    },
+    "successStats": {
+      "viewership": "Millions of streams",
+      "milestone": "A critically acclaimed shift in genre for the director",
+      "audienceRating": "9.0/10",
+      "culturalImpact": "Praised for its realistic portrayal of society."
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=OqRg43lXjPM",
+    "featured": true
+  },
+  {
+    "id": 3,
+    "slug": "hotel-relax",
+    "title": "Hotel Relax",
+    "banglaTitle": "হোটেল রিল্যাক্স",
+    "type": "Web Series",
+    "category": "web-series",
+    "year": 2023,
+    "endYear": 2023,
+    "genre": [
+      "Comedy",
+      "Thriller"
+    ],
+    "platform": "Binge",
+    "channel": "Bongo",
+    "runtime": "6 Episodes",
+    "language": "Bangla",
+    "role": "Director, Writer",
+    "poster": "https://img.youtube.com/vi/SFkW32zHf4E/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/SFkW32zHf4E/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/SFkW32zHf4E/hqdefault.jpg",
+      "https://img.youtube.com/vi/SFkW32zHf4E/hqdefault.jpg"
+    ],
+    "synopsis": "When a diverse group of quirky characters ends up at the mysterious 'Hotel Relax', chaos ensues. A blend of comedy, suspense, and unexpected situations in a single location.",
+    "logline": "Checking in is easy, relaxing is impossible.",
+    "concept": "A situational comedy-thriller taking place in a single primary location.",
+    "directorNote": "I wanted to create an ensemble piece where the location itself feels like a character.",
+    "inspiration": "Classic locked-room mysteries blended with signature situational comedy.",
+    "technicalSpecs": {
+      "camera": "N/A",
+      "lenses": "N/A",
+      "colorGrade": "N/A"
+    },
+    "challenges": "Managing an ensemble cast in a confined space.",
+    "directorPerspective": "The fun is in seeing how completely different personalities clash.",
+    "cast": [
+      "Ziaul Hoque Polash",
+      "Purnima",
+      "Marzuk Russell",
+      "Chashi Alam",
+      "Sabiha Jaman"
+    ],
+    "crew": {
+      "dop": "N/A",
+      "editor": "N/A",
+      "music": "N/A",
+      "producer": "Binge"
+    },
+    "successStats": {
+      "viewership": "Record breaking streams on Binge",
+      "milestone": "One of the most successful series on the Binge platform",
+      "audienceRating": "8.8/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=SFkW32zHf4E",
+    "featured": true
+  },
+  {
+    "id": 4,
+    "slug": "female-3",
+    "title": "Female 3",
+    "banglaTitle": "ফিমেল ৩",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2023,
+    "endYear": 2023,
+    "genre": [
+      "Comedy"
+    ],
+    "platform": "YouTube",
+    "channel": "Bongo",
+    "runtime": "45 min",
+    "language": "Bangla",
+    "role": "Director",
+    "poster": "https://img.youtube.com/vi/AZae3EFiMjc/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/AZae3EFiMjc/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/AZae3EFiMjc/hqdefault.jpg",
+      "https://img.youtube.com/vi/AZae3EFiMjc/hqdefault.jpg"
+    ],
+    "synopsis": "The highly anticipated third installment of the 'Female' comedy series, bringing back the fan-favorite characters for another round of hilarious local neighborhood conflicts and rivalry.",
+    "logline": "The ultimate neighborhood rivalry continues.",
+    "concept": "To expand on the immensely popular 'Female' franchise with higher stakes and bigger laughs.",
+    "directorNote": "It's always a joy returning to these characters. The audience's love for them makes the hard work worth it.",
+    "inspiration": "Neighborhood politics and comedic rivalries.",
+    "technicalSpecs": {
+      "camera": "N/A",
+      "lenses": "N/A",
+      "colorGrade": "N/A"
+    },
+    "challenges": "Matching the sky-high expectations set by the previous two installments.",
+    "directorPerspective": "",
+    "cast": [
+      "Ziaul Hoque Polash",
+      "Mishu Sabbir",
+      "Marzuk Russell",
+      "Chashi Alam",
+      "Saraf Ahmed Zibon",
+      "Saidur Rahman Pavel"
+    ],
+    "crew": {
+      "dop": "N/A",
+      "editor": "N/A",
+      "music": "N/A",
+      "producer": "Bongo"
+    },
+    "successStats": {
+      "viewership": "Millions of views on YouTube",
+      "milestone": "Shattered previous viewership records for single dramas",
+      "audienceRating": "9.2/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=AZae3EFiMjc",
+    "featured": false
+  },
+  {
+    "id": 5,
+    "slug": "bachelors-qurbani",
+    "title": "Bachelor's Qurbani",
+    "banglaTitle": "ব্যাচেলরস কুরবানি",
+    "type": "Special Drama",
+    "category": "single-drama",
+    "year": 2022,
+    "endYear": 2022,
+    "genre": [
+      "Comedy"
+    ],
+    "platform": "YouTube",
+    "channel": "Dhruba Tv",
+    "runtime": "50 min",
+    "language": "Bangla",
+    "role": "Director",
+    "poster": "https://img.youtube.com/vi/yITKl1QNxhs/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/yITKl1QNxhs/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/yITKl1QNxhs/hqdefault.jpg",
+      "https://img.youtube.com/vi/yITKl1QNxhs/hqdefault.jpg"
+    ],
+    "synopsis": "A special spin-off from the Bachelor Point universe, this episode focuses on the chaotic and hilarious events that unfold when the bachelors attempt to purchase and manage a sacrificial animal for Eid-ul-Adha.",
+    "logline": "Eid preparations have never been this chaotic.",
+    "concept": "A festive special bringing the beloved characters into an Eid-ul-Adha scenario.",
+    "directorNote": "We wanted to capture the true, messy, and hilarious essence of Qurbani Eid for bachelors.",
+    "inspiration": "The cultural nuances and comedic situations of buying a Qurbani cow in Dhaka.",
+    "technicalSpecs": {
+      "camera": "N/A",
+      "lenses": "N/A",
+      "colorGrade": "N/A"
+    },
+    "challenges": "Filming with animals and managing large crowds during the festive season.",
+    "directorPerspective": "",
+    "cast": [
+      "Ziaul Hoque Polash",
+      "Mishu Sabbir",
+      "Marzuk Russell",
+      "Chashi Alam",
+      "Saidur Rahman Pavel"
+    ],
+    "crew": {
+      "dop": "N/A",
+      "editor": "N/A",
+      "music": "N/A",
+      "producer": "Dhruba Tv"
+    },
+    "successStats": {
+      "viewership": "Record breaking concurrent viewership during premiere",
+      "milestone": "One of the most watched Eid specials",
+      "audienceRating": "9.4/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=yITKl1QNxhs",
+    "featured": false
+  },
+  {
+    "id": 6,
+    "slug": "me-and-u",
+    "title": "ME & U",
+    "banglaTitle": "মি এন্ড ইউ",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2019,
+    "endYear": 2019,
+    "genre": [
+      "Drama",
+      "Romance",
+      "Comedy"
+    ],
+    "platform": "YouTube",
+    "channel": "Dhruba Tv",
+    "runtime": "45 min",
+    "language": "Bangla",
+    "role": "Director",
+    "poster": "https://img.youtube.com/vi/8v_T-Bn-YmU/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/8v_T-Bn-YmU/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/8v_T-Bn-YmU/hqdefault.jpg",
+      "https://img.youtube.com/vi/8v_T-Bn-YmU/hqdefault.jpg"
+    ],
+    "synopsis": "A romantic comedy-drama that explores the nuances of modern relationships, misunderstandings, and the hilarious situations that arise when two contrasting personalities collide.",
+    "logline": "Opposites attract, but first, they fight.",
+    "concept": "A fresh take on the romantic comedy genre, driven by strong dialogue and chemistry.",
+    "directorNote": "Romance doesn't always have to be overly sweet; sometimes the best love stories are full of arguments.",
+    "inspiration": "The reality of modern urban relationships.",
+    "technicalSpecs": {
+      "camera": "N/A",
+      "lenses": "N/A",
+      "colorGrade": "N/A"
+    },
+    "challenges": "Balancing the comedy with genuine emotional moments.",
+    "directorPerspective": "",
+    "cast": [
+      "Afran Nisho",
+      "Tanjin Tisha",
+      "Ziaul Hoque Polash"
+    ],
+    "crew": {
+      "dop": "N/A",
+      "editor": "N/A",
+      "music": "N/A",
+      "producer": "Dhruba Tv"
+    },
+    "successStats": {
+      "viewership": "Highly viewed on YouTube",
+      "milestone": "",
+      "audienceRating": "8.9/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=8v_T-Bn-YmU",
+    "featured": false
+  },
+  {
+    "id": 7,
+    "slug": "x-girlfriend",
+    "title": "X Girlfriend",
+    "banglaTitle": "এক্স গার্লফ্রেন্ড",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2019,
+    "endYear": 2019,
+    "genre": [
+      "Drama",
+      "Romance"
+    ],
+    "platform": "YouTube",
+    "channel": "CINEMAWALA",
+    "runtime": "45 min",
+    "language": "Bangla",
+    "role": "Director, Writer",
+    "poster": "https://img.youtube.com/vi/sDfDPX3Hp30/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/sDfDPX3Hp30/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/sDfDPX3Hp30/hqdefault.jpg",
+      "https://img.youtube.com/vi/sDfDPX3Hp30/hqdefault.jpg"
+    ],
+    "synopsis": "A highly acclaimed romantic drama that explores the complexities of past relationships, heartbreak, and the difficulty of moving on when your past confronts your present.",
+    "logline": "Some pasts are hard to escape.",
+    "concept": "To depict the realistic and often messy aftermath of a breakup.",
+    "directorNote": "I wanted to portray the raw emotions of heartbreak without sugarcoating the pain.",
+    "inspiration": "Real-life stories of modern breakups and emotional lingering.",
+    "technicalSpecs": {
+      "camera": "N/A",
+      "lenses": "N/A",
+      "colorGrade": "N/A"
+    },
+    "challenges": "Extracting nuanced, vulnerable performances from the lead cast.",
+    "directorPerspective": "",
+    "cast": [
+      "Afran Nisho",
+      "Tanjin Tisha",
+      "Ziaul Hoque Polash"
+    ],
+    "crew": {
+      "dop": "N/A",
+      "editor": "N/A",
+      "music": "N/A",
+      "producer": "CINEMAWALA"
+    },
+    "successStats": {
+      "viewership": "Multi-million views on YouTube",
+      "milestone": "Established the director's prowess in romantic dramas",
+      "audienceRating": "9.1/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=sDfDPX3Hp30",
+    "featured": true
+  },
+  {
+    "id": 8,
+    "slug": "x-boyfriend",
+    "title": "X Boyfriend",
+    "banglaTitle": "এক্স বয়ফ্রেন্ড",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2019,
+    "endYear": 2019,
+    "genre": [
+      "Drama",
+      "Romance"
+    ],
+    "platform": "YouTube",
+    "channel": "CINEMAWALA",
+    "runtime": "40 min",
+    "language": "Bangla",
+    "role": "Director, Writer",
+    "poster": "https://img.youtube.com/vi/EqJ4V9kWfWE/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/EqJ4V9kWfWE/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/EqJ4V9kWfWE/hqdefault.jpg",
+      "https://img.youtube.com/vi/EqJ4V9kWfWE/hqdefault.jpg"
+    ],
+    "synopsis": "Released as a Valentine's Day special, this companion piece to X Girlfriend flips the perspective to explore love, regret, and closure from the other side of a failed relationship.",
+    "logline": "Moving on is never as simple as it seems.",
+    "concept": "A thematic continuation exploring the male perspective on past relationships.",
+    "directorNote": "Love is rarely a one-sided story.",
+    "inspiration": "The dual nature of every relationship's end.",
+    "technicalSpecs": {
+      "camera": "N/A",
+      "lenses": "N/A",
+      "colorGrade": "N/A"
+    },
+    "challenges": "Creating a distinct emotional tone while remaining thematically linked to its predecessor.",
+    "directorPerspective": "",
+    "cast": [
+      "Afran Nisho",
+      "Tanjin Tisha",
+      "Tasnia Farin"
+    ],
+    "crew": {
+      "dop": "N/A",
+      "editor": "N/A",
+      "music": "N/A",
+      "producer": "CINEMAWALA"
+    },
+    "successStats": {
+      "viewership": "Highly viewed during the Valentine's period",
+      "milestone": "",
+      "audienceRating": "8.8/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=EqJ4V9kWfWE",
+    "featured": false
+  },
+  {
+    "id": 9,
+    "slug": "hello-baby",
+    "title": "Hello Baby",
+    "banglaTitle": "হ্যালো বেবি",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2021,
+    "endYear": 2021,
+    "genre": [
+      "Comedy",
+      "Romance"
+    ],
+    "platform": "YouTube",
+    "channel": "Club 11 Entertainment",
+    "runtime": "43 min",
+    "language": "Bangla",
+    "role": "Director",
+    "poster": "https://img.youtube.com/vi/XVnUxI3vzt0/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/XVnUxI3vzt0/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/XVnUxI3vzt0/hqdefault.jpg",
+      "https://img.youtube.com/vi/XVnUxI3vzt0/hqdefault.jpg"
+    ],
+    "synopsis": "A hilarious and sweet story about the complications and humorous situations a young couple faces when navigating marriage and societal expectations regarding having a child.",
+    "logline": "The ultimate pressure test for a young couple.",
+    "concept": "To satirize the immense societal pressure placed on newly married couples in Bangladesh.",
+    "directorNote": "Comedy is the best tool to address societal pressures without sounding preachy.",
+    "inspiration": "The common questions faced by every married couple in South Asia.",
+    "technicalSpecs": {
+      "camera": "N/A",
+      "lenses": "N/A",
+      "colorGrade": "N/A"
+    },
+    "challenges": "Balancing the comedic timing with the genuine anxiety of the characters.",
+    "directorPerspective": "",
+    "cast": [
+      "Tahsan Khan",
+      "Bidya Sinha Mim",
+      "Ziaul Hoque Polash"
+    ],
+    "crew": {
+      "dop": "N/A",
+      "editor": "N/A",
+      "music": "N/A",
+      "producer": "Club 11 Entertainment"
+    },
+    "successStats": {
+      "viewership": "Millions of views, viral on social media",
+      "milestone": "",
+      "audienceRating": "9.0/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=XVnUxI3vzt0",
+    "featured": false
+  },
+  {
+    "id": 10,
+    "slug": "doi",
+    "title": "Doi",
+    "banglaTitle": "দই",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2022,
+    "endYear": 2022,
+    "genre": [
+      "Comedy"
+    ],
+    "platform": "YouTube",
+    "channel": "Dhruba Tv",
+    "runtime": "48 min",
+    "language": "Bangla",
+    "role": "Director",
+    "poster": "https://img.youtube.com/vi/n78u33_hQ4M/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/n78u33_hQ4M/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/n78u33_hQ4M/hqdefault.jpg",
+      "https://img.youtube.com/vi/n78u33_hQ4M/hqdefault.jpg"
+    ],
+    "synopsis": "A Valentine's Day special that revolves around a simple pot of yogurt (Doi) and the cascading, hilarious misunderstandings it creates among a group of people.",
+    "logline": "A single pot of sweet yogurt causes a very sour day.",
+    "concept": "Building an entire situational comedy around a trivial object.",
+    "directorNote": "It's an exercise in situational comedy, proving that you don't need an epic premise to make people laugh uncontrollably.",
+    "inspiration": "The trivial things that cause massive arguments in everyday life.",
+    "technicalSpecs": {
+      "camera": "N/A",
+      "lenses": "N/A",
+      "colorGrade": "N/A"
+    },
+    "challenges": "Keeping the momentum of the joke going without it feeling repetitive.",
+    "directorPerspective": "",
+    "cast": [
+      "Ziaul Hoque Polash",
+      "Mishu Sabbir",
+      "Marzuk Russell",
+      "Chashi Alam"
+    ],
+    "crew": {
+      "dop": "N/A",
+      "editor": "N/A",
+      "music": "N/A",
+      "producer": "Dhruba Tv"
+    },
+    "successStats": {
+      "viewership": "Massive hit during Valentine's Day",
+      "milestone": "",
+      "audienceRating": "9.3/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=n78u33_hQ4M",
+    "featured": false
+  },
+  {
+    "id": 11,
+    "slug": "bachelor-quarantine",
+    "title": "Bachelor Quarantine",
+    "banglaTitle": "ব্যাচেলর কোয়ারেন্টাইন",
+    "type": "Special Drama",
+    "category": "single-drama",
+    "year": 2020,
+    "endYear": 2020,
+    "genre": [
+      "Comedy"
+    ],
+    "platform": "YouTube",
+    "channel": "Dhruba Tv",
+    "runtime": "52 min",
+    "language": "Bangla",
+    "role": "Director",
+    "poster": "https://img.youtube.com/vi/kYJv8Pj328Q/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/kYJv8Pj328Q/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/kYJv8Pj328Q/hqdefault.jpg",
+      "https://img.youtube.com/vi/kYJv8Pj328Q/hqdefault.jpg"
+    ],
+    "synopsis": "Produced during the height of the global pandemic, this special episode throws the beloved characters of Bachelor Point into lockdown, capturing the frustration, paranoia, and humor of isolation.",
+    "logline": "They couldn't survive each other before, now they can't leave.",
+    "concept": "A timely, relatable reflection on the struggles of lockdown.",
+    "directorNote": "We needed to give people something to smile about during a very dark time.",
+    "inspiration": "The universal experience of the 2020 COVID-19 lockdowns.",
+    "technicalSpecs": {
+      "camera": "N/A",
+      "lenses": "N/A",
+      "colorGrade": "N/A"
+    },
+    "challenges": "Filming safely under strict lockdown conditions with a limited crew.",
+    "directorPerspective": "",
+    "cast": [
+      "Ziaul Hoque Polash",
+      "Mishu Sabbir",
+      "Marzuk Russell",
+      "Chashi Alam"
+    ],
+    "crew": {
+      "dop": "N/A",
+      "editor": "N/A",
+      "music": "N/A",
+      "producer": "Dhruba Tv"
+    },
+    "successStats": {
+      "viewership": "Millions of views, highly appreciated for its timing",
+      "milestone": "",
+      "audienceRating": "9.6/10",
+      "culturalImpact": "Brought immense relief and laughter during the pandemic"
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=kYJv8Pj328Q",
+    "featured": true
+  },
+  {
+    "id": 12,
+    "slug": "muthophone",
+    "title": "Muthophone",
+    "banglaTitle": "মুঠোফোন",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2019,
+    "endYear": 2019,
+    "genre": [
+      "Drama",
+      "Romance"
+    ],
+    "platform": "YouTube",
+    "channel": "Various",
+    "runtime": "45 min",
+    "language": "Bangla",
+    "role": "Director",
+    "poster": "https://img.youtube.com/vi/eJ05CkoaF10/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/eJ05CkoaF10/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/eJ05CkoaF10/hqdefault.jpg",
+      "https://img.youtube.com/vi/eJ05CkoaF10/hqdefault.jpg"
+    ],
+    "synopsis": "A deeply emotional story centered around communication, missed opportunities, and how modern technology bridges and breaks human connections.",
+    "logline": "A single call can change a life.",
+    "concept": "Exploring the emotional weight of phone calls in modern relationships.",
+    "directorNote": "In an era of instant messaging, the sound of a voice still holds the most power.",
+    "inspiration": "The reliance on digital communication in intimate relationships.",
+    "technicalSpecs": {
+      "camera": "N/A",
+      "lenses": "N/A",
+      "colorGrade": "N/A"
+    },
+    "challenges": "Relying heavily on voice acting and solitary acting performances.",
+    "directorPerspective": "",
+    "cast": [
+      "Afran Nisho",
+      "Mehazabien Chowdhury"
+    ],
+    "crew": {
+      "dop": "N/A",
+      "editor": "N/A",
+      "music": "N/A",
+      "producer": "N/A"
+    },
+    "successStats": {
+      "viewership": "High",
+      "milestone": "",
+      "audienceRating": "8.8/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=eJ05CkoaF10",
+    "featured": false
+  },
+  {
+    "id": 13,
+    "slug": "how-sweet",
+    "title": "How Sweet",
+    "banglaTitle": "হাউ সুইট",
+    "type": "Web Film",
+    "category": "web-film",
+    "year": 2022,
+    "endYear": 2022,
+    "genre": [
+      "Romance",
+      "Comedy"
+    ],
+    "platform": "Bongo",
+    "channel": "Bongo",
+    "runtime": "60 min",
+    "language": "Bangla",
+    "role": "Director",
+    "poster": "https://img.youtube.com/vi/hhOKWeWUuBc/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/hhOKWeWUuBc/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/hhOKWeWUuBc/hqdefault.jpg",
+      "https://img.youtube.com/vi/hhOKWeWUuBc/hqdefault.jpg"
+    ],
+    "synopsis": "A lighthearted romantic comedy that brings together two contrasting individuals in a sweet, funny, and unforgettable journey.",
+    "logline": "Sometimes love is just a little too sweet.",
+    "concept": "A feel-good romantic story designed for a premium OTT viewing experience.",
+    "directorNote": "A project purely designed to make the audience feel good.",
+    "inspiration": "Classic romantic comedy tropes given a fresh, modern Bangladeshi spin.",
+    "technicalSpecs": {
+      "camera": "N/A",
+      "lenses": "N/A",
+      "colorGrade": "Vibrant and warm"
+    },
+    "challenges": "Maintaining a light, breezy tone without becoming cliché.",
+    "directorPerspective": "",
+    "cast": [
+      "Ziaul Faruq Apurba",
+      "Tasnia Farin"
+    ],
+    "crew": {
+      "dop": "N/A",
+      "editor": "N/A",
+      "music": "N/A",
+      "producer": "Bongo"
+    },
+    "successStats": {
+      "viewership": "Highly streamed on Bongo platform",
+      "milestone": "",
+      "audienceRating": "8.5/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "https://www.youtube.com/watch?v=hhOKWeWUuBc",
+    "youtubeUrl": "",
+    "featured": false
+  },
+  {
+    "id": 14,
+    "slug": "the-end",
+    "title": "The End",
+    "banglaTitle": "দি এন্ড",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2019,
+    "endYear": 2019,
+    "genre": [
+      "Drama",
+      "Romance"
+    ],
+    "platform": "YouTube",
+    "channel": "Various",
+    "runtime": "42 min",
+    "language": "Bangla",
+    "role": "Director",
+    "poster": "https://img.youtube.com/vi/LbCvumziNj8/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/LbCvumziNj8/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/LbCvumziNj8/hqdefault.jpg",
+      "https://img.youtube.com/vi/LbCvumziNj8/hqdefault.jpg"
+    ],
+    "synopsis": "A dramatic exploration of closure, focusing on the final moments of a relationship and the bittersweet reality of saying goodbye.",
+    "logline": "Every story has a conclusion.",
+    "concept": "To focus entirely on the emotional climax of a relationship's end.",
+    "directorNote": "Endings are never easy, but they are necessary for new beginnings.",
+    "inspiration": "The painful necessity of closure in human relationships.",
+    "technicalSpecs": {
+      "camera": "N/A",
+      "lenses": "N/A",
+      "colorGrade": "N/A"
+    },
+    "challenges": "Sustaining a heavy emotional tone throughout the runtime.",
+    "directorPerspective": "",
+    "cast": [
+      "Afran Nisho",
+      "Tanjin Tisha"
+    ],
+    "crew": {
+      "dop": "N/A",
+      "editor": "N/A",
+      "music": "N/A",
+      "producer": "N/A"
+    },
+    "successStats": {
+      "viewership": "High",
+      "milestone": "",
+      "audienceRating": "8.7/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=LbCvumziNj8",
+    "featured": false
+  },
+  {
+    "id": 15,
+    "slug": "only-me",
+    "title": "Only Me",
+    "banglaTitle": "অনলি মি",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2020,
+    "endYear": 2020,
+    "genre": [
+      "Romance",
+      "Comedy"
+    ],
+    "platform": "YouTube",
+    "channel": "Various",
+    "runtime": "45 min",
+    "language": "Bangla",
+    "role": "Director",
+    "poster": "https://img.youtube.com/vi/Qqz1fdfK2j4/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/Qqz1fdfK2j4/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/Qqz1fdfK2j4/hqdefault.jpg",
+      "https://img.youtube.com/vi/Qqz1fdfK2j4/hqdefault.jpg"
+    ],
+    "synopsis": "A humorous take on digital privacy, social media obsession, and romance in the age of Facebook privacy settings.",
+    "logline": "When your relationship status is complicated.",
+    "concept": "A satire on how social media dictates modern romance.",
+    "directorNote": "We live our lives for an audience of online friends rather than for ourselves.",
+    "inspiration": "The absurdities of social media behavior.",
+    "technicalSpecs": {
+      "camera": "N/A",
+      "lenses": "N/A",
+      "colorGrade": "N/A"
+    },
+    "challenges": "Visually representing digital interactions in a compelling way.",
+    "directorPerspective": "",
+    "cast": [
+      "Afran Nisho",
+      "Tanjin Tisha"
+    ],
+    "crew": {
+      "dop": "N/A",
+      "editor": "N/A",
+      "music": "N/A",
+      "producer": "N/A"
+    },
+    "successStats": {
+      "viewership": "Highly popular",
+      "milestone": "",
+      "audienceRating": "8.9/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=Qqz1fdfK2j4",
+    "featured": false
+  },
+  {
+    "id": 16,
+    "slug": "viral-girl",
+    "title": "Viral Girl",
+    "banglaTitle": "ভাইরাল গার্ল",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2021,
+    "endYear": 2021,
+    "genre": [
+      "Drama",
+      "Social Commentary"
+    ],
+    "platform": "YouTube",
+    "channel": "Live Tech",
+    "runtime": "42 min",
+    "language": "Bangla",
+    "role": "Director",
+    "poster": "https://img.youtube.com/vi/kY3P98L_5vU/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/kY3P98L_5vU/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/kY3P98L_5vU/hqdefault.jpg",
+      "https://img.youtube.com/vi/kY3P98L_5vU/hqdefault.jpg"
+    ],
+    "synopsis": "A powerful commentary on cyberbullying, internet culture, and the devastating psychological impact of becoming an unwilling internet sensation overnight.",
+    "logline": "Fame is a nightmare when you didn't ask for it.",
+    "concept": "To expose the dark side of viral internet culture in Bangladesh.",
+    "directorNote": "The internet gives everyone a voice, but it also gives everyone a stone to throw.",
+    "inspiration": "Real-life incidents of individuals whose lives were ruined by unsolicited viral videos.",
+    "technicalSpecs": {
+      "camera": "N/A",
+      "lenses": "N/A",
+      "colorGrade": "Gritty and realistic"
+    },
+    "challenges": "Handling a highly sensitive topic with the nuance it deserved.",
+    "directorPerspective": "",
+    "cast": [
+      "Mehazabien Chowdhury",
+      "Manoj Pramanik"
+    ],
+    "crew": {
+      "dop": "N/A",
+      "editor": "N/A",
+      "music": "N/A",
+      "producer": "Live Tech"
+    },
+    "successStats": {
+      "viewership": "Millions of views",
+      "milestone": "Sparked widespread discussion on cyberbullying",
+      "audienceRating": "9.2/10",
+      "culturalImpact": "Highly praised for its strong social message and lead performance."
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=kY3P98L_5vU",
+    "featured": true
+  },
+  {
+    "banglaTitle": "",
+    "synopsis": "A masterful addition to Kajal Arefin Ome's filmography.",
+    "directorNote": "Every story deserves to be told with authenticity.",
+    "concept": "Exploring the depths of human relationships.",
+    "inspiration": "Real life events.",
+    "challenges": "Shooting during tight schedules.",
+    "directorPerspective": "I wanted to challenge the audience.",
+    "technicalSpecs": {
+      "camera": "ARRI Alexa Mini",
+      "lenses": "Cooke Anamorphic/i",
+      "colorGrade": "FilmConvert"
+    },
+    "awards": [],
+    "pressLinks": [],
+    "id": 17,
+    "slug": "the-secret",
+    "title": "The Secret",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2021,
+    "genre": [
+      "Drama",
+      "Romance"
+    ],
+    "platform": "Dhruba Tv",
+    "runtime": "40 min",
+    "poster": "https://img.youtube.com/vi/q4x131uM3pQ/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/q4x131uM3pQ/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/q4x131uM3pQ/hqdefault.jpg"
+    ],
+    "cast": [
+      "Ziaul Faruq Apurba",
+      "Tanjin Tisha"
+    ],
+    "successStats": {
+      "viewership": "15M+",
+      "milestone": "Trending #1",
+      "audienceRating": "4.8/5"
+    },
+    "crew": {
+      "dop": "Raju Raj",
+      "editor": "Arifin Sarker",
+      "music": "Naved Parvez",
+      "producer": "Dhruba Guha"
+    }
+  },
+  {
+    "banglaTitle": "",
+    "synopsis": "A masterful addition to Kajal Arefin Ome's filmography.",
+    "directorNote": "Every story deserves to be told with authenticity.",
+    "concept": "Exploring the depths of human relationships.",
+    "inspiration": "Real life events.",
+    "challenges": "Shooting during tight schedules.",
+    "directorPerspective": "I wanted to challenge the audience.",
+    "technicalSpecs": {
+      "camera": "ARRI Alexa Mini",
+      "lenses": "Cooke Anamorphic/i",
+      "colorGrade": "FilmConvert"
+    },
+    "awards": [],
+    "pressLinks": [],
+    "id": 18,
+    "slug": "kidney",
+    "title": "Kidney",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2023,
+    "genre": [
+      "Comedy",
+      "Drama"
+    ],
+    "platform": "Club 11 Entertainment",
+    "runtime": "45 min",
+    "poster": "https://img.youtube.com/vi/OqJ9TzC3o-I/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/OqJ9TzC3o-I/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/OqJ9TzC3o-I/hqdefault.jpg"
+    ],
+    "cast": [
+      "Ziaul Hoque Polash",
+      "Parsa Evana",
+      "Chashi Alam"
+    ],
+    "successStats": {
+      "viewership": "20M+",
+      "milestone": "Eid Record",
+      "audienceRating": "4.9/5"
+    },
+    "crew": {
+      "dop": "Raju Raj",
+      "editor": "Arifin Sarker",
+      "music": "Naved Parvez",
+      "producer": "Akbar Eider"
+    }
+  },
+  {
+    "banglaTitle": "",
+    "synopsis": "A masterful addition to Kajal Arefin Ome's filmography.",
+    "directorNote": "Every story deserves to be told with authenticity.",
+    "concept": "Exploring the depths of human relationships.",
+    "inspiration": "Real life events.",
+    "challenges": "Shooting during tight schedules.",
+    "directorPerspective": "I wanted to challenge the audience.",
+    "technicalSpecs": {
+      "camera": "ARRI Alexa Mini",
+      "lenses": "Cooke Anamorphic/i",
+      "colorGrade": "FilmConvert"
+    },
+    "awards": [],
+    "pressLinks": [],
+    "id": 19,
+    "slug": "thanda",
+    "title": "Thanda",
+    "type": "Web Film",
+    "category": "short-film",
+    "year": 2021,
+    "genre": [
+      "Comedy"
+    ],
+    "platform": "ZEE5",
+    "runtime": "50 min",
+    "poster": "https://img.youtube.com/vi/XQhT0l47iI0/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/XQhT0l47iI0/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/XQhT0l47iI0/hqdefault.jpg"
+    ],
+    "cast": [
+      "Ziaul Hoque Polash",
+      "Marzuk Russell",
+      "Mishu Sabbir",
+      "Chashi Alam"
+    ],
+    "successStats": {
+      "viewership": "Exclusive",
+      "milestone": "ZEE5 Top 10",
+      "audienceRating": "4.7/5"
+    },
+    "crew": {
+      "dop": "Raju Raj",
+      "editor": "Arifin Sarker",
+      "music": "Ahmed Hasan",
+      "producer": "ZEE5"
+    }
+  },
+  {
+    "banglaTitle": "",
+    "synopsis": "A masterful addition to Kajal Arefin Ome's filmography.",
+    "directorNote": "Every story deserves to be told with authenticity.",
+    "concept": "Exploring the depths of human relationships.",
+    "inspiration": "Real life events.",
+    "challenges": "Shooting during tight schedules.",
+    "directorPerspective": "I wanted to challenge the audience.",
+    "technicalSpecs": {
+      "camera": "ARRI Alexa Mini",
+      "lenses": "Cooke Anamorphic/i",
+      "colorGrade": "FilmConvert"
+    },
+    "awards": [],
+    "pressLinks": [],
+    "id": 17,
+    "slug": "the-secret",
+    "title": "The Secret",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2021,
+    "genre": [
+      "Drama",
+      "Romance"
+    ],
+    "platform": "Dhruba Tv",
+    "runtime": "40 min",
+    "poster": "https://img.youtube.com/vi/q4x131uM3pQ/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/q4x131uM3pQ/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/q4x131uM3pQ/hqdefault.jpg"
+    ],
+    "cast": [
+      "Ziaul Faruq Apurba",
+      "Tanjin Tisha"
+    ],
+    "successStats": {
+      "viewership": "15M+",
+      "milestone": "Trending #1",
+      "audienceRating": "4.8/5"
+    },
+    "crew": {
+      "dop": "Raju Raj",
+      "editor": "Arifin Sarker",
+      "music": "Naved Parvez",
+      "producer": "Dhruba Guha"
+    }
+  },
+  {
+    "banglaTitle": "",
+    "synopsis": "A masterful addition to Kajal Arefin Ome's filmography.",
+    "directorNote": "Every story deserves to be told with authenticity.",
+    "concept": "Exploring the depths of human relationships.",
+    "inspiration": "Real life events.",
+    "challenges": "Shooting during tight schedules.",
+    "directorPerspective": "I wanted to challenge the audience.",
+    "technicalSpecs": {
+      "camera": "ARRI Alexa Mini",
+      "lenses": "Cooke Anamorphic/i",
+      "colorGrade": "FilmConvert"
+    },
+    "awards": [],
+    "pressLinks": [],
+    "id": 18,
+    "slug": "kidney",
+    "title": "Kidney",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2023,
+    "genre": [
+      "Comedy",
+      "Drama"
+    ],
+    "platform": "Club 11 Entertainment",
+    "runtime": "45 min",
+    "poster": "https://img.youtube.com/vi/OqJ9TzC3o-I/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/OqJ9TzC3o-I/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/OqJ9TzC3o-I/hqdefault.jpg"
+    ],
+    "cast": [
+      "Ziaul Hoque Polash",
+      "Parsa Evana",
+      "Chashi Alam"
+    ],
+    "successStats": {
+      "viewership": "20M+",
+      "milestone": "Eid Record",
+      "audienceRating": "4.9/5"
+    },
+    "crew": {
+      "dop": "Raju Raj",
+      "editor": "Arifin Sarker",
+      "music": "Naved Parvez",
+      "producer": "Akbar Eider"
+    }
+  },
+  {
+    "banglaTitle": "",
+    "synopsis": "A masterful addition to Kajal Arefin Ome's filmography.",
+    "directorNote": "Every story deserves to be told with authenticity.",
+    "concept": "Exploring the depths of human relationships.",
+    "inspiration": "Real life events.",
+    "challenges": "Shooting during tight schedules.",
+    "directorPerspective": "I wanted to challenge the audience.",
+    "technicalSpecs": {
+      "camera": "ARRI Alexa Mini",
+      "lenses": "Cooke Anamorphic/i",
+      "colorGrade": "FilmConvert"
+    },
+    "awards": [],
+    "pressLinks": [],
+    "id": 19,
+    "slug": "thanda",
+    "title": "Thanda",
+    "type": "Web Film",
+    "category": "short-film",
+    "year": 2021,
+    "genre": [
+      "Comedy"
+    ],
+    "platform": "ZEE5",
+    "runtime": "50 min",
+    "poster": "https://img.youtube.com/vi/XQhT0l47iI0/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/XQhT0l47iI0/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/XQhT0l47iI0/hqdefault.jpg"
+    ],
+    "cast": [
+      "Ziaul Hoque Polash",
+      "Marzuk Russell",
+      "Mishu Sabbir",
+      "Chashi Alam"
+    ],
+    "successStats": {
+      "viewership": "Exclusive",
+      "milestone": "ZEE5 Top 10",
+      "audienceRating": "4.7/5"
+    },
+    "crew": {
+      "dop": "Raju Raj",
+      "editor": "Arifin Sarker",
+      "music": "Ahmed Hasan",
+      "producer": "ZEE5"
+    }
+  },
+  {
+    "banglaTitle": "",
+    "synopsis": "A masterful addition to Kajal Arefin Ome's filmography.",
+    "directorNote": "Every story deserves to be told with authenticity.",
+    "concept": "Exploring the depths of human relationships.",
+    "inspiration": "Real life events.",
+    "challenges": "Shooting during tight schedules.",
+    "directorPerspective": "I wanted to challenge the audience.",
+    "technicalSpecs": {
+      "camera": "ARRI Alexa Mini",
+      "lenses": "Cooke Anamorphic/i",
+      "colorGrade": "FilmConvert"
+    },
+    "awards": [],
+    "pressLinks": [],
+    "id": 17,
+    "slug": "the-secret",
+    "title": "The Secret",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2021,
+    "genre": [
+      "Drama",
+      "Romance"
+    ],
+    "platform": "Dhruba Tv",
+    "runtime": "40 min",
+    "poster": "https://img.youtube.com/vi/q4x131uM3pQ/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/q4x131uM3pQ/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/q4x131uM3pQ/hqdefault.jpg"
+    ],
+    "cast": [
+      "Ziaul Faruq Apurba",
+      "Tanjin Tisha"
+    ],
+    "successStats": {
+      "viewership": "15M+",
+      "milestone": "Trending #1",
+      "audienceRating": "4.8/5"
+    },
+    "crew": {
+      "dop": "Raju Raj",
+      "editor": "Arifin Sarker",
+      "music": "Naved Parvez",
+      "producer": "Dhruba Guha"
+    }
+  },
+  {
+    "banglaTitle": "",
+    "synopsis": "A masterful addition to Kajal Arefin Ome's filmography.",
+    "directorNote": "Every story deserves to be told with authenticity.",
+    "concept": "Exploring the depths of human relationships.",
+    "inspiration": "Real life events.",
+    "challenges": "Shooting during tight schedules.",
+    "directorPerspective": "I wanted to challenge the audience.",
+    "technicalSpecs": {
+      "camera": "ARRI Alexa Mini",
+      "lenses": "Cooke Anamorphic/i",
+      "colorGrade": "FilmConvert"
+    },
+    "awards": [],
+    "pressLinks": [],
+    "id": 18,
+    "slug": "kidney",
+    "title": "Kidney",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2023,
+    "genre": [
+      "Comedy",
+      "Drama"
+    ],
+    "platform": "Club 11 Entertainment",
+    "runtime": "45 min",
+    "poster": "https://img.youtube.com/vi/OqJ9TzC3o-I/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/OqJ9TzC3o-I/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/OqJ9TzC3o-I/hqdefault.jpg"
+    ],
+    "cast": [
+      "Ziaul Hoque Polash",
+      "Parsa Evana",
+      "Chashi Alam"
+    ],
+    "successStats": {
+      "viewership": "20M+",
+      "milestone": "Eid Record",
+      "audienceRating": "4.9/5"
+    },
+    "crew": {
+      "dop": "Raju Raj",
+      "editor": "Arifin Sarker",
+      "music": "Naved Parvez",
+      "producer": "Akbar Eider"
+    }
+  },
+  {
+    "banglaTitle": "",
+    "synopsis": "A masterful addition to Kajal Arefin Ome's filmography.",
+    "directorNote": "Every story deserves to be told with authenticity.",
+    "concept": "Exploring the depths of human relationships.",
+    "inspiration": "Real life events.",
+    "challenges": "Shooting during tight schedules.",
+    "directorPerspective": "I wanted to challenge the audience.",
+    "technicalSpecs": {
+      "camera": "ARRI Alexa Mini",
+      "lenses": "Cooke Anamorphic/i",
+      "colorGrade": "FilmConvert"
+    },
+    "awards": [],
+    "pressLinks": [],
+    "id": 19,
+    "slug": "thanda",
+    "title": "Thanda",
+    "type": "Web Film",
+    "category": "short-film",
+    "year": 2021,
+    "genre": [
+      "Comedy"
+    ],
+    "platform": "ZEE5",
+    "runtime": "50 min",
+    "poster": "https://img.youtube.com/vi/XQhT0l47iI0/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/XQhT0l47iI0/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/XQhT0l47iI0/hqdefault.jpg"
+    ],
+    "cast": [
+      "Ziaul Hoque Polash",
+      "Marzuk Russell",
+      "Mishu Sabbir",
+      "Chashi Alam"
+    ],
+    "successStats": {
+      "viewership": "Exclusive",
+      "milestone": "ZEE5 Top 10",
+      "audienceRating": "4.7/5"
+    },
+    "crew": {
+      "dop": "Raju Raj",
+      "editor": "Arifin Sarker",
+      "music": "Ahmed Hasan",
+      "producer": "ZEE5"
+    }
+  },
+  {
+    "banglaTitle": "",
+    "synopsis": "A masterful addition to Kajal Arefin Ome's filmography.",
+    "directorNote": "Every story deserves to be told with authenticity.",
+    "concept": "Exploring the depths of human relationships.",
+    "inspiration": "Real life events.",
+    "challenges": "Shooting during tight schedules.",
+    "directorPerspective": "I wanted to challenge the audience.",
+    "technicalSpecs": {
+      "camera": "ARRI Alexa Mini",
+      "lenses": "Cooke Anamorphic/i",
+      "colorGrade": "FilmConvert"
+    },
+    "awards": [],
+    "pressLinks": [],
+    "id": 20,
+    "slug": "bachelor-point",
+    "title": "Bachelor Point",
+    "type": "Drama Series",
+    "category": "series",
+    "year": 2018,
+    "genre": [
+      "Comedy",
+      "Drama"
+    ],
+    "platform": "Dhruba Tv",
+    "runtime": "30 min per episode",
+    "poster": "https://img.youtube.com/vi/bQ6u6uX9b9I/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/bQ6u6uX9b9I/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/bQ6u6uX9b9I/hqdefault.jpg"
+    ],
+    "cast": [
+      "Ziaul Hoque Polash",
+      "Mishu Sabbir",
+      "Chashi Alam",
+      "Marzuk Russell"
+    ],
+    "successStats": {
+      "viewership": "100M+",
+      "milestone": "Cult Classic",
+      "audienceRating": "4.9/5"
+    },
+    "crew": {
+      "dop": "Raju Raj",
+      "editor": "Arifin Sarker",
+      "music": "Naved Parvez",
+      "producer": "Dhruba Guha"
+    }
+  },
+  {
+    "banglaTitle": "",
+    "synopsis": "A masterful addition to Kajal Arefin Ome's filmography.",
+    "directorNote": "Every story deserves to be told with authenticity.",
+    "concept": "Exploring the depths of human relationships.",
+    "inspiration": "Real life events.",
+    "challenges": "Shooting during tight schedules.",
+    "directorPerspective": "I wanted to challenge the audience.",
+    "technicalSpecs": {
+      "camera": "ARRI Alexa Mini",
+      "lenses": "Cooke Anamorphic/i",
+      "colorGrade": "FilmConvert"
+    },
+    "awards": [],
+    "pressLinks": [],
+    "id": 21,
+    "slug": "hotel-relax",
+    "title": "Hotel Relax",
+    "type": "Web Series",
+    "category": "series",
+    "year": 2023,
+    "genre": [
+      "Comedy",
+      "Thriller"
+    ],
+    "platform": "Bongo BD",
+    "runtime": "6 Episodes",
+    "poster": "https://img.youtube.com/vi/j5O6s7_tNQA/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/j5O6s7_tNQA/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/j5O6s7_tNQA/hqdefault.jpg"
+    ],
+    "cast": [
+      "Mishu Sabbir",
+      "Ziaul Hoque Polash",
+      "Marzuk Russell",
+      "Chashi Alam",
+      "Parsa Evana",
+      "Purnima"
+    ],
+    "successStats": {
+      "viewership": "Record Breaking",
+      "milestone": "Bongo Top Rated",
+      "audienceRating": "4.8/5"
+    },
+    "crew": {
+      "dop": "Raju Raj",
+      "editor": "Arifin Sarker",
+      "music": "Naved Parvez",
+      "producer": "Mushfiqur Rahman Manzu"
+    }
+  },
+  {
+    "banglaTitle": "",
+    "synopsis": "A masterful addition to Kajal Arefin Ome's filmography.",
+    "directorNote": "Every story deserves to be told with authenticity.",
+    "concept": "Exploring the depths of human relationships.",
+    "inspiration": "Real life events.",
+    "challenges": "Shooting during tight schedules.",
+    "directorPerspective": "I wanted to challenge the audience.",
+    "technicalSpecs": {
+      "camera": "ARRI Alexa Mini",
+      "lenses": "Cooke Anamorphic/i",
+      "colorGrade": "FilmConvert"
+    },
+    "awards": [],
+    "pressLinks": [],
+    "id": 22,
+    "slug": "oshomoy",
+    "title": "Oshomoy",
+    "type": "Web Film",
+    "category": "web-film",
+    "year": 2024,
+    "genre": [
+      "Drama",
+      "Thriller"
+    ],
+    "platform": "Bongo BD",
+    "runtime": "2h 10min",
+    "poster": "https://img.youtube.com/vi/4X9Uf2Z0v04/hqdefault.jpg",
+    "coverImage": "https://img.youtube.com/vi/4X9Uf2Z0v04/hqdefault.jpg",
+    "stills": [
+      "https://img.youtube.com/vi/4X9Uf2Z0v04/hqdefault.jpg"
+    ],
+    "cast": [
+      "Tasnia Farin",
+      "Tariq Anam Khan",
+      "Monira Mithu",
+      "Runa Khan",
+      "Iresh Zaker"
+    ],
+    "successStats": {
+      "viewership": "Blockbuster",
+      "milestone": "Bongo Record",
+      "audienceRating": "4.9/5"
+    },
+    "crew": {
+      "dop": "Raju Raj",
+      "editor": "Arifin Sarker",
+      "music": "Ahmed Hasan",
+      "producer": "Mushfiqur Rahman Manzu"
+    }
+  }
+]

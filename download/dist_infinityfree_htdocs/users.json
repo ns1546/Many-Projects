@@ -1,0 +1,25 @@
+[
+  {
+    "id": "admin_1",
+    "email": "admin@jkhjesan.com",
+    "password": "admin",
+    "role": "admin",
+    "permissions": [
+      "all"
+    ]
+  },
+  {
+    "id": "mod_1777821704952",
+    "email": "a@gmail.com",
+    "password": "a",
+    "role": "admin",
+    "permissions": []
+  },
+  {
+    "id": "mod_1777843597315",
+    "email": "b@gmail.com",
+    "password": "b",
+    "role": "moderator",
+    "permissions": []
+  }
+]

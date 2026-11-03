@@ -1,0 +1,219 @@
+
+--- Page 8 ---
+Acknowledgement
+We would like to express our heartfelt gratitude to the Almighty Allah, who offered
+our families and us kind care throughout this journey.
+We are deeply thankful to
+the Bangladesh University of Business and Technology (BUBT) for providing us with
+an excellent research environment and world-class computing facilities to pursue our
+capstone project.
+We express our sincerest gratitude to our respected supervisor, Md. Saddam Hos-
+sain, Assistant Professor, Department of CSE, BUBT. This research would not have
+been possible without his patient guidance, sharp technical insight, and consistent aca-
+demic support. He identified the research gap in privacy-preserving federated learning
+for edge medical devices, guided us through the complex integration of FedProx, Differ-
+ential Privacy, and gradient compression, and shared many essential research resources.
+He was disciplined and responsible, always finding time to discuss our progress.
+We are also thankful to our course teacher, Dr.
+Md.
+Rajibul Islam, Associate
+Professor and Chairman of the Department of Data Science and Engineering, BUBT,
+for providing valuable direction and constructive academic feedback throughout the
+semester. Special appreciation goes to Prof. Dr. Md. Ahsan Habib, Chairman
+of the CSE Department, and to all our respected faculty members for their consistent
+inspiration.
+We would also like to acknowledge our five-member team for their coordinated technical
+effort, patience, and mutual encouragement throughout the eight-month development
+cycle. Finally, we are grateful to our families, well-wishers, and BUBT for granting us
+this opportunity to contribute to trustworthy artificial intelligence in healthcare.
+viii
+
+--- Page 9 ---
+Abstract
+Federated Learning (FL) enables collaborative medical image diagnosis without sharing
+raw patient data, supporting privacy regulations such as HIPAA and GDPR. In practice,
+medical FL faces non-IID data drift, communication bottlenecks, and gradient-leakage
+risks. Existing studies often address these issues separately and rarely evaluate full
+pipelines under edge constraints.
+This report presents FEDMED-X, a communication-efficient and privacy-preserving
+federated learning system for medical image classification. The framework integrates
+FedProx (µ = 0.01), DP-SGD (ϵ = 1.0, δ = 1e−5), TopK 50% + INT8 compression,
+and a lightweight MedNet-CBAM model designed for edge deployment.
+On MedMNIST PneumoniaMNIST with 5 Dirichlet non-IID clients (α = 0.5), Fed-
+Prox reached 85.58% accuracy. With privacy and compression together, FEDMED-X
+achieved 75.16% accuracy while reducing communication by 90% under ϵ = 1.0. Edge-
+oriented evaluation targets NVIDIA Jetson Nano deployment with 0.20 ms/image in-
+ference latency.
+Keywords: Federated Learning; Differential Privacy; Edge Computing; Medical Image
+Classification; FedProx; TopK; Jetson Nano.
+ix
+
+--- Page 10 ---
+List of Figures
+1
+Proposed FEDMED-X methodological framework showing data parti-
+tioning, local training, privacy, compression, aggregation, and evaluation
+flow. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+18
+2
+Module-level architecture of the FEDMED-X software pipeline.
+. . . .
+28
+3
+Gantt chart of the FEDMED-X eight-month development plan.
+. . . .
+52
+x
+
+--- Page 11 ---
+List of Tables
+1
+Conceptual comparison of prior research directions and FEDMED-X focus 14
+2
+Dataset summary for PneumoniaMNIST . . . . . . . . . . . . . . . . .
+20
+3
+Class definition used in FEDMED-X
+. . . . . . . . . . . . . . . . . . .
+21
+4
+Software and environment requirements . . . . . . . . . . . . . . . . . .
+22
+5
+Factorial ablation configurations used in FEDMED-X . . . . . . . . . .
+26
+6
+Implementation environment . . . . . . . . . . . . . . . . . . . . . . . .
+31
+7
+Master factorial ablation results on PneumoniaMNIST under Dirichlet
+non-IID partitioning (α = 0.5, 5 clients)
+. . . . . . . . . . . . . . . . .
+35
+8
+Runtime of each ablation configuration . . . . . . . . . . . . . . . . . .
+35
+9
+Protocol-aware comparison with representative related directions . . . .
+40
+10
+Approximate project budget . . . . . . . . . . . . . . . . . . . . . . . .
+50
+11
+Major milestones of the FEDMED-X project . . . . . . . . . . . . . . .
+51
+xi
+
+--- Page 12 ---
+List of Abbreviations and Acronyms
+AI
+Artificial Intelligence
+BUBT
+Bangladesh University of Business and Technology
+CBAM
+Convolutional Block Attention Module
+CNN
+Convolutional Neural Network
+DL
+Deep Learning
+DP
+Differential Privacy
+DP-SGD
+Differentially Private Stochastic Gradient Descent
+FedAvg
+Federated Averaging
+FedProx
+Federated Proximal Optimization
+FL
+Federated Learning
+FPS
+Frames Per Second
+GDPR
+General Data Protection Regulation
+GPU
+Graphics Processing Unit
+HE
+Homomorphic Encryption
+HIPAA
+Health Insurance Portability and Accountability Act
+IID
+Independent and Identically Distributed
+INT8
+8-bit Integer Quantization
+xii
+
+--- Page 13 ---
+MedMNIST Medical MNIST Benchmark Dataset
+ML
+Machine Learning
+RDP
+Rényi Differential Privacy
+ReLU
+Rectified Linear Unit
+SDLC
+Software Development Life Cycle
+SOTA
+State of the Art
+TopK
+Top-K Gradient Sparsification
+xiii
+
+--- Page 14 ---
+Contents
+Declaration
+iii
+Approval
+vi
+Dedication
+vii
+Acknowledgement
+viii
+Abstract
+ix
+List of Figures
+x
+List of Tables
+xi
+List of Abbreviations and Acronyms
+xiii
+1
+Introduction
+1
+1.1
+Problem Statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2
+1.2
+Problem Background . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3
+1.3
+Research Objectives . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3
+1.4
+Motivations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+4
+1.5
+Significance of the Research
+. . . . . . . . . . . . . . . . . . . . . . . .
+5
+1.6
+Research Contributions . . . . . . . . . . . . . . . . . . . . . . . . . . .
+5
+1.7
+Complex Engineering Analysis . . . . . . . . . . . . . . . . . . . . . . .
+6
+1.7.1
+Complex Engineering Problems . . . . . . . . . . . . . . . . . .
+6
+1.7.2
+Complex Engineering Activities . . . . . . . . . . . . . . . . . .
+7
+1.8
+Thesis/Project Organization . . . . . . . . . . . . . . . . . . . . . . . .
+8
+2
+Background Study
+9
+2.1
+Literature Review . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+9
+xiv

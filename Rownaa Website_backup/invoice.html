@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rownaa - Invoice</title>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  :root {
+    --bg-base: #111;
+    --bg-panel: #1A1A1A;
+    --text-primary: #FFF;
+    --text-secondary: #AAA;
+    --text-tertiary: #666;
+    --border-subtle: #222;
+    --accent: #E5FE40;
+    --font-sans: 'Inter', -apple-system, sans-serif;
+    --font-display: 'Outfit', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-sans); }
+  body { background: var(--bg-base); color: var(--text-primary); padding: 40px; display: flex; justify-content: center; }
+  
+  .invoice-card { background: var(--bg-panel); border: 1px solid var(--border-subtle); width: 100%; max-width: 800px; padding: 40px; border-radius: 8px; position: relative; }
+  
+  .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-subtle); padding-bottom: 24px; margin-bottom: 24px; }
+  .brand { font-family: var(--font-display); font-size: 2rem; font-weight: 900; color: var(--text-primary); letter-spacing: -1px; }
+  .brand span { color: var(--accent); }
+  .status { font-weight: 700; color: var(--accent); font-size: 1.2rem; }
+  
+  .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 32px; }
+  .meta-block h4 { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+  .meta-block p { font-size: 1rem; line-height: 1.5; }
+  
+  .table { width: 100%; border-collapse: collapse; margin-bottom: 32px; }
+  .table th { text-align: left; padding: 12px; color: var(--text-secondary); font-size: 0.85rem; border-bottom: 1px solid var(--border-subtle); }
+  .table td { padding: 16px 12px; border-bottom: 1px solid var(--border-subtle); }
+  
+  .summary { width: 300px; margin-left: auto; }
+  .sum-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.9rem; }
+  .sum-total { border-top: 1px solid var(--border-subtle); margin-top: 8px; padding-top: 12px; font-size: 1.2rem; font-weight: 700; }
+  
+  .btn-print { position: absolute; top: 40px; right: 40px; background: var(--accent); color: #000; padding: 8px 16px; border-radius: 4px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; gap: 8px; align-items: center; border:none; }
+  
+  @media print {
+    body { background: #FFF; color: #000; padding: 0; }
+    .invoice-card { border: none; box-shadow: none; padding: 0; }
+    .btn-print { display: none; }
+    :root {
+        --bg-panel: #FFF;
+        --text-primary: #000;
+        --text-secondary: #333;
+        --border-subtle: #CCC;
+        --accent: #000;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="invoice-card" id="invoiceArea">
+  <button class="btn-print" onclick="window.print()"><i class="ph ph-printer"></i> Print</button>
+  
+  <div class="header">
+    <div>
+      <div class="brand">ROWNAA<span>®</span></div>
+      <div style="color:var(--text-secondary); margin-top:4px;">Invoice / Receipt</div>
+    </div>
+    <div style="text-align:right">
+      <div class="status" id="inv-status">PAID</div>
+      <div style="color:var(--text-secondary); font-size:0.9rem; margin-top:4px;">Date: <span id="inv-date"></span></div>
+    </div>
+  </div>
+  
+  <div class="meta-grid">
+    <div class="meta-block">
+      <h4>Billed To</h4>
+      <p id="inv-customer">
+        Name<br>
+        Email
+      </p>
+    </div>
+    <div class="meta-block">
+      <h4>Booking Reference</h4>
+      <p id="inv-ref">#BK-XXXX<br>Service Type</p>
+    </div>
+  </div>
+  
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Date & Time</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody id="inv-items">
+      <!-- Injected by JS -->
+    </tbody>
+  </table>
+  
+  <div class="summary">
+    <div class="sum-row">
+      <span>Subtotal</span>
+      <span id="inv-subtotal">৳0</span>
+    </div>
+    <div class="sum-row" style="color:var(--text-secondary)">
+      <span>VAT (5%)</span>
+      <span id="inv-vat">৳0</span>
+    </div>
+    <div class="sum-row sum-total">
+      <span>Total Paid</span>
+      <span id="inv-total">৳0</span>
+    </div>
+  </div>
+  
+  <div style="margin-top:64px; text-align:center; color:var(--text-secondary); font-size:0.85rem;">
+    Thank you for riding with Rownaa. For support, contact info@rownaa.com.
+  </div>
+</div>
+
+<script src="js/bookings.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    
+    if(!id || !window.BookingsManager) {
+        document.getElementById('invoiceArea').innerHTML = '<h2 style="text-align:center">Booking Not Found</h2>';
+        return;
+    }
+    
+    const b = await window.BookingsManager.getById(id);
+    if(!b) {
+        document.getElementById('invoiceArea').innerHTML = '<h2 style="text-align:center">Booking Not Found</h2>';
+        return;
+    }
+    
+    document.getElementById('inv-date').textContent = new Date().toLocaleDateString();
+    document.getElementById('inv-customer').innerHTML = `${b.customerName}<br>${b.customerEmail}`;
+    document.getElementById('inv-ref').innerHTML = `<b>${b.id}</b><br>${(b.service||'').toUpperCase()}`;
+    
+    if (b.status === 'Pending') document.getElementById('inv-status').textContent = 'PAYMENT DUE (80%)';
+    
+    // Parse price to calculate backwards
+    let total = parseInt(b.price.replace('৳','').replace(',','')) || 0;
+    let base = Math.round(total / 1.05); // naive vat reverse
+    let vat = total - base;
+    
+    document.getElementById('inv-items').innerHTML = `
+      <tr>
+        <td>
+          <b>${b.vehicle || 'Assigned Vehicle'}</b><br>
+          <span style="color:var(--text-secondary);font-size:0.85rem">Zone: ${b.zone || 'N/A'}</span>
+        </td>
+        <td>${b.dateTime}</td>
+        <td>৳${base}</td>
+      </tr>
+    `;
+    
+    document.getElementById('inv-subtotal').textContent = `৳${base}`;
+    document.getElementById('inv-vat').textContent = `৳${vat}`;
+    document.getElementById('inv-total').textContent = `৳${total}`;
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+# ROWNAA — Phase 6: Mobile CSS (App Experience) & QA
+
+> Mobile CSS is a completely separate file. The mobile experience must feel like a native app. No shrunk-down website. Read Phase 0 CSS Architecture before writing any mobile styles.
+
+---
+
+## 1. Mobile CSS File Rule (ABSOLUTE)
+
+- File: `/styles/mobile.css` and `/styles/admin-mobile.css`
+- Loaded only via: `<link media="screen and (max-width: 768px)">`
+- Must NEVER contain `min-width` media queries
+- Must NEVER reference desktop-only classes
+- All pixel values, padding, margin, font-size defined independently (do NOT inherit from desktop.css via cascade assumptions)
+
+---
+
+## 2. Global Mobile Layout (mobile.css)
+
+### Body & Root
+```css
+body {
+  background-color: var(--color-brand-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-body);     /* 15px on mobile */
+  overscroll-behavior: none;       /* Prevents browser pull-to-refresh */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Prevent horizontal scroll globally */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Safe area padding for notched phones (iPhone X+) */
+.page-wrapper {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+```
+
+---
+
+## 3. Mobile Navigation (Replaces Desktop Top Navbar Entirely)
+
+### Customer Site — Mobile Navbar
+- **Top bar (fixed, 56px height):**
+  - Left: Hamburger icon (if needed) OR back arrow (on inner pages)
+  - Center: "ROWNAA" logo text
+  - Right: Notification bell + User avatar (32px circle)
+  - Background: `var(--color-brand-primary)`, `border-bottom: 1px solid rgba(255,255,255,0.07)`
+
+- **Bottom Navigation Bar (fixed, 60px + safe-area height):**
+  - Position: `fixed; bottom: 0; left: 0; right: 0; z-index: 1000`
+  - Background: `var(--color-brand-secondary)` with top border `1px solid rgba(255,255,255,0.07)`
+  - 4 items: Home (house icon) | Book (plus-circle) | Bookings (calendar) | Profile (user)
+  - Each item: icon (24px) + label text (10px) below, stacked vertically
+  - Active: icon + label → `var(--color-brand-accent)` color
+  - Touch target for each item: minimum 44px × 56px
+  - `padding-bottom: env(safe-area-inset-bottom)` applied to the bar itself
+
+### Admin & Owner Panel — Mobile Bottom Nav
+- **Owner:** Dashboard | Bookings | My Cars | Earnings | Profile (5 items)
+- **Admin:** Dashboard | Registrations | Bookings | Payments | More (5th opens bottom sheet)
+- Same styling rules as customer nav
+
+---
+
+## 4. Bottom Sheets (Replace All Modals & Overlays)
+
+**All popups, filter panels, and forms on mobile open as slide-up bottom sheets — NOT centered modal dialogs.**
+
+### Bottom Sheet Structure
+```
+┌─────────────────────────────┐
+│    ▬  (drag handle bar)    │ ← 4px wide, 40px long, rounded, centered
+│                             │
+│   Sheet Content             │
+│                             │
+└─────────────────────────────┘
+```
+
+### Bottom Sheet CSS Properties
+```css
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-brand-secondary);
+  border-radius: 20px 20px 0 0;
+  padding: 12px 20px 0;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 2000;
+}
+
+.bottom-sheet.open {
+  transform: translateY(0);
+}
+
+.bottom-sheet-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.bottom-sheet-overlay.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+```
+
+**When to use bottom sheets on mobile:**
+- All filter panels (booking filters, car listing filters)
+- All form dialogs (End Trip modal, confirm booking modal)
+- All action menus (car card actions, booking actions)
+- Map area picker
+- Service selector on homepage
+
+---
+
+## 5. Data Tables → Mobile Cards
+
+**Desktop admin tables are NEVER shown on mobile. They are replaced by cards.**
+
+### Booking List (Mobile Card)
+```
+┌─────────────────────────────────┐
+│ [Service Badge]    [Status Badge] │
+│ Customer Name                   │
+│ 📍 Pickup Area   📅 Jan 15, 2025 │
+│ 🚗 Not Assigned Yet              │
+│                    [View Details] │
+└─────────────────────────────────┘
+```
+
+### Owner Registration Card (Mobile)
+```
+┌─────────────────────────────────┐
+│ [Avatar] Business Name          │
+│ 📞 01712-XXXXXX   [Agency Badge] │
+│ 📍 Dhaka   📅 Submitted Jan 10  │
+│ [● Pending]           [Review →] │
+└─────────────────────────────────┘
+```
+
+### Car Card (Mobile — Owner Dashboard)
+```
+┌─────────────────────────────────┐
+│ [Car Photo — 80px]  Toyota Axio │
+│                  ● Active        │
+│ BD-1234  |  Sedan  |  4 Seats   │
+│ [Available ●]    [Edit] [Docs]  │
+└─────────────────────────────────┘
+```
+
+---
+
+## 6. Mobile Booking Forms
+
+### General Rules
+- Each step/field takes full viewport width
+- Labels: 13px uppercase, letter-spacing 0.05em
+- Inputs: `height: 52px; font-size: 16px` (16px prevents iOS zoom)
+- Textarea: `min-height: 100px`
+- Date/time pickers: use native `<input type="date">` and `<input type="time">` on mobile for best UX
+- Segmented buttons (Car Type, Trip Type): full-width flex row, each option 50% width
+- Number steppers (passengers, cars, hours): large minus/plus buttons, minimum 44px tap target
+- "Book Now" sticky button: `position: sticky; bottom: 0` within the form scroll container
+
+### Homepage — Service Selector (Mobile)
+- 2-column grid of service cards (3 rows × 2 cols)
+- Each card: 140px height, service icon (40px) + name
+- Tapping a card → Bottom sheet slides up with the booking form
+
+### Form Validation on Mobile
+- Errors appear BELOW the field they belong to (inline, red text)
+- DO NOT use browser default alert boxes
+- On submit with errors → page scrolls to first error field automatically
+
+---
+
+## 7. Mobile Typography & Spacing Overrides
+
+```css
+/* mobile.css — Typography */
+h1 { font-size: 1.5rem; }       /* 24px */
+h2 { font-size: 1.25rem; }      /* 20px */
+h3 { font-size: 1.0625rem; }    /* 17px */
+p, body { font-size: 0.9375rem; } /* 15px */
+small, .label { font-size: 0.8125rem; } /* 13px */
+.badge { font-size: 0.75rem; }  /* 12px */
+
+/* mobile.css — Spacing */
+.section { padding: 20px 16px; }
+.card { padding: 16px; border-radius: 16px; }
+.card + .card { margin-top: 12px; }
+.page-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; }
+```
+
+---
+
+## 8. Admin Panel Mobile — Specific Rules (admin-mobile.css)
+
+### Dashboard KPI Cards
+- Stack vertically (2 per row in a 2-column grid)
+- Each card: padding 16px, border-radius 16px, number in 28px bold gold
+- Label below number: 12px muted text
+
+### Charts
+- Chart 1 (Line): Full width, height 200px
+- Chart 2 (Donut): Centered, 200px × 200px with legend below
+- Chart 3 (Bar): Full width, height 200px, horizontal scroll if many bars
+
+### Booking Detail (Mobile)
+- Single column layout (vs 2-column on desktop)
+- Customer info first
+- Assignment section second
+- Payment section third
+- Status progress bar: vertical stepper (vs horizontal on desktop)
+
+### Two-Layer Verification (Mobile)
+- Business review: full screen, scroll down to see all document images
+- Document images: tap to open full-screen lightbox
+- Approve/Reject buttons: fixed at bottom of screen (sticky action bar, 2 buttons side by side)
+
+---
+
+## 9. Animations — Mobile Specific
+
+- Page transitions: slide left (forward) / slide right (back) — 300ms
+- Bottom sheet open: translateY(100%) → translateY(0) — 350ms
+- Card entrance: fadeInUp staggered — 60ms delay per card
+- Status badge: pulse animation on "Ongoing" status — 2s loop (subtle ring)
+- Toast notifications: slide in from top — 300ms, auto-dismiss 3s
+
+---
+
+## 10. QA Checklist (Pre-Launch)
+
+### Functional Testing
+
+**Auth**
+- [ ] OTP sends within 10 seconds on valid phone
+- [ ] OTP expires after 5 minutes
+- [ ] 3rd failed OTP attempt locks for 1 hour
+- [ ] Login works with both phone+OTP and email+password
+- [ ] JWT expires correctly (7 days)
+
+**Booking Flow**
+- [ ] All 6 service forms submit with all required fields
+- [ ] Submitting with missing required fields shows inline errors
+- [ ] Pickup location is always structured (never allows free text input)
+- [ ] Seat matching algorithm returns correct combination for 1, 4, 6, 10, 15 passengers
+- [ ] Advance payment (SSLCommerz) succeeds and booking status updates
+- [ ] bKash manual advance shows "Pending verification" status
+- [ ] My Bookings shows correct status badges
+
+**Owner Registration**
+- [ ] All 7 steps validate before allowing "Next"
+- [ ] OTP verification works on Step 1
+- [ ] File uploads work for JPG, PNG, and PDF (each doc slot tested)
+- [ ] Files over 5MB are rejected with error message
+- [ ] "Add Another Car" correctly duplicates car form
+- [ ] Service selection enforces max 3 choices
+- [ ] Submission creates DB record with status = pending
+
+**Owner Dashboard**
+- [ ] Accept booking → customer gets SMS
+- [ ] Reject booking → booking returns to admin pending
+- [ ] Start Trip → status updates, timestamp recorded
+- [ ] End Trip → commission auto-calculated correctly (10%)
+- [ ] Car availability toggle works
+- [ ] Earnings calculations are accurate
+
+**Admin Panel**
+- [ ] Registration queue loads and filters correctly
+- [ ] Approve business → owner gets SMS
+- [ ] Reject business with reason → reason delivered via SMS
+- [ ] Approve car → car appears in customer search
+- [ ] Reject car → does NOT affect other cars under same business
+- [ ] Assign driver to booking → status moves to confirmed
+- [ ] "Force Complete" admin override works
+- [ ] Commission is always auto-calculated (never manually entered)
+- [ ] Subscription expiry auto-downgrades visibility
+
+**Security**
+- [ ] Customer cannot access `/owner/*` or `/admin/*` routes
+- [ ] Owner cannot access `/admin/*` routes
+- [ ] Unapproved car returns 0 results in customer car search query
+- [ ] Direct file URL access to documents requires auth token
+
+### UI/UX Testing
+
+**Desktop**
+- [ ] All buttons have hover states (scale + shadow)
+- [ ] All input focus states show accent ring
+- [ ] All status badges use correct colors from design system
+- [ ] No hardcoded colors anywhere (all use CSS variables)
+- [ ] Animations respect `prefers-reduced-motion`
+- [ ] No horizontal scrollbar on any page
+
+**Mobile**
+- [ ] Bottom nav is visible and tappable on all pages
+- [ ] No top navbar visible on mobile
+- [ ] All modals are bottom sheets
+- [ ] All tables are replaced by cards
+- [ ] No horizontal scroll on mobile
+- [ ] Input font-size is 16px (no iOS zoom trigger)
+- [ ] Touch targets are minimum 44px
+- [ ] Admin panel looks and feels like a native app, not a website
+- [ ] Back navigation works correctly (OS back button)
+
+**Cross-Browser**
+- [ ] Chrome, Safari, Firefox (desktop)
+- [ ] Chrome Android, Safari iOS (mobile)
+- [ ] Samsung Internet (mobile)

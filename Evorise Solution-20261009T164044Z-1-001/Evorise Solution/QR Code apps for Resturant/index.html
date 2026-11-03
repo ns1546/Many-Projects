@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Alchemist's Lounge - Digital Menu</title>
+    <!-- Google Fonts for premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <div class="menu-container">
+        <!-- Navigation Buttons -->
+        <button id="prev-btn" class="nav-btn prev-btn"><i class="fa-solid fa-chevron-left"></i></button>
+        <button id="next-btn" class="nav-btn next-btn"><i class="fa-solid fa-chevron-right"></i></button>
+
+        <div class="flip-book" id="flip-book">
+            <!-- Cover Page -->
+            <div class="page page-cover page-cover-top" data-density="hard">
+                <div class="page-content">
+                    <img src="./images/cover.jpg" alt="Menu Cover" class="cover-bg" onerror="this.style.display='none'">
+                    <div class="cover-text">
+                        <h1 class="brand-name">THE<br>ALCHEMIST'S<br>LOUNGE</h1>
+                        <p class="brand-sub">EST. 2026</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page 1: Welcome & Starters -->
+            <div class="page">
+                <div class="page-content book-page-content">
+                    <h2 class="page-title">Starters</h2>
+                    <div class="menu-items">
+                        <div class="menu-item">
+                            <div class="item-header">
+                                <h3 class="item-name">Truffle Arancini</h3>
+                                <span class="item-price">$14</span>
+                            </div>
+                            <p class="item-desc">Crispy risotto balls stuffed with wild mushrooms and black truffle, served with garlic aioli.</p>
+                        </div>
+                        <div class="menu-item">
+                            <div class="item-header">
+                                <h3 class="item-name">Wagyu Beef Carpaccio</h3>
+                                <span class="item-price">$22</span>
+                            </div>
+                            <p class="item-desc">Thinly sliced wagyu beef, capers, shaved parmesan, extra virgin olive oil, and lemon.</p>
+                        </div>
+                        <div class="menu-item">
+                            <div class="item-header">
+                                <h3 class="item-name">Calamari Fritti</h3>
+                                <span class="item-price">$16</span>
+                            </div>
+                            <p class="item-desc">Lightly dusted baby squid, chili flakes, and house-made tartare sauce.</p>
+                        </div>
+                    </div>
+                    <div class="page-number">1</div>
+                </div>
+            </div>
+
+            <!-- Page 2: Gourmet Burger -->
+            <div class="page page-with-image">
+                <div class="page-content">
+                    <img src="./images/burger.jpg" alt="Gourmet Burger" class="page-image">
+                    <div class="page-number">2</div>
+                </div>
+            </div>
+
+            <!-- Page 3: Mains - Burger Details -->
+            <div class="page">
+                <div class="page-content book-page-content">
+                    <h2 class="page-title">Mains</h2>
+                    <div class="menu-items">
+                        <div class="menu-item highlighted">
+                            <div class="item-header">
+                                <h3 class="item-name">The Alchemist Burger</h3>
+                                <span class="item-price">$24</span>
+                            </div>
+                            <p class="item-desc">Premium dry-aged beef patty, double smoked bacon, aged cheddar, caramelised onions, truffle mayo on a toasted brioche bun.</p>
+                        </div>
+                        <div class="menu-item">
+                            <div class="item-header">
+                                <h3 class="item-name">Seafood Linguine</h3>
+                                <span class="item-price">$32</span>
+                            </div>
+                            <p class="item-desc">Fresh linguine tossed with scallops, prawns, mussels, cherry tomatoes, white wine, and a hint of chili.</p>
+                        </div>
+                        <div class="menu-item">
+                            <div class="item-header">
+                                <h3 class="item-name">Wild Mushroom Risotto</h3>
+                                <span class="item-price">$28</span>
+                            </div>
+                            <p class="item-desc">Carnaroli rice, porcini mushrooms, thyme, finished with mascarpone and truffle oil. (V)</p>
+                        </div>
+                    </div>
+                    <div class="page-number">3</div>
+                </div>
+            </div>
+
+            <!-- Page 4: Seafood Pasta Image -->
+            <div class="page page-with-image">
+                <div class="page-content">
+                    <img src="./images/pasta.jpg" alt="Seafood Pasta" class="page-image">
+                    <div class="page-number">4</div>
+                </div>
+            </div>
+
+            <!-- Page 5: From the Grill -->
+            <div class="page">
+                <div class="page-content book-page-content">
+                    <h2 class="page-title">From the Grill</h2>
+                    <div class="menu-items">
+                        <div class="menu-item highlighted">
+                            <div class="item-header">
+                                <h3 class="item-name">300g Ribeye Steak</h3>
+                                <span class="item-price">$55</span>
+                            </div>
+                            <p class="item-desc">45-day dry-aged premium ribeye, cooked to your liking, served with grilled asparagus, smoked sea salt, and peppercorn jus.</p>
+                        </div>
+                        <div class="menu-item">
+                            <div class="item-header">
+                                <h3 class="item-name">Wood-Fired Salmon</h3>
+                                <span class="item-price">$38</span>
+                            </div>
+                            <p class="item-desc">Tasmanian salmon fillet, charred broccolini, lemon butter caper sauce.</p>
+                        </div>
+                    </div>
+                    <div class="page-number">5</div>
+                </div>
+            </div>
+
+            <!-- Page 6: Steak Image -->
+            <div class="page page-with-image">
+                <div class="page-content">
+                    <img src="./images/steak.jpg" alt="Ribeye Steak" class="page-image">
+                    <div class="page-number">6</div>
+                </div>
+            </div>
+
+            <!-- Page 7: Cocktails -->
+            <div class="page">
+                <div class="page-content book-page-content">
+                    <h2 class="page-title">Signature Cocktails</h2>
+                    <div class="menu-items">
+                        <div class="menu-item highlighted">
+                            <div class="item-header">
+                                <h3 class="item-name">Siren's Ember</h3>
+                                <span class="item-price">$18</span>
+                            </div>
+                            <p class="item-desc">Smoky rye whiskey, blood orange liqueur, Montenegro amaro, charred thyme sprig.</p>
+                        </div>
+                        <div class="menu-item">
+                            <div class="item-header">
+                                <h3 class="item-name">Midnight Botanical</h3>
+                                <span class="item-price">$16</span>
+                            </div>
+                            <p class="item-desc">Premium dry gin, elderflower, cucumber, lime juice, topped with tonic and edible flowers.</p>
+                        </div>
+                        <div class="menu-item">
+                            <div class="item-header">
+                                <h3 class="item-name">Velvet Espresso</h3>
+                                <span class="item-price">$17</span>
+                            </div>
+                            <p class="item-desc">Vanilla vodka, fresh espresso, coffee liqueur, dusted with dark cocoa.</p>
+                        </div>
+                    </div>
+                    <div class="page-number">7</div>
+                </div>
+            </div>
+
+            <!-- Page 8: Cocktail Image -->
+            <div class="page page-with-image">
+                <div class="page-content">
+                    <img src="./images/cocktail.jpg" alt="Signature Cocktail" class="page-image">
+                    <div class="page-number">8</div>
+                </div>
+            </div>
+
+            <!-- Back Cover -->
+            <div class="page page-cover page-cover-bottom" data-density="hard">
+                <div class="page-content">
+                    <div class="back-cover-content">
+                        <h2 class="brand-name-small">THE ALCHEMIST'S LOUNGE</h2>
+                        <p class="footer-text">123 Culinary Boulevard, Metropolis</p>
+                        <p class="footer-text">Reservations: (555) 123-4567</p>
+                        <p class="footer-text">www.alchemistslounge.com</p>
+                        <div class="social-icons">
+                            <i class="fa-brands fa-instagram"></i>
+                            <i class="fa-brands fa-facebook"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PageFlip JS -->
+    <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
+    <script src="./main.js"></script>
+</body>
+</html>

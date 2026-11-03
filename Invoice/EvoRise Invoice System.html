@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<!-- saved from url=(0036)https://invoice-evorise.netlify.app/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=ai-legible&utm_source=comment&utm_medium=referral&utm_id=3fb58f66-115b-4331-acaa-0afa19392ee5
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="hosting-provider" content="Netlify">
+<meta name="netlify-deploy" content="https://netlify.new/?utm_campaign=ai-legible&amp;utm_source=meta&amp;utm_medium=referral&amp;utm_id=3fb58f66-115b-4331-acaa-0afa19392ee5">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EvoRise Invoice System</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- html2pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        /* Toggling logic for Edit/Preview modes */
+        .mode-preview .show-edit { display: none !important; }
+        .mode-edit .show-preview { display: none !important; }
+
+        @media print {
+            body {
+                background-color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            @page {
+                margin: 0.5cm;
+            }
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-10{margin-bottom:2.5rem}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mt-4{margin-top:1rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.grid{display:grid}.h-24{height:6rem}.h-4{height:1rem}.h-\[18px\]{height:18px}.min-h-screen{min-height:100vh}.w-1\/2{width:50%}.w-1\/6{width:16.666667%}.w-12{width:3rem}.w-16{width:4rem}.w-20{width:5rem}.w-32{width:8rem}.w-36{width:9rem}.w-4{width:1rem}.w-\[18px\]{width:18px}.w-full{width:100%}.max-w-2xl{max-width:42rem}.max-w-5xl{max-width:64rem}.border-collapse{border-collapse:collapse}.resize-none{resize:none}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.divide-y > :not([hidden]) ~ :not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px * calc(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px * var(--tw-divide-y-reverse))}.divide-slate-100 > :not([hidden]) ~ :not([hidden]){--tw-divide-opacity:1;border-color:rgb(241 245 249 / var(--tw-divide-opacity, 1))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.whitespace-pre-line{white-space:pre-line}.rounded{border-radius:0.25rem}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-y{border-top-width:1px;border-bottom-width:1px}.border-b{border-bottom-width:1px}.border-l{border-left-width:1px}.border-r{border-right-width:1px}.border-t{border-top-width:1px}.border-indigo-500{--tw-border-opacity:1;border-color:rgb(99 102 241 / var(--tw-border-opacity, 1))}.border-indigo-700\/50{border-color:rgb(67 56 202 / 0.5)}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.border-transparent{border-color:transparent}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-indigo-800\/50{background-color:rgb(55 48 163 / 0.5)}.bg-indigo-900{--tw-bg-opacity:1;background-color:rgb(49 46 129 / var(--tw-bg-opacity, 1))}.bg-indigo-900\/50{background-color:rgb(49 46 129 / 0.5)}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-transparent{background-color:transparent}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.pb-2{padding-bottom:0.5rem}.pt-4{padding-top:1rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.font-sans{font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"}.text-2xl{font-size:1.5rem;line-height:2rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.italic{font-style:italic}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-indigo-100{--tw-text-opacity:1;color:rgb(224 231 255 / var(--tw-text-opacity, 1))}.text-indigo-200{--tw-text-opacity:1;color:rgb(199 210 254 / var(--tw-text-opacity, 1))}.text-indigo-400{--tw-text-opacity:1;color:rgb(129 140 248 / var(--tw-text-opacity, 1))}.text-indigo-600{--tw-text-opacity:1;color:rgb(79 70 229 / var(--tw-text-opacity, 1))}.text-red-500{--tw-text-opacity:1;color:rgb(239 68 68 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:border-slate-300:hover{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.hover\:bg-indigo-700:hover{--tw-bg-opacity:1;background-color:rgb(67 56 202 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-50:hover{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-50\/50:hover{background-color:rgb(248 250 252 / 0.5)}.hover\:text-indigo-800:hover{--tw-text-opacity:1;color:rgb(55 48 163 / var(--tw-text-opacity, 1))}.hover\:text-red-500:hover{--tw-text-opacity:1;color:rgb(239 68 68 / var(--tw-text-opacity, 1))}.focus\:border-indigo-500:focus{--tw-border-opacity:1;border-color:rgb(99 102 241 / var(--tw-border-opacity, 1))}.focus\:bg-white:focus{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-indigo-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(129 140 248 / var(--tw-ring-opacity, 1))}.focus\:ring-indigo-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(99 102 241 / var(--tw-ring-opacity, 1))}@media (min-width: 768px){.md\:w-1\/2{width:50%}.md\:w-1\/3{width:33.333333%}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:p-12{padding:3rem}.md\:p-8{padding:2rem}}@media print{.print\:hidden{display:none}.print\:rounded-none{border-radius:0px}.print\:bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.print\:p-0{padding:0px}.print\:shadow-none{--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}}</style></head>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans">
+    <div id="app-wrapper" class="min-h-screen p-4 md:p-8 print:bg-white print:p-0 mode-preview">
+        
+        <!-- Header Actions (Hidden in Print) -->
+        <div class="max-w-5xl mx-auto mb-6 flex justify-between items-center print:hidden">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="file-text" aria-hidden="true" class="lucide lucide-file-text text-indigo-600"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path><path d="M14 2v5a1 1 0 0 0 1 1h5"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg>
+                    Invoice System
+                </h1>
+                <p class="text-slate-500 text-sm">EvoRise Solutions</p>
+            </div>
+            <div class="flex gap-3">
+                <button id="btn-toggle-mode" class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg shadow-sm hover:bg-slate-50 transition-colors text-slate-700 font-medium">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="edit" aria-hidden="true" id="btn-toggle-icon" class="lucide lucide-edit lucide-file-text w-[18px] h-[18px]"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"></path></svg>
+                    <span id="btn-toggle-text">Edit Invoice</span>
+                </button>
+                <button id="btn-download" class="show-preview flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition-colors font-medium">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="printer" aria-hidden="true" class="lucide lucide-printer w-[18px] h-[18px]"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg>
+                    Download PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Invoice Document -->
+        <div id="invoice-capture" class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg print:shadow-none print:rounded-none overflow-hidden mode-preview">
+            
+            <!-- Top Branding Section -->
+            <div class="bg-indigo-900 text-white p-8 md:p-12 flex flex-col md:flex-row justify-between items-start gap-6">
+                <div>
+                    <h1 class="text-4xl font-extrabold tracking-tight mb-2">EvoRise Solutions</h1>
+                    <p class="text-indigo-200 text-lg mb-6">Marketing &amp; Growth Agency</p>
+                    
+                    <div class="space-y-2 text-sm text-indigo-100">
+                        <div class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="globe" aria-hidden="true" class="lucide lucide-globe text-indigo-400 w-4 h-4"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+                            <span>www.evorise.agency</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="mail" aria-hidden="true" class="lucide lucide-mail text-indigo-400 w-4 h-4"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg>
+                            <span>helloevorisesolutions@gmail.com</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="phone" aria-hidden="true" class="lucide lucide-phone text-indigo-400 w-4 h-4"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg>
+                            <span>+8801754-220135</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-right">
+                    <h2 class="text-4xl font-bold uppercase tracking-wider text-indigo-100 mb-4">Invoice</h2>
+                    
+                    <div class="space-y-3 bg-indigo-800/50 p-4 rounded-lg backdrop-blur-sm border border-indigo-700/50">
+                        <!-- Invoice Number -->
+                        <div class="flex justify-between gap-8 items-center">
+                            <span class="text-indigo-200 text-sm">Invoice No:</span>
+                            <input id="invoice-number" type="text" class="show-edit bg-indigo-900/50 border border-indigo-500 rounded px-2 py-1 text-right text-white w-32 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                            <span id="invoice-number-preview" class="show-preview font-semibold">INV-2026-001</span>
+                        </div>
+                        <!-- Date -->
+                        <div class="flex justify-between gap-8 items-center">
+                            <span class="text-indigo-200 text-sm">Date:</span>
+                            <input id="invoice-date" type="date" class="show-edit bg-indigo-900/50 border border-indigo-500 rounded px-2 py-1 text-right text-white w-36 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                            <span id="invoice-date-preview" class="show-preview font-semibold">2026-08-31</span>
+                        </div>
+                        <!-- Due Date -->
+                        <div class="flex justify-between gap-8 items-center">
+                            <span class="text-indigo-200 text-sm">Due Date:</span>
+                            <input id="invoice-due-date" type="date" class="show-edit bg-indigo-900/50 border border-indigo-500 rounded px-2 py-1 text-right text-white w-36 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                            <span id="invoice-due-date-preview" class="show-preview font-semibold">2026-09-14</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-8 md:p-12">
+                <!-- Bill To Section -->
+                <div class="mb-10">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 border-b pb-2">Bill To</h3>
+                    
+                    <!-- Edit Mode Form -->
+                    <div class="show-edit grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl">
+                        <div>
+                            <label class="block text-xs text-slate-500 mb-1">Client Name</label>
+                            <input id="client-name" type="text" placeholder="John Doe" class="w-full border border-slate-300 rounded-md px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-500 mb-1">Company</label>
+                            <input id="client-company" type="text" placeholder="Client Company LLC" class="w-full border border-slate-300 rounded-md px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-500 mb-1">Email</label>
+                            <input id="client-email" type="email" placeholder="john@example.com" class="w-full border border-slate-300 rounded-md px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-500 mb-1">Address</label>
+                            <input id="client-address" type="text" placeholder="123 Business St, City, Country" class="w-full border border-slate-300 rounded-md px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                    </div>
+
+                    <!-- Preview Mode Display -->
+                    <div id="client-preview" class="show-preview text-slate-800"><p class="text-slate-400 italic">No client details provided</p></div>
+                </div>
+
+                <!-- Items Table -->
+                <div class="mb-10 overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-y border-slate-200">
+                                <th class="py-3 px-4 font-semibold text-slate-700 w-1/2">Description</th>
+                                <th class="py-3 px-4 font-semibold text-slate-700 text-center w-1/6">Qty</th>
+                                <th class="py-3 px-4 font-semibold text-slate-700 text-right w-1/6">Rate</th>
+                                <th class="py-3 px-4 font-semibold text-slate-700 text-right w-1/6">Amount</th>
+                                <th class="py-3 px-4 w-12 print:hidden show-edit"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="items-tbody" class="divide-y divide-slate-100">
+                    <tr class="hover:bg-slate-50/50 transition-colors" data-id="1788203120914">
+                        <td class="py-3 px-4">
+                            <input type="text" placeholder="Item description" value="" class="show-edit w-full border border-transparent hover:border-slate-300 focus:border-indigo-500 rounded px-2 py-1 bg-transparent focus:bg-white focus:outline-none transition-all item-desc">
+                            <span class="show-preview text-slate-800 item-desc-preview">-</span>
+                        </td>
+                        <td class="py-3 px-4 text-center">
+                            <input type="number" min="1" value="1" class="show-edit w-full text-center border border-transparent hover:border-slate-300 focus:border-indigo-500 rounded px-2 py-1 bg-transparent focus:bg-white focus:outline-none transition-all item-qty">
+                            <span class="show-preview text-slate-800 item-qty-preview">1</span>
+                        </td>
+                        <td class="py-3 px-4 text-right">
+                            <input type="number" min="0" step="0.01" value="0" class="show-edit w-full text-right border border-transparent hover:border-slate-300 focus:border-indigo-500 rounded px-2 py-1 bg-transparent focus:bg-white focus:outline-none transition-all item-rate">
+                            <span class="show-preview text-slate-800 item-rate-preview">BDT&nbsp;0.00</span>
+                        </td>
+                        <td class="py-3 px-4 text-right font-medium text-slate-800">
+                            <input type="number" min="0" step="0.01" value="0" class="show-edit w-full text-right border border-transparent hover:border-slate-300 focus:border-indigo-500 rounded px-2 py-1 bg-transparent focus:bg-white focus:outline-none transition-all font-medium item-amount-input">
+                            <span class="show-preview item-amount-preview">BDT&nbsp;0.00</span>
+                        </td>
+                        <td class="py-3 px-4 text-right print:hidden show-edit">
+                            <button class="text-slate-400 hover:text-red-500 transition-colors btn-remove" disabled="">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trash-2" aria-hidden="true" class="lucide lucide-trash-2 w-[18px] h-[18px] inline-block"><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+                    </table>
+
+                    <button id="btn-add-item" class="show-edit mt-4 flex items-center gap-1 text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors print:hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus" aria-hidden="true" class="lucide lucide-plus w-4 h-4"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg> Add Line Item
+                    </button>
+                </div>
+
+                <!-- Calculations & Summary -->
+                <div class="flex flex-col md:flex-row justify-between gap-8">
+                    <div class="w-full md:w-1/2">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Notes</h3>
+                        <textarea id="notes-input" placeholder="Additional notes or payment instructions..." class="show-edit w-full h-24 border border-slate-300 rounded-md px-3 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"></textarea>
+                        <p id="notes-preview" class="show-preview text-slate-600 whitespace-pre-line text-sm">Thank you for your business. Please make payment within 14 days.</p>
+                    </div>
+
+                    <div class="w-full md:w-1/3 space-y-3">
+                        <div class="flex justify-between items-center text-slate-600">
+                            <span>Subtotal</span>
+                            <span id="subtotal-display" class="font-medium">BDT&nbsp;0.00</span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center text-slate-600">
+                            <span class="flex items-center gap-2">
+                                Tax 
+                                <div class="show-edit flex items-center border border-slate-300 rounded overflow-hidden w-16">
+                                    <input id="tax-input" type="number" min="0" max="100" class="w-full text-right px-1 py-0.5 text-sm focus:outline-none">
+                                    <span class="bg-slate-100 text-xs px-1 py-1 border-l">%</span>
+                                </div>
+                                <span id="tax-preview" class="show-preview text-sm">(0%)</span>
+                            </span>
+                            <span id="tax-amount-display" class="font-medium">BDT&nbsp;0.00</span>
+                        </div>
+
+                        <div class="flex justify-between items-center text-slate-600">
+                            <span class="flex items-center gap-2">
+                                Discount
+                                <div class="show-edit flex items-center border border-slate-300 rounded overflow-hidden w-20">
+                                    <span class="bg-slate-100 text-xs px-1.5 py-1 border-r">৳</span>
+                                    <input id="discount-input" type="number" min="0" class="w-full text-right px-1 py-0.5 text-sm focus:outline-none">
+                                </div>
+                            </span>
+                            <span id="discount-amount-display" class="font-medium text-red-500">BDT&nbsp;0.00</span>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-200 flex justify-between items-center">
+                            <span class="text-lg font-bold text-slate-800">Total</span>
+                            <span id="total-display" class="text-2xl font-bold text-indigo-600">BDT&nbsp;0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="bg-slate-50 p-6 text-center text-sm text-slate-500 border-t border-slate-200">
+                <p>Thank you for choosing EvoRise Solutions.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Global State
+            const state = {
+                isEditing: true,
+                invoiceMeta: {
+                    invoiceNumber: 'INV-2026-001',
+                    date: new Date().toISOString().split('T')[0],
+                    dueDate: new Date(new Date().setDate(new Date().getDate() + 14)).toISOString().split('T')[0],
+                },
+                client: {
+                    name: '',
+                    company: '',
+                    email: '',
+                    address: '',
+                },
+                items: [
+                    { id: Date.now(), description: '', quantity: 1, rate: 0 }
+                ],
+                tax: 0,
+                discount: 0,
+                notes: 'Thank you for your business. Please make payment within 14 days.'
+            };
+
+            // Helpers
+            const formatCurrency = (amount) => {
+                return new Intl.NumberFormat('en-BD', {
+                    style: 'currency',
+                    currency: 'BDT'
+                }).format(amount);
+            };
+
+            // Core Render and Update Functions
+            const updateClientPreview = () => {
+                const preview = document.getElementById('client-preview');
+                let html = '';
+                if (state.client.name) html += `<p class="font-bold text-lg">${state.client.name}</p>`;
+                if (state.client.company) html += `<p class="text-slate-600">${state.client.company}</p>`;
+                if (state.client.email) html += `<p class="text-slate-600">${state.client.email}</p>`;
+                if (state.client.address) html += `<p class="text-slate-600 mt-1">${state.client.address}</p>`;
+                if (!state.client.name && !state.client.company) html += `<p class="text-slate-400 italic">No client details provided</p>`;
+                preview.innerHTML = html;
+            };
+
+            const updateTotals = () => {
+                const subtotal = state.items.reduce((sum, item) => sum + (item.quantity * item.rate), 0);
+                const taxAmount = subtotal * (state.tax / 100);
+                const total = subtotal + taxAmount - state.discount;
+
+                document.getElementById('subtotal-display').textContent = formatCurrency(subtotal);
+                document.getElementById('tax-amount-display').textContent = formatCurrency(taxAmount);
+                document.getElementById('discount-amount-display').textContent = state.discount > 0 ? `-${formatCurrency(state.discount)}` : formatCurrency(0);
+                document.getElementById('total-display').textContent = formatCurrency(total);
+            };
+
+            const renderItems = () => {
+                const tbody = document.getElementById('items-tbody');
+                tbody.innerHTML = state.items.map((item) => `
+                    <tr class="hover:bg-slate-50/50 transition-colors" data-id="${item.id}">
+                        <td class="py-3 px-4">
+                            <input type="text" placeholder="Item description" value="${item.description}" class="show-edit w-full border border-transparent hover:border-slate-300 focus:border-indigo-500 rounded px-2 py-1 bg-transparent focus:bg-white focus:outline-none transition-all item-desc" />
+                            <span class="show-preview text-slate-800 item-desc-preview">${item.description || '-'}</span>
+                        </td>
+                        <td class="py-3 px-4 text-center">
+                            <input type="number" min="1" value="${item.quantity}" class="show-edit w-full text-center border border-transparent hover:border-slate-300 focus:border-indigo-500 rounded px-2 py-1 bg-transparent focus:bg-white focus:outline-none transition-all item-qty" />
+                            <span class="show-preview text-slate-800 item-qty-preview">${item.quantity}</span>
+                        </td>
+                        <td class="py-3 px-4 text-right">
+                            <input type="number" min="0" step="0.01" value="${item.rate}" class="show-edit w-full text-right border border-transparent hover:border-slate-300 focus:border-indigo-500 rounded px-2 py-1 bg-transparent focus:bg-white focus:outline-none transition-all item-rate" />
+                            <span class="show-preview text-slate-800 item-rate-preview">${formatCurrency(item.rate)}</span>
+                        </td>
+                        <td class="py-3 px-4 text-right font-medium text-slate-800">
+                            <input type="number" min="0" step="0.01" value="${item.quantity * item.rate}" class="show-edit w-full text-right border border-transparent hover:border-slate-300 focus:border-indigo-500 rounded px-2 py-1 bg-transparent focus:bg-white focus:outline-none transition-all font-medium item-amount-input" />
+                            <span class="show-preview item-amount-preview">${formatCurrency(item.quantity * item.rate)}</span>
+                        </td>
+                        <td class="py-3 px-4 text-right print:hidden show-edit">
+                            <button class="text-slate-400 hover:text-red-500 transition-colors btn-remove" ${state.items.length <= 1 ? 'disabled' : ''}>
+                                <i data-lucide="trash-2" class="w-[18px] h-[18px] inline-block"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+                lucide.createIcons();
+            };
+
+            // Input Listeners
+            
+            // Meta Inputs
+            const bindInputToPreview = (inputId, previewId, stateObj, stateKey) => {
+                const input = document.getElementById(inputId);
+                const preview = document.getElementById(previewId);
+                // Initialize values
+                input.value = stateObj[stateKey];
+                preview.textContent = stateObj[stateKey];
+                // Bind event
+                input.addEventListener('input', (e) => {
+                    stateObj[stateKey] = e.target.value;
+                    preview.textContent = e.target.value;
+                });
+            };
+
+            bindInputToPreview('invoice-number', 'invoice-number-preview', state.invoiceMeta, 'invoiceNumber');
+            bindInputToPreview('invoice-date', 'invoice-date-preview', state.invoiceMeta, 'date');
+            bindInputToPreview('invoice-due-date', 'invoice-due-date-preview', state.invoiceMeta, 'dueDate');
+
+            // Client Inputs
+            ['name', 'company', 'email', 'address'].forEach(field => {
+                document.getElementById(`client-${field}`).addEventListener('input', (e) => {
+                    state.client[field] = e.target.value;
+                    updateClientPreview();
+                });
+            });
+
+            // Notes, Tax, Discount
+            document.getElementById('notes-input').value = state.notes;
+            document.getElementById('notes-preview').textContent = state.notes;
+            document.getElementById('notes-input').addEventListener('input', (e) => {
+                state.notes = e.target.value;
+                document.getElementById('notes-preview').textContent = state.notes;
+            });
+
+            document.getElementById('tax-input').value = state.tax;
+            document.getElementById('tax-preview').textContent = `(${state.tax}%)`;
+            document.getElementById('tax-input').addEventListener('input', (e) => {
+                state.tax = Number(e.target.value) || 0;
+                document.getElementById('tax-preview').textContent = `(${state.tax}%)`;
+                updateTotals();
+            });
+
+            document.getElementById('discount-input').value = state.discount;
+            document.getElementById('discount-input').addEventListener('input', (e) => {
+                state.discount = Number(e.target.value) || 0;
+                updateTotals();
+            });
+
+            // Table Event Delegation (to preserve focus while editing)
+            document.getElementById('items-tbody').addEventListener('input', (e) => {
+                const tr = e.target.closest('tr');
+                if (!tr) return;
+                const id = parseInt(tr.dataset.id);
+                const item = state.items.find(i => i.id === id);
+
+                if (e.target.classList.contains('item-desc')) {
+                    item.description = e.target.value;
+                    tr.querySelector('.item-desc-preview').textContent = item.description || '-';
+                } 
+                else if (e.target.classList.contains('item-qty')) {
+                    item.quantity = Number(e.target.value) || 0;
+                    tr.querySelector('.item-qty-preview').textContent = item.quantity;
+                    tr.querySelector('.item-amount-input').value = item.quantity * item.rate;
+                    tr.querySelector('.item-amount-preview').textContent = formatCurrency(item.quantity * item.rate);
+                    updateTotals();
+                } 
+                else if (e.target.classList.contains('item-rate')) {
+                    item.rate = Number(e.target.value) || 0;
+                    tr.querySelector('.item-rate-preview').textContent = formatCurrency(item.rate);
+                    tr.querySelector('.item-amount-input').value = item.quantity * item.rate;
+                    tr.querySelector('.item-amount-preview').textContent = formatCurrency(item.quantity * item.rate);
+                    updateTotals();
+                }
+                else if (e.target.classList.contains('item-amount-input')) {
+                    // Back-calculate rate if total amount is directly changed
+                    const amount = Number(e.target.value) || 0;
+                    item.rate = amount / (item.quantity || 1);
+                    tr.querySelector('.item-rate').value = item.rate;
+                    tr.querySelector('.item-rate-preview').textContent = formatCurrency(item.rate);
+                    tr.querySelector('.item-amount-preview').textContent = formatCurrency(item.quantity * item.rate);
+                    updateTotals();
+                }
+            });
+
+            // Table Row Removal
+            document.getElementById('items-tbody').addEventListener('click', (e) => {
+                const btn = e.target.closest('.btn-remove');
+                if (btn && !btn.disabled) {
+                    const tr = btn.closest('tr');
+                    const id = parseInt(tr.dataset.id);
+                    state.items = state.items.filter(i => i.id !== id);
+                    renderItems();
+                    updateTotals();
+                }
+            });
+
+            // Add Item
+            document.getElementById('btn-add-item').addEventListener('click', () => {
+                state.items.push({ id: Date.now(), description: '', quantity: 1, rate: 0 });
+                renderItems();
+                updateTotals();
+            });
+
+            // Toggle Mode (Edit / Preview)
+            document.getElementById('btn-toggle-mode').addEventListener('click', () => {
+                state.isEditing = !state.isEditing;
+                const wrapper = document.getElementById('app-wrapper');
+                const capture = document.getElementById('invoice-capture');
+                const btnText = document.getElementById('btn-toggle-text');
+                const btnIcon = document.getElementById('btn-toggle-icon');
+
+                if (state.isEditing) {
+                    wrapper.classList.add('mode-edit');
+                    wrapper.classList.remove('mode-preview');
+                    capture.classList.add('mode-edit');
+                    capture.classList.remove('mode-preview');
+                    btnText.textContent = 'Preview Invoice';
+                    btnIcon.setAttribute('data-lucide', 'file-text');
+                } else {
+                    wrapper.classList.add('mode-preview');
+                    wrapper.classList.remove('mode-edit');
+                    capture.classList.add('mode-preview');
+                    capture.classList.remove('mode-edit');
+                    btnText.textContent = 'Edit Invoice';
+                    btnIcon.setAttribute('data-lucide', 'edit');
+                }
+                lucide.createIcons();
+            });
+
+            // PDF Download
+            document.getElementById('btn-download').addEventListener('click', () => {
+                const element = document.getElementById('invoice-capture');
+                if (window.html2pdf) {
+                    const opt = {
+                        margin: 0.3,
+                        filename: `EvoRise_Solutions_Invoice_${state.invoiceMeta.invoiceNumber || 'Document'}.pdf`,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true },
+                        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+                        pagebreak: { avoid: ['tr', '.avoid-break'] }
+                    };
+                    window.html2pdf().set(opt).from(element).save();
+                } else {
+                    window.print();
+                }
+            });
+
+            // Initial Render
+            updateClientPreview();
+            renderItems();
+            updateTotals();
+            lucide.createIcons();
+        });
+    </script>
+
+</body></html>

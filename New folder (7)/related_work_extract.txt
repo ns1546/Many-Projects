@@ -1,0 +1,538 @@
+Group No. : 07 
+Student Name and IDs : 20234103357 (Najmush Shakib), 20234103351 (Munim Halder) 
+Project Title : Multilingual (English and Bangla) Spam Detection Using NLP and Machine Learning. 
+ 
+Overview 
+ 
+While digital communication systems evolve, the malicious behavior toward such communication means 
+by the use of various kinds of cyberattacks (spam, smishing, phishing) has unfortunately grown. Thus, a 
+considerable amount of research has been done in the fields of machine learning, deep learning, and natural 
+language processing techniques. Starting from work on messaging systems, Almeida et al. [1] proposed the 
+publicly available Public SMS Spam Collection dataset. Various machine learning methods were 
+considered; it was discovered that Support Vector Machine (SVM) showed outstanding initial results and 
+reached 97.64% accuracy. Nevertheless, due to the brevity of SMS text, the variety of features and message 
+semantic understanding was severely restricted. In terms of email spam recognition, Fattahi et al. [9] created 
+"SpamDL" using GloVe vectorization and Bi-LSTM models. Though deep learning models proved to be 
+highly effective in recognizing patterns, they can be efficiently used only on emails, not informal messages 
+found in mobile phones. 
+ 
+There have also been approaches for identifying suspicious web links. Gupta et al. [2] created a hybrid 
+classifier that leveraged the attributes generated from the URL strings and the DOM structure of the 
+webpage and achieved 99.17% accuracy using XGBoost. The major weakness with this method was its 
+vulnerability to being evaded through embedded objects or any form of page which isn’t HTML. Another 
+approach was taken by Dutta [3], who based his work on identifying suspicious URL strings by using only 
+RNN-LSTM networks. He attained a high accuracy rate in dealing with zero-day attacks (97.4%) but faced 
+computational complexity and the inadequacy of unsupervised feature extraction techniques. On the other 
+hand, Kumar et al. [8] used heuristics generated from source codes and URLs to identify suspicious URLs 
+and used machine learning models like Random Forest. They were able to attain a high 91.4% accuracy 
+rate, but they found out that there was a need for further validation of the model. 
+ 
+To deal with the changing strategies of attackers through mobile channels, several researchers have 
+considered text normalization and behavioral factors. According to Goel et al. [5], a dedicated slang 
+dictionary was used for transforming abbreviations to text before classifying using the Naïve Bayes 
+technique, and thus achieving a 96.2% detection rate. However, in their study, they did not consider the 
+behavior of the URLs contained in the text at all. In contrast, "SmishGuard" by Samad et al. [6] combined 
+the techniques of TF-IDF, Latent Dirichlet Allocation, and Word2Vec to attain a detection accuracy of 
+98.47%. Later, Hosseinpour and Das [10] introduced a multi-signal method that integrates semantic 
+labeling and structure of messages for detecting evasive smishing, obtaining 97.89% accuracy on a massive 
+scale of data. The one disadvantage in such highly complex systems is the extensive dependency of these 
+models on English-based corpora. 
+ 
+To bridge the gap for resource-scarce languages, especially those involving speakers in South Asia, there 
+is a dire need for highly customized techniques. Alam et al. [4] considered fine-tuning multilingual 
+transformer architectures for text classifications of Bangla, with reasonable success but still recognizing the 
+lack of a good mono-language transformer in Bangla for handling the intricacies of local dialects. A 
+
+commendable step was taken by Talukder et al. [7], who came up with a multi-class deep learning system 
+using BiLSTM architecture to classify Bangla messages as ham, smishing, phishing, and financial frauds, 
+with an overall success rate of 99%. Though highly impressive, there is no mention of the NLP-specific 
+customization needed to detect localized new financial scams such as bKash, Nagad, and lottery scams, 
+which are often written in a mixture of Bangla, English, and phonetic spelling. 
+ 
+Comparison Table 
+Author 
+Dataset 
+Methods 
+Proposed 
+Architecture 
+Maximum 
+Accuracy 
+Minimum 
+Accuracy 
+Remarks / 
+Gaps 
+Almeida et 
+al. [1] 
+SMS 
+Spam 
+Collectio
+n (5,574 
+msgs) 
+SVM, 
+Naive 
+Bayes, 
+C4.5, 
+KNN 
+ML-based 
+SMS spam 
+filtering 
+evaluated with 
+dual tokenizers 
+97.64% 
+77.13% 
+Limited 
+feature 
+extraction 
+space; 
+struggles with 
+deep semantic 
+processing of 
+short texts. 
+Guptta et 
+al. [2] 
+6,000 
+URLs 
+(Legitim
+ate & 
+Phishtan
+k) 
+XGBoost, 
+RF, SVM, 
+DT, LR 
+Hybrid 
+Feature-Based 
+Phishing 
+Detection 
+leveraging 
+DOM structure 
+99.17% 
+96.25% 
+Susceptible to 
+evasion via 
+non-HTML 
+web elements 
+or embedded 
+objects 
+(Flash/iFrame
+s). 
+Dutta [3] 
+Phishtan
+k & 
+Crawler 
+(~13,700 
+URLs) 
+RNN-
+LSTM 
+Deep learning 
+URL detection 
+analyzing raw 
+string 
+sequences 
+97.40% 
+96.80% 
+Computationa
+lly heavy; 
+lacks 
+integration of 
+unsupervised 
+learning for 
+deeper 
+insights. 
+
+Alam et al. 
+[4] 
+6 distinct 
+Bangla 
+text 
+datasets 
+mBERT, 
+XLM-
+ROBERTa 
+Transformer-
+based Bangla 
+text 
+classification 
+fine-tuning 
+93.80% 
+53.50% 
+Hampered by 
+subword 
+tokenization 
+limits; relies 
+on 
+multilingual 
+rather than 
+monolingual 
+models. 
+Goel et al. 
+[5] 
+SMS 
+Spam 
+Collectio
+n v.1 
+(5,169 
+texts) 
+Naive 
+Bayes, 
+NoSlang 
+dictionary 
+Content-based 
+smishing 
+detection 
+utilizing text 
+normalization 
+96.20% 
+88.20% 
+Mostly 
+ignores 
+embedded 
+URL 
+behavior; 
+contextual 
+relevance 
+processing 
+needs 
+expansion. 
+Samad et 
+al. [6] 
+SMS 
+Phishing 
+Dataset 
+(7,261 
+texts) 
+TF-IDF-
+LDA, 
+Word2Vec
+, XGBoost 
+SmishGuard: 
+Hybrid ML and 
+NLP 
+architecture for 
+SMS threats 
+98.47% 
+82.83% 
+Completely 
+limited to 
+English 
+messages; 
+cannot 
+process 
+diverse 
+linguistic or 
+mixed threats. 
+Talukder 
+et al. [7] 
+11,599 
+multi-
+class 
+Bangla 
+SMS 
+BiLSTM, 
+BiGRU, 
+1D CNN 
+Automated 
+multi-class 
+classification 
+for Bangla 
+SMS security 
+99.00% 
+91.00% 
+Lacks 
+specialized 
+focus on 
+emerging 
+localized MFS 
+(Mobile 
+Financial 
+Services) 
+fraud tactics. 
+
+Kumar et 
+al. [8] 
+URL 
+Phishing 
+website 
+database 
+RF, KNN, 
+DT, SVM, 
+LR 
+ML framework 
+built on 
+heuristic 
+feature 
+extraction from 
+URLs 
+91.40% 
+Not 
+specified 
+Traditional 
+ML approach 
+limits 
+sequential 
+learning; 
+needs testing 
+on broader, 
+modern 
+datasets. 
+Fattahi et 
+al. [9] 
+Enron & 
+SpamAs
+sassin 
+datasets 
+GloVe, 
+Bi-LSTM 
+SpamDL: Deep 
+learning spam 
+detector using 
+global word 
+vectors 
+~98.00% 
+Not 
+specified 
+Optimized for 
+long-form 
+email 
+structures, 
+making it less 
+effective for 
+short, 
+dynamic 
+mobile SMS. 
+Hosseinpo
+ur & Das 
+[10] 
+84,000 
+global 
+SMS 
+message
+s 
+Semantic 
+tagging, 
+multi-
+signal 
+NLP 
+Multi-signal 
+model 
+combining 
+structural and 
+contextual 
+phrase embeds 
+97.89% 
+Not 
+specified 
+Focuses on 
+global/country
+-specific tags 
+but lacks 
+dedicated 
+linguistic 
+adaptation for 
+Bangla. 
+ 
+ 
+ 
+ 
+
+Feature Matrix 
+S. 
+No. 
+Featur
+es 
+[1] 
+[2] 
+[3] 
+[4] 
+[5] 
+[6] 
+[7] 
+[8] 
+[9] 
+[10] 
+Proposed 
+System 
+1 
+Traditio
+nal ML 
+Algorit
+hms 
+✓ 
+✓ 
+✗ 
+✗ 
+✓ 
+✓ 
+✗ 
+✓ 
+✗ 
+✗ 
+✓ 
+2 
+Advanc
+ed 
+Deep 
+Learnin
+g 
+✗ 
+✗ 
+✓ 
+✓ 
+✗ 
+✗ 
+✓ 
+✗ 
+✓ 
+✓ 
+✗ 
+3 
+NLP / 
+Custom 
+Text 
+Normal
+ization 
+✓ 
+✗ 
+✗ 
+✓ 
+✓ 
+✓ 
+✓ 
+✗ 
+✓ 
+✓ 
+✓ 
+4 
+Native 
+Bangla 
+Langua
+ge 
+Support 
+✗ 
+✗ 
+✗ 
+✓ 
+✗ 
+✗ 
+✓ 
+✗ 
+✗ 
+✗ 
+✓ 
+5 
+Localiz
+ed MFS 
+Fraud 
+Focus 
+(bKash/
+Nagad) 
+✗ 
+✗ 
+✗ 
+✗ 
+✗ 
+✗ 
+✗ 
+✗ 
+✗ 
+✗ 
+✓ 
+6 
+URL / 
+Link 
+Analysi
+s 
+✗ 
+✓ 
+✓ 
+✗ 
+✗ 
+✗ 
+✗ 
+✓ 
+✗ 
+✓ 
+✓ 
+
+Include
+d 
+7 
+Multi-
+class 
+Categor
+ization 
+✗ 
+✗ 
+✗ 
+✓ 
+✗ 
+✗ 
+✓ 
+✗ 
+✗ 
+✗ 
+✓ 
+8 
+High-
+Speed / 
+Low-
+Overhe
+ad 
+Deploy
+ment 
+✓ 
+✗ 
+✗ 
+✗ 
+✓ 
+✗ 
+✗ 
+✓ 
+✗ 
+✗ 
+✓ 
+ 
+ 
+References 
+[1] T. A. Almeida, J. M. G. Hidalgo, and A. Yamakami, "Contributions to the Study of SMS Spam 
+Filtering: New Collection and Results," Proceedings of the 11th ACM Symposium on Document 
+Engineering (DocEng '11), 2011, pp. 259-262. 
+ 
+[2] S. D. Guptta, K. T. Shahriyar, H. Alqahtani, D. Alsalman, and I. H. Sarker, "Modeling Hybrid 
+Feature-Based Phishing Websites Detection Using Machine Learning Techniques," Annals of Data 
+Science, vol. 9, pp. 1-21, 2022. 
+ 
+[3] A. K. Dutta, "Detecting Phishing Websites Using Machine Learning Technique," PLoS ONE, vol. 16, 
+no. 10, p. e0258361, 2021. 
+ 
+[4] T. Alam, A. Khan, and F. Alam, "Bangla Text Classification Using Transformers," in Proceedings of 
+the International Conference on Bangla Speech and Language Processing (ICBSLP), 2021, pp. 1-6. 
+ 
+[5] D. Goel, H. Ahmad, A. K. Jain, and N. K. Goel, "Machine Learning Driven Smishing Detection 
+Framework for Mobile Security," arXiv preprint arXiv:2412.09641v1, 2024. 
+ 
+[6] S. R. A. Samad, P. Ganesan, J. Rajasekaran, M. Radhakrishnan, H. Ammaippan, and V. Ramamurthy, 
+"SmishGuard: Leveraging Machine Learning and Natural Language Processing for Smishing Detection," 
+International Journal of Advanced Computer Science and Applications (IJACSA), vol. 14, no. 11, pp. 
+586-593, 2023. 
+ 
+ 
+
+[7] S. D. Talukder, M. S. Islam, M. H. Badhan, M. R. Hasan, A. K. M. A. Musa, and I. M. Saiful, 
+"Towards Secure Digital Communication: Deep Learning-Based Automated Classification of Malicious 
+Bangla Messages," in Proceedings of the 2026 IEEE 2nd International Conference on Quantum 
+Photonics, Artificial Intelligence, and Networking (QPAIN), 2026, pp. 1-6. 
+ 
+[8] N. K. D, N. S. R. Hemanth, Premnath S, Uma S, and N. K. V, "Detection of Phishing Websites Using 
+an Efficient Machine Learning Framework," International Journal of Engineering Research & 
+Technology (IJERT), vol. 9, no. 5, pp. 1282-1286, 2020. 
+ 
+[9] J. Fattahi, M. Mejri, M. Ziadia, and R. Ghayoula, "SpamDL: A High Performance Deep Learning 
+Spam Detector Using Stanford Global Vectors and Bidirectional Long Short-Term Memory Neural 
+Networks," in New Trends in Intelligent Software Methodologies, Tools and Techniques, H. Fujita et al., 
+Eds. IOS Press, 2022, pp. 143-162. 
+ 
+[10] S. Hosse [9] J. Fattahi, M. Mejri, M. Ziadia, and R. Ghayoula, "SpamDL: A High Performance Deep 
+Learning Spam Detector Using Stanford Global Vectors and Bidirectional Long Short-Term Memory 
+Neural Networks," in New Trends in Intelligent Software Methodologies, Tools and Techniques, H. 
+Fujita et al., Eds. IOS Press, 2022, pp. 143 
+

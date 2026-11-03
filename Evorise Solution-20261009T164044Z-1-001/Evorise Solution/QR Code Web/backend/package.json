@@ -1,0 +1,17 @@
+{
+  "name": "evorise-restaurant-backend",
+  "version": "1.0.0",
+  "description": "FAANG-Tier Microservices Suite for Evorise Restaurant OS",
+  "main": "gateway/index.js",
+  "scripts": {
+    "start": "node gateway/index.js",
+    "start:order": "node services/order-service/index.js",
+    "start:geo": "node services/geo-service/index.js",
+    "start:menu": "node services/menu-service/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "uuid": "^9.0.1"
+  }
+}

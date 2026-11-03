@@ -1,0 +1,271 @@
+# ROWNAA — Phase 3: Owner & Driver Registration System
+
+> This is the supply-side of the marketplace. Every car that a customer can book originates here. The registration must be thorough, the approval flow strict, and the owner dashboard functional like a mobile app.
+
+---
+
+## 1. Owner Registration Entry Point
+
+### Where It Begins
+- Homepage footer link: "List Your Car on Rownaa"
+- Login page: "Are you a car owner? Register your vehicle →"
+- Dedicated URL: `/owner/register`
+
+### Pre-Registration Screen
+- Hero message: "Earn with your car. Verified drivers earn more."
+- Two-column feature highlights: "Easy Registration" | "Secure Payments" | "6 Service Types" | "Admin Support"
+- "Start Registration" CTA button → begins 7-step flow
+
+---
+
+## 2. The 7-Step Registration Form UI
+
+### Progress Indicator
+- Sticky at top of form: Step bar showing steps 1–7
+- Current step: filled circle with number, accent color
+- Completed steps: checkmark circle, green
+- Future steps: empty circle, muted
+- Step label shown below each circle (desktop) / just number (mobile)
+
+### Navigation
+- "Next →" button (accent) — validates current step before proceeding
+- "← Back" button (ghost) — goes to previous step without losing data
+- Data is stored in React state across all steps until final submit
+- No partial saves to DB until Step 7 submit
+
+---
+
+### Step 1 — Basic Info
+
+| Field | Type | Validation |
+|---|---|---|
+| Full Name / Business Name | Text input | Required, min 3 chars |
+| Phone Number | Tel input | Required, 11 digits, triggers OTP verification inline |
+| OTP Box | 4-digit OTP input | Required to proceed — "Verify" button |
+| Email | Email input | Optional |
+| Business Type | Radio cards: "Individual Owner" / "Rental Agency" | Required — affects Step 2 and Step 3 |
+| Main Operating Zone | Structured area multi-select | Required (where their cars primarily operate) |
+
+**UI Note:** After entering phone, a "Send OTP" button appears. A 60-second countdown timer shows after OTP sent. "Resend" appears after countdown. Verified = green checkmark next to phone field.
+
+**Business Type Visual:** Two large radio cards side by side. "Individual Owner" card shows single-car icon + "1 car, driving yourself or with a driver". "Rental Agency" card shows fleet icon + "Multiple cars, rental business". Selected card gets accent border.
+
+---
+
+### Step 2 — Owner/Business Verification Documents
+
+| Field | Type | Condition | Notes |
+|---|---|---|---|
+| NID Card — Front | File upload | Always required | Accept: JPG, PNG, PDF. Max 5MB |
+| NID Card — Back | File upload | Always required | Same as above |
+| Trade License | File upload | Required if "Rental Agency" | Hidden for Individual |
+| Address Proof (Utility Bill) | File upload | Always required | |
+
+**File Upload UI Spec:**
+- Each upload slot = dashed-border box with cloud-upload icon
+- States: Empty → "Click or drag to upload" | Uploading → progress bar | Done → thumbnail preview with file name + "× Remove" button
+- Image files: show actual thumbnail preview
+- PDF files: show PDF icon + file name
+- Error (wrong type/too large): red border + error message inline
+
+**Step 2 Note for Agencies:** If "Rental Agency" was selected in Step 1, an additional box appears for Trade License upload with a subtle callout: "Required for registered businesses."
+
+---
+
+### Step 3 — Car Information
+
+**UI Header:** "Tell us about your car" + an "Add Another Car +" button (top right, for agencies)
+
+Each car is a collapsible card section. All fields below are per-car:
+
+| Field | Type | Validation |
+|---|---|---|
+| Car Name / Model | Text input (e.g. "Toyota Axio") | Required |
+| Car Type | Segmented: Sedan / SUV / Microbus / Noah-Hiace | Required |
+| Seat Count | Number stepper (min=2, max=20) | Required |
+| Manufacturing Year | Year dropdown (2000–current year) | Optional |
+| Car Color | Text input + color swatches (10 common colors selectable) | Required |
+| Number Plate | Text input, uppercase enforced | Required, unique |
+| Car Photos | 3 upload slots labeled: "Front View" / "Rear View" / "Interior" | Min 1 required |
+| BRTA Registration Paper | File upload | Required |
+| Fitness Certificate | File upload | Required |
+| Fitness Certificate Expiry Date | Date picker | Required — stored in DB for auto-suspend |
+| Tax Token | File upload | Required |
+| Tax Token Expiry Date | Date picker | Required |
+| Insurance Paper | File upload | Optional — shows "(Optional)" label |
+
+**"Add Another Car" Logic:**
+- Appears at bottom of Step 3 ONLY if "Rental Agency" was selected in Step 1
+- Clicking it clones the car form section with a new "Car #2" header
+- Each car section has a "Remove Car" button (except the first one)
+- All cars must be individually complete before proceeding to Step 4
+
+---
+
+### Step 4 — Driver Information
+
+**Header:** "Who will drive this car?"
+
+**Toggle at top:** "I am the driver" / "I have a separate driver"
+
+**If "I am the driver" is selected:**
+- All driver fields are hidden
+- A small note shows: "Your NID from Step 2 will serve as driver verification."
+- "Next →" button is enabled immediately
+
+**If "I have a separate driver" is selected:**
+
+| Field | Type | Validation |
+|---|---|---|
+| Driver's Full Name | Text input | Required |
+| Driver's Phone | Tel input | Required |
+| Driving License — Front | File upload | Required |
+| Driving License — Back | File upload | Required |
+| Driver's Photo | File upload (portrait) | Required |
+| Years of Experience | Number stepper (min=0) | Optional |
+
+**For multi-car agencies:** A driver can be added per-car, or one driver can be marked as the default for all cars (a "Use for all cars" checkbox on the driver card).
+
+**MVP Note:** Driver info is optional for MVP. Show an "I'll add driver details later" link that skips Step 4. Flag this owner account as `driver_pending`.
+
+---
+
+### Step 5 — Service Preference
+
+| Field | Type | Validation |
+|---|---|---|
+| Services Offered | Checkbox cards: 6 service options | Required — must select exactly 1 to 3 (enforce max 3 with UI counter) |
+| Availability | Radio: Full-time / Part-time / Weekend Only | Required |
+| Operating Areas | Multi-select dropdown (list of districts/areas) | Required — min 1 |
+
+**Service Checkbox Cards:**
+- 6 cards in a 3×2 grid (desktop) / 2×3 grid (mobile)
+- Each card: service icon + name + 1-line description
+- Selected = accent border + checkmark
+- Counter badge: "2/3 selected" — turns red if user tries to select 4th
+
+---
+
+### Step 6 — Payment / Bank Info
+
+| Field | Type | Validation |
+|---|---|---|
+| bKash Number | Tel input | Required (at least one payment method) |
+| Nagad Number | Tel input | Optional |
+| Bank Name | Text input | Optional |
+| Account Holder Name | Text input | Required if bank details entered |
+| Account Number | Text input | Required if bank details entered |
+| Branch Name | Text input | Optional |
+
+**UI Note:** bKash number is required. Bank details section is collapsible, labeled "Add Bank Account (Optional)". If expanded, account holder name and account number become required.
+
+---
+
+### Step 7 — Review & Submit
+
+- Full summary of all entered data displayed in read-only sections
+- Each section has an "Edit" link that navigates back to that specific step
+- Checkbox: "I confirm all information provided is accurate and genuine."
+- "Submit Application" button (accent, full-width)
+
+**On Submit:**
+1. POST `/api/owners/register` with all accumulated data (including all file upload URLs from Cloudinary)
+2. Business record created with `status = 'pending'`
+3. Notification sent to admin panel
+4. Customer sees "Application Submitted!" success screen
+5. Screen shows: "We'll review your documents within 24–48 hours. You'll receive an SMS once approved."
+
+---
+
+## 3. Approval Notification Flow
+
+### On Approval (Admin triggers):
+- `businesses.status` updated to `'approved'`
+- SMS sent to owner phone: "Congratulations! Your Rownaa registration has been approved. You can now log in and start receiving bookings."
+- Email sent (if email provided)
+- Owner's cars remain in `pending` status until each is individually approved (two-layer, see Phase 4)
+
+### On Rejection (Admin triggers):
+- `businesses.status` updated to `'rejected'`, `rejection_reason` field filled
+- SMS: "Your Rownaa registration was not approved. Reason: [reason]. Please resubmit with correct documents."
+- Owner can log in, see rejection reason, re-upload documents, and resubmit
+
+---
+
+## 4. Owner Dashboard (After Approval)
+
+### Dashboard Layout (Desktop)
+- Left sidebar: Logo | Dashboard | Bookings | My Cars | Earnings | Profile | Logout
+- Main content area: changes per section
+
+### Dashboard Layout (Mobile) — App-Like
+- Full-screen content area
+- Bottom navigation bar (fixed): Home icon | Bookings icon | Cars icon | Earnings icon | Profile icon
+- No sidebar on mobile. Each section is full-screen page transition (slide left/right animation)
+
+---
+
+### Dashboard Home Tab
+- Welcome banner: "Hello, [Name]. Your account is Active."
+- KPI row (3 cards): "New Requests" | "Active Bookings" | "Net Earnings This Month"
+- Section: Recent booking requests (last 5) with Accept/Reject buttons
+- Section: Expiry alerts — red alert card if any fitness cert expires within 30 days
+
+---
+
+### Bookings Tab
+
+**Tab sub-nav:** New Requests | Upcoming | History
+
+#### New Requests
+- List of `pending` bookings assigned to this owner's cars
+- Each card: Service type | Pickup location | Date & Time | Passenger count | Customer name
+- Two buttons: "Accept" (green) | "Reject" (red)
+- Accept → booking status moves to `confirmed`, customer gets SMS
+- Reject → booking goes back to `pending` in admin panel for reassignment
+
+#### Upcoming Bookings
+- List of `confirmed` bookings
+- Each card: Same info + "Start Trip" button
+- "Start Trip" → `PATCH /api/bookings/:id/start-trip` → status = `ongoing`, records `trip_started_at`
+
+#### Ongoing Bookings
+- Active trip card: prominent, with "End Trip" button
+- "End Trip" → modal appears: "Enter Final Bill Amount" + "Payment Received" confirmation → `PATCH /api/bookings/:id/end-trip`
+
+#### History
+- List of `completed` and `cancelled` bookings — read-only
+
+---
+
+### My Cars Tab
+
+- List of all cars under this business
+- Each car card: photo | model | plate | status badge | seats | type
+- Toggle switch: "Available / Unavailable" — `PATCH /api/cars/:id/availability`
+- "Edit Details" button → edit car info form (pre-filled)
+- "Update Document" button → individual document re-upload (e.g. new fitness cert)
+- Status display: Active / Inactive / Suspended (with reason if suspended)
+
+---
+
+### Earnings Tab
+
+**KPI cards:**
+- Total Earned (all time)
+- This Month's Earnings
+- Commission Deducted (10% total)
+- Net Payable
+
+**Earnings Table:**
+- Columns: Date | Booking ID | Service | Total Amount | Commission | Net
+- Filter by: This week / This month / Date range
+
+---
+
+### Profile Tab
+
+- Edit basic info (name, email, operating zone)
+- Re-upload verification documents
+- Change bKash / bank info
+- "Change Password" option (if email login set up)

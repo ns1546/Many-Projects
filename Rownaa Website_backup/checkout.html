@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Checkout — Rownaa®</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <link rel="stylesheet" href="css/design.css?v=3" />
+  <script src="js/auth.js"></script>
+
+  <style>
+    body { background: var(--bg-base); color: var(--text-primary); }
+    .checkout-wrap { max-width: 1000px; margin: 100px auto; display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; padding: 0 24px; }
+    
+    .panel { background: var(--bg-panel); border: 1px solid var(--border-strong); border-radius: 12px; padding: 32px; }
+    .panel h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 24px; }
+    
+    .f-group { margin-bottom: 20px; }
+    .f-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .f-input { width: 100%; background: var(--bg-base); border: 1px solid var(--border-strong); border-radius: 6px; padding: 12px 16px; color: var(--text-primary); font-size: 1rem; outline: none; transition: border-color 0.2s; }
+    .f-input:focus { border-color: var(--text-primary); }
+    select.f-input { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px; -webkit-appearance: none; }
+    
+    .summary-card { background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: 12px; padding: 24px; position: sticky; top: 100px; }
+    .sc-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px; }
+    .sc-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.9rem; color: var(--text-secondary); }
+    .sc-total { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-subtle); font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
+    
+    .btn-checkout { width: 100%; background: var(--accent); color: #000; font-weight: 700; font-size: 1rem; padding: 16px; border-radius: 6px; border: none; cursor: pointer; margin-top: 24px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity 0.2s; }
+    .btn-checkout:hover { opacity: 0.9; }
+
+    /* Success Overlay */
+    .success-overlay { position: fixed; inset: 0; background: var(--bg-base); z-index: 9999; display: none; align-items: center; justify-content: center; flex-direction: column; }
+    .success-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
+    .success-overlay i { font-size: 5rem; color: var(--success); margin-bottom: 24px; }
+    .success-overlay h2 { font-family: var(--font-display); font-size: 2rem; margin-bottom: 8px; }
+
+    @media (max-width: 800px) {
+      .checkout-wrap { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="top-header" style="position:fixed;top:0;width:100%;background:rgba(5,5,5,0.9);backdrop-filter:blur(10px);z-index:1000;padding:20px 40px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border-subtle);">
+  <a href="index.html" class="brand-logo" style="color:var(--text-primary);text-decoration:none;font-family:var(--font-display);font-size:1.5rem;font-weight:800;letter-spacing:-0.05em;">ROWNAA<span style="color:var(--text-tertiary);font-weight:400;">®</span></a>
+  <a href="find-cars.html" class="nav-text-link" style="color:var(--text-secondary);text-decoration:none;"><i class="ph ph-arrow-left"></i> Back to Fleet</a>
+</header>
+
+<div class="checkout-wrap">
+  <div class="panel">
+    <h2>Booking Details</h2>
+    <form id="checkoutForm">
+      <div class="f-group">
+        <label class="f-label">Selected Vehicle</label>
+        <input type="text" class="f-input" id="c-vehicle" readonly style="opacity:0.7"/>
+      </div>
+      
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <div class="f-group">
+          <label class="f-label">Full Name</label>
+          <input type="text" class="f-input" id="c-name" required placeholder="John Doe"/>
+        </div>
+        <div class="f-group">
+          <label class="f-label">Email Address</label>
+          <input type="email" class="f-input" id="c-email" required placeholder="john@example.com"/>
+        </div>
+      </div>
+
+      <div class="f-group">
+        <label class="f-label">Service Required</label>
+        <select class="f-input" id="c-service" onchange="updatePrice()">
+          <option value="hourly">Hourly Rental (Inside Dhaka)</option>
+          <option value="intercity">Intercity Travel (Outside Dhaka)</option>
+          <option value="airport">Airport Transfer (Zone 1)</option>
+        </select>
+      </div>
+      
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <div class="f-group">
+          <label class="f-label">Date</label>
+          <input type="date" class="f-input" id="c-date" required/>
+        </div>
+        <div class="f-group">
+          <label class="f-label">Time</label>
+          <input type="time" class="f-input" id="c-time" required/>
+        </div>
+      </div>
+    </form>
+  </div>
+  
+  <div>
+    <div class="summary-card">
+      <div class="sc-title">Payment Summary</div>
+      <div class="sc-row">
+        <span>Base Fare</span>
+        <span id="s-base">৳0</span>
+      </div>
+      <div class="sc-row">
+        <span>VAT (5%)</span>
+        <span id="s-vat">৳0</span>
+      </div>
+      <div class="sc-row" id="s-discount-row" style="display:none; color:var(--success)">
+        <span>Discount</span>
+        <span id="s-discount">-৳0</span>
+      </div>
+      
+      <div style="margin: 16px 0; display:flex; gap:8px;">
+        <input type="text" id="c-promo" class="f-input" placeholder="Promo Code (e.g. ROWNAA20)" style="margin:0; text-transform:uppercase" onchange="updatePrice()"/>
+        <button class="btn-primary" style="padding: 0 16px; border-radius:4px" onclick="updatePrice()">Apply</button>
+      </div>
+
+      <div class="sc-total">
+        <span>Total Payable</span>
+        <span id="s-total">৳0</span>
+      </div>
+      
+      <button class="btn-checkout" onclick="processBooking()" type="button">
+        Confirm Booking <i class="ph ph-lock-key"></i>
+      </button>
+      <div style="font-size:0.75rem;color:var(--text-secondary);text-align:center;margin-top:16px;">
+        <i class="ph ph-shield-check"></i> Secure Checkout Process
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="success-overlay" id="successScreen">
+  <i class="ph-fill ph-check-circle"></i>
+  <h2>Booking Confirmed!</h2>
+  <p style="color:var(--text-secondary)">Redirecting to your dashboard...</p>
+</div>
+
+<script src="js/pricing-data.js"></script>
+<script src="js/pricing.js"></script>
+<script src="js/bookings.js"></script>
+<script src="js/inventory.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  let currentCarClass = 'sedan_economy';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const car = urlParams.get('car') || 'Toyota Axio';
+    document.getElementById('c-vehicle').value = car;
+    
+    // Naive mapper for demo
+    const carLower = car.toLowerCase();
+    if(carLower.includes('premio')) currentCarClass = 'sedan_premium';
+    else if(carLower.includes('prado')) currentCarClass = 'luxury';
+    else if(carLower.includes('hiace')) currentCarClass = 'hiace';
+    else currentCarClass = 'sedan_economy';
+    
+    // Pre-fill user data if logged in
+    const sessionStr = null /* Migrated to HttpOnly */;
+    if(window.AppState && window.AppState.user) {
+      const session = window.AppState.user;
+      if(session) {
+          document.getElementById('c-name').value = session.name || '';
+          document.getElementById('c-email').value = session.role === 'customer' ? 'customer@rownaa.com' : '';
+      }
+    }
+    
+    updatePrice();
+  });
+
+  function updatePrice() {
+    if(!window.PricingEngine) return;
+    const service = document.getElementById('c-service').value;
+    let result = null;
+    
+    if (service === 'hourly') {
+      result = window.PricingEngine.calculateHourly(currentCarClass, false, 0, 0);
+    } else if (service === 'intercity') {
+      result = window.PricingEngine.calculateIntercity(currentCarClass === 'luxury' || currentCarClass === 'hiace' ? 'premium' : 'economy', 200, false, 0);
+    } else if (service === 'airport') {
+      result = window.PricingEngine.calculateAirport('z1', currentCarClass, 'Airport Drop-off', false);
+    }
+    
+    if (result) {
+      let base = result.baseFare || result.total;
+      
+      let discount = 0;
+      const promo = document.getElementById('c-promo').value.toUpperCase();
+      if (promo === 'ROWNAA20') {
+          discount = Math.round(base * 0.20); // 20% discount
+          document.getElementById('s-discount-row').style.display = 'flex';
+          document.getElementById('s-discount').textContent = `-৳${discount}`;
+      } else {
+          document.getElementById('s-discount-row').style.display = 'none';
+      }
+      
+      const afterDiscount = base - discount;
+      
+      document.getElementById('s-base').textContent = `৳${base}`;
+      const vat = Math.round(afterDiscount * 0.05);
+      document.getElementById('s-vat').textContent = `৳${vat}`;
+      document.getElementById('s-total').textContent = `৳${afterDiscount + vat}`;
+    }
+  }
+
+  async function processBooking() {
+    const name = document.getElementById('c-name').value;
+    const email = document.getElementById('c-email').value;
+    const date = document.getElementById('c-date').value;
+    const time = document.getElementById('c-time').value;
+    const service = document.getElementById('c-service').value;
+    
+    if(!name || !email || !date || !time) {
+      alert("Please fill out all required fields.");
+      return;
+    }
+
+    const priceText = document.getElementById('s-total').textContent;
+    const vehicleName = document.getElementById('c-vehicle').value;
+    
+    // Find car owner
+    let ownerId = 'biz-001'; // Fallback
+    if (window.InventoryManager) {
+        const allCars = await window.InventoryManager.getAll();
+        const car = allCars.find(c => c.name === vehicleName);
+        if (car && car.ownerId) ownerId = car.ownerId;
+    }
+    
+    // Find customer ID
+    let customerId = 'cust-1'; // Fallback
+    const sessionStr = null /* Migrated to HttpOnly */;
+    if (sessionStr && window.rownaaSession) {
+        const session = window.AppState.user;
+        if (session && session.userId) customerId = session.userId;
+    }
+    
+    // Save to BookingsManager
+    await window.BookingsManager.add({
+      customerId: customerId,
+      ownerId: ownerId,
+      customerName: name,
+      customerEmail: email,
+      vehicle: vehicleName,
+      service: service,
+      dateTime: `${date} ${time}`,
+      price: priceText
+    });
+    
+    document.getElementById('successScreen').classList.add('active');
+    
+    setTimeout(() => {
+      window.location.href = 'customer-panel.html';
+    }, 2000);
+  }
+</script>
+</body>
+</html>

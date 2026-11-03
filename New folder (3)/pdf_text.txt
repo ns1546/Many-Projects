@@ -1,0 +1,545 @@
+BANGLADESH UNIVERSITY OF
+BUSINESS AND TECHNOLOGY
+Department of Computer Science and Engineering
+Dhaka, Bangladesh
+PROJECT
+PROPOSAL
+Smart Air Quality Monitoring &
+Health Risk Prediction System
+Using ESP32 + Machine Learning + IoT
+Course Name :Internet of Things (IoT) Lab
+Course Code : CSE-342
+Session : 2026 FALL
+Semester : Fall 2026
+Submitted By
+Section: 04 Intake : 52
+Mohammad Zunayed 20234103328
+Najmush Shakib 20234103357
+Omar Faruk Jihad 20234103145
+Munim Halder 20234103351Submitted To
+Name : Sudipa Saha
+Desig. : Lecturer
+Dept. : CSE
+Univ. : BUBTSmart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+Submission Date:June 13, 2026•Academic Year:2026
+Department of Computer Science and Engineering•BUBT 2Contents
+0.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+0.2 Problem Statement . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+0.3 Proposed Solution . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+0.4 Objectives . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+0.4.1 Main Objective . . . . . . . . . . . . . . . . . . . . . . . . . 4
+0.4.2 Specific Objectives . . . . . . . . . . . . . . . . . . . . . . . 5
+0.5 Course Outcome Alignment . . . . . . . . . . . . . . . . . . . . . . 5
+0.6 System Architecture . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+0.6.1 System Layers . . . . . . . . . . . . . . . . . . . . . . . . . . 7
+0.6.2 Block Diagram . . . . . . . . . . . . . . . . . . . . . . . . . 7
+0.6.3 System Working Flow . . . . . . . . . . . . . . . . . . . . . 8
+0.7 Required Components and Budget . . . . . . . . . . . . . . . . . . 9
+0.8 Machine Learning Approach . . . . . . . . . . . . . . . . . . . . . . 11
+0.8.1 Model 1: Linear Regression . . . . . . . . . . . . . . . . . . 11
+0.8.2 Model 2: Decision Tree Classifier . . . . . . . . . . . . . . . 12
+0.8.3 Training Platform and Data . . . . . . . . . . . . . . . . . . 12
+0.9 Software and Tools Required . . . . . . . . . . . . . . . . . . . . . . 13
+0.10 Project Implementation Timeline . . . . . . . . . . . . . . . . . . . 14
+0.11 Expected Outcomes . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+0.11.1 Technical Outcomes . . . . . . . . . . . . . . . . . . . . . . . 15
+0.11.2 Academic Outcomes . . . . . . . . . . . . . . . . . . . . . . 15
+0.11.3 Social Outcomes . . . . . . . . . . . . . . . . . . . . . . . . 15
+0.12 Innovation and Uniqueness . . . . . . . . . . . . . . . . . . . . . . . 15
+0.13 Comparison with Existing Solutions . . . . . . . . . . . . . . . . . . 17
+0.14 Risk Assessment and Mitigation . . . . . . . . . . . . . . . . . . . . 18
+0.15 Conclusion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+References . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 19
+1Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+0.1. Introduction
+Air pollution is one of the most critical environmental and public health challenges
+facing Bangladesh today. According to theIQAir World Air Quality Report
+2023, Dhaka consistently ranks among thetop three most polluted capital
+cities in the world, with an annual average PM2.5 concentration far exceeding the
+World Health Organization (WHO) safe limit of 5 µg/m3. The health consequences
+of prolonged exposure to poor air quality are severe and well-documented, including
+respiratory diseases, cardiovascular disorders, lung cancer, and premature death.
+Despite the gravity of this problem, the vast majority of people in Bangladesh
+haveno access to real-time, localized air quality information. The few
+government monitoring stations that exist are limited in number and geographic
+coverage, and none providepredictive warningsbefore air quality deteriorates
+to dangerous levels. People are routinely exposed to hazardous air without any
+knowledge or warning.
+This project proposes aSmart Air Quality Monitoring and Health Risk
+Prediction Systemthat addresses this critical gap. The system uses anESP32
+microcontroller, multiple environmental and gas sensors, aMachine Learning
+(ML)prediction engine, and anIoT cloud platformto continuously monitor
+air quality, calculate a real-timeAir Quality Index (AQI)score, predict future
+health risk, and provide immediate alerts through multiple channels.
+Key Motivation
+Dhakais ranked among the world’s most polluted cities. This affordable
+system (under4,500) provides real-time monitoring andpredictivehealth
+risk warnings, giving people time to act BEFORE air becomes dangerous — a
+capability that no existing affordable system currently provides in Bangladesh.
+0.2. Problem Statement
+Core Problems Identified
+Problem 1: No Localized Real-Time Monitoring Government AQI
+stations are limited to a few locations in major cities. Air quality varies
+significantly between neighborhoods, buildings, and even individual rooms.
+No affordable device exists for individuals or institutions to monitor their
+immediate environment.
+Department of Computer Science and Engineering•BUBT 2Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+Problem 2: Reactive Systems Only All existing low-cost systems only
+measurecurrentconditions. They alert usersafterthe air has already
+become dangerous. No system warns usersbeforeair quality deteriorates.
+Problem 3: Single Pollutant Detection Simple sensor systems typically
+detect only one gas. True health risk depends on the combined effect of
+multiple pollutants: CO 2, CO, PM2.5, temperature, and humidity together
+determine real danger levels.
+Problem 4: No Health Guidance for Common People Raw sensor
+data such as ADC values and ppm numbers is meaningless to ordinary
+users. A clear, standardized, and actionable health status system is needed.
+Problem 5: High Cost of Commercial Solutions Commercial air
+quality monitors with prediction capability cost 10,000 to 30,000+,
+making them completely unaffordable for most Bangladeshi households
+and institutions.
+0.3. Proposed Solution
+Proposed Solution Overview
+This project proposes a complete, intelligent, and low-cost air quality moni-
+toring system with the following key capabilities:
+Department of Computer Science and Engineering•BUBT 3Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+✓MEASUREmultiple pollutants simultaneously: CO 2, CO,
+PM2.5 dust, temperature, and humidity
+✓CALCULATEreal-time AQI score every 2 seconds using
+standardized US EPA formula
+✓PREDICTfuture AQI using Linear Regression ML model 1
+hour in advance
+✓CLASSIFYhealth risk using Decision Tree: Good / Moder-
+ate / Unhealthy / Hazardous
+✓DISPLAYlive data on local OLED screen without requiring
+internet
+✓INDICATEhealth level via color-coded RGB LED: Green /
+Yellow / Red / Blue
+✓ALERTvia buzzer automatically when air becomes Unhealthy
+or Hazardous
+✓UPLOADall data to ThingSpeak IoT cloud every 15 seconds
+via WiFi
+✓MONITORfrom anywhere via professional web dashboard
+on any device
+✓COSTunder 4,500 total, affordable for homes, schools, and
+offices in Bangladesh
+0.4. Objectives
+0.4.1 Main Objective
+To design and implement a multi-sensor IoT-based air quality monitoring
+system that usesMachine Learningto predict future AQI values and health
+risk levels, providingproactive early warningsto users through local and
+remote monitoring channels at an affordable cost suitable for deployment in
+Bangladesh.
+Department of Computer Science and Engineering•BUBT 4Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+0.4.2 Specific Objectives
+Specific Objectives
+O1. To integrateMQ-135,MQ-7,GP2Y1010, andDHT22sensors with
+ESP32 to simultaneously measure CO 2, CO, PM2.5 dust, temperature,
+and humidity in real time.
+O2. To calculate a real-timeAir Quality Index (AQI)score from all
+sensor readings using the standardized US EPA multi-pollutant formula.
+O3. To collect training data from IoT deployment and public datasets, and
+train aLinear RegressionML model to predict the AQI value for the
+next one hour.
+O4. To train aDecision Tree classifierto categorize the health risk level
+asGood, Moderate, Unhealthy,orHazardousbased on current and
+predicted AQI values.
+O5. To display live sensor readings, AQI score, and ML predictions on a
+localOLED displayusing three rotating information pages.
+O6. To provide color-coded health status indication through anRGB LED
+and an audio alarm through anactive buzzerwhen dangerous condi-
+tions are detected.
+O7. To upload all sensor data and ML predictions toThingSpeak IoT
+cloudevery 15 seconds for remote monitoring via a mobile-accessible
+dashboard.
+O8. To build a professionalweb dashboardusing modern AI tools that dis-
+plays live AQI, prediction results, historical charts, and health guidance
+accessible from any device worldwide.
+0.5. Course Outcome Alignment
+Table 1 demonstrates how this project directly addresses all defined course outcomes.
+Department of Computer Science and Engineering•BUBT 5Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+Table 1: Course Outcome Mapping
+CO Description How This Project Addresses It
+CO1Demonstrate the
+functionality of ArduinoESP32 programmed in Arduino IDE.
+Four sensors interfaced using analog,
+digital, and I2C protocols. GPIO pins
+control LED, buzzer, OLED, and relay.
+12-bit ADC reads MQ gas sensors. Spe-
+cial 280µs timing code implemented for
+dust sensor.
+CO2Analyze various IoT
+techniques and apply to
+real-life problemsWiFi communication to ThingSpeak
+cloud. REST API used for data up-
+load every 15 seconds. Mobile-accessible
+dashboard. Multi-sensor fusion. Direct
+real-life application to Bangladesh’s se-
+vere air pollution crisis.
+CO3Design and implement a
+complete IoT projectComplete end-to-end system designed
+and built from scratch. Includes hard-
+ware assembly, firmware development,
+ML model training, IoT cloud integra-
+tion, and professional web dashboard
+deployment.
+0.6. System Architecture
+Department of Computer Science and Engineering•BUBT 6Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+0.6.1 System Layers
+Table 2: System Architecture Layers
+Layer Components and Function
+Sensing
+LayerMQ-135, MQ-7, GP2Y1010, DHT22 sensors. Continu-
+ously measures CO 2, CO, PM2.5 dust, temperature, and
+humidity every 2 seconds.
+Processing
+LayerESP32 DevKit V1 microcontroller. Reads all sensor data,
+computes AQI score, executes ML prediction logic, and
+manages all inputs and outputs.
+ML
+Prediction
+LayerLinear Regression predicts future AQI value. Decision
+Tree classifies health risk level. Both models run directly
+on ESP32 (Edge ML).
+Display &
+Alert LayerOLED shows live data on 3 rotating pages. RGB LED
+indicates health level by color. Buzzer sounds alarm for
+dangerous conditions.
+Cloud &
+IoT LayerThingSpeak receives all data every 15 seconds via WiFi.
+Web dashboard shows charts, gauges, ML predictions,
+and health guidance live.
+0.6.2 Block Diagram
+Figure 1 shows the complete system block diagram.
+Department of Computer Science and Engineering•BUBT 7Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+MQ-135
+CO 2/VOC
+Gas SensorMQ-7
+Carbon
+MonoxideGP2Y1010
+Dust/PM2.5
+SensorDHT22
+Temp &
+HumiditySENSING LAYER
+ESP32 DevKit V1
+Arduino IDE Programming
+AQI Calculator+ML Engine
+(Linear Regression+Decision Tree)
+OLED
+Display
+Live DataRGB LED
+Color
+IndicatorActive
+Buzzer
+AlarmThingSpeak
+Cloud +
+Web Dashboard
+LOCAL OUTPUT
+CLOUD & WEB
+Figure 1: Complete System Block Diagram
+0.6.3 System Working Flow
+Step-by-Step System Operation
+Step 1: Sensor Reading (Every 2 seconds) ESP32 reads all four sen-
+sors simultaneously: MQ-135 provides CO 2/gas value, MQ-7 provides CO
+gas value, GP2Y1010 provides dust density in µg/m3, and DHT22 provides
+temperature in°C and relative humidity in %.
+Step 2: AQI Calculation ESP32 converts each sensor reading to an AQI
+sub-index using the US EPA formula. The overall AQI score is the
+maximum of all sub-indices. Health level is determined: Good, Moderate,
+Unhealthy, or Hazardous.
+Step 3: ML Prediction Linear Regression predicts the AQI value for the
+next one hour. Decision Tree classifies the predicted future health risk
+level. AQI trend analysis determines if air quality is rising, falling, or
+stable.
+Step 4: Local Output Update OLED display shows three rotating infor-
+Department of Computer Science and Engineering•BUBT 8Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+mation pages. RGB LED changes color to match current health level.
+Buzzer sounds if health level reaches Unhealthy or Hazardous.
+Step 5: Cloud Upload (Every 15 seconds) ESP32 connects to WiFi
+and sends an HTTP request to ThingSpeak API with 8 data fields including
+all sensor values, AQI score, and ML predictions.
+Step 6: Web Dashboard Update JavaScript on the web dashboard
+fetches ThingSpeak data every 15 seconds and updates all gauges, charts,
+and health advice panels automatically in the user’s browser.
+0.7. Required Components and Budget
+Table 3 lists all hardware components required for this project with estimated costs
+in Bangladeshi Taka (BDT).
+Department of Computer Science and Engineering•BUBT 9Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+Table 3: Complete Bill of Materials (BOM)
+#Component Name Qty Price (BDT)
+1ESP32 DevKit V1 (ESP32-WROOM-
+32)1 650 – 900
+2MQ-135 Gas Sensor Module 1 150 – 250
+3MQ-7 Carbon Monoxide Sensor Mod-
+ule1 200 – 300
+4GP2Y1010AU0F Dust/PM2.5 Sen-
+sor1 450 – 600
+5DHT22 Temperature & Humidity
+Sensor1 300 – 400
+6OLED Display 0.96” I2C (SSD1306) 1 250 – 350
+7RGB LED Common Cathode 2 20 – 40
+8Active Buzzer 5V 1 30 – 50
+9220Ω Resistors (pack) 5 10 – 20
+10 10kΩ Resistors (pack) 2 10 – 15
+11 150Ω Resistors 2 5 – 10
+12 10µF Electrolytic Capacitors 2 10 – 15
+13 Breadboard Full Size (830 points) 1 150 – 200
+14Jumper Wires Set (Male-Male +
+Male-Female)2 150 – 200
+15 Micro USB Cable 1 80 – 120
+16 5V 2A DC Power Adapter 1 300 – 400
+17 Project Enclosure Box 1 200 – 300
+Total Estimated Budget 3,000 – 4,500
+Where to Buy in Bangladesh:All components are readily available from
+TechShopBD(techshopbd.com),RoboticsBD(roboticsbd.com),Daraz
+Bangladesh(daraz.com.bd), and physical electronics markets atNawabpur
+RoadandMultiplan Center, Dhaka.
+Department of Computer Science and Engineering•BUBT 10Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+0.8. Machine Learning Approach
+ML Model Description
+What We Are Predicting
+Input−→ Output
+Current sensor readings AQI value and health
+(now) risk 1 hour from now
+This system isPREDICTIVEnotREACTIVE.
+It warns usersBEFOREair becomes dangerous.
+0.8.1 Model 1: Linear Regression
+Purpose:Predict the exact future AQI value (a number)
+Algorithm:Linear Regression from Python scikit-learn
+Input Features: Current AQI, Temperature, Humidity, AQI Trend, Dust
+Density, CO Level (6 features total)
+Target Variable:AQI value 1 hour later
+Expected Performance:R2Score greater than 0.85
+Mathematical Form:
+ˆyAQI=β 0+β 1xAQI+β 2xtemp+β 3xhumid +β 4xtrend+β 5xdust+β 6xCO
+Department of Computer Science and Engineering•BUBT 11Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+0.8.2 Model 2: Decision Tree Classifier
+Purpose:Classify future health risk level (a category)
+Algorithm:Decision Tree Classifier from Python scikit-learn
+Input Features:Same 6 features as Linear Regression model
+Output Classes: 0 = GOOD, 1 = MODERATE, 2 = UNHEALTHY, 3 =
+HAZARDOUS
+Expected Performance:Classification accuracy greater than 85%
+Deployment: Model rules converted to C++ and embedded in ESP32
+firmware for offline Edge ML inference
+0.8.3 Training Platform and Data
+Table 4: ML Training Resources
+Resource Details
+Training Platform Google Colab (free, browser-based Python)
+ML Library scikit-learn with pandas and numpy
+Primary Dataset Kaggle Air Quality UCI Dataset (9,357 samples)
+Secondary Dataset Self-collected data from ThingSpeak (7-day deployment)
+Visualization matplotlib and seaborn for result plots
+0.9. Software and Tools Required
+Department of Computer Science and Engineering•BUBT 12Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+Table 5: Complete Software and Tools List
+Tool / Platform Purpose
+Arduino IDE 2.0Programming and uploading code to
+ESP32
+Google Colab ML model training using Python (free)
+scikit-learn (Python)Linear Regression and Decision Tree mod-
+els
+pandas + numpy Dataset processing and feature engineering
+matplotlib + seaborn Data visualization and result plotting
+ThingSpeak Free IoT cloud platform for data storage
+Kaggle Source of air quality training dataset
+HTML + CSS + JavaScript Web dashboard development
+Chart.js Live interactive charts on web dashboard
+Netlify / GitHub Pages Free web hosting for the dashboard
+Bolt.new / ChatGPT AI-assisted web dashboard generation
+OverleafLaTeX project report writing and format-
+ting
+0.10. Project Implementation Timeline
+Department of Computer Science and Engineering•BUBT 13Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+Table 6: Week-by-Week Implementation Plan
+Phase Activities
+Week 1
+Preparation•Install Arduino IDE, Python, and all libraries
+•Create ThingSpeak, Kaggle, and Colab accounts
+•Purchase all hardware components from local vendors
+•Study ESP32 pinout and sensor datasheets
+Week 2
+Hardware•Connect OLED display and run test code
+•Connect DHT22 and verify temperature/humidity
+•Connect MQ-135 and MQ-7 and test analog readings
+•Connect GP2Y1010 dust sensor with special circuit
+•Connect RGB LED and active buzzer
+Week 3
+Software
+& ML•Upload complete Arduino firmware to ESP32
+•Configure ThingSpeak channel and verify data upload
+•Download and prepare Kaggle air quality dataset
+•Train ML models in Google Colab
+•Extract model coefficients and embed in ESP32 code
+Week 4
+Website
+& Inte-
+gration•Generate web dashboard using AI tools
+•Connect dashboard to ThingSpeak REST API
+•Deploy website to Netlify for free hosting
+•Perform full system integration testing
+•Calibrate sensors and tune thresholds
+Week 5
+Report &
+Demo•Write complete project report in LaTeX
+•Add photos, circuit diagrams, and ML results
+•Prepare presentation slides
+•Rehearse live demonstration
+•Submit report and present project to teacher
+0.11. Expected Outcomes
+Department of Computer Science and Engineering•BUBT 14Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+0.11.1 Technical Outcomes
+Technical Deliverables
+✓Fully working hardware system with 4 sensors monitoring air quality in real time
+✓AQI score calculated every 2 seconds from combined sensor readings
+✓Linear Regression ML model with R2score greater than 0.85
+✓Decision Tree classifier with accuracy greater than 85%
+✓Live IoT dashboard on ThingSpeak showing real-time data and historical charts
+✓Professional web dashboard with live AQI gauge, charts, and health advice
+✓Automatic RGB LED and buzzer alerts when air quality becomes dangerous
+✓Complete project report with circuit diagrams, ML results, and analysis
+0.11.2 Academic Outcomes
+✓CO1 demonstrated:Arduino/ESP32 functionality with sensor interfacing and GPIO control
+✓CO2 demonstrated:IoT techniques applied to real-life air pollution problem in Bangladesh
+✓CO3 demonstrated:Complete IoT project designed and implemented end-to-end
+0.11.3 Social Outcomes
+✓Provides affordable real-time solution to air quality monitoring in Bangladesh
+✓Enables proactive health protection by warning usersbeforeair becomes dangerous
+✓Deployable in homes, schools, offices, hospitals, and factories
+0.12. Innovation and Uniqueness
+Key Innovations of This Project
+Innovation 1: Predictive Not Reactive Most IoT sensor projects only
+measure current conditions. This project uses Machine Learning topredict
+future conditions one hour ahead. This is the true value of combining ML
+with IoT.
+Department of Computer Science and Engineering•BUBT 15Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+Innovation 2: Multi-Sensor Fusion with AQI Four different sensors
+measure four different types of pollutants simultaneously. All readings are
+combined into a single meaningful and internationally standardized AQI
+score.
+Innovation 3: Edge ML Deployment The ML model is trained in the
+cloud using Google Colab but the prediction runs directly on the ESP32
+chip. This is calledEdge ML. Predictions work even without internet
+connectivity.
+Innovation 4: AI-Assisted Web Development The web dashboard is
+designed and generated using modern AI tools, demonstrating integration
+of multiple cutting-edge technologies including IoT, ML, and Generative
+AI.
+Innovation 5: Bangladesh Context Directly addresses one of
+Bangladesh’s most serious environmental health problems at a
+very low cost of under 4,500. Practical and deployable in real Bangladeshi
+homes, schools, and institutions.
+0.13. Comparison with Existing Solutions
+Department of Computer Science and Engineering•BUBT 16Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+Table 7: Comparison with Existing Air Quality Solutions
+FeatureGovt
+StationCommercialSimple
+DIYThis
+Project
+Multi-pollutant moni-
+toring✓ Some× ✓
+Real-time AQI score ✓ ✓× ✓
+ML-based prediction ××× ✓
+IoT cloud connectivity ✓ ✓× ✓
+Web dashboard Some ✓× ✓
+Proactive early warn-
+ing××× ✓
+Local OLED display × ✓ Sometimes ✓
+Affordable for
+Bangladesh×× Partial ✓
+Cost (BDT) 50 Lakh+ 10,000+∼2,000∼4,000
+0.14. Risk Assessment and Mitigation
+Department of Computer Science and Engineering•BUBT 17Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+Table 8: Risk Assessment and Mitigation Plan
+Possible Risk Mitigation Plan
+Component not available in
+BangladeshCheck multiple vendors before ordering.
+Order early with 2–3 week buffer time.
+Component damaged during
+connectionBuy 2 units of each sensor as backup.
+Always test each component individu-
+ally before full system assembly.
+WiFi not available at demo lo-
+cationSystem works fully offline without WiFi.
+Use mobile hotspot as backup connec-
+tion.
+ML accuracy below target of
+85%Use larger Kaggle dataset for training.
+Tune model hyperparameters and max
+depth.
+ThingSpeak API temporarily
+unavailableCache last known values on ESP32.
+Show offline mode indicator on dash-
+board.
+MQ sensor readings noisy or
+unstableApply averaging over 10 consecutive
+readings. Allow 48-hour warm-up pe-
+riod for MQ sensors.
+0.15. Conclusion
+This proposal presents a comprehensive, innovative, and technically sound project
+that effectively integratesIoT hardware,Machine Learning, andcloud com-
+putingto solve a real and pressing environmental health problem in Bangladesh.
+TheSmart Air Quality Monitoring and Health Risk Prediction System
+goes significantly beyond a simple sensor project by addingpredictive intelligence
+through Machine Learning, making it genuinely useful and impactful in real-world
+deployment scenarios.
+Department of Computer Science and Engineering•BUBT 18Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+Key Strengths of This Proposal:
+•Addresses all three course outcomes CO1, CO2, and CO3
+•Uses real ML prediction, not just simple threshold logic
+•Solves a critical real-life problem in Bangladesh
+•Total cost under 4,500 – affordable and practical
+•Includes web dashboard – modern full-stack IoT project
+•Uses AI tools for development – forward-thinking approach
+•Can be demonstrated live with immediate visible results
+We are fully committed to completing this project within the proposed timeline
+and delivering a working, demonstrable, and academically excellent system that
+meets and exceeds all course requirements.
+References
+[1] IQAir, “World Air Quality Report 2023,” IQAir, Switzerland, 2024. [On-
+line]. Available:https://www.iqair.com/world-air-quality-report
+[2]World Health Organization, “Ambient Air Quality and Health,”WHO Fact
+Sheets, 2023. [Online]. Available: https://www.who.int/news-room/
+fact-sheets
+[3]US Environmental Protection Agency, “Technical Assistance Document
+for the Reporting of Daily Air Quality — the Air Quality Index (AQI),”
+EPA-454/B-16-002, 2016.
+[4]F. Pedregosa et al., “Scikit-learn: Machine Learning in Python,”Journal
+of Machine Learning Research, vol. 12, pp. 2825–2830, 2011.
+[5]Espressif Systems, “ESP32 Technical Reference Manual v5.0,” Espressif
+Systems, 2023. [Online]. Available:https://docs.espressif.com
+[6]MathWorks, “ThingSpeak IoT Analytics Platform,” [Online]. Available:
+https://thingspeak.com
+[7]Hanwei Electronics Co. Ltd., “MQ-135 Air Quality Sensor Datasheet,”
+Hanwei Electronics, 2014.
+[8]Hanwei Electronics Co. Ltd., “MQ-7 Carbon Monoxide Gas Sensor Datasheet,”
+Hanwei Electronics, 2014.
+Department of Computer Science and Engineering•BUBT 19Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+[9]Sharp Corporation, “GP2Y1010AU0F Compact Optical Dust Sensor
+Datasheet,” Sharp Corporation, 2006.
+[10]Aosong Electronics, “DHT22 Temperature and Humidity Sensor Module
+Datasheet,” Aosong Electronics, 2022.
+[11]S. Zheng, C. Pozzi, and A. Pham, “Real-Time Air Quality Monitoring
+via Low-Cost Sensor Nodes and IoT Platform,”IEEE Internet of Things
+Journal, vol. 6, no. 2, pp. 2002–2012, 2019.
+[12]Arduino LLC, “Arduino Reference Documentation,” [Online]. Available:
+https://www.arduino.cc/reference/en
+Department of Computer Science and Engineering•BUBT 20Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+Project Proposal Approval Form
+Student Declaration
+I hereby confirm that the above project proposal is my original work. I
+understand the full scope, all objectives, and the technical requirements of
+this project. I am fully committed to completing it within the proposed
+timeline and delivering a working system.
+Student Name:
+Student ID:
+Signature: Date:
+Department of Computer Science and Engineering•BUBT 21Smart Air Quality Monitoring & Health Risk Prediction System Project Proposal
+Teacher Approval
+Approval Status:
+□Approved □Approved with Minor Changes □Revision Required □Rejected
+Comments / Suggestions:
+Teacher Name:
+Designation:
+Signature: Date:
+Department of Computer Science and Engineering•BUBT 22

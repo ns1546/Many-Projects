@@ -1,0 +1,31 @@
+\contentsline {section}{\numberline {I}Introduction}{1}{}%
+\contentsline {subsection}{\numberline {\mbox {I-A}}Motivation and Problem Formulation}{1}{}%
+\contentsline {subsection}{\numberline {\mbox {I-B}}Research Objectives}{1}{}%
+\contentsline {section}{\numberline {II}Literature Review}{2}{}%
+\contentsline {section}{\numberline {III}System Architecture and Infrastructure}{2}{}%
+\contentsline {subsection}{\numberline {\mbox {III-A}}High-Level Topological Design}{3}{}%
+\contentsline {subsection}{\numberline {\mbox {III-B}}The Edge Node (Perception and Processing)}{3}{}%
+\contentsline {subsection}{\numberline {\mbox {III-C}}Cloud Broker (Data Propagation)}{3}{}%
+\contentsline {section}{\numberline {IV}Hardware Instrumentation and Circuit Theory}{3}{}%
+\contentsline {subsection}{\numberline {\mbox {IV-A}}Sensor Integration Mechanics and Electrochemistry}{4}{}%
+\contentsline {subsection}{\numberline {\mbox {IV-B}}Microcontroller Pinout and Interface Mapping}{4}{}%
+\contentsline {subsection}{\numberline {\mbox {IV-C}}Circuit Protection and Signal Integrity}{4}{}%
+\contentsline {section}{\numberline {V}Mathematical Normalization: The Air Quality Index}{5}{}%
+\contentsline {subsection}{\numberline {\mbox {V-A}}Piecewise AQI Formula}{5}{}%
+\contentsline {subsection}{\numberline {\mbox {V-B}}Overall System AQI and Multi-Pollutant Fusion}{5}{}%
+\contentsline {subsection}{\numberline {\mbox {V-C}}Algorithm for Continuous Normalization}{6}{}%
+\contentsline {section}{\numberline {VI}Predictive Edge Machine Learning Pipeline}{6}{}%
+\contentsline {subsection}{\numberline {\mbox {VI-A}}Model Training and Quantization}{6}{}%
+\contentsline {subsection}{\numberline {\mbox {VI-B}}Model 1: Multivariate Linear Regression (Forecaster)}{7}{}%
+\contentsline {subsection}{\numberline {\mbox {VI-C}}Model 2: Decision Tree Risk Classifier}{7}{}%
+\contentsline {section}{\numberline {VII}Software Engineering: The Progressive Web App (PWA)}{8}{}%
+\contentsline {subsection}{\numberline {\mbox {VII-A}}Service Worker and Offline Capability}{8}{}%
+\contentsline {subsection}{\numberline {\mbox {VII-B}}Bi-Directional Command and Control (C2)}{8}{}%
+\contentsline {subsection}{\numberline {\mbox {VII-C}}State Machine Control Logic}{8}{}%
+\contentsline {section}{\numberline {VIII}System Validation and Empirical Analysis}{8}{}%
+\contentsline {subsection}{\numberline {\mbox {VIII-A}}Latency and Throughput Analytics}{9}{}%
+\contentsline {subsection}{\numberline {\mbox {VIII-B}}Predictive Accuracy of Edge-ML}{9}{}%
+\contentsline {section}{\numberline {IX}Project Budget and Bill of Materials (BOM)}{10}{}%
+\contentsline {section}{\numberline {X}Conclusion and Future Works}{11}{}%
+\contentsline {subsection}{\numberline {\mbox {X-A}}Future Works}{11}{}%
+\contentsline {section}{References}{11}{}%

@@ -1,0 +1,16 @@
+# Robots.txt for JKH Jesan Official Portfolio
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Googlebot-Image explicit crawling rules for Favicon & Media
+User-agent: Googlebot-Image
+Allow: /favicon.ico
+Allow: /*.ico$
+Allow: /*.png$
+Allow: /
+
+# Host & Sitemap Location
+Host: https://jkhjesan.com
+Sitemap: https://jkhjesan.com/sitemap.xml
+

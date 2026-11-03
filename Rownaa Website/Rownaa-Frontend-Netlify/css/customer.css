@@ -1,0 +1,24 @@
+﻿/* ============================================================
+   ROWNAA - Customer Panel CSS | Phase 0 Design System
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap');
+
+:root {
+  --color-brand-primary:#0A1628;--color-brand-secondary:#112240;--color-brand-accent:#F4A622;
+  --color-brand-accent-hover:#D4891A;--color-surface:#172A45;--color-surface-elevated:#1E3A5F;
+  --color-text-primary:#F0F4F8;--color-text-secondary:#8FA3BE;--color-text-muted:#4A6280;--color-text-on-accent:#0A1628;
+  --color-status-pending:#F59E0B;--color-status-confirmed:#3B82F6;--color-status-ongoing:#8B5CF6;
+  --color-status-completed:#10B981;--color-status-cancelled:#EF4444;
+  --gradient-hero:linear-gradient(135deg,#0A1628 0%,#1E3A5F 60%,#112240 100%);
+  --gradient-card:linear-gradient(160deg,#172A45 0%,#112240 100%);
+  --gradient-accent:linear-gradient(90deg,#F4A622 0%,#D4891A 100%);
+  --gradient-glass:linear-gradient(135deg,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0.02) 100%);
+  --font-display:'Outfit',sans-serif;--font-body:'Inter',sans-serif;
+  --text-hero:clamp(2.5rem,5vw,4rem);--text-h1:2.25rem;--text-h2:1.75rem;--text-h3:1.25rem;
+  --text-body:1rem;--text-small:0.875rem;--text-xs:0.75rem;
+  --space-xs:4px;--space-sm:8px;--space-md:16px;--space-lg:24px;--space-xl:32px;--space-2xl:48px;--space-3xl:64px;--space-4xl:96px;
+  --radius-sm:6px;--radius-md:12px;--radius-lg:16px;--radius-xl:24px;--radius-full:9999px;
+  --shadow-card:0 4px 24px rgba(0,0,0,0.35);--shadow-elevated:0 8px 40px rgba(0,0,0,0.5);
+  --shadow-accent:0 4px 20px rgba(244,166,34,0.3);--shadow-inset:inset 0 1px 0 rgba(255,255,255,0.07);
+  --sidebar-width:260px;--topbar-height:68px;
+}

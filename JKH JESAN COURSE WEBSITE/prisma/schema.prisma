@@ -1,0 +1,242 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model ContactMessage {
+  id        String   @id
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model Course {
+  id             String          @id
+  title          String
+  slug           String          @unique
+  description    String
+  thumbnail      String?
+  price          Float
+  discountPrice  Float?
+  duration       String?
+  level          String?
+  language       String?
+  accessType     String          @default("Lifetime")
+  introVideoUrl  String?
+  isDeleted      Boolean         @default(false)
+  deletedAt      DateTime?
+  published      Boolean         @default(false)
+  categoryId     String?
+  instructorId   String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  courseCategory CourseCategory? @relation(fields: [categoryId], references: [id])
+  instructor     Instructor?     @relation(fields: [instructorId], references: [id])
+  enrollments    Enrollment[]
+  modules        Module[]
+  orders         Order[]
+}
+
+model CourseCategory {
+  id        String   @id
+  name      String   @unique
+  slug      String   @unique
+  icon      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  courses   Course[]
+}
+
+model Enrollment {
+  id        String   @id
+  userId    String
+  courseId  String
+  progress  Float    @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@index([courseId])
+  @@index([userId])
+}
+
+model FAQ {
+  id        String   @id
+  question  String
+  answer    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Instructor {
+  id          String   @id
+  name        String
+  role        String
+  bio         String?
+  image       String?
+  skills      String?
+  genres      String?
+  socialLinks String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  courses     Course[]
+}
+
+model Lesson {
+  id               String           @id
+  title            String
+  description      String?
+  videoUrl         String?
+  duration         String?
+  order            Int              @default(0)
+  isFree           Boolean          @default(false)
+  resources        String?
+  isDeleted        Boolean          @default(false)
+  deletedAt        DateTime?
+  moduleId         String
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  module           Module           @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  lessonProgresses LessonProgress[]
+}
+
+model LessonProgress {
+  id        String   @id
+  userId    String
+  lessonId  String
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@index([lessonId])
+  @@index([userId])
+}
+
+model Module {
+  id          String   @id
+  title       String
+  description String?
+  order       Int      @default(0)
+  isDeleted   Boolean  @default(false)
+  deletedAt   DateTime?
+  courseId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  lessons     Lesson[]
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+model Order {
+  id            String   @id
+  userId        String
+  courseId      String
+  amount        Float
+  status        String   @default("PENDING")
+  paymentMethod String?
+  trxId         String?
+  senderPhone   String?
+  rejectionReason String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  course        Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+  @@index([trxId])
+  @@index([userId])
+}
+
+model Setting {
+  id                String   @id @default("global")
+  facebookPixelId   String?
+  googleAnalyticsId String?
+  bkashNumber       String?  @default("01700000000")
+  nagadNumber       String?  @default("01700000000")
+  rocketNumber      String?
+  whatsappNumber    String?  @default("01700000000")
+  supportEmail      String?  @default("support@jkhjesan.com")
+  noticeText        String?
+  updatedAt         DateTime @updatedAt
+}
+
+model Testimonial {
+  id        String   @id
+  name      String
+  role      String?
+  image     String?
+  rating    Int      @default(5)
+  review    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id                 String             @id
+  name               String?
+  email              String?            @unique
+  password           String?
+  role               String             @default("STUDENT")
+  phone              String?
+  image              String?
+  isBanned           Boolean            @default(false)
+  banReason          String?
+  activeSessionToken String?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  enrollments        Enrollment[]
+  lessonProgresses   LessonProgress[]
+  orders             Order[]
+  securityIncidents  SecurityIncident[]
+}
+
+model Banner {
+  id        String   @id @default(cuid())
+  title     String?
+  imageUrl  String
+  targetUrl String?
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([token])
+}
+
+
+model SecurityIncident {
+  id        String   @id @default(cuid())
+  userId    String?
+  userEmail String?
+  type      String
+  details   String?
+  ipAddress String?
+  userAgent String?
+  lessonId  String?
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userEmail])
+  @@index([type])
+  @@index([createdAt])
+}

@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Modern Google Material Elevation Shadows -->
+    <filter id="materialShadow" x="-10%" y="-10%" width="125%" height="125%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#0F172A" flood-opacity="0.14" />
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.08" />
+    </filter>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="innerDepth" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.16" />
+    </filter>
+
+    <!-- Google 4-Color Gradients with Rich Vibrancy -->
+    <linearGradient id="googleBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4285F4" />
+      <stop offset="100%" stop-color="#1967D2" />
+    </linearGradient>
+
+    <linearGradient id="googleGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34A853" />
+      <stop offset="100%" stop-color="#137333" />
+    </linearGradient>
+
+    <linearGradient id="googleYellow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBC04" />
+      <stop offset="100%" stop-color="#F29900" />
+    </linearGradient>
+
+    <linearGradient id="googleRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EA4335" />
+      <stop offset="100%" stop-color="#C5221F" />
+    </linearGradient>
+
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F8FAFC" />
+    </linearGradient>
+
+    <linearGradient id="coinGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE082" />
+      <stop offset="50%" stop-color="#FFCA28" />
+      <stop offset="100%" stop-color="#FFA000" />
+    </linearGradient>
+  </defs>
+
+  <!-- Base Squircle Background (Google Play / Material You Adaptive Canvas) -->
+  <rect x="24" y="24" width="464" height="464" rx="108" fill="url(#bgGradient)" filter="url(#materialShadow)" stroke="#F1F5F9" stroke-width="3" />
+
+  <!-- Central Digital Khata Ledger Motif with Interlocking Google-Color Ribbon -->
+  <g transform="translate(0, 0)">
+    <!-- 1. The Khata Ledger Book Base (Google Blue) -->
+    <path d="M128 116 C128 98 142 84 160 84 L336 84 C364 84 384 104 384 132 L384 364 C384 392 364 412 336 412 L160 412 C142 412 128 398 128 380 Z" 
+          fill="url(#googleBlue)" filter="url(#innerDepth)" />
+
+    <!-- Ledger Spine Stitching Details -->
+    <rect x="150" y="104" width="10" height="288" rx="5" fill="#FFFFFF" opacity="0.3" />
+    <circle cx="155" cy="140" r="4" fill="#FFFFFF" opacity="0.8" />
+    <circle cx="155" cy="200" r="4" fill="#FFFFFF" opacity="0.8" />
+    <circle cx="155" cy="260" r="4" fill="#FFFFFF" opacity="0.8" />
+    <circle cx="155" cy="320" r="4" fill="#FFFFFF" opacity="0.8" />
+    <circle cx="155" cy="370" r="4" fill="#FFFFFF" opacity="0.8" />
+
+    <!-- 2. Inside Crisp Khata Paper Page (White Canvas with Rounded Corners) -->
+    <path d="M182 108 L348 108 C366 108 376 118 376 136 L376 360 C376 378 366 388 348 388 L182 388 Z" 
+          fill="#FFFFFF" />
+
+    <!-- 3. Interlocking Geometric 'H' & 'P' + Digital Calculation Grid Ribbon -->
+    <!-- Left Stem of 'H' (Google Green - Cash Inflow) -->
+    <rect x="210" y="152" width="28" height="192" rx="14" fill="url(#googleGreen)" filter="url(#innerDepth)" />
+
+    <!-- Horizontal Bridge of 'H' & Top Loop of 'P' (Google Red/Coral - Quick POS Action) -->
+    <path d="M224 234 L310 234 C328 234 340 222 340 204 C340 186 328 174 310 174 L276 174 C268 174 262 180 262 188 L262 234 Z" 
+          fill="url(#googleRed)" />
+
+    <!-- Right Stem of 'H' and Main Body of 'P' (Google Blue) -->
+    <rect x="282" y="152" width="28" height="192" rx="14" fill="url(#googleBlue)" filter="url(#innerDepth)" />
+
+    <!-- Google Yellow Golden Coin / Taka Symbol (Wealth & Smart Calculations) -->
+    <circle cx="340" cy="324" r="36" fill="url(#coinGold)" filter="url(#innerDepth)" stroke="#FFF8E1" stroke-width="4" />
+    
+    <!-- Taka (৳) / Plus Currency Glyphs inside Coin -->
+    <path d="M332 308 C332 304 336 300 341 300 C346 300 349 303 349 308 L349 340 C349 344 346 348 341 348 C336 348 332 344 332 340 Z" fill="#78350F" opacity="0.25" />
+    <path d="M325 320 L355 320" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" />
+    <circle cx="340" cy="324" r="16" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-dasharray="4 3" />
+
+    <!-- Top Floating Sparkle (Google Style Delight) -->
+    <path d="M330 134 C330 144 338 152 348 152 C338 152 330 160 330 170 C330 160 322 152 312 152 C322 152 330 144 330 134 Z" 
+          fill="url(#googleYellow)" />
+  </g>
+</svg>

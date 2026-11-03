@@ -1,0 +1,764 @@
+# 📱 Mobile App CSS Design Plan — Air Guardian Dashboard
+## Firebase Realtime DB + ESP32 Remote Control
+
+> **Goal:** Zero web-feel on mobile. 100% native iOS/Android app feel using CSS only.
+> PC CSS remains untouched. All changes live inside `@media (max-width: 768px)`.
+
+---
+
+## 🧠 Design Philosophy
+
+| Native App Pattern | Implementation |
+|---|---|
+| No browser chrome feel | `viewport-fit=cover`, `overscroll-behavior: none` |
+| Safe area insets | `env(safe-area-inset-*)` for notch/home bar |
+| Native scroll momentum | `-webkit-overflow-scrolling: touch` |
+| No text selection on UI | `user-select: none` on buttons/nav |
+| Tap highlight removed | `-webkit-tap-highlight-color: transparent` |
+| Full bleed layout | Remove all horizontal page margins |
+| Hardware acceleration | `transform: translateZ(0)` on animating elements |
+| App-like transitions | Slide-in panes, not fade only |
+
+---
+
+## 📐 Phase 1 — App Shell & Viewport Foundation
+
+**Goal:** Establish the mobile shell — full-screen, no scrollbars, no browser artifacts.
+
+### 1.1 — HTML `<head>` Meta Updates
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#060b18">
+```
+
+### 1.2 — Global App Shell CSS
+```css
+@media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  input, textarea { user-select: text; -webkit-user-select: text; }
+
+  html, body {
+    height: 100%;
+    height: -webkit-fill-available;
+    overflow: hidden;
+    overscroll-behavior: none;
+    position: fixed;
+    width: 100%;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+```
+
+### 1.3 — Hide Sidebar Completely
+```css
+@media (max-width: 768px) {
+  .sidebar { display: none !important; }
+  .workspace { width: 100%; flex: 1; }
+}
+```
+
+---
+
+## 📱 Phase 2 — Native Top Status Bar + App Header
+
+**Goal:** Replace the desktop header with a compact, app-style top bar (like iOS/Android).
+
+### 2.1 — Mobile Top Bar Layout
+```css
+@media (max-width: 768px) {
+  .header {
+    padding: 0.75rem 1rem 0.65rem;
+    padding-top: calc(0.75rem + env(safe-area-inset-top));
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 56px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    gap: 0;
+  }
+
+  /* App name (left side) */
+  .header-title h2 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+  }
+
+  .header-title p { display: none; } /* hide subtitle */
+
+  /* Right controls — compact icon buttons */
+  .header-controls {
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  /* Hide text labels in header buttons, show only icons */
+  .header-controls .btn-action span,
+  #connectBtnLabel { display: none; }
+
+  .header-controls .btn-action {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 50%;
+    justify-content: center;
+    font-size: 0.9rem;
+  }
+
+  /* Status chip — compact pill */
+  .status-chip {
+    padding: 0.3rem 0.65rem;
+    font-size: 0.7rem;
+    gap: 5px;
+  }
+}
+```
+
+---
+
+## 🗂️ Phase 3 — Bottom Tab Navigation (Native App Nav Bar)
+
+**Goal:** Replace the sidebar with a fixed bottom tab bar — exactly like iOS/Android.
+
+### 3.1 — HTML to Inject (Add before `</body>`)
+```html
+<nav class="mobile-tab-bar" id="mobileTabBar">
+  <div class="tab-item active" onclick="showPane('pane-telemetry', this)" data-tab="telemetry">
+    <i class="fa-solid fa-gauge-high"></i>
+    <span>Live</span>
+  </div>
+  <div class="tab-item" onclick="showPane('pane-zones', this)" data-tab="zones">
+    <i class="fa-solid fa-house-laptop"></i>
+    <span>Zones</span>
+  </div>
+  <div class="tab-item" onclick="showPane('pane-c2', this)" data-tab="control">
+    <i class="fa-solid fa-sliders"></i>
+    <span>Control</span>
+  </div>
+  <div class="tab-item" onclick="showPane('pane-hardware-diag', this)" data-tab="diag">
+    <i class="fa-solid fa-microchip"></i>
+    <span>Hardware</span>
+  </div>
+  <div class="tab-item" onclick="showPane('pane-gemini', this)" data-tab="ai">
+    <i class="fa-solid fa-wand-magic-sparkles"></i>
+    <span>AI</span>
+  </div>
+</nav>
+```
+
+### 3.2 — Bottom Tab Bar CSS
+```css
+@media (max-width: 768px) {
+  .mobile-tab-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: rgba(9, 17, 34, 0.95);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-bottom: env(safe-area-inset-bottom);
+    height: calc(60px + env(safe-area-inset-bottom));
+  }
+
+  .tab-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    cursor: pointer;
+    color: #475569;
+    transition: color 0.2s, transform 0.15s;
+    padding: 8px 0;
+    border: none;
+    background: none;
+    font-size: 0;
+    position: relative;
+  }
+
+  .tab-item i {
+    font-size: 1.2rem;
+    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  .tab-item span {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  .tab-item.active {
+    color: var(--accent-primary);
+  }
+
+  .tab-item.active i {
+    transform: scale(1.15) translateY(-2px);
+    filter: drop-shadow(0 0 6px rgba(59,130,246,0.6));
+  }
+
+  /* Active indicator dot */
+  .tab-item.active::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent-primary);
+    box-shadow: 0 0 6px var(--accent-primary);
+  }
+
+  /* Touch feedback */
+  .tab-item:active { transform: scale(0.9); }
+}
+```
+
+### 3.3 — Desktop tab bar hidden
+```css
+.mobile-tab-bar { display: none; } /* default hidden, shown only on mobile */
+```
+
+---
+
+## 📄 Phase 4 — Content Panes: Native Scroll Container
+
+**Goal:** Each pane scrolls independently like a native screen, with momentum scrolling.
+
+```css
+@media (max-width: 768px) {
+  .workspace {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: calc(100vh - 56px - 60px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    /* 56px header + 60px bottom nav */
+  }
+
+  .view-pane {
+    padding: 0.85rem 0.85rem 1rem;
+    gap: 0.85rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    height: 100%;
+    flex-direction: column;
+  }
+
+  /* Pane transition — slide in from right like native screens */
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .view-pane.active {
+    animation: slideInRight 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+```
+
+---
+
+## 🃏 Phase 5 — Card & Component Redesign (App-Native Feel)
+
+### 5.1 — Hero Banner (Full-Width Alert Card)
+```css
+@media (max-width: 768px) {
+  .hero-banner {
+    border-radius: 18px;
+    padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .hero-banner-content { flex-direction: column; gap: 0.75rem; }
+  .hero-text p { max-width: 100%; font-size: 0.82rem; }
+  .hero-action-pills { flex-wrap: wrap; gap: 0.45rem; }
+  .action-pill { font-size: 0.72rem; padding: 5px 10px; }
+}
+```
+
+### 5.2 — AQI Gauge Card (Centered, Full-Width)
+```css
+@media (max-width: 768px) {
+  /* Kill the 3-column grid */
+  .telemetry-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .aqi-card {
+    padding: 1.5rem 1rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    text-align: center;
+  }
+
+  .aqi-dial {
+    width: 130px;
+    height: 130px;
+    flex-shrink: 0;
+  }
+
+  .aqi-num { font-size: 3rem; }
+}
+```
+
+### 5.3 — Metric Tiles (2-column grid, larger touch targets)
+```css
+@media (max-width: 768px) {
+  .metric-tiles {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+  }
+
+  .tile {
+    padding: 0.9rem;
+    border-radius: 14px;
+    min-height: 80px;
+  }
+
+  .tile-val { font-size: 1.5rem; }
+  .tile-label { font-size: 0.72rem; }
+}
+```
+
+### 5.4 — Zone Grid (2-column on mobile)
+```css
+@media (max-width: 768px) {
+  .zone-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+  }
+
+  .zone-card { padding: 0.85rem; border-radius: 14px; }
+  .zone-aqi { font-size: 1.35rem; }
+}
+```
+
+### 5.5 — Sensor Health Cards (Full-width stack)
+```css
+@media (max-width: 768px) {
+  /* Override auto-fit minmax grid */
+  [style*="grid-template-columns: repeat(auto-fit, minmax(320px"] {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* MCU KPI Grid → 2x2 */
+  [style*="grid-template-columns: repeat(4, 1fr)"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+```
+
+### 5.6 — Buttons (Native tap size — minimum 44px)
+```css
+@media (max-width: 768px) {
+  .btn-action {
+    min-height: 44px;
+    padding: 0.65rem 1rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    gap: 8px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn-action:active {
+    transform: scale(0.96);
+    filter: brightness(0.9);
+    transition: transform 0.1s, filter 0.1s;
+  }
+}
+```
+
+### 5.7 — Toggle Switches (Bigger for touch)
+```css
+@media (max-width: 768px) {
+  .switch {
+    width: 52px;
+    height: 30px;
+    flex-shrink: 0;
+  }
+
+  .slider:before {
+    width: 22px;
+    height: 22px;
+    left: 4px;
+    bottom: 4px;
+  }
+
+  input:checked + .slider:before { transform: translateX(22px); }
+}
+```
+
+### 5.8 — Panels (Native Card Style)
+```css
+@media (max-width: 768px) {
+  .panel {
+    border-radius: 18px;
+    padding: 1rem;
+  }
+
+  .panel-header { margin-bottom: 0.75rem; }
+  .panel-title { font-size: 0.78rem; }
+}
+```
+
+### 5.9 — Simulator Sliders Bar (Horizontal scroll on mobile)
+```css
+@media (max-width: 768px) {
+  #simulatorPanel > div:last-child {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+  }
+
+  #simulatorPanel {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.1);
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent-primary);
+    box-shadow: 0 0 8px rgba(59,130,246,0.5);
+    cursor: pointer;
+  }
+}
+```
+
+---
+
+## 🔌 Phase 6 — Firebase Online Control Panel (Mobile UI)
+
+**Goal:** Firebase realtime control from mobile — clean, large-touch device control panel.
+
+### 6.1 — Firebase Connection Status Widget (Sticky Top)
+```css
+@media (max-width: 768px) {
+  /* Firebase status banner in hardware link area */
+  #hardwareLinkBanner {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 0.85rem 1rem;
+    border-radius: 14px;
+  }
+
+  #hardwareLinkBanner .btn-action {
+    width: 100%;
+    justify-content: center;
+  }
+}
+```
+
+### 6.2 — Remote Control Panel (C2 Center)
+```css
+@media (max-width: 768px) {
+  /* C2 control rows become vertical cards */
+  .control-row {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.85rem 0;
+    gap: 1rem;
+  }
+
+  /* C2 grid — single column stacked */
+  .c2-grid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  /* LED Test Buttons — 3 column grid */
+  /* Already handled by component */
+
+  /* OLED page buttons — row of 4 */
+  /* Already 4-col, keep as-is but increase touch size */
+  .panel button[onclick*="sendOledPageLock"] {
+    min-height: 40px;
+    font-size: 0.78rem;
+  }
+}
+```
+
+### 6.3 — Firebase Realtime Indicator Badge (New UI Element)
+```css
+@media (max-width: 768px) {
+  /* Firebase cloud badge — to be placed in header */
+  .firebase-status-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255, 160, 0, 0.1);
+    border: 1px solid rgba(255, 160, 0, 0.3);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #fbbf24;
+    white-space: nowrap;
+  }
+
+  .firebase-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fbbf24;
+    box-shadow: 0 0 6px #fbbf24;
+    animation: pulseAnim 1.8s infinite;
+  }
+}
+```
+
+---
+
+## 🗂️ Phase 7 — Table, Map & Code Box (Mobile Adaptations)
+
+### 7.1 — Data Tables (Horizontal scroll, compact)
+```css
+@media (max-width: 768px) {
+  .data-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+  }
+
+  table { min-width: 600px; }
+  th, td { padding: 0.55rem 0.75rem; font-size: 0.72rem; }
+  th { font-size: 0.65rem; }
+}
+```
+
+### 7.2 — Map Panel (Full-width, fixed height)
+```css
+@media (max-width: 768px) {
+  #pane-map .panel {
+    height: auto;
+    padding: 0;
+  }
+
+  #mainMap, #fullMap {
+    height: 350px;
+    border-radius: 0 0 18px 18px;
+  }
+}
+```
+
+### 7.3 — Code/Terminal Box
+```css
+@media (max-width: 768px) {
+  .code-box {
+    height: 160px;
+    font-size: 0.72rem;
+    border-radius: 10px;
+    padding: 0.75rem;
+  }
+}
+```
+
+### 7.4 — Particle Canvas
+```css
+@media (max-width: 768px) {
+  #particleCanvas { height: 110px; }
+}
+```
+
+### 7.5 — Chart containers
+```css
+@media (max-width: 768px) {
+  /* Live Trend chart */
+  [style*="height: 175px"] { height: 160px !important; }
+  /* Forecast 24h chart */
+  [style*="height: 280px"] { height: 210px !important; }
+}
+```
+
+---
+
+## 🎨 Phase 8 — Micro Animations & Native Feel Polish
+
+```css
+@media (max-width: 768px) {
+  /* Spring-y tap feedback on all interactive cards */
+  .tile:active, .zone-card:active, .panel:active {
+    transform: scale(0.98);
+    transition: transform 0.1s;
+  }
+
+  /* Pull-to-refresh visual cue (overscroll rubber band) */
+  .view-pane { overscroll-behavior-y: contain; }
+
+  /* Smooth scroll snap for horizontal carousels */
+  .hero-action-pills {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+
+  .hero-action-pills::-webkit-scrollbar { display: none; }
+  .action-pill { scroll-snap-align: start; flex-shrink: 0; }
+
+  /* Unplug alert banner — full attention on mobile */
+  #unpluggedAlertBanner {
+    border-radius: 14px;
+    margin-top: 0.75rem;
+  }
+
+  #unpluggedAlertBanner > div {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  #unpluggedAlertBanner .btn-action {
+    width: 100%;
+    justify-content: center;
+  }
+}
+```
+
+---
+
+## 🔥 Firebase Implementation Plan (Realtime DB)
+
+### Architecture
+```
+ESP32 (WiFi) → Firebase Realtime DB → Mobile Browser (Web)
+     ↑                                        ↓
+  Reads /commands node              Writes /commands node
+  Pushes /telemetry node            Reads /telemetry node
+```
+
+### Firebase DB Structure
+```json
+{
+  "telemetry": {
+    "pm25": 82.4,
+    "co2": 1245,
+    "co": 2.1,
+    "temp": 31.2,
+    "humidity": 72,
+    "aqi": 165,
+    "uptime": 2902,
+    "freeHeap": 294000,
+    "timestamp": 1723661400
+  },
+  "commands": {
+    "led": "auto",
+    "buzzer": false,
+    "oledPage": -1,
+    "ledPolarity": "cathode",
+    "fanSpeed": 0
+  },
+  "status": {
+    "online": true,
+    "lastSeen": 1723661400,
+    "ipAddress": "192.168.1.105",
+    "firmwareVersion": "3.2.1"
+  }
+}
+```
+
+### Mobile JS Firebase Integration (to add to dashboard)
+```javascript
+// Firebase config (already provided by user)
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, onValue, set } from "firebase/database";
+
+const firebaseConfig = { /* user's config */ };
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// ── LIVE TELEMETRY LISTENER ──
+onValue(ref(db, 'telemetry'), (snapshot) => {
+  const d = snapshot.val();
+  if (!d) return;
+  updateAllMetrics(d.pm25, d.co2, d.co, d.temp, d.humidity, d.aqi);
+});
+
+// ── DEVICE STATUS LISTENER ──
+onValue(ref(db, 'status/online'), (snap) => {
+  const online = snap.val();
+  document.getElementById('globalStatusBadge')
+    .className = `status-chip ${online ? '' : 'sim'}`;
+  document.getElementById('globalStatusText').textContent =
+    online ? 'Firebase Live' : 'Device Offline';
+});
+
+// ── SEND COMMAND TO ESP32 ──
+function sendFirebaseCommand(key, value) {
+  set(ref(db, `commands/${key}`), value);
+}
+```
+
+---
+
+## ✅ Implementation Order (Priority)
+
+| Phase | What | Priority |
+|---|---|---|
+| 1 | App shell, viewport, body lock | 🔴 First |
+| 2 | Mobile header redesign | 🔴 First |
+| 3 | Bottom tab bar HTML + CSS | 🔴 First |
+| 4 | Scroll containers per pane | 🔴 First |
+| 5 | Cards, tiles, buttons, panels | 🟠 Second |
+| 6 | Firebase UI + control panel | 🟠 Second |
+| 7 | Table, map, chart adaptations | 🟡 Third |
+| 8 | Micro-animations & polish | 🟡 Third |
+| Firebase | Realtime DB integration in JS | 🟠 Parallel |
+
+---
+
+> [!IMPORTANT]
+> All mobile CSS goes into a single `@media (max-width: 768px)` block at the **bottom** of the `<style>` tag to avoid any conflict with the existing PC CSS.
+
+> [!TIP]
+> Add `?view=mobile` URL param for force-testing mobile layout on desktop — very useful during development.

@@ -1,0 +1,82 @@
+[
+  {
+    "era": "early-life",
+    "year": "1985",
+    "label": "Born",
+    "title": "Early Life and Upbringing",
+    "description": "Kajal Arefin Ome was born in Dhaka, Bangladesh, where his early exposure to local culture and media planted the seeds for his future storytelling career.",
+    "detail": "Growing up in Dhaka, Ome was naturally observant of the chaotic, vibrant, and humorous aspects of middle-class urban life. These early observations of everyday Bangladeshi conversations, street culture, and relationships would later become the defining hallmark of his realistic and relatable directorial style.",
+    "icon": "birth",
+    "color": "#E50914"
+  },
+  {
+    "era": "beginnings",
+    "year": "2010-2015",
+    "label": "Assistant Director",
+    "title": "Learning the Craft",
+    "description": "Began his career in the media industry working intensely as an Assistant Director.",
+    "detail": "Before helming his own projects, Ome spent years mastering the technical and logistical aspects of filmmaking. As an Assistant Director (AD), he learned how to manage sets, coordinate with actors, and understand audience psychology by observing traditional television drama productions from the inside out.",
+    "icon": "work",
+    "color": "#E50914"
+  },
+  {
+    "era": "first-work",
+    "year": "2016-2017",
+    "label": "Directorial Debut",
+    "title": "The First Independent Projects",
+    "description": "Transitioned to an independent director, quickly gaining recognition for his unique comedic timing and storytelling.",
+    "detail": "Ome made his directorial debut and immediately began making waves with single dramas and telefilms. Unlike the prevalent melodramas of the time, his early works focused on situational comedy, natural dialogue, and relatable scenarios, which rapidly built him a loyal youth following on YouTube.",
+    "icon": "milestone",
+    "color": "#E50914"
+  },
+  {
+    "era": "phenomenon",
+    "year": "2018-2022",
+    "label": "Bachelor Point",
+    "title": "A Cultural Phenomenon",
+    "description": "Created and directed 'Bachelor Point', which became the most successful comedy franchise in Bangladeshi television history.",
+    "detail": "The launch of 'Bachelor Point' completely revolutionized the Bangladeshi entertainment industry. Characters like Kabila, Shuvo, Habu, and Pasha became cultural icons. Spanning four highly successful seasons and multiple spin-offs (like Bachelor Eid and Bachelor's Qurbani), the series shattered viewership records and generated a massive, dedicated fanbase.",
+    "icon": "phenomenon",
+    "color": "#E50914"
+  },
+  {
+    "era": "recognition",
+    "year": "2019-2020",
+    "label": "Critical Acclaim",
+    "title": "Emotional Depth and Awards",
+    "description": "Directed emotionally gripping dramas like 'Sorry Sir' and 'Me & U', proving his versatility beyond comedy.",
+    "detail": "While known as a comedy genius, Ome proved his profound ability to handle serious, emotional narratives. Works like 'Sorry Sir' and 'Me & U' earned massive critical acclaim and viewership. His direction on 'Sorry Sir' won him the prestigious CJFB Performance Award for Best Director, cementing his position as a top-tier filmmaker.",
+    "icon": "award",
+    "color": "#E50914"
+  },
+  {
+    "era": "ott-era",
+    "year": "2023",
+    "label": "OTT Blockbusters",
+    "title": "Dominating Streaming Platforms",
+    "description": "Directed the smash-hit web series 'Hotel Relax', breaking subscription and streaming records on Binge.",
+    "detail": "Transitioning seamlessly into the premium OTT space, Ome directed 'Hotel Relax'. The series blended comedy with suspense in a confined setting. It became an unprecedented success for the Binge platform, proving that Ome's audience would follow him from free YouTube content to paid streaming services.",
+    "icon": "breakthrough",
+    "color": "#E50914"
+  },
+  {
+    "era": "evolution",
+    "year": "2024",
+    "label": "Social Tragedy",
+    "title": "Artistic Evolution: Oshomoy",
+    "description": "Directed his debut web film 'Oshomoy', tackling deep societal issues and the consequences of modern 'show-off' culture.",
+    "detail": "With 'Oshomoy', Ome took a deliberate artistic risk, stepping away from pure comedy to deliver a hard-hitting social tragedy. The film was widely praised for its realistic portrayal of society, outstanding performances from a stellar cast (including Tasnia Farin and Tariq Anam Khan), and its poignant message, showcasing his maturity as a storyteller.",
+    "icon": "evolution",
+    "color": "#E50914"
+  },
+  {
+    "era": "present",
+    "year": "2025-2026",
+    "label": "The Future",
+    "title": "Cinematic Ambitions",
+    "description": "Continuing to redefine Bangladeshi entertainment, setting sights on larger canvases and theatrical releases.",
+    "detail": "Standing at the pinnacle of digital entertainment in Bangladesh, Kajal Arefin Ome continues to push the boundaries of local production quality. As he prepares for larger scale projects and cinematic releases, he remains the most influential director of his generation, constantly evolving while staying true to the authentic stories of his people.",
+    "icon": "future",
+    "color": "#E50914"
+  }
+]

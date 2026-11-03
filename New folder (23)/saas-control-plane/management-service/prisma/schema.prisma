@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model BusinessOwner {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tenants   Tenant[]
+}
+
+model Tenant {
+  id              String        @id @default(uuid())
+  ownerId         String
+  owner           BusinessOwner @relation(fields: [ownerId], references: [id])
+  storeName       String
+  domain          String        @unique
+  status          String        @default("PROVISIONING")
+  apiPort         Int?
+  dbUser          String
+  dbPassword      String
+  dbName          String
+  secretKey       String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}

@@ -1,0 +1,183 @@
+openapi: 3.1.0
+info:
+  title: Evorise Enterprise Restaurant API
+  description: High-performance microservices API for the Evorise Restaurant Management System. Handles Geofencing, Order State Machines, and Menu Catalogs.
+  version: 1.0.0
+servers:
+  - url: https://api.evorise.com/v1
+    description: Production API Gateway (Cloudflare/Kong)
+  - url: https://staging.api.evorise.com/v1
+    description: Staging Environment
+
+security:
+  - bearerAuth: []
+  - deviceSignature: []
+
+paths:
+  /sessions/init:
+    post:
+      summary: Initialize a Table Session (Geofence & BLE Verification)
+      operationId: initSession
+      tags:
+        - Security & Geo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionInitRequest'
+      responses:
+        '201':
+          description: Session created successfully. Returns JWT.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionTokenResponse'
+        '403':
+          description: Geofence violation, BLE mismatch, or Table Occupied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit exceeded (Token Bucket).
+
+  /menu/{restaurant_id}:
+    get:
+      summary: Retrieve Restaurant Catalog
+      operationId: getMenu
+      tags:
+        - Catalog
+      parameters:
+        - name: restaurant_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Highly cached menu catalog (Served via Redis/Edge).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenuCatalog'
+
+  /orders/place:
+    post:
+      summary: Place a new order
+      operationId: placeOrder
+      tags:
+        - Ordering Engine
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Prevents double-charging if client network drops.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+      responses:
+        '202':
+          description: Order accepted by API Gateway and pushed to Kafka for asynchronous processing.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderAcceptedResponse'
+        '400':
+          description: Invalid payload, out of stock items, or price mismatch.
+          
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    deviceSignature:
+      type: apiKey
+      in: header
+      name: Evorise-Device-Signature
+      
+  schemas:
+    SessionInitRequest:
+      type: object
+      required:
+        - table_identifier
+        - gps_lat
+        - gps_lng
+        - device_fingerprint
+      properties:
+        table_identifier:
+          type: string
+          example: "TBL-12"
+        gps_lat:
+          type: number
+          format: float
+          example: 40.7128
+        gps_lng:
+          type: number
+          format: float
+          example: -74.0060
+        ble_rssi:
+          type: integer
+          example: -65
+          description: Signal strength of the floor beacon in dBm.
+        device_fingerprint:
+          type: string
+          example: "a1b2c3d4e5f6..."
+
+    OrderRequest:
+      type: object
+      required:
+        - items
+        - expected_total_cents
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            required:
+              - product_id
+              - quantity
+            properties:
+              product_id:
+                type: string
+                format: uuid
+              quantity:
+                type: integer
+                minimum: 1
+              modifiers:
+                type: object
+                additionalProperties: true
+        expected_total_cents:
+          type: integer
+          description: Client-calculated total. Backend strictly validates this against DB prices.
+          
+    OrderAcceptedResponse:
+      type: object
+      properties:
+        order_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          example: "PENDING_ACCEPTANCE"
+        websocket_topic:
+          type: string
+          example: "/orders/live/f47ac10b..."
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "ERR_GEOFENCE_VIOLATION"
+        message:
+          type: string
+          example: "You must be physically present in the restaurant to place an order."

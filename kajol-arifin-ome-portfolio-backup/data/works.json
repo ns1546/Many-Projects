@@ -1,0 +1,615 @@
+[
+  {
+    "id": 1,
+    "slug": "bachelor-point",
+    "title": "Bachelor Point",
+    "type": "Web Series",
+    "category": "web-series",
+    "year": 2018,
+    "endYear": "2022",
+    "genre": [
+      "Comedy",
+      "Drama"
+    ],
+    "platform": "Dhruba Tv",
+    "channel": "Dhruba Tv",
+    "runtime": "22-35 min/episode",
+    "language": "Bangla",
+    "role": "Director, Writer",
+    "poster": "/gallery/bachelor point.jpg",
+    "coverImage": "/gallery/bachelor point.jpg",
+    "stills": [
+      "/gallery/bachelor point.jpg"
+    ],
+    "synopsis": "Bachelor Point is a highly popular comedy-drama revolving around the everyday lives, friendships, struggles, and humorous experiences of a group of young men from different districts of Bangladesh living together in a shared apartment in Dhaka. It is celebrated for its authentic depiction of bachelor life and use of diverse regional dialects.",
+    "logline": "Six bachelors. One apartment. Infinite chaos and heartwarming friendship.",
+    "concept": "The idea stemmed from the relatable memories of bachelor life in Dhaka.",
+    "directorNote": "Bachelor Point is not just a comedy. It's a love letter to every young man who ever ate cold rice alone and called it dinner.",
+    "inspiration": "Inspired by personal experiences of bachelor life in Dhaka.",
+    "technicalSpecs": {
+      "camera": "Sony",
+      "lenses": "Cinema Primes",
+      "colorGrade": "Vibrant"
+    },
+    "challenges": "Coordinating with a large recurring cast across multiple seasons while maintaining the natural chemistry.",
+    "directorPerspective": "This show taught me that simplicity is the highest form of complexity.",
+    "cast": [
+      "Mishu Sabbir",
+      "Ziaul Hoque Polash",
+      "Chashi Alam",
+      "Marzuk Russell",
+      "Tawsif Mahbub",
+      "Shamim Hasan Sarkar",
+      "Monira Akter Mithu",
+      "Tamim Mridha",
+      "Faria Shahrin",
+      "Parsa Evana",
+      "Sanjana Sarkar Riya",
+      "Mukit Zakaria"
+    ],
+    "crew": {
+      "dop": "Various",
+      "editor": "Various",
+      "music": "Various",
+      "producer": "Dhruba Tv"
+    },
+    "successStats": {
+      "viewership": "500M+ total views",
+      "milestone": "Most popular comedy series in Bangladesh",
+      "audienceRating": "9.5/10",
+      "culturalImpact": "Spawned countless memes, catchphrases ('Pasha Bhai', 'Kabila'), and massive fan communities.",
+      "seasons": 5
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=XQhT0l47iI0",
+    "featured": true
+  },
+  {
+    "id": 2,
+    "slug": "oshomoy",
+    "title": "Oshomoy",
+    "type": "Web Film",
+    "category": "web-film",
+    "year": 2024,
+    "endYear": 2024,
+    "genre": [
+      "Drama",
+      "Tragedy",
+      "Social"
+    ],
+    "platform": "Binge",
+    "channel": "Bongo",
+    "runtime": "90 min",
+    "language": "Bangla",
+    "role": "Director, Writer",
+    "poster": "/gallery/osomoy.jpg",
+    "coverImage": "/gallery/osomoy.jpg",
+    "stills": [
+      "/gallery/osomoy.jpg"
+    ],
+    "synopsis": "The story follows Urbi, a university student from a middle-class background who becomes fascinated by the luxurious lives of her wealthy friends. As she navigates this world of privilege, she inadvertently becomes entangled in a homicide investigation. The film explores themes of societal show-off culture and the consequences of chasing material success.",
+    "logline": "A poignant reflection on contemporary societal issues, double-faced lives, and unexpected tragedy.",
+    "concept": "To showcase a different dimension of storytelling, breaking away from the pure comedy genre.",
+    "directorNote": "Oshomoy was a challenge to myself to tell a story that makes people think deeply about the society we live in.",
+    "inspiration": "The changing dynamics of modern society and unexpected turns in human lives.",
+    "technicalSpecs": {
+      "camera": "Cinema Camera",
+      "lenses": "Prime Lenses",
+      "colorGrade": "Cinematic / Serious tone"
+    },
+    "challenges": "Shifting audience expectations from pure comedy to serious drama.",
+    "directorPerspective": "I wanted to prove that a storyteller is not bound by a single genre.",
+    "cast": [
+      "Tasnia Farin",
+      "Runa Khan",
+      "Tariq Anam Khan",
+      "Monira Mithu",
+      "Iresh Zaker",
+      "Saraf Ahmed Jibon",
+      "Shashwta Datta",
+      "Intekhab Dinar",
+      "Ziaul Hoque Polash",
+      "Shimul Sharma",
+      "Lamima Lam"
+    ],
+    "crew": {
+      "dop": "N/A",
+      "editor": "N/A",
+      "music": "N/A",
+      "producer": "Binge"
+    },
+    "successStats": {
+      "viewership": "Millions of streams",
+      "milestone": "A critically acclaimed shift in genre for the director",
+      "audienceRating": "9.0/10",
+      "culturalImpact": "Praised for its realistic portrayal of society."
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=OqRg43lXjPM",
+    "featured": true
+  },
+  {
+    "id": 3,
+    "slug": "hotel-relax",
+    "title": "Hotel Relax",
+    "type": "Web Series",
+    "category": "web-series",
+    "year": 2023,
+    "endYear": 2023,
+    "genre": [
+      "Comedy",
+      "Thriller"
+    ],
+    "platform": "Binge",
+    "channel": "Bongo",
+    "runtime": "6 Episodes",
+    "language": "Bangla",
+    "role": "Director, Writer",
+    "poster": "/gallery/hotel relax.jpg",
+    "coverImage": "/gallery/hotel relax.jpg",
+    "stills": [
+      "/gallery/hotel relax.jpg"
+    ],
+    "synopsis": "The story follows a group of unusual individuals—including dacoits, cloth merchants, pickpockets, and conmen—who all gather at an infamous establishment called Hotel Relax. Their plan to rest unexpectedly leads to a series of chaotic and troublesome events in this comedy-thriller.",
+    "logline": "Checking in is easy, relaxing is impossible when a diverse group of quirky characters collide.",
+    "concept": "A situational comedy-thriller taking place in a single primary location.",
+    "directorNote": "I wanted to create an ensemble piece where the location itself feels like a character.",
+    "inspiration": "Classic locked-room mysteries blended with signature situational comedy.",
+    "technicalSpecs": {
+      "camera": "N/A",
+      "lenses": "N/A",
+      "colorGrade": "N/A"
+    },
+    "challenges": "Managing an ensemble cast in a confined space.",
+    "directorPerspective": "The fun is in seeing how completely different personalities clash.",
+    "cast": [
+      "Mishu Sabbir",
+      "Ziaul Hoque Polash",
+      "Marzuk Russell",
+      "Chashi Alam",
+      "Parsa Evana",
+      "Saidur Rahman Pavel",
+      "Saraf Ahmed Zibon",
+      "Purnima",
+      "Musafire Syed Bacchu",
+      "Abdullah Rana",
+      "Schumonn Patwary"
+    ],
+    "crew": {
+      "dop": "N/A",
+      "editor": "N/A",
+      "music": "N/A",
+      "producer": "Binge"
+    },
+    "successStats": {
+      "viewership": "Record breaking streams on Binge",
+      "milestone": "One of the most successful series on the Binge platform",
+      "audienceRating": "8.8/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=SFkW32zHf4E",
+    "featured": true
+  },
+  {
+    "id": 4,
+    "slug": "female-3",
+    "title": "Female 3",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2023,
+    "endYear": 2023,
+    "genre": [
+      "Comedy"
+    ],
+    "platform": "YouTube",
+    "channel": "Bongo",
+    "runtime": "45 min",
+    "language": "Bangla",
+    "role": "Director",
+    "poster": "/gallery/female.jpg",
+    "coverImage": "/gallery/female.jpg",
+    "stills": [
+      "/gallery/female.jpg"
+    ],
+    "synopsis": "The Female series revolves around the lives, misadventures, and humorous conflicts of a group of friends. It focuses on their interactions, gang dynamics, and comical situations while navigating life, relationships, and societal pressures in their neighborhood.",
+    "logline": "The ultimate neighborhood rivalry continues with higher stakes and bigger laughs.",
+    "concept": "To expand on the immensely popular 'Female' franchise with higher stakes and bigger laughs.",
+    "directorNote": "It's always a joy returning to these characters. The audience's love for them makes the hard work worth it.",
+    "inspiration": "Neighborhood politics and comedic rivalries.",
+    "technicalSpecs": {
+      "camera": "N/A",
+      "lenses": "N/A",
+      "colorGrade": "N/A"
+    },
+    "challenges": "Matching the sky-high expectations set by the previous two installments.",
+    "directorPerspective": "",
+    "cast": [
+      "Ziaul Hoque Polash",
+      "Mishu Sabbir",
+      "Marzuk Russell",
+      "Chashi Alam",
+      "Saraf Ahmed Zibon",
+      "Shimul Sharma",
+      "Saidur Rahman Pavel",
+      "Musafire Syed Bacchu"
+    ],
+    "crew": {
+      "dop": "N/A",
+      "editor": "N/A",
+      "music": "N/A",
+      "producer": "Bongo"
+    },
+    "successStats": {
+      "viewership": "Millions of views on YouTube",
+      "milestone": "Shattered previous viewership records for single dramas",
+      "audienceRating": "9.2/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=AZae3EFiMjc",
+    "featured": false
+  },
+  {
+    "id": 100,
+    "slug": "how-sweet",
+    "title": "How Sweet!",
+    "type": "Web Film",
+    "category": "web-film",
+    "year": 2025,
+    "endYear": 2025,
+    "genre": [
+      "Drama",
+      "Comedy"
+    ],
+    "platform": "Bongo",
+    "channel": "Bongo",
+    "runtime": "22-35 min/episode",
+    "language": "Bangla",
+    "role": "Director, Writer",
+    "poster": "/gallery/photo-1.jpg",
+    "coverImage": "/gallery/photo-1.jpg",
+    "stills": [
+      "/gallery/photo-1.jpg"
+    ],
+    "synopsis": "How Sweet! is a popular production directed by Kajal Arefin Ome, exploring the nuances of society.",
+    "logline": "Another masterpiece by Kajal Arefin Ome.",
+    "concept": "The idea stemmed from the relatable memories of bachelor life in Dhaka.",
+    "directorNote": "Bachelor Point is not just a comedy. It's a love letter to every young man who ever ate cold rice alone and called it dinner.",
+    "inspiration": "Inspired by personal experiences of bachelor life in Dhaka.",
+    "technicalSpecs": {
+      "camera": "Sony",
+      "lenses": "Cinema Primes",
+      "colorGrade": "Vibrant"
+    },
+    "challenges": "Coordinating with a large recurring cast across multiple seasons while maintaining the natural chemistry.",
+    "directorPerspective": "This show taught me that simplicity is the highest form of complexity.",
+    "cast": [
+      "Ziaul Faruq Apurba",
+      "Tasnia Farin"
+    ],
+    "crew": {
+      "dop": "Various",
+      "editor": "Various",
+      "music": "Various",
+      "producer": "Dhruba Tv"
+    },
+    "successStats": {
+      "viewership": "Millions of views",
+      "milestone": "A fan favorite",
+      "audienceRating": "9.0/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=XQhT0l47iI0",
+    "featured": true
+  },
+  {
+    "id": 101,
+    "slug": "sheshmesh",
+    "title": "Sheshmesh",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2024,
+    "endYear": 2024,
+    "genre": [
+      "Drama",
+      "Comedy"
+    ],
+    "platform": "Club 11 Entertainment",
+    "channel": "Club 11 Entertainment",
+    "runtime": "22-35 min/episode",
+    "language": "Bangla",
+    "role": "Director, Writer",
+    "poster": "/gallery/photo-2.jpg",
+    "coverImage": "/gallery/photo-2.jpg",
+    "stills": [
+      "/gallery/photo-2.jpg"
+    ],
+    "synopsis": "Sheshmesh is a popular production directed by Kajal Arefin Ome, exploring the nuances of society.",
+    "logline": "Another masterpiece by Kajal Arefin Ome.",
+    "concept": "The idea stemmed from the relatable memories of bachelor life in Dhaka.",
+    "directorNote": "Bachelor Point is not just a comedy. It's a love letter to every young man who ever ate cold rice alone and called it dinner.",
+    "inspiration": "Inspired by personal experiences of bachelor life in Dhaka.",
+    "technicalSpecs": {
+      "camera": "Sony",
+      "lenses": "Cinema Primes",
+      "colorGrade": "Vibrant"
+    },
+    "challenges": "Coordinating with a large recurring cast across multiple seasons while maintaining the natural chemistry.",
+    "directorPerspective": "This show taught me that simplicity is the highest form of complexity.",
+    "cast": [
+      "Ziaul Hoque Polash",
+      "Parsa Evana",
+      "Monira Akter Mithu",
+      "Saidur Rahman Pavel"
+    ],
+    "crew": {
+      "dop": "Various",
+      "editor": "Various",
+      "music": "Various",
+      "producer": "Dhruba Tv"
+    },
+    "successStats": {
+      "viewership": "Millions of views",
+      "milestone": "A fan favorite",
+      "audienceRating": "9.0/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=XQhT0l47iI0",
+    "featured": true
+  },
+  {
+    "id": 102,
+    "slug": "good-buzz",
+    "title": "Good Buzz",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2022,
+    "endYear": 2022,
+    "genre": [
+      "Drama",
+      "Comedy"
+    ],
+    "platform": "Club 11 Entertainment",
+    "channel": "Club 11 Entertainment",
+    "runtime": "22-35 min/episode",
+    "language": "Bangla",
+    "role": "Director, Writer",
+    "poster": "/gallery/photo-3.jpg",
+    "coverImage": "/gallery/photo-3.jpg",
+    "stills": [
+      "/gallery/photo-3.jpg"
+    ],
+    "synopsis": "Good Buzz is a popular production directed by Kajal Arefin Ome, exploring the nuances of society.",
+    "logline": "Another masterpiece by Kajal Arefin Ome.",
+    "concept": "The idea stemmed from the relatable memories of bachelor life in Dhaka.",
+    "directorNote": "Bachelor Point is not just a comedy. It's a love letter to every young man who ever ate cold rice alone and called it dinner.",
+    "inspiration": "Inspired by personal experiences of bachelor life in Dhaka.",
+    "technicalSpecs": {
+      "camera": "Sony",
+      "lenses": "Cinema Primes",
+      "colorGrade": "Vibrant"
+    },
+    "challenges": "Coordinating with a large recurring cast across multiple seasons while maintaining the natural chemistry.",
+    "directorPerspective": "This show taught me that simplicity is the highest form of complexity.",
+    "cast": [
+      "Mishu Sabbir",
+      "Safa Kabir",
+      "Ziaul Hoque Polash",
+      "Parsa Evana"
+    ],
+    "crew": {
+      "dop": "Various",
+      "editor": "Various",
+      "music": "Various",
+      "producer": "Dhruba Tv"
+    },
+    "successStats": {
+      "viewership": "Millions of views",
+      "milestone": "A fan favorite",
+      "audienceRating": "9.0/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=XQhT0l47iI0",
+    "featured": true
+  },
+  {
+    "id": 103,
+    "slug": "bad-buzz",
+    "title": "Bad Buzz",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2022,
+    "endYear": 2022,
+    "genre": [
+      "Drama",
+      "Comedy"
+    ],
+    "platform": "Club 11 Entertainment",
+    "channel": "Club 11 Entertainment",
+    "runtime": "22-35 min/episode",
+    "language": "Bangla",
+    "role": "Director, Writer",
+    "poster": "/gallery/photo-4.jpg",
+    "coverImage": "/gallery/photo-4.jpg",
+    "stills": [
+      "/gallery/photo-4.jpg"
+    ],
+    "synopsis": "Bad Buzz is a popular production directed by Kajal Arefin Ome, exploring the nuances of society.",
+    "logline": "Another masterpiece by Kajal Arefin Ome.",
+    "concept": "The idea stemmed from the relatable memories of bachelor life in Dhaka.",
+    "directorNote": "Bachelor Point is not just a comedy. It's a love letter to every young man who ever ate cold rice alone and called it dinner.",
+    "inspiration": "Inspired by personal experiences of bachelor life in Dhaka.",
+    "technicalSpecs": {
+      "camera": "Sony",
+      "lenses": "Cinema Primes",
+      "colorGrade": "Vibrant"
+    },
+    "challenges": "Coordinating with a large recurring cast across multiple seasons while maintaining the natural chemistry.",
+    "directorPerspective": "This show taught me that simplicity is the highest form of complexity.",
+    "cast": [
+      "Mishu Sabbir",
+      "Safa Kabir",
+      "Ziaul Hoque Polash",
+      "Parsa Evana"
+    ],
+    "crew": {
+      "dop": "Various",
+      "editor": "Various",
+      "music": "Various",
+      "producer": "Dhruba Tv"
+    },
+    "successStats": {
+      "viewership": "Millions of views",
+      "milestone": "A fan favorite",
+      "audienceRating": "9.0/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=XQhT0l47iI0",
+    "featured": true
+  },
+  {
+    "id": 104,
+    "slug": "doi",
+    "title": "Doi",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2023,
+    "endYear": 2023,
+    "genre": [
+      "Drama",
+      "Comedy"
+    ],
+    "platform": "Motion Rock Entertainment",
+    "channel": "Motion Rock Entertainment",
+    "runtime": "22-35 min/episode",
+    "language": "Bangla",
+    "role": "Director, Writer",
+    "poster": "/gallery/photo-5.jpg",
+    "coverImage": "/gallery/photo-5.jpg",
+    "stills": [
+      "/gallery/photo-5.jpg"
+    ],
+    "synopsis": "Doi is a popular production directed by Kajal Arefin Ome, exploring the nuances of society.",
+    "logline": "Another masterpiece by Kajal Arefin Ome.",
+    "concept": "The idea stemmed from the relatable memories of bachelor life in Dhaka.",
+    "directorNote": "Bachelor Point is not just a comedy. It's a love letter to every young man who ever ate cold rice alone and called it dinner.",
+    "inspiration": "Inspired by personal experiences of bachelor life in Dhaka.",
+    "technicalSpecs": {
+      "camera": "Sony",
+      "lenses": "Cinema Primes",
+      "colorGrade": "Vibrant"
+    },
+    "challenges": "Coordinating with a large recurring cast across multiple seasons while maintaining the natural chemistry.",
+    "directorPerspective": "This show taught me that simplicity is the highest form of complexity.",
+    "cast": [
+      "Mishu Sabbir",
+      "Ziaul Hoque Polash",
+      "Marzuk Russell",
+      "Chashi Alam"
+    ],
+    "crew": {
+      "dop": "Various",
+      "editor": "Various",
+      "music": "Various",
+      "producer": "Dhruba Tv"
+    },
+    "successStats": {
+      "viewership": "Millions of views",
+      "milestone": "A fan favorite",
+      "audienceRating": "9.0/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=XQhT0l47iI0",
+    "featured": true
+  },
+  {
+    "id": 105,
+    "slug": "dukkhito",
+    "title": "Dukkhito",
+    "type": "Single Drama",
+    "category": "single-drama",
+    "year": 2024,
+    "endYear": 2024,
+    "genre": [
+      "Drama",
+      "Comedy"
+    ],
+    "platform": "Bongo",
+    "channel": "Bongo",
+    "runtime": "22-35 min/episode",
+    "language": "Bangla",
+    "role": "Director, Writer",
+    "poster": "/gallery/photo-6.jpg",
+    "coverImage": "/gallery/photo-6.jpg",
+    "stills": [
+      "/gallery/photo-6.jpg"
+    ],
+    "synopsis": "Dukkhito is a popular production directed by Kajal Arefin Ome, exploring the nuances of society.",
+    "logline": "Another masterpiece by Kajal Arefin Ome.",
+    "concept": "The idea stemmed from the relatable memories of bachelor life in Dhaka.",
+    "directorNote": "Bachelor Point is not just a comedy. It's a love letter to every young man who ever ate cold rice alone and called it dinner.",
+    "inspiration": "Inspired by personal experiences of bachelor life in Dhaka.",
+    "technicalSpecs": {
+      "camera": "Sony",
+      "lenses": "Cinema Primes",
+      "colorGrade": "Vibrant"
+    },
+    "challenges": "Coordinating with a large recurring cast across multiple seasons while maintaining the natural chemistry.",
+    "directorPerspective": "This show taught me that simplicity is the highest form of complexity.",
+    "cast": [
+      "Ziaul Hoque Polash",
+      "Parsa Evana"
+    ],
+    "crew": {
+      "dop": "Various",
+      "editor": "Various",
+      "music": "Various",
+      "producer": "Dhruba Tv"
+    },
+    "successStats": {
+      "viewership": "Millions of views",
+      "milestone": "A fan favorite",
+      "audienceRating": "9.0/10",
+      "culturalImpact": ""
+    },
+    "awards": [],
+    "festivalScreenings": [],
+    "pressLinks": [],
+    "trailerUrl": "",
+    "youtubeUrl": "https://www.youtube.com/watch?v=XQhT0l47iI0",
+    "featured": true
+  }
+]

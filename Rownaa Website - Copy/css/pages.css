@@ -1,0 +1,122 @@
+/* ====================================
+   pages.css — Shared inner-page styles
+   (login, register, find-cars, etc.)
+   ==================================== */
+.page-hero{background:var(--black);padding:120px 40px 60px;text-align:center;position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(34,197,94,0.08),transparent 70%)}
+.page-hero h1{font-size:clamp(2rem,4vw,3rem);font-weight:900;color:var(--white);letter-spacing:-1.5px;position:relative;z-index:1}
+.page-hero p{font-size:1rem;color:rgba(255,255,255,0.5);margin-top:10px;position:relative;z-index:1}
+
+/* AUTH PAGES (login, register) */
+.auth-page{min-height:100vh;background:var(--g100);display:flex;align-items:center;justify-content:center;padding:100px 20px}
+.auth-card{background:var(--white);border-radius:var(--r-xl);padding:48px;width:100%;max-width:460px;box-shadow:var(--sh-lg)}
+.auth-logo{text-align:center;margin-bottom:32px}
+.auth-logo a{font-size:2rem;font-weight:900;color:var(--black);text-decoration:none;letter-spacing:-1.5px}
+.auth-logo a span{color:var(--green)}
+.auth-title{font-size:1.5rem;font-weight:900;color:var(--black);letter-spacing:-0.8px;margin-bottom:6px}
+.auth-sub{font-size:0.88rem;color:var(--g600);margin-bottom:32px}
+.auth-form{display:flex;flex-direction:column;gap:18px}
+.form-field{display:flex;flex-direction:column;gap:6px}
+.form-field label{font-size:0.72rem;font-weight:700;color:var(--g600);text-transform:uppercase;letter-spacing:0.8px}
+.form-field input,.form-field select,.form-field textarea{padding:13px 16px;border:1.5px solid var(--g200);border-radius:var(--r-md);font-family:'Inter',sans-serif;font-size:0.9rem;color:var(--black);background:var(--white);transition:var(--tx);outline:none;width:100%;-webkit-appearance:none}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--black);box-shadow:0 0 0 3px rgba(0,0,0,0.06)}
+.form-field textarea{resize:vertical;min-height:90px}
+.btn-submit{width:100%;padding:15px;background:var(--black);color:var(--white);border:none;border-radius:var(--r-md);font-family:'Inter',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:var(--tx);letter-spacing:-0.3px}
+.btn-submit:hover{background:#1a1a1a;transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,0.2)}
+.auth-switch{text-align:center;font-size:0.88rem;color:var(--g600);margin-top:20px}
+.auth-switch a{color:var(--black);font-weight:700;text-decoration:none}
+.auth-switch a:hover{color:var(--green)}
+.form-divider{display:flex;align-items:center;gap:12px;color:var(--g400);font-size:0.8rem;font-weight:500;margin:4px 0}
+.form-divider::before,.form-divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.error-msg{font-size:0.78rem;color:#ef4444;font-weight:600;margin-top:3px}
+.success-msg{font-size:0.78rem;color:var(--green-d);font-weight:600;margin-top:3px}
+.input-with-btn{display:flex;gap:10px}
+.input-with-btn input{flex:1}
+.input-with-btn button{padding:0 18px;background:var(--black);color:var(--white);border:none;border-radius:var(--r-sm);font-family:'Inter',sans-serif;font-size:0.83rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:var(--tx)}
+.input-with-btn button:hover{background:#333}
+
+/* STEP WIZARD (owner register) */
+.wizard-wrap{min-height:100vh;background:var(--g100);padding-top:80px}
+.wizard-inner{max-width:700px;margin:0 auto;padding:40px}
+.wizard-progress{display:flex;align-items:center;gap:0;margin-bottom:40px}
+.wp-step{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative}
+.wp-circle{width:36px;height:36px;border-radius:50%;background:var(--g200);color:var(--g600);font-size:0.8rem;font-weight:800;display:flex;align-items:center;justify-content:center;transition:var(--tx);position:relative;z-index:1}
+.wp-step.active .wp-circle{background:var(--black);color:var(--white)}
+.wp-step.done .wp-circle{background:var(--green);color:var(--white)}
+.wp-label{font-size:0.65rem;font-weight:700;color:var(--g400);text-align:center;max-width:70px}
+.wp-step.active .wp-label,.wp-step.done .wp-label{color:var(--black)}
+.wp-line{flex:1;height:2px;background:var(--g200);margin-top:-18px;position:relative;z-index:0}
+.wp-line.done{background:var(--green)}
+.wizard-card{background:var(--white);border-radius:var(--r-xl);padding:40px;box-shadow:var(--sh-md)}
+.wizard-card h2{font-size:1.4rem;font-weight:900;color:var(--black);letter-spacing:-0.8px;margin-bottom:6px}
+.wizard-card .step-hint{font-size:0.88rem;color:var(--g600);margin-bottom:28px}
+.wizard-form{display:flex;flex-direction:column;gap:18px}
+.wizard-btns{display:flex;gap:12px;margin-top:28px}
+.btn-wizard-back{flex:1;padding:13px;background:var(--g100);color:var(--black);border:1.5px solid var(--g200);border-radius:var(--r-md);font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer;transition:var(--tx)}
+.btn-wizard-back:hover{background:var(--g200)}
+.btn-wizard-next{flex:2;padding:13px;background:var(--black);color:var(--white);border:none;border-radius:var(--r-md);font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer;transition:var(--tx)}
+.btn-wizard-next:hover{background:#222;transform:translateY(-1px)}
+.upload-box{border:2px dashed var(--g300);border-radius:var(--r-md);padding:28px;text-align:center;cursor:pointer;transition:var(--tx);background:var(--g100)}
+.upload-box:hover{border-color:var(--black);background:var(--white)}
+.upload-box input[type="file"]{display:none}
+.upload-box .ub-icon{font-size:2rem;margin-bottom:8px}
+.upload-box p{font-size:0.85rem;color:var(--g600);margin-bottom:4px}
+.upload-box small{font-size:0.75rem;color:var(--g400)}
+.checkbox-group{display:flex;flex-direction:column;gap:10px}
+.checkbox-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border:1.5px solid var(--g200);border-radius:var(--r-md);cursor:pointer;transition:var(--tx)}
+.checkbox-item:hover{border-color:var(--black)}
+.checkbox-item input[type="checkbox"]{width:18px;height:18px;accent-color:var(--black);cursor:pointer;flex-shrink:0}
+.checkbox-item label{font-size:0.9rem;font-weight:600;color:var(--black);cursor:pointer}
+.checkbox-item small{font-size:0.78rem;color:var(--g600);display:block}
+
+/* FIND CARS PAGE */
+.find-cars-layout{display:grid;grid-template-columns:340px 1fr;min-height:calc(100vh - 66px);margin-top:66px}
+.filter-panel{background:var(--white);border-right:1px solid var(--g200);padding:28px;position:sticky;top:66px;height:calc(100vh - 66px);overflow-y:auto}
+.filter-panel h3{font-size:0.75rem;font-weight:800;color:var(--black);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:18px}
+.filter-group{margin-bottom:28px}
+.filter-group label{font-size:0.72rem;font-weight:700;color:var(--g600);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px}
+.filter-group select,.filter-group input{width:100%;padding:10px 13px;border:1.5px solid var(--g200);border-radius:var(--r-sm);font-family:'Inter',sans-serif;font-size:0.875rem;color:var(--black);background:var(--white);outline:none;-webkit-appearance:none;transition:var(--tx)}
+.filter-group select:focus,.filter-group input:focus{border-color:var(--black)}
+.car-type-btns{display:flex;flex-wrap:wrap;gap:8px}
+.ctb{padding:7px 14px;border:1.5px solid var(--g200);border-radius:50px;font-family:'Inter',sans-serif;font-size:0.78rem;font-weight:600;color:var(--g600);background:var(--white);cursor:pointer;transition:var(--tx)}
+.ctb.active,.ctb:hover{border-color:var(--black);color:var(--black);background:var(--g100)}
+.cars-panel{padding:28px;background:var(--g100)}
+.cars-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.cars-header h2{font-size:1.1rem;font-weight:800;color:var(--black)}
+.cars-header select{padding:8px 14px;border:1.5px solid var(--g200);border-radius:50px;font-family:'Inter',sans-serif;font-size:0.82rem;color:var(--black);background:var(--white);outline:none;cursor:pointer}
+.cars-grid{display:flex;flex-direction:column;gap:16px}
+.car-card{background:var(--white);border-radius:var(--r-lg);overflow:hidden;display:flex;border:1.5px solid var(--g200);transition:var(--tx);cursor:pointer}
+.car-card:hover{border-color:var(--black);transform:translateY(-3px);box-shadow:var(--sh-md)}
+.car-card-img{width:200px;flex-shrink:0;background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:4rem}
+.car-card-body{padding:20px 22px;flex:1}
+.car-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
+.car-name{font-size:1.05rem;font-weight:800;color:var(--black);letter-spacing:-0.4px}
+.car-type-badge{font-size:0.72rem;font-weight:700;padding:4px 10px;border-radius:50px;background:var(--g100);color:var(--g600)}
+.car-details{display:flex;gap:16px;margin-bottom:14px}
+.car-detail{font-size:0.8rem;color:var(--g600);display:flex;align-items:center;gap:5px}
+.car-rating{display:flex;align-items:center;gap:5px;margin-bottom:14px}
+.car-rating .stars{color:#f59e0b;font-size:0.85rem}
+.car-rating span{font-size:0.8rem;color:var(--g600)}
+.car-card-footer{display:flex;align-items:center;justify-content:space-between}
+.car-price{font-size:1.1rem;font-weight:900;color:var(--black)}
+.car-price small{font-size:0.75rem;font-weight:500;color:var(--g400)}
+.btn-select-car{padding:10px 22px;background:var(--black);color:var(--white);border:none;border-radius:50px;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:700;cursor:pointer;transition:var(--tx)}
+.btn-select-car:hover{background:#222;transform:translateY(-1px)}
+
+/* MOBILE inner page adjustments */
+@media(max-width:767px){
+  .page-hero{padding:90px 20px 40px}
+  .auth-page{padding:80px 18px}
+  .auth-card{padding:30px 24px;border-radius:20px}
+  .input-row{grid-template-columns:1fr}
+  .wizard-inner{padding:24px 18px}
+  .wizard-card{padding:24px}
+  .wizard-progress{gap:0}
+  .wp-label{display:none}
+  .find-cars-layout{grid-template-columns:1fr;margin-top:58px}
+  .filter-panel{position:static;height:auto;border-right:none;border-bottom:1px solid var(--g200);padding:20px}
+  .cars-panel{padding:18px}
+  .car-card{flex-direction:column}
+  .car-card-img{width:100%;height:160px}
+}

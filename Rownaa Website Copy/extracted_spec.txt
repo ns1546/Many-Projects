@@ -1,0 +1,300 @@
+ROWNAA — Developer Specification (Master Edition) Page 1 of 8  ROWNAA  
+Book a car, anywhere you're headed.  
+DEVELOPER SPECIFICATION DOCUMENT  
+Car Rental Marketplace Platform — Full Build Spec e 
+ 
+1. Project Overview  
+Rownaa is a car rental marketplace website, structured similarly to ride-sharing platforms (e.g. Pathao, Uber) but 
+built around scheduled rentals rather than point-to-point pickups. 
+The platform owner does not own any vehicles. Car owners and drivers register on the platform and list their 
+vehicles. Customers browse and book based on pickup location, date, and service type. The platform takes a 
+commission on each completed booking. 
+1.1 Business Model  
+• Marketplace model: car owners/drivers register and list vehicles; the platform does not own any cars 
+• Commission: approximately 10% per booking, taken from the total fare 
+• Payment split: customer pays a 20% advance online to confirm the booking; the remaining balance is paid 
+directly to the driver in person 
+• Owners/drivers are verified (documents checked) before being approved to receive bookings 
+• Initial services offered: Airport Transfer, Corporate Transport, Car Rental with Hourly, Intercity Travel, Travel 
+& Tour, Event & Wedding Transport. 
+1.2 User Roles  
+• Customer — books a car for a service 
+• Car Owner / Driver — registers a vehicle (and optionally a driver) and fulfills bookings 
+• Admin — verifies users, oversees bookings, tracks commission, manages disputes and platform content 
+2. Customer Panel — Booking Flow  
+The customer selects one of 6 services on the homepage, then a service-wise booking form appears. 
+2.1 Common Fields (present on every service)  
+• Name 
+• Mobile number 
+• Pickup location (address / area select — map picker preferred) 
+• Pickup date 
+• Pickup time 
+• Car type preference (Sedan / SUV / Microbus / Noah-Hiace / Any) 
+• Special note / instruction (optional text box) 
+• Advance payment (20%) — via bKash / Bank Transfer or SSLCommerz at confirmation 
+ 
+ 
+
+ROWNAA — Developer Specification (Master Edition) Page 2 of 8  2.2 Service-Specific Fields  
+# Service Service-Specific Fields  
+01 Car Rental with Hourly  • Rental duration (hours / days)  
+• Start date & time  
+• End date & time (or “estimated”)  
+• Trip type: within city / outside city  
+02 Airport Transfer  • Pickup type: from Airport / to Airport  
+• Trip type: One-way / Round trip  
+• Drop location (if from airport) or pickup location (if to airport)  
+03 Intercity Travel  • From city 
+• To city 
+• Trip type: One-way / Round trip  
+• Return date & time (if round trip)  
+• Preferred pickup point (within origin city)  
+• Drop point (within destination city)  
+04 Travel & Tour Booking  • Trip type: Tour (multiple destinations)  
+• From city 
+• To city / Destination(s)  
+• One-way / Round trip  
+• Trip duration (days, for tour packages)  
+• Itinerary detail (optional — places to visit)  
+05 Event & Wedding Transport  • Event type (wedding / function / corporate event / other)  
+• Event date  
+• Venue location  
+• Multiple cars needed? (based on guest count)  
+• Number of cars needed (if multiple)  
+• Duration (how many hours the car is needed)  
+06 Corporate Transport  • Company name  
+• Office pickup point  
+• Drop location  
+• One-time / Recurring (daily / weekly / monthly) booking  
+• If recurring: for how many days, which days  
+• Number of passengers  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ROWNAA — Developer Specification (Master Edition) Page 3 of 8  2.3 Seat Matching Logic  
+Based on how many passengers the trip creator wants to carry, the system should automatically filter and suggest 
+available cars matching that count. 
+The system should display: 
+• Total passengers required 
+• How many cars are needed 
+• Which car type(s) are needed 
+• Available seats per car 
+• Combined total seats across the suggested cars 
+Example — 10 passengers:  
+• Sedan — 4 seats 
+• SUV — 6 seats 
+• Result: 2 cars = 10 seats total  
+2.4 Customer Panel — Feature List  
+• Sign up / login (phone number or email) 
+• Homepage with the 6 service options 
+• Automatic filtering: only cars registered near the selected pickup area are shown 
+• Car listing view: photos, model, seat capacity, rate, driver rating 
+• Booking confirmation with online advance payment 
+• “My Bookings” page showing status: Pending / Confirmed / Ongoing / Completed / Cancelled 
+• Option to rate and review the driver/car after a completed trip 
+⚠ Developer Notes — Booking Data  
+• Every service form submission creates a booking request in the backend containing: service type, all field data, 
+customer info, and status (pending / confirmed / completed).  
+• Keep the pickup location field structured (dropdown or map-based area select), not free-text — this is 
+required to filter and match the nearest registered car owner/driver.  
+• Intercity Travel is a standalone service, separate from Travel & Tour — Intercity is for straightforward point-
+to-point city-to-city trips, while Travel & Tour covers multi-destination/multi-day tour packages with an 
+itinerary. 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ROWNAA — Developer Specification (Master Edition) Page 4 of 8  3. Owner / Driver Registration Panel  
+Step-by-step registration flow for car owners and rental businesses. 
+Step 1 — Basic Info  
+• Name (owner / business name) 
+• Phone number (OTP verification recommended) 
+• Email (optional) 
+• Business type: Individual owner / Rental agency (if multiple cars) 
+• Area / address (main operating zone — where pickup usually happens) 
+Step 2 — Owner/Business Verification Documents  
+• NID card (front-back photo upload) 
+• Trade license (if rental business / agency) 
+• Address proof (utility bill) 
+Step 3 — Car Information (“Add another car” option if multiple)  
+• Car name/model (e.g. Toyota Axio, Noah, Hiace) 
+• Manufacturing year (Optional) 
+• Seat count 
+• Car color 
+• Number plate 
+• Car photos (front, back, inside — a few) 
+• Registration paper (BRTA) upload 
+• Fitness certificate upload (Expire date entry must) 
+• Tax token upload 
+• Insurance paper (if available) 
+Step 4 — Driver Information (if owner keeps a driver instead of driving)  
+• Driver's name 
+• Phone number 
+• Driving license (photo upload, front-back) 
+• Driver's photo 
+• Experience (years, optional) 
+If the owner is the driver themself, this step is skipped.  
+Step 5 — Service Preference  
+• Which services they want to offer (checkbox: Airport Transfer / Corporate / Rental / Intercity / Tour / Event) 
+(Choose any 3 options) 
+• Availability: Full-time / Part-time / Weekend only 
+• Operating area (select one or more areas) 
+Step 6 — Payment / Bank Info  
+• bKash/Nagad number (for receiving payouts) 
+• Bank account (optional, if bank transfer is kept) 
+ 
+
+ROWNAA — Developer Specification (Master Edition) Page 5 of 8  Step 7 — Submit → Pending Approval  
+1. After submitting, status stays “Pending” 
+2. A notification goes to the admin panel 
+3. Admin verifies all documents and Approves/Rejects 
+4. On approval, the owner is notified via SMS/email — from then, their car becomes visible for customer 
+booking 
+3.1 Owner's Own Dashboard (after approval)  
+• See booking requests for their car (notification on new booking) 
+• Option to accept/reject bookings 
+• See their booking history and earnings 
+• Update car info/photos 
+• If multiple cars, manage all cars (mark available/unavailable) 
+• Update profile/documents (e.g. upload a new fitness certificate) 
+• Earnings dashboard: total earned, commission deducted, net payable, payment history 
+• Availability calendar management 
+⚠ Developer Notes — Registration & Verification  
+• For multi-car owners (rental agency), one owner account needs multiple car profiles under it (one-to-many 
+relation). 
+• Document upload should accept both image.  
+• In MVP, driver info can be optional (can start with just owner+car verification) — driver management can be 
+added later.  
+• Must ensure the logic: without approval, a car should never show up in customer-facing search.  
+4. Admin Panel — Full Structure  
+Complete panel-by-panel design for the Rownaa admin — covering owner registration, bookings, drivers, 
+payments, and platform control. 
+Panel 1 — Dashboard (Overview)  
+• Total bookings — today / this week / this month 
+• Total revenue and commission earned — today / this week / this month 
+• Pending bookings (not yet assigned to a driver) 
+• New owner/driver registration requests (pending approval) 
+• Active vs. completed vs. cancelled booking counts 
+• Quick alerts: expiring fitness certificates/tax tokens, expiring subscriptions 
+Panel 2 — Owner Registration Panel  
+Two-layer verification: the business/company is approved first, then each car under it is verified and approved 
+separately.  
+2A. Registration Queue  
+• List of all registration submissions — filter by Pending / Approved / Rejected 
+• Filter by business type (Individual owner / Rental agency), area, and submission date 
+• Quick search by owner name or phone number 
+ 
+
+ROWNAA — Developer Specification (Master Edition) Page 6 of 8  2B. Business/Company-Level Review  
+• Basic info: owner/business name, phone (OTP-verified), email, area/operating zone 
+• Verification documents: NID (front-back), trade license (if agency), address proof 
+• bKash/Nagad number and bank info (for payouts) shown for reference 
+• Approve / Reject button with a mandatory reason note on rejection 
+• On approval, the owner is notified via SMS/email; on rejection, the reason is included 
+• Option to suspend or block an already-approved business 
+• View total car count and status summary under this business 
+2C. Car-Level Review (per business)  
+• Every car added under an approved business appears here as its own entry (“Add Car”) 
+• Car details: model, manufacturing year, seat count, color, number plate, photos (front/back/inside) 
+• Document verification per car: BRTA registration paper, fitness certificate, tax token, insurance (if available) 
+• Each car is individually Approved/Rejected — one car's rejected papers don't affect the business's other cars 
+• Car status: Active / Inactive / Suspended (auto notify us -suspend on fitness/tax token expiry, or manual) 
+• Driver assignment per car — pick a specific driver or from the business's driver pool 
+• Logic enforced platform-wide: an unapproved car never appears in customer-facing search 
+2D. Driver Review  
+• Driver list with NID, driving license (front-back), photo, years of experience 
+• Which car each driver is currently assigned to 
+• Individually approve, suspend, or block a driver 
+• In MVP, driver verification can be optional — owner-and-car verification is enough to launch 
+Panel 3 — Booking Panel  
+3A. Booking List & Detail  
+• Full booking list — filter by service type, status, date, area 
+• Booking detail view: customer info + all form data the customer submitted 
+• Manual driver/car assignment — system suggests matching owners based on the booking's pickup area 
+3B. Booking Status & Trip Control  
+• Status flow: Pending → Conﬁrmed → Ongoing → Compl eted → Cancelled  
+• “Start Trip” — marks the booking Ongoing once the driver has picked up the customer 
+• “End Trip / Complete” — marks drop-off and completion; admin can view real-time trip status or override it if 
+needed 
+• Completed trips automatically move into booking history and trigger the payment/commission step 
+3C. Payment on the Booking  
+• Advance payment (bKash/Bank or SSLCommerz) received status, shown directly on the booking 
+• “Bill Payment Receive” log — final amount entered by the owner/driver (base fare + extras such as waiting 
+time or extra km) 
+• Payment method shown: Cash / bKash / Nagad / Bank Transfer 
+• Commission (10%) auto-calculated from the received amount and reflected in the admin's revenue report 
+• Cancel/refund handling directly from the booking detail view 
+• Booking history and rating viewable per car and per customer 
+ 
+ 
+
+ROWNAA — Developer Specification (Master Edition) Page 7 of 8  Panel 4 — Payment & Commission  
+• Transaction log of every booking's advance payment (bKash/Bank Transfer or SSLCommerz) 
+• Commission calculation (10%) — how much commission each booking generated 
+• Owner payout tracking (for when Rownaa collects the full payment and pays owners out) 
+• Monthly/weekly revenue report 
+Panel 5 — Subscription Management  
+• Create/edit subscription plans (e.g. Free / Premium / Business) — car limits, visibility priority, commission 
+rate per plan 
+• Manage subscription price, duration, benefits, and active/expired status 
+• View each owner's active/expired subscription status 
+• Renewal reminders sent via SMS/email before expiry 
+• That owner's vehicle(s) will automatically move to the regular category until the expired subscription is 
+renewed. 
+Panel 6 — Service & Content Management  
+• Edit/add/remove the 6 service categories shown on the customer homepage 
+• Update homepage banner/promo content 
+• Edit pricing guideline or estimated fare, if used 
+Panel 7 — Customer Management  
+• Registered/guest customer list 
+• Booking history per customer 
+• Complaint/feedback management 
+Panel 8 — Notifications  
+• Admin notified (email/SMS) when a new booking comes in 
+• Notification when a new owner/driver approval request comes in 
+• Customer notified by SMS/email when a booking is confirmed and when the trip starts/completes 
+Panel 9 — Roles & Access (for later)  
+• Initially, a single admin account manages everything 
+• When staff are added later, role-based access applies (e.g. a booking manager sees only bookings, not 
+payments) 
+5. Trip Lifecycle & Payment Workflow  
+5.1 Trip Start & Trip Complete  
+• “Trip Start” and “Trip Complete” buttons for each booking 
+• Automatically record date/time and update trip status on each action 
+• Trip Complete/End should only be available after Trip Start 
+ 
+ 
+ 
+
+ROWNAA — Developer Specification (Master Edition) Page 8 of 8  5.2 Bill Payment Received  
+• “Payment Received” button becomes available after trip completion/end 
+• Show Total Bill, Received Amount, Due Amount, and Payment Status 
+• Payment status: Unpaid / Paid 
+• Save all payment records in the Admin Panel 
+5.3 Advance Payment & Commission  
+• Online advance payment (20% of fare) via bKash /Bank Transfer or SSLCommerz integration at checkout 
+• Remaining balance paid directly to the driver at the time of service 
+• Admin panel reconciles advance payments against commission owed per booking 
+• Commission (≈10%) auto-calculated from the received amount 
+6. Notes for the Developer — Summary  
+• Platform owner will not supply vehicles — all cars and drivers come from registered owners 
+• Owner/driver verification must be completed by admin before a listing goes live 
+• Location-based matching (pickup area → nearby registered cars) is a core requirement, not an op Ɵonal ﬁlter  
+• Seat-matching logic should suggest car combinations automatically based on passenger count 
+• Mobile-responsive design is required since most customers are expected to book from phones 
+• Architecture should allow adding new service categories and coverage areas without a rebuild 
+• Keep the one business → many cars (one-to-many) relation in the database design from day one 
+• Document upload should accept both image and PDF formats 
+• In MVP, driver info/verification can be optional — owner + car verification is enough to launch 
+• Intercity Travel and Travel & Tour are separate services — do not merge their forms or logic 
+ 
+ROWNAA — Car rental marketplace — book by location, drive with trust  
+

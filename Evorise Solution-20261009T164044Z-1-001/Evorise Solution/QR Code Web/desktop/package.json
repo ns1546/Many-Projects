@@ -1,0 +1,11 @@
+{
+  "name": "evorise-admin-desktop",
+  "version": "1.0.0",
+  "description": "Evorise Solution - Admin POS & Kitchen Management Desktop Application",
+  "main": "main.js",
+  "author": "Evorise Solution",
+  "license": "ISC",
+  "scripts": {
+    "start": "electron ."
+  }
+}

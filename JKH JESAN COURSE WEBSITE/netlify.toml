@@ -1,0 +1,12 @@
+# Netlify Configuration for Next.js 16 + Prisma
+[build]
+  command = "prisma generate && next build --webpack"
+  publish = ".next"
+
+[build.environment]
+  SECRETS_SCAN_ENABLED = "false"
+  SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
+  NODE_VERSION = "20"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

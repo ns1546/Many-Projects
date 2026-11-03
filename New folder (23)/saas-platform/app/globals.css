@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  
+  --color-background: #000000;
+  --color-foreground: #ffffff;
+  
+  --color-card: #111111;
+  --color-card-foreground: #ffffff;
+  
+  --color-border: #222222;
+  --color-accent: #333333;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-white selection:text-black;
+  }
+}
+
+/* Premium micro-animations */
+.premium-hover {
+  @apply transition-all duration-500 ease-out;
+}
+
+.premium-hover:hover {
+  @apply transform scale-[1.02] shadow-[0_0_40px_rgba(255,255,255,0.1)];
+}
+
+.text-gradient {
+  background: linear-gradient(to right, #ffffff, #888888);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+  opacity: 0;
+}

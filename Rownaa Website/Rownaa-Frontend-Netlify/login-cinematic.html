@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rownaa® — Interactive Portal</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <script type="module" src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <style>
+    /* =========================================================
+       ULTRA CINEMATIC INTERACTIVE PORTAL
+    ========================================================= */
+    :root {
+      --bg-base: #050505;
+      --accent: #d4ff00;
+      --error: #ff3333;
+      --success: #00ff88;
+      --text-main: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.4);
+      --border-subtle: rgba(255, 255, 255, 0.1);
+      
+      --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: 'Inter', sans-serif;
+      --font-code: 'Space Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-ui);
+      height: 100vh;
+      overflow: hidden;
+      perspective: 1000px; /* For 3D effects */
+      display: flex;
+    }
+
+    /* ----------------------------------------------------
+       GLOBAL EFFECTS & BACKGROUND
+    ---------------------------------------------------- */
+    #cursor-light {
+      position: fixed;
+      top: 0; left: 0;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,255,0,0.15) 0%, rgba(0,0,0,0) 70%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      mix-blend-mode: screen;
+      transition: width 0.3s, height 0.3s, background 0.3s;
+    }
+    .error-mode #cursor-light { background: radial-gradient(circle, rgba(255,51,51,0.2) 0%, rgba(0,0,0,0) 70%); }
+    
+    .ambient-bg {
+      position: absolute; inset: 0;
+      background-image: url('assets/car2.jpg');
+      background-size: cover; background-position: center;
+      opacity: 0.15; filter: grayscale(100%) contrast(120%);
+      transition: all 1s ease;
+      transform: scale(1.05);
+      z-index: -2;
+    }
+    .ambient-bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at center, transparent 0%, #050505 80%);
+    }
+
+    /* Screen Glitch Overlay (Hidden by default) */
+    .glitch-overlay {
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(0deg, rgba(255,0,0,0.1) 0px, rgba(255,0,0,0.1) 1px, transparent 1px, transparent 2px);
+      pointer-events: none;
+      opacity: 0; z-index: 9000;
+      mix-blend-mode: overlay;
+    }
+
+    /* ----------------------------------------------------
+       3D SCENE & FLIP CONTAINER
+    ---------------------------------------------------- */
+    .scene {
+      width: 100%; max-width: 500px;
+      margin: auto;
+      perspective: 1200px;
+      z-index: 10;
+    }
+
+    .card-3d {
+      width: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+      /* Tilt properties set via JS */
+    }
+
+    .card-3d.is-flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      width: 100%;
+      backface-visibility: hidden;
+      padding: 50px;
+      background: rgba(10, 10, 10, 0.8);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+    }
+
+    .card-back {
+      position: absolute;
+      top: 0; left: 0;
+      transform: rotateY(180deg);
+    }
+
+    /* ----------------------------------------------------
+       UI COMPONENTS
+    ---------------------------------------------------- */
+    .brand {
+      font-family: var(--font-display); font-size: 1.5rem; font-weight: 800;
+      display: flex; align-items: center; gap: 12px; margin-bottom: 40px;
+    }
+    .brand span { color: var(--accent); transition: color 0.3s; }
+    .error-mode .brand span { color: var(--error); }
+
+    .header-text h1 { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; margin-bottom: 8px; }
+    .header-text p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 40px; }
+
+    .form-group { position: relative; margin-bottom: 30px; }
+    
+    .input-field {
+      width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-main); font-family: var(--font-ui); font-size: 1rem; padding: 12px 0; outline: none;
+      transition: border-color 0.4s, transform 0.2s;
+    }
+    .input-field:focus { border-bottom-color: var(--accent); }
+    .error-mode .input-field:focus { border-bottom-color: var(--error); }
+
+    .input-label {
+      position: absolute; top: 14px; left: 0; font-size: 0.95rem; color: var(--text-muted);
+      pointer-events: none; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .input-field:focus ~ .input-label, .input-field:not(:placeholder-shown) ~ .input-label {
+      top: -16px; font-size: 0.7rem; color: var(--accent); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .error-mode .input-field:focus ~ .input-label, .error-mode .input-field:not(:placeholder-shown) ~ .input-label { color: var(--error); }
+
+    /* Typing indicator for password */
+    .type-indicator {
+      position: absolute; bottom: -2px; left: 0; height: 2px; width: 0%;
+      background: var(--accent); transition: width 0.1s; box-shadow: 0 0 10px var(--accent);
+    }
+
+    /* Terminal Console for Errors */
+    .terminal-out {
+      font-family: var(--font-code); font-size: 0.75rem; color: var(--error);
+      min-height: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; opacity: 0;
+    }
+    .terminal-out.visible { opacity: 1; }
+
+    /* Action Buttons */
+    .btn-action {
+      width: 100%; background: var(--text-main); color: #000;
+      font-family: var(--font-display); font-weight: 800; font-size: 0.95rem; letter-spacing: 0.05em;
+      padding: 18px; border: none; border-radius: 4px; cursor: pointer; position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: space-between; transition: all 0.4s;
+    }
+    
+    /* Hover magnetic ripple effect */
+    .btn-ripple {
+      position: absolute; border-radius: 50%; background: var(--accent); transform: scale(0);
+      animation: rippleAnim 0.6s linear; pointer-events: none; opacity: 0.5;
+    }
+
+    .btn-action:hover { background: var(--accent); box-shadow: 0 10px 30px rgba(212,255,0,0.2); transform: translateY(-2px); }
+    
+    .switch-link {
+      display: block; text-align: center; margin-top: 30px; font-size: 0.85rem; color: var(--text-muted);
+      cursor: pointer; transition: color 0.3s; font-weight: 500;
+    }
+    .switch-link:hover { color: var(--text-main); }
+    .switch-link span { color: var(--accent); font-weight: 700; border-bottom: 1px dashed var(--accent); padding-bottom: 2px; margin-left: 6px; }
+
+    /* ----------------------------------------------------
+       KEYFRAME ANIMATIONS
+    ---------------------------------------------------- */
+    @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+    
+    @keyframes glitch {
+      0% { transform: translate(0) }
+      20% { transform: translate(-4px, 4px) }
+      40% { transform: translate(-4px, -4px) }
+      60% { transform: translate(4px, 4px) }
+      80% { transform: translate(4px, -4px) }
+      100% { transform: translate(0) }
+    }
+    
+    @keyframes rgbSplit {
+      0% { text-shadow: -2px 0 red, 2px 0 cyan; }
+      50% { text-shadow: 2px 0 red, -2px 0 cyan; }
+      100% { text-shadow: none; }
+    }
+
+    .shake-error { animation: glitch 0.3s cubic-bezier(.36,.07,.19,.97) both; border-color: rgba(255,51,51,0.5) !important; }
+    .text-glitch { animation: rgbSplit 0.3s steps(2) infinite; color: var(--error); }
+
+    /* Success Portal Animation */
+    .portal-open {
+      animation: zoomIntoPortal 1.5s cubic-bezier(0.75, 0, 0.25, 1) forwards;
+    }
+    @keyframes zoomIntoPortal {
+      0% { transform: scale(1); opacity: 1; filter: brightness(1); }
+      40% { transform: scale(0.9); opacity: 1; filter: brightness(2); }
+      100% { transform: scale(5) rotate(5deg); opacity: 0; filter: brightness(10); }
+    }
+
+  </style>
+  <script src="js/auth.js"></script>
+</head>
+<body>
+
+  <!-- Custom light cursor tracking mouse -->
+  <div id="cursor-light"></div>
+  <div class="ambient-bg" id="bgLayer"></div>
+  <div class="glitch-overlay" id="glitchLayer"></div>
+
+  <div class="scene">
+    <div class="card-3d" id="cardContainer">
+      
+      <!-- ==================== FRONT: LOGIN ==================== -->
+      <div class="card-face card-front">
+        <div class="brand">
+          <i class="ph-fill ph-steering-wheel icon-spin" id="brandIcon"></i> ROWNAA<span id="brandDot">®</span>
+        </div>
+
+        <div class="header-text">
+          <h1>System Login.</h1>
+          <p>Initiate handshake sequence to gain access.</p>
+        </div>
+
+        <div class="terminal-out" id="termOut"></div>
+
+        <div class="form-group">
+          <input type="text" id="loginId" class="input-field" placeholder=" " autocomplete="off">
+          <label for="loginId" class="input-label">Identification (Email/Phone)</label>
+        </div>
+
+        <div class="form-group">
+          <input type="password" id="loginPass" class="input-field" placeholder=" " autocomplete="off" oninput="updateTyping('loginPass', 'loginProgress')">
+          <label for="loginPass" class="input-label">Passkey</label>
+          <div class="type-indicator" id="loginProgress"></div>
+        </div>
+
+        <button class="btn-action" onclick="attemptLogin(event)">
+          <span id="btnText">EXECUTE HANDSHAKE</span>
+          <i class="ph ph-terminal-window"></i>
+        </button>
+
+        <div class="switch-link" onclick="flipCard()">
+          No access clearance? <span>Request Override</span>
+        </div>
+      </div>
+
+      <!-- ==================== BACK: SIGNUP ==================== -->
+      <div class="card-face card-back">
+        <div class="brand">
+          <i class="ph-fill ph-plus-circle"></i> REQUEST<span style="color:var(--text-main)">ACCESS</span>
+        </div>
+
+        <div class="header-text">
+          <h1>New Partner.</h1>
+          <p>Register your fleet to join the premium network.</p>
+        </div>
+        
+        <div class="terminal-out" id="regTermOut" style="display:none;margin-bottom:12px;"></div>
+        
+        <div class="form-group">
+          <input type="text" id="regName" class="input-field" placeholder=" ">
+          <label for="regName" class="input-label">Business / Full Name</label>
+        </div>
+        
+        <div style="display:flex; gap:16px;">
+          <div class="form-group" style="flex:1">
+            <input type="text" id="regPhone" class="input-field" placeholder=" ">
+            <label class="input-label">Username / Phone</label>
+          </div>
+          <div class="form-group" style="flex:1">
+            <input type="password" id="regPasskey" class="input-field" placeholder=" ">
+            <label class="input-label">Set Passkey</label>
+          </div>
+        </div>
+
+        <button class="btn-action" onclick="attemptCinematicRegister(event)">
+          <span id="regBtnText">TRANSMIT DATA</span>
+          <i class="ph ph-paper-plane-tilt"></i>
+        </button>
+
+        <div class="switch-link" onclick="flipCard()">
+          Clearance already granted? <span>Return to Login</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const cursorLight = document.getElementById('cursor-light');
+    const cardContainer = document.getElementById('cardContainer');
+    const bgLayer = document.getElementById('bgLayer');
+    
+    // 1. Mouse Tracking & 3D Tilt Parallax
+    document.addEventListener('mousemove', (e) => {
+      // Light cursor follows mouse
+      cursorLight.style.left = e.clientX + 'px';
+      cursorLight.style.top = e.clientY + 'px';
+
+      // Calculate tilt for 3D card based on mouse position relative to screen center
+      const xAxis = (window.innerWidth / 2 - e.clientX) / 40;
+      const yAxis = (window.innerHeight / 2 - e.clientY) / 40;
+      cardContainer.style.transform = `rotateY(${cardContainer.classList.contains('is-flipped') ? 180 + xAxis : xAxis}deg) rotateX(${-yAxis}deg)`;
+      
+      // Slight BG parallax
+      bgLayer.style.transform = `scale(1.05) translate(${xAxis}px, ${yAxis}px)`;
+    });
+
+    // Reset tilt on leave
+    document.addEventListener('mouseleave', () => {
+      cardContainer.style.transform = `rotateY(${cardContainer.classList.contains('is-flipped') ? 180 : 0}deg) rotateX(0deg)`;
+      bgLayer.style.transform = `scale(1.05) translate(0px, 0px)`;
+    });
+
+    // 2. 3D Flip Action
+    function flipCard() {
+      cardContainer.classList.toggle('is-flipped');
+      // Reset errors if any
+      document.body.classList.remove('error-mode');
+      document.getElementById('termOut').classList.remove('visible');
+    }
+
+    // 3. Typing Progress Indicator (Creative Reaction)
+    function updateTyping(inputId, progId) {
+      const input = document.getElementById(inputId);
+      const prog = document.getElementById(progId);
+      const valLen = input.value.length;
+      // Cap at 100% (assume max 20 chars for visual)
+      const percent = Math.min((valLen / 15) * 100, 100);
+      prog.style.width = percent + '%';
+    }
+
+    // 4. Button Ripple Reaction
+    function createRipple(e) {
+      const btn = e.currentTarget;
+      const circle = document.createElement('span');
+      const diameter = Math.max(btn.clientWidth, btn.clientHeight);
+      const radius = diameter / 2;
+      
+      const rect = btn.getBoundingClientRect();
+      circle.style.width = circle.style.height = `${diameter}px`;
+      circle.style.left = `${e.clientX - rect.left - radius}px`;
+      circle.style.top = `${e.clientY - rect.top - radius}px`;
+      circle.classList.add('btn-ripple');
+      
+      const existingRipple = btn.querySelector('.btn-ripple');
+      if(existingRipple) { existingRipple.remove(); }
+      btn.appendChild(circle);
+    }
+
+    // 5. Cinematic Login Logic
+    function attemptLogin(e) {
+      createRipple(e);
+      const username = document.getElementById('loginId').value.trim();
+      const pass = document.getElementById('loginPass').value;
+      const termOut = document.getElementById('termOut');
+      const btnText = document.getElementById('btnText');
+      const cardFront = document.querySelector('.card-front');
+      const glitchLayer = document.getElementById('glitchLayer');
+
+      if (!username || !pass) {
+        termOut.classList.add('visible');
+        termOut.innerHTML = '> ERROR: IDENTIFICATION AND PASSKEY REQUIRED.';
+        return;
+      }
+
+      // Reset states
+      document.body.classList.remove('error-mode');
+      cardFront.classList.remove('shake-error');
+      termOut.classList.remove('visible');
+      termOut.innerHTML = '';
+      
+      // Loading State Reaction
+      btnText.innerHTML = `VERIFYING HASH... <i class="ph ph-spinner" style="animation:spin 1s infinite"></i>`;
+      
+      setTimeout(() => {
+        fetch('/api/login', { credentials: 'include',
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password: pass })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (!data.success && !data.token) {
+            // ERROR REACTION
+            document.body.classList.add('error-mode');
+            cardFront.classList.add('shake-error');
+            
+            // Glitch screen effect
+            glitchLayer.style.opacity = '1';
+            setTimeout(() => glitchLayer.style.opacity = '0', 300);
+            
+            // Terminal Typewriter Effect
+            termOut.classList.add('visible');
+            typeWriter(termOut, '> ERROR_CODE: 401. ' + (data.error || 'UNAUTHORIZED ACCESS ATTEMPT DETECTED.'), 0);
+            
+            btnText.innerHTML = 'EXECUTE HANDSHAKE';
+            document.getElementById('loginPass').value = '';
+            document.getElementById('loginProgress').style.width = '0%';
+            
+            setTimeout(() => cardFront.classList.remove('shake-error'), 400);
+
+          } else {
+            // SUCCESS REACTION
+            btnText.innerHTML = 'HANDSHAKE ACCEPTED.';
+            document.getElementById('brandIcon').classList.replace('ph-steering-wheel', 'ph-check-circle');
+            document.getElementById('brandDot').style.color = 'var(--success)';
+            
+            cursorLight.style.background = 'radial-gradient(circle, rgba(0,255,136,0.3) 0%, rgba(0,0,0,0) 70%)';
+            if (data.token) {
+              try { localStorage.setItem('rownaa_session_token', data.token); } catch (e) {}
+            }
+            if (data.user) {
+              try { localStorage.setItem('rownaa_user', JSON.stringify(data.user)); } catch (e) {}
+              window.rownaaSession = data.user;
+            }
+            const role = data.role || (data.user && data.user.role);
+            
+            setTimeout(() => {
+              document.body.classList.add('portal-open');
+              setTimeout(() => {
+                if (role === 'admin') window.location.href = 'admin-panel.html';
+                else if (role === 'customer') window.location.href = 'customer-panel.html';
+                else if (role === 'owner') window.location.href = 'owner-panel.html';
+                else window.location.href = 'index.html';
+              }, 1500);
+            }, 500);
+          }
+        })
+        .catch(err => {
+          btnText.innerHTML = 'EXECUTE HANDSHAKE';
+          termOut.classList.add('visible');
+          termOut.innerHTML = '> NETWORK_ERROR: FAILED TO REACH GATEWAY.';
+        });
+      }, 600);
+    }
+
+    function attemptCinematicRegister(e) {
+      createRipple(e);
+      const name = document.getElementById('regName').value.trim();
+      const username = document.getElementById('regPhone').value.trim();
+      const pass = document.getElementById('regPasskey').value;
+      const termOut = document.getElementById('regTermOut');
+      const btnText = document.getElementById('regBtnText');
+
+      if (!name || !username || !pass) {
+        termOut.style.display = 'block';
+        termOut.classList.add('visible');
+        termOut.innerHTML = '> ERROR: ALL PARAMETERS REQUIRED.';
+        return;
+      }
+
+      btnText.innerHTML = `ENCRYPTING... <i class="ph ph-spinner" style="animation:spin 1s infinite"></i>`;
+
+      fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ name, username, password: pass, role: 'customer' })
+      })
+      .then(res => res.json())
+      .then(data => {
+        btnText.innerHTML = 'TRANSMIT DATA';
+        if (data.success || data.token) {
+          termOut.style.display = 'block';
+          termOut.classList.add('visible');
+          termOut.style.color = 'var(--success)';
+          termOut.innerHTML = '> CLEARANCE GRANTED. ACCESS PROTOCOL INITIALIZED.';
+          setTimeout(() => {
+            flipCard();
+            document.getElementById('loginId').value = username;
+            document.getElementById('loginPass').value = pass;
+          }, 1200);
+        } else {
+          termOut.style.display = 'block';
+          termOut.classList.add('visible');
+          termOut.style.color = 'var(--danger)';
+          termOut.innerHTML = '> REGISTRATION_ERROR: ' + (data.error || 'COULD NOT COMPLETE ENROLLMENT.');
+        }
+      })
+      .catch(err => {
+        btnText.innerHTML = 'TRANSMIT DATA';
+        termOut.style.display = 'block';
+        termOut.classList.add('visible');
+        termOut.innerHTML = '> NETWORK_ERROR: GATEWAY UNREACHABLE.';
+      });
+    }
+
+    // Typewriter effect function for terminal
+    function typeWriter(element, text, index) {
+      if (index < text.length) {
+        element.innerHTML += text.charAt(index);
+        setTimeout(() => typeWriter(element, text, index + 1), 30);
+      }
+    }
+
+    // Polyfill for spin
+    const style = document.createElement('style');
+    style.innerHTML = `@keyframes spin { 100% { transform: rotate(360deg); } }`;
+    document.head.appendChild(style);
+  
+// Auto-injected to fix Vite module scoping
+window.flipCard = flipCard;
+window.updateTyping = updateTyping;
+window.createRipple = createRipple;
+window.attemptLogin = attemptLogin;
+window.typeWriter = typeWriter;
+</script>
+
+</body>
+</html>

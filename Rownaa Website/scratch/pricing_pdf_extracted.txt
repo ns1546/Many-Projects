@@ -1,0 +1,482 @@
+TOTAL PAGES: 10
+
+============================== PAGE 1 ==============================
+ 
+Complete Service Pricing Specification 
+Developer & Admin Reference Document — All Rates Admin-Editable 
+Covers: Hourly Rental · Intercity (One-Way & Round-Trip) · Corporate Transport · Airport Transfer · Travel & Tour 
+Document Scope 
+This document consolidates the pricing calculation logic for all five currently finalized Rownaa  services into a single 
+developer reference: Hourly Rental, Intercity Travel (One-Way & Round-Trip), Corporate Transport, Airport Transfer, and 
+Travel & Tour. It replaces the need to reference three separate files (Hourly Pricing Developer Spec, Intercity Pricing 
+Specification, and Service Pricing Formula Specification) — all of that content is merged here without changes to the 
+underlying logic. 
+Event Transport and Wedding Booking pricing are intentionally excluded — that formula is still under review and will be 
+issued as a follow-up specification once finalized. 
+Note: Every rate, threshold, and percentage in this document must be implemented as an admin -editable setting. Nothing 
+described below should be hard-coded in the application. 
+1. Hourly Rental Pricing 
+1.1 Vehicle Categories & Rates 
+All categories below always exist in the system. Each one has its own ON/OFF toggle in the Admin Panel: turned OFF, it is 
+hidden from the customer app; turned ON, it appears in "Choose Car." New categories can be added the same way without 
+rebuilding the screen. 
+The table below lists the current 7 vehicle categories with their recommended base rates. Every value must be stored as an 
+editable field in the admin panel. 
+Category Seats 4 Hour Rate 10 Hour Rate Extra Hour 
+Rate 
+Extra KM 
+Rate 
+Sedan Economy 4 1600 tk 2800 tk 250 tk 12 tk 
+Sedan (Standard) 4 2000 tk 3500 tk 300 tk 15 tk 
+Sedan Premium 4 2800 tk 4800 tk 400 tk 18 tk 
+Noah 7 3000 tk 5200 tk 500 tk 20 tk 
+Chander Gari 8 3500 tk 6000 tk 550 tk 22 tk 
+HiAce 11 4000 tk 7000 tk 600 tk 25 tk 
+Luxury (Prado/Camry) 4-6 4500 tk 8000 tk 700 tk 25 tk 
+1.2 Pricing Logic 
+1.2.1 Base Package 
+● Each category has two selectable base packages: 4-Hour and 10-Hour. 
+
+
+============================== PAGE 2 ==============================
+● The 4-Hour and 10-Hour rates already include a fixed included distance (recommended default: 40 km) and 
+driver cost. 
+● The included-distance value (40 km) must also be an admin-editable field, per category if needed. 
+1.2.2 Extra Hour Charge 
+● If the customer keeps the car beyond the selected package duration, each additional hour is charged at the 
+category's Extra Hour Rate. 
+● Extra hours should be calculated by rounding up to the nearest full hour (e.g. 1 hour 10 minutes over = 2 extra 
+hours). Its also also be an admin-editable field. 
+● If the trip distance exceeds the included distance (default 40 km) within the booked package, each additional 
+kilometre is charged at the category's Extra KM Rate. 
+● Extra KM and Extra Hour charges apply independently and are both shown as separate line items to the customer 
+and driver — never merged into a single total. 
+1.3 Admin Panel Requirements 
+● A dedicated 'Hourly Pricing' settings screen where every cell in the 1.1 table (4 -Hour Rate, 10-Hour Rate, Extra 
+Hour Rate, Extra KM Rate) can be edited independently, per category. 
+● Ability to add a new vehicle category (name + seat count + all four rate fields) without a code change.  
+● Ability to edit the included distance (default 40 km) globally or per category. 
+● All rate changes should take effect immediately for new bookings, without affecting bookings already confirmed.  
+● Keep a simple change log (who changed which rate, old value, new value, timestamp) for accountability.  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+2. Intercity Pricing — One-Way & Round-Trip 
+2.1 Booking Categories ("Choose Car" Screen) 
+All categories below always exist in the system. Each one has its own ON/OFF toggle in the Admin Panel: turned OFF, it is 
+hidden from the customer app; turned ON, it appears in "Choose Car." New categories can be added the same way without 
+rebuilding the screen. 
+Category Seats Shown to Customer 
+Sedan Premium 4 Admin-controlled ON/OFF 
+Sedan 4 Admin-controlled ON/OFF 
+Sedan Economy 4 Admin-controlled ON/OFF 
+Noah 7 Admin-controlled ON/OFF 
+Chander Gari 8 Admin-controlled ON/OFF 
+HiAce 11 Admin-controlled ON/OFF 
+(others, e.g. Probox, added later) — Same toggle pattern 
+
+============================== PAGE 3 ==============================
+2.2 Pricing Tiers & Starting Rates 
+The One-Way and Round-Trip formulas (2.3–2.4) both read Base Fare and Per-KM Rate from these tiers. Update once in 
+Admin, and both trip types pick it up automatically — no separate round-trip pricing table exists. 
+Tier Example Cars Base Fare (Tk) Per-KM (Tk) Status 
+Economy Corolla, Allion, Premio (older) 3,000 40 Active 
+Premium Corolla/Civic (newer), Camry 4,500 40 Active 
+Luxury Crown, Mark X, new Camry TBD TBD Hidden 
+2.3 One-Way Trip Pricing 
+Steps: (1) customer picks Pickup, Drop and car category → (2) system calls the map API for road distance = Planned 
+Distance → (3) system looks up Base Fare + Per-KM Rate for that category from Admin settings → (4) calculates Total 
+Price → (5) customer sees only the Total → (6) once the trip runs, Actual Distance is tracked against Planned Distance for 
+Extra-KM (Section 2.5). 
+Total Price = Base Fare + (Planned Distance × Per-KM Rate) 
+● Distance is always pulled live from a map/distance API (e.g. Google Maps Distance Matrix) — road distance, 
+never straight-line, never typed in manually. 
+● Customer only ever sees the final Total Price (e.g. "৳10,680") — per-km rate and base fare are never shown or 
+broken down. Route distance may optionally be shown for information only. 
+Worked example — Dhaka → Jessore, ≈192 km, Economy: 
+3,000 + (192 × 40) = 10,680 Tk 
+2.4 Round-Trip Pricing 
+A round trip is priced differently depending on whether the car waits overnight, since a waiting car can't take other booking s. 
+Type Description 
+Same-Day Car drops customer, waits a few hours nearby, returns same day. No overnight stay.  
+Multi-Day Car & driver stay at the destination one or more nights before returning. 
+2.4.1 Same-Day Round Trip 
+Same-Day Price = One-Way Price + (Base Fare × Same-Day Return Charge %, default 50%) 
+● One-Way Price part uses the one-way distance, not doubled — the Per-KM Rate already covers the return drive. 
+● Same-Day Return Charge % is its own admin field (2.6); being a % of Base Fare it auto -scales by category. 
+● Must always be shown to the customer as its own line item, separate from the One -Way Price. 
+● Maximum Same-Day Round Trip Distance: admin-editable, default 250 km (one-way). Beyond this, Same-Day is 
+not offered — only Multi-Day is available (fatigue/safety limit). 
+2.4.2 Multi-Day Round Trip — Waiting Charge 
+Multi-Day Price = One-Way Price + (Waiting Nights × Daily Waiting Charge) 
+● Daily Waiting Charge is its own admin-editable rate (Tk/night); can become category-specific later. 
+● Always shown to the customer as its own line item, separate from the trip price. 
+● If the customer changes the number of waiting nights before the trip starts, recalculate and show the new total 
+before charging. 
+ 
+
+============================== PAGE 4 ==============================
+2.4.3 What the Customer Sees 
+Pickup Point, Drop Point, car category and trip type (Same-Day / Multi-Day) are selected at booking; Multi-Day also asks 
+for number of nights. Breakdown shown: Trip Fare + Waiting Charge (if any) = Total. No per -km rate or base fare shown. 
+2.4.4 Worked Examples (Economy) 
+Dhaka → Jessore, ≈192 km (within the 250 km limit, both types available):  
+Same-Day: 10,680 + (3,000 × 50%) = 12,180 Tk   |   3-day/2-night: 10,680 + (2 × 2,000) = 14,680 Tk 
+Dhaka → Cox's Bazar, ≈414 km (exceeds 250 km → only Multi-Day offered), 3-day/2-night: 
+3,000 + (414 × 40) + (2 × 2,000) = 23,560 Tk 
+2.5 Extra Distance (Overage KM) — Applies to Both Trip Types 
+● Planned Distance: One-Way = Pickup→Drop distance. Round-Trip = one-way distance × 2 (out + back). 
+● "Start Trip" begins GPS tracking of Actual Distance; "End Trip" / "Complete Trip" closes it and compares Actual 
+vs. Planned. 
+● If Actual > Planned, the difference is Extra KM. If Actual ≤ Planned, Extra KM = 0.  
+Extra Charge = Extra KM × Extra-KM Rate     New Total = Original Total + Extra Charge 
+● Extra-KM Rate (Tk/km) is its own admin field, separate from the normal Per-KM Rate. 
+● Extra Charge is always its own line item — never merged silently into the trip total. 
+● Visible to the driver (after End Trip: Extra KM, Extra Charge, new grand total) and to admin, per completed trip: 
+Planned Distance, Actual Distance, Extra KM, Extra Charge, New Total, plus (for multi -day) Waiting Nights and 
+Waiting Charge. 
+● Global ON/OFF toggle in Admin Panel. OFF: distances are still recorded for reporting, but nothing extra is 
+charged. ON: Extra Charge is auto-calculated as above. 
+● Any time the driver is asked to use the car for personal use while waiting overnight, that distance is out of scope 
+and is not billed to the customer unless agreed separately. 
+2.6 Admin Panel — All Editable Settings 
+None of the values below are hard-coded. Any change applies to new bookings immediately — no developer or redeploy 
+needed. 
+Setting Applies To Default Notes 
+Base Fare — per pricing tier One-Way & Round-Trip Eco 3,000 / Prem 
+4,500 Separate field per tier 
+Per-KM Rate One-Way & Round-Trip 40 Tk (uniform) 
+Global now; per-
+tier/city later if 
+needed 
+Minimum trip distance One-Way — Optional 
+Enable/disable pricing tier (e.g. 
+Luxury) Booking flow — Toggle to show/hide 
+Enable/disable car category (2.1 
+list) Choose Car screen — Per-category toggle; 
+hidden when OFF 
+Extra-KM charging ON/OFF Both — Global toggle 
+Extra-KM Rate (Tk/km) Both Not pre-filled 
+Separate from Per-
+KM Rate; set before 
+enabling toggle 
+
+============================== PAGE 5 ==============================
+Setting Applies To Default Notes 
+Same-Day Return Charge % Round-Trip 50% % of Base Fare 
+Maximum Same-Day Round Trip 
+Distance (km, one-way) Round-Trip Distance chosen by 
+admin 
+Beyond this, Multi-
+Day only 
+Admin-controlled 
+ON/OFF 
+Daily Waiting Charge (Tk/night) Round-Trip (Multi-Day) — Own field; can go 
+category-specific later 
+Enable/disable Multi-Day Round 
+Trip Round-Trip — Toggle 
+Maximum waiting nights per 
+booking Round-Trip — Optional limit 
+2.7 Developer Checklist 
+● Planned Distance always comes live from the map API (road distance) — never typed in manually. 
+● One-Way Total = Base Fare + (Planned Distance × Per-KM Rate). 
+● Before offering Round-Trip options, check one-way distance against Max Same-Day Distance (default 250 km): 
+if it's over, only offer Multi-Day. Its work only when one-way distance against Max Same-Day Distance(ON) 
+● Same-Day Price = One-Way Price + (Base Fare × Same-Day Return Charge %); Multi-Day Price = Same-Day 
+Price + (Waiting Nights × Daily Waiting Charge). 
+● Round-trip Planned Distance for overage tracking = one-way distance × 2; use the same Start Trip / End Trip 
+GPS tracking and Extra-KM formula as One-Way, gated by the same ON/OFF toggle. 
+● Base Fare, Per-KM Rate, Extra-KM Rate, Same-Day Return Charge %, Max Same-Day Distance and Daily 
+Waiting Charge are each their own separate, admin-editable field — never hard-coded, never shared with each 
+other. 
+● Every car category on the Choose Car screen has its own Admin ON/OFF toggle, independent of pricing -tier 
+toggles. 
+● Customer-facing screens show only the final Total Price plus clearly separate line items for Same -Day Return 
+Charge / Waiting Charge / Extra Charge — the raw per-km rate or base fare is never shown. 
+● If the customer changes waiting nights before the trip starts, recalculate and show the new total before charging.  
+● Two pricing tiers (Economy, Premium) active at launch; structure so Luxury and further car categories can be 
+switched on later without rebuilding the pricing engine. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+============================== PAGE 6 ==============================
+ 
+3. Corporate Transport 
+Designed for repeat/ongoing business use: single trips, short multi-day bookings, weekly, and monthly contracts. Pricing 
+uses a Fixed Daily Rate model — each duration tier has its own fixed Tk/day rate per car category, set directly by the admin. 
+No percentage or formula-based discount is calculated at runtime. 
+3.1 Fixed Daily Rate Table (by Car Category) 
+Each cell below is individually editable in the admin panel. The system finds which duration tier a booking falls into, takes  
+that tier's fixed rate for the selected car category, and multiplies by the number of days.  
+Car Category 1-6 Days 
+(Tk/day) 
+7-14 Days 
+(Tk/day) 
+15-29 Days 
+(Tk/day) 
+30+ Days 
+(Tk/day) 
+Sedan Economy Tk 3,000 Tk 2,600 Tk 2,400 Tk 2,150 
+Sedan Tk 3,800 Tk 3,300 Tk 3,050 Tk 2,750 
+Sedan Premium Tk 5,000 Tk 4,350 Tk 4,000 Tk 3,600 
+Noah Tk 6,500 Tk 5,650 Tk 5,200 Tk 4,700 
+HiAce Tk 8,500 Tk 7,400 Tk 6,800 Tk 6,150 
+Note: No formula, percentage, or auto-calculation is applied — admin enters the exact Tk/day value for each tier, per 
+category. 
+3.2 How Total Is Calculated 
+Total Fare = (Fixed Daily Rate for the matching tier) × (Number of Days Booked)  
+The system checks how many days the booking covers, finds which tier that falls into (1 -6 / 7-14 / 15-29 / 30+), takes that 
+tier's fixed rate for the selected car category, and multiplies by the number of days.  
+3.3 Worked Example — Sedan Economy 
+Duration Tier Rate (Tk/day) Days Booked Total (Tk) Savings vs Flat Rate 
+1-6 Days 3,000 6 18,000 - 
+7-14 Days 2,600 14 36,400 5,600 
+15-29 Days 2,400 29 69,600 17,400 
+ 
+• the Admin will set the maximum number of days allowed for direct booking.  
+               If a customer selects more than the allowed days. 
+• The customer will see “For bookings exceeding this limit, our team will contact you to discuss the details and 
+confirm the booking.” 
+• The maximum booking duration must be editable from the Admin Panel  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+============================== PAGE 7 ==============================
+ 
+4. Airport Transfer 
+Short point-to-point trips between Hazrat Shahjalal International Airport and a pickup/drop zone. Priced as a flat zone fare, 
+not per-km, matching standard market practice. 
+4.1 Formula 
+Airport Transfer Fare = Flat Zone Fare (by zone + car category) + Waiting Charge (depends on Trip Direction, 
+beyond free window) + Round Trip Surcharge (if applicable) + Late Night Surcharge (if applicable)  
+Note: Trip Direction (Section 4.5) determines which Waiting Charge window applies and whether the Round Trip Surcharge 
+is added — this must be captured at booking time, not assumed from the zone or car category.  
+4.2 Car Categories 
+Same car category set used across the platform, excluding "Chander Gari" (Intercity -only). 
+● Sedan Economy, Sedan, Sedan Premium, Noah, HiAce 
+4.3 Zone Structure — 8 Zones 
+Zones are defined by driving distance from the airport, not by North Dhaka / South Dhaka labels — the customer only cares 
+how far their pickup point is. 
+Zone Coverage Area 
+Zone 1 Uttara (Sectors 1–18), Ashkona, Diabari, Nikunji 1 & 2 (Airport Core) 
+Zone 2 Khilkhet, Dakshinkhan, Uttarkhan, Turag, North Tongi (Near North) 
+Zone 3 Gulshan 1 & 2, Banani, Baridhara (incl. DOHS), Niketan, Bashundhara R/A, Vatara, Kuril, 
+Cantonment, Mohakhali DOHS (Gulshan–Banani–Bashundhara Corridor) 
+Zone 4 Badda (incl. Merul, Middle Badda), Aftabnagar, Rampura, Hatirjheel, Tejgaon, Tejgaon 
+Industrial Area (Mid Dhaka East) 
+Zone 5 Mirpur (Sections 1–14, incl. DOHS), Pallabi, Rupnagar, Shah Ali, Kafrul, Ibrahimpur, 
+Kazipara, Shewrapara (Mid Dhaka West) 
+Zone 6 
+Motijheel, Paltan, Ramna, Shahbagh, New Market, Dhanmondi, Mohammadpur, Farmgate, 
+Shyamoli, Agargaon, Malibagh, Khilgaon, Bonoshree, Mugda (Central Business & 
+Residential) 
+Zone 7 Lalbagh, Chawkbazar, Kotwali, Sutrapur, Wari, Sadarghat, Jatrabari, Shonir  Akhra, Demra, 
+Shyampur (Old Dhaka Core) 
+Zone 8 Keraniganj, Savar, Ashulia, Narayanganj, Dohar, Nawabganj, Konabari/Gazipur border 
+(Extended Outskirts, outside Dhaka) 
+4.4 Zone × Category Rate Grid (Example) 
+Each zone needs its own flat rate per car category — an 8×5 grid in the admin panel. Example structure with placeholder 
+values. 
+Zone Sedan 
+Economy Sedan Sedan 
+Premium Noah HiAce 
+Zone 1 Tk 500 Tk 650 Tk 800 Tk 1,000 Tk 1,200 
+Zone 2 Tk 800 Tk 1,000 Tk 1,200 Tk 1,500 Tk 1,800 
+
+============================== PAGE 8 ==============================
+Zone Sedan 
+Economy Sedan Sedan 
+Premium Noah HiAce 
+Zone 3 Tk 1,300 Tk 1,600 Tk 1,900 Tk 2,300 Tk 2,700 
+Zone 4 Tk 1,500 Tk 1,800 Tk 2,100 Tk 2,500 Tk 2,900 
+Zone 5 Tk 1,600 Tk 1,900 Tk 2,200 Tk 2,600 Tk 3,000 
+Zone 6 Tk 2,000 Tk 2,400 Tk 2,800 Tk 3,300 Tk 3,800 
+Zone 7 Tk 2,600 Tk 3,000 Tk 3,400 Tk 3,900 Tk 4,400 
+Zone 8 Tk 3,500 Tk 4,000 Tk 4,500 Tk 5,200 Tk 6,000 
+Note: Trips beyond Zone 8 (e.g. to another district) should not use this module at all; the system should route the customer 
+to Intercity pricing instead. 
+4.5 Trip Direction 
+The customer must select a Trip Direction when booking an Airport Transfer. This determines which Waiting Charge 
+window applies and whether the Round Trip Surcharge is added. It also changes what the booking form asks for and how the 
+driver's schedule is set. 
+Trip Direction What It Means Waiting Charge Round Trip 
+Surcharge 
+Booking 
+Form Asks 
+For 
+Airport Drop-off 
+Customer is going abroad; picked 
+up from home/Home Zone and 
+dropped at the airport, 
+Send-off Window 
+only (4.6.1) Not applied 
+Departure 
+time — must 
+reach the 
+airport by 
+Airport Pickup 
+Customer is arriving from 
+abroad; picked up at the airport 
+and dropped at home/Home Zone  
+Receive Window 
+only (4.6.2) Not applied 
+Flight number 
++ scheduled 
+arrival time 
+Round Trip 
+(Drop-off + 
+Pickup) 
+Same booking covers both legs 
+— e.g. family drops a traveler 
+off, then returns later to receive 
+them, or drives to the airport and 
+waits for both legs. 
+Both Send-off 
+Window (4.6.1) 
+and Receive 
+Window (4.6.2), 
+applied to their 
+respective legs 
+Applied (4.7) 
+Both: 
+departure time 
+for Leg 1, 
+flight number 
++ arrival time 
+for Leg 2 
+Note: This selection is mandatory at booking — the system must not guess Trip Direction from zone or car category. It 
+directly controls which Waiting Charge logic (4.6) and Round Trip Surcharge (4.7) get applied.  
+4.6 Waiting Charge 
+Waiting Charge has two separate windows depending on Trip Direction (4.5). Only one applies per leg — never both on the 
+same leg. 
+4.6.1 Send-off Window (Airport Drop-off leg) 
+Applies when the driver/family is at the airport waiting for the departing passenger to finish check -in/security (Airport Drop-
+off or the drop-off leg of a Round Trip). 
+● Free wait window: 30 minutes from arrival at the airport (admin-editable). 
+● After the free window: admin-editable hourly waiting charge (market range observed: Tk 100–200/hour). 
+ 
+ 
+
+============================== PAGE 9 ==============================
+4.6.2 Receive Window (Airport Pickup leg) 
+Applies when the driver is waiting at the airport for an arriving passenger to clear immigration/baggage (Airport Pickup or 
+the pickup leg of a Round Trip). 
+● Free wait window: 30 minutes for domestic flights, 60 minutes for international flights, counted from actual flight 
+landing time — not scheduled time (admin-editable). 
+● After the free window: admin-editable hourly waiting charge (market range observed: Tk 100–200/hour). 
+● Flight number should be captured at booking so the system/driver can track real landing time (flight delays should 
+not cost the customer extra free-window minutes). 
+4.7 Round Trip Surcharge 
+● Applies whenever a single booking covers both an Airport Drop-off leg and an Airport Pickup leg (Trip Direction 
+= Round Trip, Section 4.5) — e.g. a family drops a traveler off, then returns later to receive them, or the common 
+send-off-and-receive pattern for a family member going abroad and coming back. 
+● Flat admin-editable surcharge added on top of the one-way Zone Fare (market range observed: Tk 500). This is 
+separate from, and in addition to, the Waiting Charges in Section 4.6. 
+● Not applied to Airport Drop-off-only or Airport Pickup-only bookings. 
+4.8 Late Night Surcharge 
+● Admin-editable flat surcharge for duty between 1:00 AM–5:00 AM (market range observed: Tk 300). 
+ 
+ 
+ 
+ 
+ 
+5. Travel & Tour 
+Multi-day tour packages to popular destinations (Cox's Bazar, Sylhet, Sreemangal , etc.). Unlike Intercity, this is NOT 
+calculated from distance × per-km — it is sold as a fixed all-inclusive package per route, matching standard market practice. 
+5.1 Formula 
+Tour Fare = Fixed Destination Package Rate (by route + car category + number of days) + Extra Day Charge (if 
+extended) + Custom Route Fallback (if no fixed package exists) 
+5.2 Fixed Package Rate Table 
+Each popular route/duration combination gets its own admin-configurable flat rate per car category, e.g.: 
+Route Days Sedan Sedan 
+economy 
+Sedan 
+premium 
+Noah / X-
+Noah Hiace 
+Dhaka ↔ Cox's Bazar (Inani, Himchari, 
+Marine Drive, Teknaf) 4 Tk 26,000  To be priced 27000 Tk 30,000 Tk 30,000 
+Dhaka ↔ Sreemangal (Lawachara, 
+Madhabpur, Tea Gardens) 2 Tk 11,500  To be priced 13000 Tk 14,500 Tk 14,500 
+Dhaka ↔ Sreemangal ↔ Sylhet (Jaflong, 
+Lalakhal, Ratargul, Bichanakandi) 3 To be priced  To be priced To be 
+priced 
+To be 
+priced 
+To be 
+priced 
+Note: This table is a starting seed from market research and is not exhaustive — the admin panel must let the business add 
+new Route + Days + Car Category combinations freely, each with its own flat price, rather than hard -coding a fixed list of 
+routes in code. 
+
+============================== PAGE 10 ==============================
+5.3 Package Inclusions 
+● Package rate includes: rental fare for all days, driver food & accommodation for the trip duration, fuel, CNG, 
+tolls, and all standard road expenses on the defined route. 
+● If the customer wants to visit places outside the defined route, the customer bears any extra fuel cost for that 
+detour (flag this clearly in the booking confirmation UI). 
+5.4 Extra Day Charge 
+● If the customer extends the trip beyond the booked number of days, each additional day is charged at the 
+category's standard Daily Rate (reuse the Daily rate from the Hourly Rental Pricing section, 1.1).  
+5.5 Custom Route Fallback 
+If the customer requests a destination with no pre-defined fixed package, the system falls back to the Intercity + Round Trip 
+formulas (Sections 2.3 / 2.4) to generate a quote instead of blocking the booking.  
+ 
+ 
+6. Summary for Developer 
+Service Pricing Logic Key Admin-Editable Settings 
+Hourly Rental 4-Hour / 10-Hour base package + Extra Hour + 
+Extra KM beyond included distance 
+4hr/10hr rate, extra hour rate, 
+extra KM rate, included distance 
+— all per category 
+Intercity — One-
+Way Base Fare + (Planned Distance × Per-KM Rate) Base Fare & Per-KM Rate per tier, 
+Extra-KM Rate + toggle 
+Intercity — 
+Round-Trip 
+One-Way Price + Same-Day Return Charge % or 
++ (Waiting Nights × Daily Waiting Charge) 
+Same-Day Return Charge %, Max 
+Same-Day Distance, Daily 
+Waiting Charge 
+Corporate Fixed Daily Rate per duration tier (no % calc) Tk/day rate per category × 4 
+duration tiers 
+Airport Transfer 
+Flat zone fare + Trip Direction (drop-
+off/pickup/round trip) + waiting/round-trip/late-
+night add-ons 
+8-zone × category rate grid, Trip 
+Direction, send-off/receive wait 
+windows, surcharges 
+Travel & Tour Fixed package per route/days/category Route package table 
+(editable/addable), extra day rate 
+Note: Not covered in this document: Event Transport and Wedding Booking pricing — still under review, to be issued as a 
+follow-up specification. 
+

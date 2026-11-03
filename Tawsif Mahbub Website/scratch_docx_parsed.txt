@@ -1,0 +1,34 @@
+=== PARAGRAPHS ===
+P0: Tawsif Website
+
+=== HYPERLINKS IN RELS ===
+rId40 -> https://www.youtube.com/watch?v=AtXbnGVQURI
+rId42 -> https://www.youtube.com/watch?v=v0DtJ-4QeEU
+rId41 -> https://www.youtube.com/watch?v=CLqLIq6z0Lo
+rId44 -> https://www.youtube.com/watch?v=QDdNY5hO2hk&list=RDQDdNY5hO2hk&start_radio=1
+rId43 -> https://www.youtube.com/watch?v=fIlvm3WSSCo&list=RDfIlvm3WSSCo&start_radio=1
+rId46 -> https://www.youtube.com/watch?v=a--Q2w68Kzc&list=RDa--Q2w68Kzc&start_radio=1
+rId45 -> https://www.youtube.com/watch?v=D5xf2hgG_nQ&list=RDD5xf2hgG_nQ&start_radio=1
+rId48 -> https://www.youtube.com/watch?v=WC_nv_PRYWw&list=RDWC_nv_PRYWw&start_radio=1
+rId47 -> https://www.youtube.com/watch?v=bgaAjW3oYYg&list=RDbgaAjW3oYYg&start_radio=1
+rId49 -> https://www.prothomalo.com/topic/%E0%A6%A4%E0%A7%8C%E0%A6%B8%E0%A6%BF%E0%A6%AB
+rId35 -> https://www.youtube.com/watch?v=tPJkOhpxpmk
+rId37 -> https://www.youtube.com/watch?v=tWatFr--zGY
+rId36 -> https://www.youtube.com/watch?v=BJu11CP71Y4
+rId39 -> https://www.youtube.com/watch?v=km2f7LU7Wmg
+rId38 -> https://www.youtube.com/watch?v=ZnxHGvIt5uk
+rId51 -> https://kaleralo.com/393827/2026/
+rId50 -> https://www.dhakapost.com/topic/%E0%A6%A4%E0%A7%87%E0%A7%97%E0%A6%B8%E0%A6%BF%E0%A6%AB-%E0%A6%AE%E0%A6%BE%E0%A6%B9%E0%A6%AC%E0%A7%81%E0%A6%AC
+rId53 -> https://tob.news/which-tawsif-mahbub-dramas-does-his-wife-love-most/
+rId52 -> https://www.thedailystar.net/culture/entertainment/news/tawsif-mahbub-extends-support-flood-affected-communities-4223441
+rId54 -> https://www.bd24live.com/tag/tawsif-mahbub/
+
+=== TABLES ===
+
+--- Table 0 ---
+Row 0: SN | Title | Image | Update
+Row 1: 1 | Solo Photo |  | 
+Row 2: 2 | Natok Poster |  | 
+Row 3: 3 | YouTube Natok Link |  | Chuye Dilam Tomay | Full Drama | Tawsif & Totini | Niha | Capital Drama | New Natok 2026 Amar Rajje Tumi | আমার রাজ্যে তুমি |Full Drama | Tawsif Mahbub | Keya Payel | Malaika |Capital DramaAponpor | আপনপর | Full Natok | Tawsif Mahbub | Sadnima | Rubel Hasan | New Bangla Natok 2026 Warish | ওয়ারিশ | Full Natok | Tawsif Mahbub, Yash Rohan, Safa Kabir, Priyontee | Bangla Natok 2026 Moneri Ronge Rangiye | Valentine Special Drama | Tawsif Mahbub | Porshi | KM Sohag Rana | New Natok Emon Dine Tare Bola Jay | Full Drama | Tawsif Mahbub | Priyontee Urbee | Mir Rabby | New Natok 2025 অকারণে ভালোবাসি | Okarone Bhalobashi | Tawsif Mahbub | Keya Payel | Exclusive Bangla Natok 2026 Mon Dewana | মন দিওয়ানা | Full Natok | Tawsif Mahbub | Totini | Eid Natok | New Bangla Natok 2025
+Row 4: 4 | Song Link |  | Sokhi Tomare Badibo | Imran Mahmudul  | Kona | Tawsif Mahbub | Payel | Ural Pakhi Natok Song Adore Astin | আদরে আস্তিন (Full Song) |  Riyad | Kona |  Tawsif Mahbub | Sadnima |  Bangla New Song আমার দিন গুলো সব যায় হারিয়ে আঁধারে | Habib Wahid | Nancy | Imran | OST Of Hridoy Er Kotha Amar Ful Tumi | আমার ফুল তুমি | Dorodia | Tawsif | Niha | Imran | Atiya Anisha | Bangla Song 2026 Jonak Jola Rate | Imran & Porshi | Tawsif Mahbub | Naznin Niha | Tui Theke Tumi Natok Song Bhalobasha Govir (Full Song) | Jokhom | Imran, Haimanti | Tawsif, Totini | CMV | Bangla Song 2026
+Row 5: 5 | Media News |  | https://www.prothomalo.com/topic/%E0%A6%A4%E0%A7%8C%E0%A6%B8%E0%A6%BF%E0%A6%AB https://www.dhakapost.com/topic/%E0%A6%A4%E0%A7%87%E0%A7%97%E0%A6%B8%E0%A6%BF%E0%A6%AB-%E0%A6%AE%E0%A6%BE%E0%A6%B9%E0%A6%AC%E0%A7%81%E0%A6%AC https://kaleralo.com/393827/2026/ https://www.thedailystar.net/culture/entertainment/news/tawsif-mahbub-extends-support-flood-affected-communities-4223441 https://tob.news/which-tawsif-mahbub-dramas-does-his-wife-love-most/ https://www.bd24live.com/tag/tawsif-mahbub/

@@ -1,0 +1,96 @@
+# ----------------------------------------------------------------------
+# JKH Jesan - Production Apache & InfinityFree Configuration
+# ----------------------------------------------------------------------
+
+# Default index documents
+DirectoryIndex index.html index.php
+
+# 1. Protect Sensitive Files (Credentials & Server-Side files)
+<FilesMatch "(users\.json|server\.js|package.*\.json|\.env|\.git.*|.*\.py|.*\.pdf)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# 2. Enable Rewrite Engine & Routes
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    Options -MultiViews
+
+    # HTTPS Redirect (if SSL is active on InfinityFree / Cloudflare)
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # 1. Force Redirect /index.html and index.html to root /
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /(.*)index\.html(\?.*)?\ HTTP/ [NC]
+    RewriteRule ^(.*)index\.html$ /%1 [R=301,L]
+
+    # 2. Force Redirect any .html requests to clean extensionless URLs (e.g. /about.html -> /about)
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^/]+)\.html(\?.*)?\ HTTP/ [NC]
+    RewriteRule ^([^/]+)\.html$ /$1 [R=301,L]
+
+    # 3. Strip trailing slashes from non-directory page requests (e.g. /about/ -> /about)
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([^/]+)/+$ /$1 [R=301,L]
+
+    # 4. API Routing -> api.php (Handles CMS Auth & Dynamic Content)
+    RewriteRule ^api(/.*)?$ api.php [QSA,L]
+
+    # 5. Clean URL internal handler (serve .html without needing .html in URL)
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{DOCUMENT_ROOT}/$1.html -f [OR]
+    RewriteCond %{REQUEST_FILENAME}\.html -f
+    RewriteRule ^([^/]+)/?$ $1.html [L]
+</IfModule>
+
+# Custom 404 Fallback to site root
+ErrorDocument 404 /index.html
+
+# 3. Browser Caching for Fast Performance
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+    
+    # Favicons & Images
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType image/vnd.microsoft.icon "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    
+    # Audio
+    ExpiresByType audio/mpeg "access plus 1 year"
+    ExpiresByType audio/mp3 "access plus 1 year"
+
+    # CSS, JavaScript
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    
+    # Fonts
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+</IfModule>
+
+# 4. GZIP / Brotli Compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json application/xml image/svg+xml
+</IfModule>
+
+# 5. MIME Types
+<IfModule mod_mime.c>
+    AddType image/x-icon .ico
+    AddType image/webp .webp
+    AddType application/manifest+json .webmanifest
+    AddType audio/mpeg .mp3
+</IfModule>
+
+# Disable Directory Browsing
+Options -Indexes

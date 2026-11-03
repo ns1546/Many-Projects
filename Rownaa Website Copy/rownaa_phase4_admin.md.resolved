@@ -1,0 +1,356 @@
+# ROWNAA — Phase 4: Admin Panel (All 9 Panels)
+
+> The admin is the platform controller. Every piece of data flows through here. This panel must be designed for efficiency — minimal clicks to approve, manage, and monitor. On mobile it must feel like a management app.
+
+---
+
+## Admin Panel Layout (Desktop)
+
+### Sidebar (Fixed Left, 240px wide)
+- Top: Rownaa logo + "Admin Panel" label
+- Navigation items (with icons):
+  1. Dashboard (home icon)
+  2. Registrations (user-check icon)
+  3. Bookings (calendar icon)
+  4. Payments (credit-card icon)
+  5. Subscriptions (star icon)
+  6. Content (layout icon)
+  7. Customers (users icon)
+  8. Notifications (bell icon)
+  9. Settings / Roles (shield icon)
+- Bottom: Admin avatar + name + "Logout" link
+- Active item: left border accent color + background tint
+
+### Main Content Area
+- Top bar: Page title (left) + Notification bell with badge count (right) + Admin avatar
+- Content below top bar, full width, scrollable
+
+---
+
+## Admin Panel Layout (Mobile) — App-Like
+
+- NO sidebar on mobile
+- Top bar: "ROWNAA Admin" text (left) + Notification bell (right)
+- Bottom navigation bar (fixed, 5 icons): Dashboard | Registrations | Bookings | Payments | More (opens a sheet with remaining items)
+- All data tables converted to swipeable cards on mobile
+- Filter/search → opens as a bottom sheet slide-up panel
+
+---
+
+## Panel 1 — Dashboard (Overview)
+
+### KPI Row (4 cards)
+| Card | Data Source | Period Selector |
+|---|---|---|
+| Total Bookings | COUNT bookings | Today / This Week / This Month toggle |
+| Total Revenue | SUM final_amount | Same toggle |
+| Commission Earned | SUM commission_amount | Same toggle |
+| Pending Actions | COUNT pending bookings + pending registrations | Always live |
+
+### Charts Row
+- Chart 1: Line chart — Bookings over last 30 days
+- Chart 2: Donut chart — Booking status distribution (Pending / Confirmed / Ongoing / Completed / Cancelled)
+- Chart 3: Bar chart — Revenue by service type
+
+### Alerts Section
+- Red alert cards for: Fitness certs expiring in ≤7 days (list of car plate + expiry date + owner name + "View Car" link)
+- Orange alert cards for: Tax tokens expiring in ≤7 days (same format)
+- Yellow alert cards for: Subscriptions expiring in ≤7 days
+
+### Quick Actions Row
+- "New Registration Requests" → count badge + "Review" button → navigates to Panel 2
+- "Pending Bookings" → count + "Assign" button → navigates to Panel 3
+- "Today's Trips" → count + "View" button
+
+---
+
+## Panel 2 — Owner Registration Panel
+
+### 2A — Registration Queue Page
+
+**Filters Bar:**
+- Status filter tabs: All | Pending | Approved | Rejected (tab bar style)
+- Dropdown filter: Business Type (Individual / Agency)
+- Dropdown filter: Area / Zone
+- Date range filter: Submitted between [date] and [date]
+- Search box: "Search by owner name or phone"
+
+**Table Columns (Desktop):**
+| # | Owner/Business Name | Phone | Type | Area | Submitted | Status | Action |
+|---|---|---|---|---|---|---|---|
+
+**Card Format (Mobile):**
+- Owner name (bold) + phone
+- Type badge + Area tag
+- Submitted date + Status badge
+- "Review" button (accent, full-width)
+
+**Clicking "Review" on any row → opens 2B (Business Review)**
+
+---
+
+### 2B — Business/Company Level Review Page
+
+**Header:** Owner/Business Name | Submission date | Status badge
+
+**Section 1 — Basic Info (read-only display)**
+- Name, Phone (✓ OTP Verified badge), Email, Business Type, Area/Operating Zone
+
+**Section 2 — Identity Documents**
+- NID Front: [Image viewer — click to enlarge in lightbox]
+- NID Back: [Image viewer]
+- Trade License: [Image viewer or "Not Applicable"]
+- Address Proof: [Image viewer]
+
+**Section 3 — Payment Info**
+- bKash: xxxxxxxxxx | Nagad: xxxxxxxxxx | Bank: [Details if provided]
+
+**Section 4 — Cars Under This Business**
+- Summary: "3 Cars Registered" with status breakdown (2 pending, 1 approved)
+- Link: "Review Cars →" → goes to 2C
+
+**Action Bar (sticky at bottom of page)**
+- "Approve Business" (green button) → modal: "Are you sure? This allows the owner to receive bookings." → Confirm → updates DB, sends SMS
+- "Reject" (red button) → modal with mandatory text field: "Enter rejection reason" → Confirm → updates DB, sends SMS with reason
+- (If already approved): "Suspend Business" | "Block Business" buttons (danger style)
+
+---
+
+### 2C — Car-Level Review Page
+
+**Header:** Business name + "All Cars" + "Add Car" note
+
+**Car List (per car, as cards):**
+
+Each car card shows:
+- Car photo (front)
+- Model | Plate | Type | Seats | Color | Year
+- Status badge: Pending / Approved / Rejected / Suspended
+- "Review" button
+
+**Car Review Panel (opens on click, full page or slide-in panel):**
+
+- Car photos: 3 image slots (Front / Back / Interior) — click to enlarge
+- Car details (read-only): model, plate, type, seats, color, year
+- Documents section:
+  - BRTA Paper: [Viewer] — "Mark Verified ✓" checkbox
+  - Fitness Certificate: [Viewer] — Expiry Date: [date shown] — "Mark Verified ✓" checkbox
+  - Tax Token: [Viewer] — Expiry Date: [date shown] — "Mark Verified ✓" checkbox
+  - Insurance: [Viewer or "Not provided"]
+- Driver Assigned: [Driver name + photo] or "No driver assigned" + "Assign Driver" button
+
+**Action Bar:**
+- "Approve This Car" → DB: `cars.status = 'active'` — does NOT affect other cars under same business
+- "Reject This Car" → mandatory reason field → DB: `cars.status = 'rejected'`, reason stored
+- "Suspend Car" (manual) → DB: `cars.status = 'suspended'`
+
+---
+
+### 2D — Driver Review
+
+**Driver List Table:**
+| Driver Name | Phone | License # | Assigned Car | Submitted | Status | Action |
+|---|---|---|---|---|---|---|
+
+**Driver Detail View:**
+- Name, Phone, Experience
+- License front + back (image viewers)
+- Driver photo
+- Assigned car info
+- Action buttons: "Approve" | "Suspend" | "Block"
+
+---
+
+## Panel 3 — Booking Panel
+
+### 3A — Booking List
+
+**Filters:**
+- Status tabs: All | Pending | Confirmed | Ongoing | Completed | Cancelled
+- Service type dropdown: All / Car Rental / Airport / Intercity / Tour / Event / Corporate
+- Date range picker
+- Area filter dropdown
+- Search: booking ID or customer phone
+
+**Table Columns (Desktop):**
+| Booking ID | Customer | Service | Pickup Area | Date | Car Assigned | Status | Action |
+|---|---|---|---|---|---|---|---|
+
+**Mobile Card:**
+- Service badge + Status badge
+- Customer name + date
+- Pickup area
+- "View" button
+
+### 3B — Booking Detail View (clicking any booking)
+
+**Page layout: 2 columns**
+
+**Column 1 — Booking Info**
+- Booking ID + Service Type + Status badge
+- Customer info: name, phone
+- ALL form fields the customer submitted (service type determines which fields show)
+- Pickup date/time, location, car type preference, passenger count, special note
+- Service-specific data rendered from `service_data JSONB`
+
+**Column 2 — Assignment & Control**
+
+**Car/Driver Assignment:**
+- Current assignment: [Car model + plate] / [Driver name] or "Not assigned"
+- "Assign Car & Driver" button → opens assignment modal:
+  - System suggests cars matching pickup area + service type (auto-filtered)
+  - Admin selects from dropdown of available, approved cars in that area
+  - Admin selects driver from the business's driver pool
+  - "Confirm Assignment" → updates DB, changes status to `confirmed`, sends SMS to customer
+
+**Trip Control (state machine — buttons appear based on current status):**
+
+| Current Status | Buttons Available |
+|---|---|
+| `pending` | Assign Car & Driver → leads to Confirmed |
+| `confirmed` | "Mark Trip Started" (admin override) |
+| `ongoing` | "Mark Trip Completed" (admin override) |
+| `completed` | "Mark Payment Received" |
+| Any | "Cancel Booking" (shows refund note) |
+
+**Important:** The owner/driver triggers Start/End Trip from their dashboard. Admin override exists for disputes or manual correction.
+
+### 3C — Payment on Booking (visible in booking detail)
+
+**Payment Section:**
+- Advance payment: ৳500 received via bKash | Transaction ID: xxx | [Paid ✓ badge] or [Pending badge]
+- Final bill: [Input field if not yet entered] / [Amount shown if entered]
+- Payment method: Cash / bKash / Nagad / Bank Transfer
+- Amount received: ৳2,500
+- Commission (10%): ৳250 (auto-calculated, shown in gold color, not editable)
+- Net to owner: ৳2,250
+- Payment status badge: Unpaid / Paid
+- "Mark as Paid" button → updates `payment_status = 'paid'`
+- Refund/Cancel note: if cancelled, show refund amount calculation
+
+---
+
+## Panel 4 — Payment & Commission
+
+**Overview KPI Row:**
+- Total advance payments received (period selector)
+- Total commission earned (period selector)
+- Total owner payouts pending
+- Total revenue
+
+**Transaction Log Table:**
+| Date | Booking ID | Service | Customer | Amount | Advance | Commission | Net | Status |
+|---|---|---|---|---|---|---|---|---|
+
+**Filters:** Date range | Service type | Payment method | Status (paid/unpaid)
+
+**Export Button:** "Export CSV" — downloads filtered data
+
+**Revenue Report:**
+- Monthly bar chart: Revenue vs. Commission
+- Table: Month | Total Bookings | Total Revenue | Commission | Owner Payouts
+
+---
+
+## Panel 5 — Subscription Management
+
+### Plans List
+- Table of all subscription plans
+- Columns: Plan Name | Price | Duration | Car Limit | Commission Rate | Status (Active/Inactive) | Actions
+
+### Create/Edit Plan (Modal or dedicated page)
+
+| Field | Type |
+|---|---|
+| Plan Name | Text input (e.g. "Free", "Premium", "Business") |
+| Price | Number input (BDT) |
+| Duration | Number input + dropdown (days / months) |
+| Max Cars | Number input (0 = unlimited) |
+| Visibility Priority | Number (higher = shown first in search) |
+| Commission Rate | Number input (%) |
+| Features | Repeating text field ("Add Feature" button — each becomes a bullet point) |
+| Active Status | Toggle |
+
+### Business Subscription Status Table
+- Columns: Owner/Business | Plan | Started | Expires | Status | Action
+- Filters: Active / Expired / Expiring Soon (≤7 days)
+- "Send Renewal Reminder" manual button per row
+
+### Auto-Downgrade Logic:
+- When subscription expires → cron job downgrades `visibility_priority` to 0 (base level)
+- Cars remain active (not suspended), just lose priority placement in search results
+
+---
+
+## Panel 6 — Service & Content Management
+
+### Service Categories
+- List of 6 services with toggles: Active / Inactive (disabling hides from homepage)
+- Edit service: name, description, icon (upload), order (drag to reorder)
+- "Add New Service" button (future expansion)
+
+### Homepage Banner Management
+- Current banner image (preview)
+- Upload new banner image
+- Edit banner headline text
+- Edit banner subtext
+- "Publish Changes" button
+
+### Pricing Guidelines (optional)
+- Table: Car Type | Service | Estimated Rate | Per (hour/trip/day)
+- Admin can edit these — shown as guidance to customers on booking confirmation
+
+---
+
+## Panel 7 — Customer Management
+
+**Customer List Table:**
+| Name | Phone | Email | Total Bookings | Joined | Last Active | Action |
+|---|---|---|---|---|---|---|
+
+**Search:** By name, phone, email
+
+**Customer Detail Page:**
+- Profile info
+- Booking history (linked booking detail views)
+- All reviews submitted
+- "Block Customer" button (prevents login) — for abuse cases
+
+**Complaints/Feedback Tab:**
+- All complaints submitted via contact forms or post-trip feedback
+- Status: Open / Resolved
+- Reply text area + "Mark Resolved" button
+
+---
+
+## Panel 8 — Notifications
+
+### Notification Settings
+- Toggle: Admin email notification when new booking comes in
+- Toggle: Admin email notification when new registration request submitted
+- Toggle: SMS to customer on booking confirmed
+- Toggle: SMS to customer when trip starts
+- Toggle: SMS to customer when trip completes
+- Toggle: SMS to owner on new booking assigned
+
+### Notification Log
+- Table of all sent notifications: Date | Type | Recipient | Message | Status (Sent/Failed)
+
+---
+
+## Panel 9 — Roles & Access (Future Phase)
+
+**Current MVP:** Single admin account, no sub-roles.
+
+**Planned structure (build schema now, UI later):**
+
+| Role | Access |
+|---|---|
+| Super Admin | Everything |
+| Booking Manager | Panel 3 (bookings) only |
+| Finance Manager | Panel 4 (payments) only |
+| Support Agent | Panel 7 (customers) only |
+
+**Staff Management (placeholder page for now):**
+- "Staff management will be available in a future update."
+- Schema already supports roles in `users` table — no rebuild needed later.

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+    <g id="Group_35216">
+        <circle id="Ellipse_1391" cx="16" cy="16" r="16" fill="#ffe3ef" stroke-width="0" />
+        <g id="Icon_feather-plus">
+            <path id="Path_26384" d="m15.84,7.82v17.69" fill="none" stroke="#ed739e"
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+            <path id="Path_26385" d="m7,16.66h17.69" fill="none" stroke="#ed739e"
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,347 @@
+# ROWNAA — Phase 1: Project Foundation & Database
+
+> Build this phase entirely before writing any UI code. Every UI phase depends on this structure being correct.
+
+---
+
+## 1. Tech Stack
+
+| Layer | Technology | Reason |
+|---|---|---|
+| Frontend | Next.js 14 (App Router) | Dynamic forms, SSR for SEO, easy routing |
+| Styling | Vanilla CSS (per Phase 0 architecture) | Full control, no AI defaults |
+| Backend | Node.js + Express.js | REST API, flexible middleware |
+| Database | PostgreSQL | Relational, supports one-to-many (business→cars) |
+| ORM | Prisma | Type-safe DB queries, easy migrations |
+| Auth | JWT + OTP (via SMS gateway) | Phone-based login as per spec |
+| File Storage | Cloudinary or AWS S3 | Image/PDF uploads for documents |
+| SMS Gateway | SSL Wireless or Twilio Bangladesh | OTP, booking notifications |
+| Payment | SSLCommerz + bKash Checkout API | Advance payment as per spec |
+| Maps | Google Maps Places API | Structured pickup area selection |
+| Hosting | Vercel (Frontend) + Railway/Render (Backend) | Scalable, easy CI/CD |
+
+---
+
+## 2. Folder Structure
+
+```
+/rownaa-frontend/
+├── app/
+│   ├── (public)/
+│   │   ├── page.tsx              ← Homepage
+│   │   ├── login/page.tsx
+│   │   ├── register/page.tsx
+│   │   └── book/[service]/page.tsx  ← Dynamic booking forms
+│   ├── (customer)/
+│   │   ├── dashboard/page.tsx
+│   │   └── bookings/page.tsx     ← My Bookings
+│   ├── (owner)/
+│   │   ├── register/page.tsx     ← 7-step onboarding
+│   │   └── dashboard/page.tsx
+│   └── (admin)/
+│       ├── dashboard/page.tsx
+│       ├── owners/page.tsx
+│       ├── bookings/page.tsx
+│       ├── payments/page.tsx
+│       └── settings/page.tsx
+├── components/
+│   ├── ui/                       ← Reusable: Button, Input, Card, Badge, Modal
+│   ├── booking/                  ← Service-specific form components
+│   ├── admin/                    ← Admin panel components
+│   └── owner/                    ← Owner dashboard components
+├── styles/
+│   ├── global.css
+│   ├── desktop.css
+│   ├── mobile.css
+│   ├── admin.css
+│   ├── admin-mobile.css
+│   └── animations.css
+└── lib/
+    ├── api.ts                    ← API client functions
+    └── auth.ts                   ← Auth helpers
+
+/rownaa-backend/
+├── routes/
+│   ├── auth.js
+│   ├── bookings.js
+│   ├── owners.js
+│   ├── cars.js
+│   ├── admin.js
+│   └── payments.js
+├── middleware/
+│   ├── auth.js                   ← JWT verification
+│   └── rbac.js                   ← Role-based access control
+├── prisma/
+│   └── schema.prisma             ← Full DB schema
+└── services/
+    ├── sms.js                    ← SMS gateway integration
+    ├── payment.js                ← SSLCommerz/bKash
+    └── notifications.js
+```
+
+---
+
+## 3. Database Schema (PostgreSQL via Prisma)
+
+### 3A. Users Table
+```sql
+Table: users
+- id              UUID PRIMARY KEY
+- phone           VARCHAR(15) UNIQUE NOT NULL   -- Primary login method
+- email           VARCHAR(255) UNIQUE           -- Optional
+- name            VARCHAR(255) NOT NULL
+- role            ENUM('customer','owner','driver','admin') DEFAULT 'customer'
+- is_verified     BOOLEAN DEFAULT false         -- Phone OTP verified
+- created_at      TIMESTAMP DEFAULT now()
+- updated_at      TIMESTAMP DEFAULT now()
+```
+
+### 3B. Businesses Table (Owner/Agency)
+```sql
+Table: businesses
+- id              UUID PRIMARY KEY
+- user_id         UUID REFERENCES users(id)     -- The owner's user account
+- business_name   VARCHAR(255) NOT NULL
+- type            ENUM('individual','agency')
+- operating_zone  VARCHAR(255) NOT NULL         -- Primary pickup area
+- nid_front_url   TEXT                          -- Cloudinary URL
+- nid_back_url    TEXT
+- trade_license_url TEXT                        -- NULL for individuals
+- address_proof_url TEXT
+- bkash_number    VARCHAR(15)
+- nagad_number    VARCHAR(15)
+- bank_account    TEXT                          -- Optional JSON {bank, branch, acc_no}
+- status          ENUM('pending','approved','rejected','suspended') DEFAULT 'pending'
+- rejection_reason TEXT                         -- Filled on rejection
+- approved_at     TIMESTAMP
+- created_at      TIMESTAMP DEFAULT now()
+```
+
+### 3C. Cars Table (Many cars per business)
+```sql
+Table: cars
+- id                    UUID PRIMARY KEY
+- business_id           UUID REFERENCES businesses(id)   -- ONE business → MANY cars
+- model                 VARCHAR(255) NOT NULL            -- e.g. "Toyota Axio"
+- manufacturing_year    INT                              -- Optional
+- seat_count            INT NOT NULL                     -- 4, 6, 7, 11, etc.
+- car_type              ENUM('sedan','suv','microbus','noah_hiace','other')
+- color                 VARCHAR(50)
+- number_plate          VARCHAR(20) UNIQUE NOT NULL
+- photo_front_url       TEXT
+- photo_back_url        TEXT
+- photo_inside_url      TEXT
+- brta_doc_url          TEXT
+- fitness_cert_url      TEXT
+- fitness_expiry_date   DATE NOT NULL                    -- Required; auto-suspend logic uses this
+- tax_token_url         TEXT
+- tax_token_expiry_date DATE
+- insurance_url         TEXT                             -- Optional
+- status                ENUM('pending','approved','rejected','active','inactive','suspended') DEFAULT 'pending'
+- rejection_reason      TEXT
+- is_available          BOOLEAN DEFAULT true             -- Owner toggle
+- created_at            TIMESTAMP DEFAULT now()
+```
+
+### 3D. Drivers Table
+```sql
+Table: drivers
+- id                UUID PRIMARY KEY
+- business_id       UUID REFERENCES businesses(id)
+- car_id            UUID REFERENCES cars(id)             -- Currently assigned car
+- name              VARCHAR(255) NOT NULL
+- phone             VARCHAR(15) NOT NULL
+- license_front_url TEXT
+- license_back_url  TEXT
+- photo_url         TEXT
+- experience_years  INT                                  -- Optional
+- status            ENUM('pending','approved','suspended','blocked') DEFAULT 'pending'
+- created_at        TIMESTAMP DEFAULT now()
+```
+
+### 3E. Bookings Table (Core of the platform)
+```sql
+Table: bookings
+- id                UUID PRIMARY KEY
+- customer_id       UUID REFERENCES users(id)
+- car_id            UUID REFERENCES cars(id)             -- Assigned after matching
+- driver_id         UUID REFERENCES drivers(id)          -- Assigned by admin
+- service_type      ENUM('car_rental','airport_transfer','intercity','travel_tour','event_wedding','corporate')
+- status            ENUM('pending','confirmed','ongoing','completed','cancelled') DEFAULT 'pending'
+
+-- Common fields (always present)
+- customer_name     VARCHAR(255) NOT NULL
+- customer_phone    VARCHAR(15) NOT NULL
+- pickup_area       VARCHAR(255) NOT NULL                -- Structured area, NOT free text
+- pickup_date       DATE NOT NULL
+- pickup_time       TIME NOT NULL
+- car_type_pref     ENUM('sedan','suv','microbus','noah_hiace','any') DEFAULT 'any'
+- passenger_count   INT DEFAULT 1
+- special_note      TEXT
+
+-- Service-specific fields (stored as JSONB for flexibility)
+- service_data      JSONB NOT NULL                       -- All extra fields per service (see Phase 2)
+
+-- Payment
+- estimated_fare    DECIMAL(10,2)
+- advance_amount    DECIMAL(10,2)                        -- 20% of estimated_fare
+- advance_paid      BOOLEAN DEFAULT false
+- advance_payment_method ENUM('bkash','bank','sslcommerz')
+- advance_txn_id    VARCHAR(255)
+
+-- Trip lifecycle
+- trip_started_at   TIMESTAMP
+- trip_ended_at     TIMESTAMP
+
+-- Final payment
+- final_amount      DECIMAL(10,2)                        -- Entered after trip
+- amount_received   DECIMAL(10,2)
+- commission_amount DECIMAL(10,2)                        -- Auto-calculated 10%
+- payment_status    ENUM('unpaid','partial','paid') DEFAULT 'unpaid'
+- payment_method    ENUM('cash','bkash','nagad','bank')
+
+-- Meta
+- created_at        TIMESTAMP DEFAULT now()
+- updated_at        TIMESTAMP DEFAULT now()
+```
+
+### 3F. Reviews Table
+```sql
+Table: reviews
+- id            UUID PRIMARY KEY
+- booking_id    UUID REFERENCES bookings(id) UNIQUE
+- customer_id   UUID REFERENCES users(id)
+- car_id        UUID REFERENCES cars(id)
+- driver_id     UUID REFERENCES drivers(id)
+- rating        INT CHECK (rating >= 1 AND rating <= 5)
+- comment       TEXT
+- created_at    TIMESTAMP DEFAULT now()
+```
+
+### 3G. Subscriptions Table
+```sql
+Table: subscription_plans
+- id            UUID PRIMARY KEY
+- name          VARCHAR(100) NOT NULL          -- e.g. Free, Premium, Business
+- price         DECIMAL(10,2) NOT NULL
+- duration_days INT NOT NULL
+- car_limit     INT                            -- Max cars allowed under this plan
+- visibility_priority INT DEFAULT 0            -- Higher = shown first in listings
+- commission_rate DECIMAL(5,2) DEFAULT 10.00  -- % commission
+- features      JSONB                          -- Array of feature strings
+- is_active     BOOLEAN DEFAULT true
+
+Table: business_subscriptions
+- id            UUID PRIMARY KEY
+- business_id   UUID REFERENCES businesses(id)
+- plan_id       UUID REFERENCES subscription_plans(id)
+- starts_at     TIMESTAMP NOT NULL
+- expires_at    TIMESTAMP NOT NULL
+- status        ENUM('active','expired','cancelled')
+```
+
+### 3H. Notifications Table
+```sql
+Table: notifications
+- id            UUID PRIMARY KEY
+- user_id       UUID REFERENCES users(id)
+- type          VARCHAR(100)                   -- e.g. 'booking_confirmed', 'doc_approved'
+- title         VARCHAR(255)
+- body          TEXT
+- is_read       BOOLEAN DEFAULT false
+- created_at    TIMESTAMP DEFAULT now()
+```
+
+---
+
+## 4. Role-Based Access Control (RBAC)
+
+| Route Pattern | Allowed Roles |
+|---|---|
+| `/` (homepage), `/book/*` | Public (all) |
+| `/customer/*` | `customer` only |
+| `/owner/*` | `owner` only, and `status = approved` |
+| `/admin/*` | `admin` only |
+| `GET /api/cars/search` | Public — BUT query MUST include `WHERE cars.status = 'active' AND businesses.status = 'approved'` |
+
+**Middleware Logic (`rbac.js`):**
+1. Extract JWT from Authorization header
+2. Decode and get `role` and `id`
+3. Match against route pattern
+4. If mismatch → return `403 Forbidden`
+5. Never trust client-side role — always re-validate from DB on sensitive operations
+
+---
+
+## 5. API Endpoint Structure (REST)
+
+### Auth
+```
+POST   /api/auth/send-otp          ← Send OTP to phone number
+POST   /api/auth/verify-otp        ← Verify OTP, return JWT
+POST   /api/auth/login             ← Email/password fallback
+POST   /api/auth/logout
+```
+
+### Bookings
+```
+POST   /api/bookings               ← Create a new booking
+GET    /api/bookings               ← List (filtered by role: customer sees own, admin sees all)
+GET    /api/bookings/:id           ← Booking detail
+PATCH  /api/bookings/:id/status    ← Update status (role-restricted)
+PATCH  /api/bookings/:id/start-trip
+PATCH  /api/bookings/:id/end-trip
+PATCH  /api/bookings/:id/payment   ← Record final payment
+```
+
+### Cars & Matching
+```
+GET    /api/cars/search?area=X&service=Y&passengers=N   ← Customer search
+GET    /api/cars/match?passengers=N                     ← Seat matching algorithm
+POST   /api/cars                   ← Owner adds a car
+PATCH  /api/cars/:id               ← Owner updates car info
+PATCH  /api/cars/:id/availability  ← Toggle available/unavailable
+```
+
+### Owner/Business
+```
+POST   /api/owners/register        ← Submit full registration (Steps 1–6)
+GET    /api/owners/me              ← Owner's own dashboard data
+GET    /api/owners/:id/bookings    ← Bookings for this owner's cars
+PATCH  /api/owners/:id/documents   ← Update a specific document
+```
+
+### Admin
+```
+GET    /api/admin/dashboard        ← KPI stats
+GET    /api/admin/registrations    ← Queue of pending businesses
+PATCH  /api/admin/businesses/:id/approve
+PATCH  /api/admin/businesses/:id/reject
+PATCH  /api/admin/cars/:id/approve
+PATCH  /api/admin/cars/:id/reject
+GET    /api/admin/bookings         ← All bookings
+PATCH  /api/admin/bookings/:id/assign   ← Assign driver/car
+GET    /api/admin/payments
+GET    /api/admin/subscriptions
+```
+
+---
+
+## 6. Automated Jobs (Cron)
+
+| Job | Schedule | Action |
+|---|---|---|
+| Fitness certificate expiry check | Daily at midnight | Set `cars.status = 'suspended'` where `fitness_expiry_date < TODAY` |
+| Tax token expiry check | Daily at midnight | Same logic for tax token |
+| Subscription expiry check | Daily at midnight | Set `business_subscriptions.status = 'expired'`, downgrade visibility |
+| Renewal reminder SMS | 7 days before expiry | Send SMS to business owner |
+
+---
+
+## 7. Security Requirements
+
+- All file upload endpoints: validate MIME type (accept only `image/jpeg`, `image/png`, `application/pdf`)
+- Max file size: 5MB per document
+- Uploaded files renamed to UUID before storage (prevent enumeration attacks)
+- All admin endpoints require `role = 'admin'` in JWT AND in DB (double check)
+- Rate limit OTP endpoint: max 3 OTP requests per phone per hour

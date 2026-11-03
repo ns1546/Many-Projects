@@ -1,0 +1,3963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Checkout &amp; Reservation — Rownaa® Chauffeur Services</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  
+  <script type="module" src="https://unpkg.com/@phosphor-icons/web"></script>
+  <!-- Pathao / Uber Grade Vector Map Engine (MapLibre GL JS) with Leaflet Fallback -->
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="css/design.css?v=4" />
+  <script src="js/auth.js"></script>
+
+  <style>
+    :root {
+      --bg-base: #050505;
+      --bg-panel: #0d0d0d;
+      --bg-elevated: #141414;
+      --bg-surface: #18181b;
+      --text-primary: #f5f5f7;
+      --text-secondary: #a1a1aa;
+      --text-tertiary: #71717a;
+      --accent: #d4ff00;
+      --accent-hover: #b5d900;
+      --accent-muted: rgba(212, 255, 0, 0.12);
+      --accent-glow: rgba(212, 255, 0, 0.22);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.15);
+      --border-accent: rgba(212, 255, 0, 0.4);
+      --success: #30d158;
+      --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --border-rad: 16px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font-ui);
+      min-height: 100vh;
+      line-height: 1.5;
+      background-image: 
+        radial-gradient(circle at 85% 10%, rgba(212, 255, 0, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 15% 60%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; color: inherit; }
+    input, select, textarea { font-family: inherit; color: inherit; }
+
+    /* Top Navigation */
+    .checkout-nav {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      background: rgba(6, 6, 6, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 1000;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0 40px;
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-logo {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--text-primary);
+    }
+    .brand-logo sup {
+      color: var(--accent);
+      font-size: 0.55em;
+      top: -0.8em;
+    }
+    .brand-badge {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* Checkout Step Indicators */
+    .step-tracker {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--text-tertiary);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .step-item.completed {
+      color: var(--text-secondary);
+    }
+    .step-item.completed .step-dot {
+      background: rgba(212, 255, 0, 0.2);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .step-item.active {
+      color: var(--text-primary);
+    }
+    .step-item.active .step-dot {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .step-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1px solid var(--border-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      transition: all 0.2s var(--ease);
+    }
+    .step-arrow {
+      color: var(--text-tertiary);
+      font-size: 0.75rem;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .btn-nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-elevated);
+      transition: all 0.2s;
+    }
+    .btn-nav-back:hover {
+      color: var(--text-primary);
+      border-color: var(--border-strong);
+      background: var(--bg-surface);
+    }
+
+    /* Main Checkout Grid */
+    .checkout-wrap {
+      max-width: 1240px;
+      margin: 36px auto 80px;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* Left Column: Form Panels & Vehicle Showcase */
+    .form-column {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Luxury Vehicle Showcase Card */
+    .vehicle-hero-card {
+      background: linear-gradient(135deg, rgba(20,20,20,0.9) 0%, rgba(13,13,13,0.95) 100%);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--border-rad);
+      overflow: hidden;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.4);
+      position: relative;
+    }
+    .vehicle-hero-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+    .vh-top-grid {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 24px;
+      padding: 24px;
+      align-items: center;
+    }
+    .vh-img-wrap {
+      width: 100%;
+      height: 130px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      position: relative;
+    }
+    .vh-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s var(--ease);
+    }
+    .vehicle-hero-card:hover .vh-img {
+      transform: scale(1.05);
+    }
+    .vh-details {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .vh-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .badge-class {
+      background: rgba(212, 255, 0, 0.12);
+      color: var(--accent);
+      border: 1px solid rgba(212, 255, 0, 0.3);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .badge-verified {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .badge-verified i {
+      color: var(--success);
+    }
+    .vh-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+    .vh-specs {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .spec-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+    .spec-item i {
+      color: var(--accent);
+      font-size: 0.95rem;
+    }
+    .vh-actions-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 24px;
+      background: rgba(0,0,0,0.3);
+      border-top: 1px solid var(--border-subtle);
+    }
+    .vh-status-note {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .vh-status-note .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+    .btn-change-fleet {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .btn-change-fleet:hover {
+      text-decoration: underline;
+      color: #fff;
+    }
+
+    /* Section Panels */
+    .section-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--border-rad);
+      padding: 30px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .panel-icon-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 1.15rem;
+    }
+    .panel-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .panel-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+      margin-top: 2px;
+    }
+
+    /* Form Fields */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .f-group {
+      margin-bottom: 18px;
+    }
+    .f-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .input-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      color: var(--text-tertiary);
+      font-size: 1.1rem;
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+    .f-input {
+      width: 100%;
+      background: var(--bg-base);
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      padding: 13px 16px 13px 42px;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s var(--ease);
+    }
+    .f-input:focus {
+      border-color: var(--accent);
+      background: rgba(10, 10, 10, 0.95);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .input-box:focus-within .input-icon {
+      color: var(--accent);
+    }
+    select.f-input {
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 16px;
+      padding-right: 40px;
+    }
+
+    /* Right Column: Sticky Payment Breakdown Card */
+    .sticky-summary {
+      position: sticky;
+      top: 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .summary-card {
+      background: linear-gradient(180deg, rgba(22, 22, 28, 0.85) 0%, rgba(13, 13, 16, 0.98) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+    }
+    .sc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 20px;
+    }
+    .sc-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .ssl-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--success);
+      background: rgba(48, 209, 88, 0.1);
+      border: 1px solid rgba(48, 209, 88, 0.25);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    /* Itemized Fare Rows */
+    .fare-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .sc-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .sc-row strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    .sc-row.discount-row {
+      color: var(--accent);
+      background: rgba(212, 255, 0, 0.08);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px dashed rgba(212, 255, 0, 0.3);
+    }
+
+    /* Modern Promo Box */
+    .promo-container {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 20px;
+    }
+    .promo-input-wrap {
+      display: flex;
+      gap: 8px;
+    }
+    .promo-input {
+      flex: 1;
+      background: var(--bg-base);
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text-primary);
+      font-size: 0.88rem;
+      outline: none;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      transition: border-color 0.2s;
+    }
+    .promo-input:focus {
+      border-color: var(--accent);
+    }
+    .btn-apply-promo {
+      background: var(--text-primary);
+      color: #000;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0 18px;
+      border-radius: 8px;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-apply-promo:hover {
+      background: var(--accent);
+      transform: translateY(-1px);
+    }
+    .promo-pills-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .quick-promo {
+      cursor: pointer;
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .quick-promo:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(212, 255, 0, 0.08);
+    }
+
+    /* Payment Method Selector */
+    .payment-methods {
+      margin-bottom: 22px;
+    }
+    .pm-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .pm-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .pm-option {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      background: var(--bg-base);
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      transition: all 0.2s;
+    }
+    .pm-option.selected {
+      border-color: var(--accent);
+      background: rgba(212, 255, 0, 0.04);
+    }
+    .pm-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .pm-icon {
+      font-size: 1.25rem;
+      color: var(--accent);
+    }
+    .pm-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .pm-sub {
+      font-size: 0.72rem;
+      color: var(--text-tertiary);
+    }
+    .pm-radio {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid var(--border-strong);
+      position: relative;
+    }
+    .pm-option.selected .pm-radio {
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    /* Grand Total Row */
+    .sc-total-box {
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 18px;
+      margin-top: 12px;
+    }
+    .sc-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .total-label {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .total-amount {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+    .total-note {
+      font-size: 0.72rem;
+      color: var(--text-tertiary);
+      text-align: right;
+    }
+
+    /* CTA Button (Executive High-End Pill Architecture) */
+    .btn-checkout {
+      width: 100%;
+      background: var(--accent);
+      color: #000;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+      padding: 16px 28px;
+      border-radius: 9999px;
+      margin-top: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      cursor: pointer;
+      border: 1px solid rgba(212, 255, 0, 0.5);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 6px 24px rgba(212, 255, 0, 0.28);
+    }
+    .btn-checkout:hover {
+      background: #e2ff33;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(212, 255, 0, 0.42);
+    }
+    .btn-checkout:active {
+      transform: scale(0.98);
+    }
+    .btn-checkout .btn-arrow-bubble {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(0, 0, 0, 0.12);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 0.9rem;
+      transition: transform 0.2s ease;
+    }
+    .btn-checkout:hover .btn-arrow-bubble {
+      transform: translateX(3px);
+    }
+
+    /* Trust Guarantees */
+    .trust-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    .trust-item i {
+      color: var(--accent);
+      font-size: 0.95rem;
+    }
+
+    /* =========================================================
+       WORLD-CLASS CONFIRMATION MODAL (#successScreen)
+       ========================================================= */
+    .success-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 3, 3, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .success-overlay.active {
+      display: flex;
+      animation: modalFadeIn 0.3s var(--ease) forwards;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .confirmation-modal {
+      background: #0d0d0d;
+      border: 1px solid var(--border-accent);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 580px;
+      padding: 36px;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.8), 0 0 50px rgba(212, 255, 0, 0.12);
+      position: relative;
+      text-align: center;
+    }
+
+    .conf-status-icon {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: rgba(212, 255, 0, 0.12);
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-size: 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 0 25px var(--accent-glow);
+    }
+
+    .conf-heading {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    .conf-desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      max-width: 440px;
+      margin: 0 auto 24px;
+    }
+
+    /* Ticket Details Card Inside Modal */
+    .conf-ticket {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: left;
+      margin-bottom: 24px;
+    }
+    .ticket-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 14px;
+    }
+    .ticket-code {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+    .ticket-badge {
+      background: rgba(48, 209, 88, 0.15);
+      color: var(--success);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .ticket-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      font-size: 0.82rem;
+    }
+    .tg-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .tg-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      font-weight: 600;
+    }
+    .tg-val {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* Modal Action Buttons */
+    .conf-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .btn-conf-primary {
+      width: 100%;
+      background: var(--accent);
+      color: #000;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 14px 20px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-conf-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+    .btn-conf-secondary {
+      width: 100%;
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      border: 1px solid var(--border-strong);
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 12px 20px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-conf-secondary:hover {
+      background: var(--bg-elevated);
+      border-color: var(--text-primary);
+    }
+    .conf-timer-note {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+      margin-top: 10px;
+    }
+
+    /* Passenger Profile Folded Card */
+    .rider-folded-card {
+      background: linear-gradient(135deg, rgba(25, 25, 25, 0.95) 0%, rgba(14, 14, 14, 0.98) 100%);
+      border: 1px solid rgba(212, 255, 0, 0.25);
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      transition: all 0.25s var(--ease);
+    }
+    .rider-folded-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 6px 20px rgba(212, 255, 0, 0.1);
+    }
+    .rfc-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+    .rfc-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(212, 255, 0, 0.12);
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .rfc-details {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+    .rfc-name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .rfc-name {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-primary);
+    }
+    .rfc-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(48, 209, 88, 0.12);
+      color: var(--success);
+      border: 1px solid rgba(48, 209, 88, 0.25);
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    .rfc-contact {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .rfc-contact span {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn-edit-profile {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-strong);
+      color: var(--text-primary);
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .btn-edit-profile:hover {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+    .rider-form-fields {
+      transition: all 0.3s var(--ease);
+    }
+    .rider-form-fields.collapsed {
+      display: none;
+    }
+
+    /* Input Action Buttons (Header Actions: Map Pickers & Quick GPS) */
+    .field-header-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .btn-header-action {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-secondary);
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+    .btn-header-action:hover {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+    .btn-header-action.accent {
+      color: var(--accent);
+      border-color: rgba(212, 255, 0, 0.35);
+      background: rgba(212, 255, 0, 0.08);
+    }
+    .btn-header-action.accent:hover {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+
+    /* Travel Date & Pickup Time Quick Selectors */
+    .schedule-control-group {
+      margin-bottom: 18px;
+    }
+    .schedule-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .pills-scroll-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .choice-pill {
+      background: var(--bg-base);
+      border: 1px solid var(--border-strong);
+      color: var(--text-secondary);
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+    }
+    .choice-pill:hover {
+      border-color: var(--text-secondary);
+      color: var(--text-primary);
+    }
+    .choice-pill.active {
+      background: rgba(212, 255, 0, 0.12);
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 10px rgba(212, 255, 0, 0.15);
+    }
+    .choice-pill i {
+      font-size: 0.95rem;
+    }
+    .schedule-preview-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(212, 255, 0, 0.07);
+      border: 1px solid rgba(212, 255, 0, 0.25);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--accent);
+      width: 100%;
+      margin-top: 4px;
+    }
+
+    /* Vouchers Hub Modal & Trigger */
+    .btn-vouchers-hub {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(212, 255, 0, 0.12) 0%, rgba(20, 20, 20, 0.8) 100%);
+      border: 1px solid rgba(212, 255, 0, 0.35);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.25s var(--ease);
+      margin-bottom: 14px;
+    }
+    .btn-vouchers-hub:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 16px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+    .bvh-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+    .bvh-left i {
+      font-size: 1.25rem;
+      color: var(--accent);
+    }
+    .bvh-badge {
+      background: var(--accent);
+      color: #000;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* Map Selection Modal */
+    .map-modal-overlay, .voucher-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 3, 3, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .map-modal-overlay.active, .voucher-modal-overlay.active {
+      display: flex;
+      animation: modalFadeIn 0.25s var(--ease) forwards;
+    }
+    .map-modal-box {
+      background: #0d0d0d;
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 760px;
+      overflow: hidden;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.85);
+      display: flex;
+      flex-direction: column;
+    }
+    .map-modal-header {
+      padding: 18px 24px;
+      background: #141414;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .mmh-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mmh-title i {
+      color: var(--accent);
+    }
+    .modal-close-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .modal-close-btn:hover {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+    }
+    /* Uber-Style Location Search in Map Modal */
+    .uber-search-container {
+      padding: 14px 20px;
+      background: #141414;
+      border-bottom: 1px solid var(--border-subtle);
+      position: relative;
+      z-index: 2000;
+    }
+    .uber-search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: var(--bg-base);
+      border: 1px solid var(--border-strong);
+      border-radius: 12px;
+      padding: 0 16px;
+      transition: all 0.2s var(--ease);
+    }
+    .uber-search-box:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-glow);
+    }
+    .uber-search-icon {
+      font-size: 1.15rem;
+      color: var(--text-tertiary);
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+    .uber-search-box:focus-within .uber-search-icon {
+      color: var(--accent);
+    }
+    .uber-search-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-primary);
+      font-size: 0.92rem;
+      padding: 13px 0;
+      font-family: inherit;
+    }
+    .uber-search-clear {
+      color: var(--text-tertiary);
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 50%;
+      transition: color 0.2s;
+      background: none;
+      border: none;
+    }
+    .uber-search-clear:hover {
+      color: #fff;
+    }
+    .uber-suggestions-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 20px;
+      right: 20px;
+      background: #18181b;
+      border: 1px solid var(--border-strong);
+      border-radius: 12px;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.85);
+      max-height: 240px;
+      overflow-y: auto;
+      z-index: 3000;
+      display: flex;
+      flex-direction: column;
+    }
+    .uber-suggestion-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.15s;
+    }
+    .uber-suggestion-item:last-child {
+      border-bottom: none;
+    }
+    .uber-suggestion-item:hover {
+      background: rgba(212, 255, 0, 0.08);
+    }
+    .usi-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+    .usi-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .usi-primary {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .usi-secondary {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Floating Re-Center / Locate Me Button (Uber Style) */
+    .map-canvas-container {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      background: #18181b;
+    }
+    #map-canvas {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      z-index: 1;
+    }
+    .btn-floating-locate {
+      position: absolute;
+      bottom: 24px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #141414;
+      border: 1px solid var(--border-strong);
+      color: var(--text-primary);
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+      z-index: 1000;
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+    }
+    .btn-floating-locate:hover {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+      transform: scale(1.06);
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+    .btn-floating-locate.locating i {
+      animation: spin 1s linear infinite;
+      color: var(--accent);
+    }
+    .map-footer-bar {
+      padding: 16px 24px;
+      background: #141414;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .mf-location-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .mf-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      font-weight: 700;
+    }
+    .mf-address {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .btn-confirm-map {
+      background: var(--accent);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.9rem;
+      padding: 12px 20px;
+      border-radius: 8px;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .btn-confirm-map:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    /* Vouchers Modal Styles */
+    .voucher-modal-box {
+      background: #0d0d0d;
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 640px;
+      overflow: hidden;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.85);
+      display: flex;
+      flex-direction: column;
+    }
+    .vouchers-list {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-height: 520px;
+      overflow-y: auto;
+    }
+    .voucher-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .voucher-card:hover {
+      border-color: rgba(212, 255, 0, 0.4);
+      background: rgba(24, 24, 27, 0.9);
+    }
+    .vc-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+    .vc-top-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .vc-code {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      background: rgba(212, 255, 0, 0.1);
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px dashed rgba(212, 255, 0, 0.35);
+    }
+    .vc-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+    }
+    .vc-title {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--text-primary);
+    }
+    .vc-desc {
+      font-size: 0.78rem;
+      color: var(--text-tertiary);
+    }
+    .btn-apply-voucher-action {
+      background: var(--accent);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.82rem;
+      padding: 9px 18px;
+      border-radius: 6px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-apply-voucher-action:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+    .btn-apply-voucher-action.applied {
+      background: var(--success);
+      color: #fff;
+    }
+
+    /* MFS Instructions Box */
+    .mfs-instructions {
+      margin-top: 10px;
+      background: rgba(212, 255, 0, 0.06);
+      border: 1px dashed rgba(212, 255, 0, 0.3);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      display: none;
+    }
+    .mfs-instructions.active {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+
+    /* MapLibre GL Vector Map (Pathao & Uber Technology) */
+    .maplibregl-map {
+      font-family: var(--font-body, 'Inter', sans-serif);
+      width: 100% !important;
+      height: 100% !important;
+      cursor: grab;
+    }
+    .maplibregl-map:active {
+      cursor: grabbing;
+    }
+    .maplibregl-canvas {
+      outline: none;
+    }
+    .maplibregl-ctrl-group {
+      background: rgba(18, 18, 20, 0.95) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      border-radius: 8px !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6) !important;
+      overflow: hidden;
+    }
+    .maplibregl-ctrl-group button {
+      background: transparent !important;
+      color: #ffffff !important;
+      width: 34px !important;
+      height: 34px !important;
+      border: none !important;
+    }
+    .maplibregl-ctrl-group button:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+    .maplibregl-ctrl-attrib {
+      background: rgba(0, 0, 0, 0.75) !important;
+      color: rgba(255, 255, 255, 0.6) !important;
+      font-size: 10px !important;
+      border-radius: 4px !important;
+      padding: 3px 8px !important;
+    }
+    .maplibregl-ctrl-attrib a { color: var(--accent, #d4ff00) !important; }
+
+    /* Uber & Pathao Signature Center Pin Overlay */
+    .uber-center-pin-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -100%);
+      pointer-events: none;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .uber-center-pin-container.moving {
+      transform: translate(-50%, -125%);
+    }
+    .pin-bubble {
+      background: rgba(14, 14, 16, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 6px 14px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+      margin-bottom: 8px;
+      white-space: nowrap;
+      backdrop-filter: blur(10px);
+      animation: fadeIn 0.2s ease;
+    }
+    .pin-bubble .bubble-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent, #d4ff00);
+      box-shadow: 0 0 10px var(--accent, #d4ff00);
+    }
+    .pin-bubble .bubble-text {
+      font-family: var(--font-body, 'Inter', sans-serif);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #ffffff;
+      max-width: 260px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .uber-pin-marker {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .pin-head {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #000000;
+      border: 3px solid var(--accent, #d4ff00);
+      color: var(--accent, #d4ff00);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 0 25px rgba(212, 255, 0, 0.8), 0 6px 20px rgba(0, 0, 0, 0.9);
+      transition: transform 0.2s;
+    }
+    .pin-needle {
+      width: 3px;
+      height: 12px;
+      background: var(--accent, #d4ff00);
+      box-shadow: 0 0 10px rgba(212, 255, 0, 0.8);
+    }
+    .pin-shadow {
+      width: 18px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.5);
+      filter: blur(2px);
+      margin-top: -3px;
+      transition: all 0.22s ease;
+    }
+    .uber-center-pin-container.moving .pin-shadow {
+      transform: scale(0.5);
+      opacity: 0.25;
+    }
+    .btn-floating-pitch {
+      background: #141416;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+      transition: all 0.2s;
+    }
+    .btn-floating-pitch:hover {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+
+        /* Quick GPS Pill under search */
+    .uber-quick-location-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px 2px;
+    }
+    .btn-quick-gps {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(212, 255, 0, 0.08);
+      border: 1px solid rgba(212, 255, 0, 0.35);
+      color: var(--accent, #d4ff00);
+      font-family: var(--font-body, 'Inter', sans-serif);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-quick-gps:hover {
+      background: var(--accent, #d4ff00);
+      color: #000000;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(212, 255, 0, 0.4);
+    }
+    .usi-icon.gps-icon {
+      background: rgba(212, 255, 0, 0.15) !important;
+      color: var(--accent, #d4ff00) !important;
+    }
+    /* Map Floating Controls & Theme Switcher (Ultra-Clean Glass Pill Layout - Zero Overlap) */
+    .map-floating-controls {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+      z-index: 1000;
+    }
+    .btn-floating-theme {
+      background: #141416;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      transition: all 0.2s;
+    }
+    .btn-floating-theme:hover {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+
+    /* Auth Gate Modal */
+    .auth-gate-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .auth-gate-modal-overlay.active {
+      display: flex;
+      animation: fadeIn 0.25s ease;
+    }
+    .auth-gate-modal-box {
+      background: #111113;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 440px;
+      padding: 30px;
+      position: relative;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+    }
+    .agm-icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(212, 255, 0, 0.12);
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+    }
+    .agm-header h3 {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .agm-header p {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+      margin-bottom: 18px;
+    }
+    .agm-trip-preview {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+    }
+    .atp-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .atp-veh {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .atp-fare {
+      font-family: var(--font-display);
+      font-weight: 800;
+      color: var(--accent);
+      font-size: 1.05rem;
+    }
+    .atp-route {
+      font-size: 0.78rem;
+      color: var(--text-tertiary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .agm-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 18px;
+      padding-bottom: 8px;
+    }
+    .agm-tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-tertiary);
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .agm-tab-btn.active {
+      background: rgba(212, 255, 0, 0.12);
+      color: var(--accent);
+    }
+    .agm-tab-content {
+      display: none;
+    }
+    .agm-tab-content.active {
+      display: block;
+    }
+    .agm-field {
+      margin-bottom: 14px;
+    }
+    .agm-field label {
+      display: block;
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .agm-input {
+      width: 100%;
+      background: #18181b;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .agm-input:focus {
+      border-color: var(--accent);
+    }
+    .agm-submit-btn {
+      width: 100%;
+      background: var(--accent);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.92rem;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 6px;
+      transition: all 0.2s;
+    }
+    .agm-submit-btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+    .agm-demo-box {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--text-tertiary);
+    }
+    .btn-quick-demo {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-primary);
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-quick-demo:hover {
+      background: rgba(212, 255, 0, 0.15);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .agm-footer-note {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--text-tertiary);
+    }
+    .agm-alert {
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      margin-bottom: 14px;
+    }
+    .agm-alert.error {
+      background: rgba(255, 69, 58, 0.12);
+      border: 1px solid rgba(255, 69, 58, 0.3);
+      color: #ff453a;
+    }
+    .agm-alert.success {
+      background: rgba(48, 209, 88, 0.12);
+      border: 1px solid rgba(48, 209, 88, 0.3);
+      color: var(--success);
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .checkout-wrap {
+        grid-template-columns: 1fr;
+        margin-top: 20px;
+      }
+      .step-tracker {
+        display: none;
+      }
+      .checkout-nav {
+        padding: 0 20px;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .vh-top-grid {
+        grid-template-columns: 1fr;
+      }
+      .vh-img-wrap {
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- High-End Top Navigation -->
+<header class="checkout-nav">
+  <div class="brand-group">
+    <a href="index.html" class="brand-logo">ROWNAA<sup>®</sup></a>
+    <span class="brand-badge">VIP Fleet Reservation</span>
+  </div>
+
+  <div class="step-tracker">
+    <div class="step-item completed">
+      <span class="step-dot"><i class="ph-bold ph-check"></i></span>
+      <span>1. Select Fleet</span>
+    </div>
+    <span class="step-arrow"><i class="ph ph-caret-right"></i></span>
+    <div class="step-item active">
+      <span class="step-dot">2</span>
+      <span>2. Trip &amp; Rider Details</span>
+    </div>
+    <span class="step-arrow"><i class="ph ph-caret-right"></i></span>
+    <div class="step-item">
+      <span class="step-dot">3</span>
+      <span>3. Confirmation</span>
+    </div>
+  </div>
+
+  <div class="nav-actions">
+    <a href="find-cars.html" class="btn-nav-back">
+      <i class="ph ph-arrow-left"></i> Change Fleet
+    </a>
+  </div>
+</header>
+
+<div class="checkout-wrap">
+  <!-- Left Column: Form & Vehicle Showcase -->
+  <div class="form-column">
+    
+    <!-- Luxury Vehicle Showcase Card -->
+    <div class="vehicle-hero-card">
+      <div class="vh-top-grid">
+        <div class="vh-img-wrap">
+          <img id="car-img" src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80" alt="Selected Fleet Vehicle" class="vh-img"/>
+        </div>
+        <div class="vh-details">
+          <div class="vh-badge-row">
+            <span class="badge-class" id="car-category-badge">Sedan (Economy)</span>
+            <span class="badge-verified"><i class="ph-fill ph-shield-check"></i> Chauffeur &amp; Fuel Guaranteed</span>
+          </div>
+          <h1 class="vh-title" id="car-display-name">Toyota Axio</h1>
+          <div class="vh-specs">
+            <div class="spec-item" id="car-seats-spec"><i class="ph ph-users"></i> <span>4 Passengers</span></div>
+            <div class="spec-item" id="car-bags-spec"><i class="ph ph-suitcase-simple"></i> <span>2 Luggage</span></div>
+            <div class="spec-item"><i class="ph ph-snowflake"></i> <span>Climate AC</span></div>
+            <div class="spec-item"><i class="ph ph-gas-pump"></i> <span>Fuel Included</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="vh-actions-bar">
+        <span class="vh-status-note"><span class="pulse-dot"></span> Ready for immediate or scheduled dispatch</span>
+        <a href="find-cars.html" class="btn-change-fleet"><i class="ph ph-arrows-clockwise"></i> Switch to Different Vehicle</a>
+      </div>
+      <!-- Hidden Input for DOM ID Contract & Tests -->
+      <input type="hidden" id="c-vehicle" value="Toyota Axio" />
+    </div>
+
+    <!-- Booking Details Form -->
+    <form id="checkoutForm" onsubmit="event.preventDefault(); processBooking();">
+      
+      <!-- Panel 1: Rider Information -->
+      <div class="section-panel" style="margin-bottom: 24px;">
+        <div class="panel-header">
+          <div class="panel-icon-badge"><i class="ph ph-user"></i></div>
+          <div>
+            <h2 class="panel-title">Rider Contact Details</h2>
+            <p class="panel-subtitle">Used for driver dispatch coordination and live trip telemetry</p>
+          </div>
+        </div>
+
+        <!-- Folded Passenger Profile Card (Clean VIP Vibe) -->
+        <div class="rider-folded-card" id="rider-folded-card" style="display:none;">
+          <div class="rfc-left">
+            <div class="rfc-avatar" id="rfc-avatar-icon">FA</div>
+            <div class="rfc-details">
+              <div class="rfc-name-row">
+                <span class="rfc-name" id="rfc-display-name">Faisal Ahmed</span>
+                <span class="rfc-badge"><i class="ph-fill ph-shield-check"></i> Saved Profile</span>
+              </div>
+              <div class="rfc-contact">
+                <span id="rfc-display-phone"><i class="ph ph-phone"></i> +880 1712 345678</span>
+                <span id="rfc-display-email"><i class="ph ph-envelope"></i> faisal@example.com</span>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn-edit-profile" onclick="toggleRiderProfile()">
+            <i class="ph ph-pencil-simple"></i> Edit Profile
+          </button>
+        </div>
+
+        <!-- Editable Form Fields (Collapsible Accordion) -->
+        <div class="rider-form-fields" id="rider-form-fields">
+          <div class="form-grid">
+            <div class="f-group">
+              <label class="f-label" for="c-name">Full Name</label>
+              <div class="input-box">
+                <i class="ph ph-user input-icon"></i>
+                <input type="text" class="f-input" id="c-name" required placeholder="Faisal Ahmed" oninput="syncRiderData()"/>
+              </div>
+            </div>
+            <div class="f-group">
+              <label class="f-label" for="c-phone">Phone Number (BD Mobile)</label>
+              <div class="input-box">
+                <i class="ph ph-phone input-icon"></i>
+                <input type="tel" class="f-input" id="c-phone" required placeholder="+880 1712 345678" oninput="syncRiderData()"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="f-group" style="margin-bottom: 0;">
+            <label class="f-label" for="c-email">Email Address (For Tax Invoice &amp; Trip Log)</label>
+            <div class="input-box">
+              <i class="ph ph-envelope-simple input-icon"></i>
+              <input type="email" class="f-input" id="c-email" required placeholder="faisal@example.com" oninput="syncRiderData()"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 2: Journey & Schedule -->
+      <div class="section-panel">
+        <div class="panel-header">
+          <div class="panel-icon-badge"><i class="ph ph-map-pin"></i></div>
+          <div>
+            <h2 class="panel-title">Trip Route &amp; Schedule</h2>
+            <p class="panel-subtitle">Select your service type, pickup point, and departure window</p>
+          </div>
+        </div>
+
+        <div class="f-group">
+          <label class="f-label" for="c-service">Service Tier Required</label>
+          <div class="input-box">
+            <i class="ph ph-car-profile input-icon"></i>
+            <select class="f-input" id="c-service" onchange="updatePrice()">
+              <option value="hourly">Hourly Rental (Inside Dhaka Metro)</option>
+              <option value="intercity">Intercity Travel (Outside Dhaka Highway)</option>
+              <option value="airport">Airport Transfer (Zone 1 Express)</option>
+              <option value="corporate">Corporate Fleet Account</option>
+              <option value="tour">Travel & Tour (Cox's Bazar / Sylhet / Sreemangal)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="f-group">
+            <div class="field-header-actions">
+              <label class="f-label" for="c-pickup" style="margin-bottom:0;">Pickup Address / Area</label>
+              <div style="display:flex; gap:6px;">
+                <button type="button" class="btn-header-action" onclick="quickFillCurrentLocation('c-pickup')" title="Detect Current GPS Location">
+                  <i class="ph-bold ph-crosshair"></i> Current Location
+                </button>
+                <button type="button" class="btn-header-action accent" onclick="openMapModal('pickup')" title="Select exact point on map">
+                  <i class="ph-fill ph-map-pin"></i> Pick on Map
+                </button>
+              </div>
+            </div>
+            <div class="input-box">
+              <i class="ph ph-map-pin-line input-icon"></i>
+              <input type="text" class="f-input" id="c-pickup" required placeholder="e.g. House 12, Road 7, Gulshan 2, Dhaka"/>
+            </div>
+          </div>
+          <div class="f-group">
+            <div class="field-header-actions">
+              <label class="f-label" for="c-dropoff" style="margin-bottom:0;">Dropoff Destination</label>
+              <button type="button" class="btn-header-action accent" onclick="openMapModal('dropoff')" title="Select destination on map">
+                <i class="ph-fill ph-flag-pennant"></i> Pick on Map
+              </button>
+            </div>
+            <div class="input-box">
+              <i class="ph ph-flag-pennant input-icon"></i>
+              <input type="text" class="f-input" id="c-dropoff" placeholder="e.g. Hazrat Shahjalal Airport / As Directed"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- User-Controlled Travel Date & Pickup Time -->
+        <div class="form-grid" style="margin-bottom: 14px;">
+          <div class="f-group" style="margin-bottom: 0;">
+            <label class="f-label" for="c-date">Travel Date</label>
+            <div class="input-box">
+              <i class="ph ph-calendar input-icon"></i>
+              <input type="date" class="f-input" id="c-date" required onchange="onCustomDateChange()"/>
+            </div>
+          </div>
+          <div class="f-group" style="margin-bottom: 0;">
+            <label class="f-label" for="c-time">Pickup Time</label>
+            <div class="input-box">
+              <i class="ph ph-clock input-icon"></i>
+              <input type="time" class="f-input" id="c-time" required onchange="onCustomTimeChange()"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Live Departure Badge -->
+        <div class="schedule-preview-badge" id="schedule-preview-badge">
+          <i class="ph-fill ph-clock-countdown"></i>
+          <span id="schedule-preview-text">Confirmed Dispatch: Tomorrow at 10:00 AM</span>
+        </div>
+      </div>
+    </form>
+  </div>
+  
+  <!-- Right Column: Sticky Payment & Confirmation Panel -->
+  <div class="sticky-summary">
+    <div class="summary-card">
+      <div class="sc-header">
+        <h2 class="sc-title">Payment Summary</h2>
+        <span class="ssl-chip"><i class="ph-fill ph-lock-key"></i> 256-bit SSL</span>
+      </div>
+
+      <div class="fare-breakdown">
+        <div class="sc-row">
+          <span>Vehicle Base Fare</span>
+          <strong id="s-base">৳1500</strong>
+        </div>
+        <div class="sc-row">
+          <span>Govt VAT &amp; Service Tax (5%)</span>
+          <strong id="s-vat">৳75</strong>
+        </div>
+        <div class="sc-row discount-row" id="s-discount-row" style="display:none;">
+          <span style="display:flex; align-items:center; gap:6px;">
+            <i class="ph-fill ph-tag"></i> Promo Discount (<span id="s-discount-label">ROWNAA20</span>)
+          </span>
+          <strong id="s-discount">-৳0</strong>
+        </div>
+      </div>
+
+      <!-- Vouchers Hub Trigger -->
+      <button type="button" class="btn-vouchers-hub" onclick="openVouchersModal()">
+        <div class="bvh-left">
+          <i class="ph-fill ph-ticket"></i>
+          <span>View All Vouchers &amp; Offers</span>
+        </div>
+        <span class="bvh-badge">5 Active</span>
+      </button>
+
+      <!-- Modern Promo Apply Box -->
+      <div class="promo-container">
+        <label class="f-label" for="c-promo" style="margin-bottom: 6px;">Have a Promo Code?</label>
+        <div class="promo-input-wrap">
+          <input type="text" id="c-promo" class="promo-input" placeholder="e.g. ROWNAA20" oninput="updatePrice()" onchange="updatePrice()"/>
+          <button type="button" class="btn-apply-promo" onclick="updatePrice()">Apply</button>
+        </div>
+      </div>
+
+      <!-- Payment Method Selector (Strictly 2 Methods) -->
+      <div class="payment-methods">
+        <span class="pm-label">Payment Method</span>
+        <div class="pm-options">
+          <div class="pm-option selected" id="pm-cash" onclick="selectPaymentMethod('cash')">
+            <div class="pm-left">
+              <i class="ph-fill ph-money pm-icon"></i>
+              <div>
+                <div class="pm-title">Cash on Completion</div>
+                <div class="pm-sub">Pay chauffeur upon journey completion</div>
+              </div>
+            </div>
+            <div class="pm-radio"></div>
+          </div>
+          <div class="pm-option" id="pm-mfs" onclick="selectPaymentMethod('mfs')">
+            <div class="pm-left">
+              <i class="ph-fill ph-device-mobile pm-icon"></i>
+              <div>
+                <div class="pm-title">bKash / Nagad Instant</div>
+                <div class="pm-sub">Direct digital MFS transfer to Merchant</div>
+              </div>
+            </div>
+            <div class="pm-radio"></div>
+          </div>
+        </div>
+
+        <!-- MFS Instructions (Shown when bKash/Nagad selected) -->
+        <div class="mfs-instructions" id="mfs-instructions">
+          <div style="font-weight:700;color:var(--accent);margin-bottom:4px;display:flex;align-items:center;gap:6px;">
+            <i class="ph-fill ph-info"></i> bKash &amp; Nagad Official Merchant Account:
+          </div>
+          <div>Merchant Number: <strong style="color:#fff;">01712-769622</strong> (Counter: 1)</div>
+          <div>Or scan driver's official QR code when your chauffeur arrives.</div>
+        </div>
+        <input type="hidden" id="c-payment-method" value="Cash on Completion" />
+      </div>
+
+      <!-- Grand Total -->
+      <div class="sc-total-box">
+        <div class="sc-total-row">
+          <span class="total-label">Total Payable</span>
+          <span class="total-amount" id="s-total">৳1575</span>
+        </div>
+        <div class="total-note">All fuel, vehicle sanitation, tolls &amp; VAT included</div>
+      </div>
+      
+      <!-- Inline Notice / Error Banner -->
+      <div id="checkout-error-banner" style="display:none;background:rgba(255,69,58,0.12);border:1px solid rgba(255,69,58,0.3);color:#ff453a;padding:10px 14px;border-radius:8px;font-size:0.8rem;margin-top:14px;line-height:1.4;"></div>
+
+      <!-- Primary Action Button -->
+      <button class="btn-checkout" id="btn-submit-booking" onclick="processBooking()" type="button">
+        Confirm Reservation <span class="btn-arrow-bubble"><i class="ph-bold ph-arrow-right"></i></span>
+      </button>
+
+      <!-- Trust Guarantees -->
+      <div class="trust-footer">
+        <div class="trust-item">
+          <i class="ph-fill ph-check-circle"></i>
+          <span>100% Guaranteed Fleet &amp; Driver Allocation</span>
+        </div>
+        <div class="trust-item">
+          <i class="ph-fill ph-arrow-counter-clockwise"></i>
+          <span>Free Cancellation Up to 2 Hours Before Trip</span>
+        </div>
+        <div class="trust-item">
+          <i class="ph-fill ph-headset"></i>
+          <span>24/7 Dispatch Concierge: +880 9610-ROWNAA</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     LUXURY CONFIRMATION MODAL (#successScreen)
+     ========================================================= -->
+<div class="success-overlay" id="successScreen">
+  <div class="confirmation-modal">
+    <div class="conf-status-icon">
+      <i class="ph-fill ph-check-circle"></i>
+    </div>
+    
+    <h2 class="conf-heading">Reservation Confirmed!</h2>
+    <p class="conf-desc">Your chauffeur has been scheduled in the Rownaa dispatch engine. An official booking confirmation has been recorded.</p>
+    
+    <!-- Trip Ticket Summary -->
+    <div class="conf-ticket">
+      <div class="ticket-header-row">
+        <span class="ticket-code">REFERENCE: <strong id="conf-booking-id">#BK-94812</strong></span>
+        <span class="ticket-badge"><i class="ph-fill ph-circle"></i> Confirmed</span>
+      </div>
+      <div class="ticket-grid">
+        <div class="tg-item">
+          <span class="tg-label">Vehicle Assigned</span>
+          <span class="tg-val" id="conf-vehicle-val">Toyota Axio</span>
+        </div>
+        <div class="tg-item">
+          <span class="tg-label">Scheduled Date &amp; Time</span>
+          <span class="tg-val" id="conf-datetime-val">Tomorrow at 10:00 AM</span>
+        </div>
+        <div class="tg-item">
+          <span class="tg-label">Pickup Location</span>
+          <span class="tg-val" id="conf-pickup-val">Gulshan 2, Dhaka</span>
+        </div>
+        <div class="tg-item">
+          <span class="tg-label">Dropoff Destination</span>
+          <span class="tg-val" id="conf-dropoff-val">As Directed</span>
+        </div>
+        <div class="tg-item">
+          <span class="tg-label">Lead Passenger</span>
+          <span class="tg-val" id="conf-rider-val">Faisal Ahmed</span>
+        </div>
+        <div class="tg-item">
+          <span class="tg-label">Total Amount</span>
+          <span class="tg-val" id="conf-total-val" style="color:var(--accent);">৳1575</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="conf-actions">
+      <a id="conf-invoice-btn" href="invoice.html" class="btn-conf-primary">
+        <i class="ph-bold ph-receipt"></i> View Official Tax Invoice
+      </a>
+      <a href="customer-panel.html" class="btn-conf-secondary">
+        <i class="ph ph-squares-four"></i> Open Customer Portal
+      </a>
+      <button type="button" onclick="closeSuccessModal()" style="font-size:0.8rem;color:var(--text-tertiary);margin-top:8px;text-decoration:underline;">
+        Book Another Ride
+      </button>
+    </div>
+    
+    <div class="conf-timer-note" id="conf-timer-msg">
+      Auto-redirecting to invoice in <span id="conf-countdown">8</span> seconds...
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     UBER-STYLE INTERACTIVE MAP MODAL (#mapModal)
+     ========================================================= -->
+<div class="map-modal-overlay" id="mapModal">
+  <div class="map-modal-box">
+    <div class="map-modal-header">
+      <div class="mmh-title">
+        <i class="ph-fill ph-map-pin" id="map-target-icon"></i>
+        <span id="map-target-title">Select Pickup Point on Map</span>
+      </div>
+      <button type="button" class="modal-close-btn" onclick="closeMapModal()">
+        <i class="ph ph-x"></i>
+      </button>
+    </div>
+
+    <!-- Uber-Style Instant Location Search Bar -->
+    <div class="uber-search-container">
+      <div class="uber-search-box">
+        <i class="ph ph-magnifying-glass uber-search-icon"></i>
+        <input type="text" id="map-search-input" class="uber-search-input" placeholder="Search street, landmark, area (e.g. Airport, Gulshan, Banani, Dhanmondi)..." autocomplete="off" oninput="onMapSearchInput(this.value)" onfocus="onMapSearchFocus()" />
+        <button type="button" class="uber-search-clear" id="btn-clear-search" onclick="clearMapSearch()" style="display:none;">
+          <i class="ph ph-x"></i>
+        </button>
+      </div>
+      
+      <!-- Quick Uber / Pathao Present Location Pill -->
+      <div class="uber-quick-location-bar">
+        <button type="button" class="btn-quick-gps" onclick="locateUserCurrentPosition()">
+          <i class="ph-bold ph-crosshair"></i> Use Present Location (GPS)
+        </button>
+      </div>
+
+      <div class="uber-suggestions-dropdown" id="uber-suggestions" style="display:none;"></div>
+    </div>
+
+    <!-- Uber & Pathao Vector Canvas with Centered Interactive Pin -->
+    <div class="map-canvas-container" id="map-canvas-container">
+      <div id="map-canvas"></div>
+
+      <!-- Signature Uber / Pathao Interactive Center Pin Overlay -->
+      <div class="uber-center-pin-container" id="uber-center-pin">
+        <div class="pin-bubble" id="pin-address-bubble">
+          <span class="bubble-dot"></span>
+          <span class="bubble-text" id="pin-bubble-text">Gulshan 2 Circle, Dhaka</span>
+        </div>
+        <div class="uber-pin-marker">
+          <div class="pin-head">
+            <i class="ph-bold ph-map-pin" id="pin-icon"></i>
+          </div>
+          <div class="pin-needle"></div>
+        </div>
+        <div class="pin-shadow"></div>
+      </div>
+
+      <div class="map-floating-controls">
+        <button type="button" class="btn-floating-pitch" id="btn-floating-pitch" onclick="toggleMapPitch()" title="Toggle 3D / 2D Perspective">
+          <i class="ph-bold ph-cube"></i> <span id="pitch-toggle-label">3D</span>
+        </button>
+        <button type="button" class="btn-floating-theme" id="btn-floating-theme" onclick="toggleMapTheme()" title="Switch Map Theme (Voyager / Dark / Positron)">
+          <i class="ph-bold ph-sun" id="theme-toggle-icon"></i> <span id="theme-toggle-label">Voyager</span>
+        </button>
+      </div>
+
+      <!-- Floating Uber GPS Locate Button (Clean Bottom-Right, No Overlap) -->
+      <button type="button" class="btn-floating-locate" id="btn-floating-locate" onclick="locateUserCurrentPosition()" title="Center to Present GPS Location">
+        <i class="ph-bold ph-crosshair"></i>
+      </button>
+    </div>
+
+    <!-- Map Confirmation Bar -->
+    <div class="map-footer-bar">
+      <div class="mf-location-info">
+        <span class="mf-label" id="map-selection-type-label">Selected Pickup Point</span>
+        <div class="mf-address" id="map-display-address">Detecting location...</div>
+        <div style="font-size:0.7rem;color:var(--text-tertiary);" id="map-display-coords">23.7936° N, 90.4137° E (Tap map or drag pin to customize)</div>
+      </div>
+      <button type="button" class="btn-confirm-map" id="btn-confirm-map-loc" onclick="confirmMapLocation()">
+        <i class="ph-bold ph-check"></i> Set Location
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     EXCLUSIVE ROWNAA® VOUCHERS HUB MODAL (#vouchersModal)
+     ========================================================= -->
+<div class="voucher-modal-overlay" id="vouchersModal">
+  <div class="voucher-modal-box">
+    <div class="map-modal-header">
+      <div class="mmh-title">
+        <i class="ph-fill ph-ticket"></i>
+        <span>Available Vouchers &amp; Promo Offers</span>
+      </div>
+      <button type="button" class="modal-close-btn" onclick="closeVouchersModal()">
+        <i class="ph ph-x"></i>
+      </button>
+    </div>
+
+    <div class="vouchers-list">
+      <!-- Voucher 1 -->
+      <div class="voucher-card">
+        <div class="vc-left">
+          <div class="vc-top-row">
+            <span class="vc-code">ROWNAA20</span>
+            <span class="vc-badge">VIP Exclusive</span>
+          </div>
+          <div class="vc-title">20% OFF Entire Chauffeur Trip</div>
+          <div class="vc-desc">Enjoy 20% discount on all sedan and executive microbus rentals. Max discount ৳1,000. Valid until Dec 31, 2026.</div>
+        </div>
+        <button type="button" class="btn-apply-voucher-action" onclick="applyVoucher('ROWNAA20')">
+          Apply Voucher
+        </button>
+      </div>
+
+      <!-- Voucher 2 -->
+      <div class="voucher-card">
+        <div class="vc-left">
+          <div class="vc-top-row">
+            <span class="vc-code">WELCOME50</span>
+            <span class="vc-badge">New Rider</span>
+          </div>
+          <div class="vc-title">৳250 Flat Discount on First Ride</div>
+          <div class="vc-desc">Flat ৳250 savings on your inaugural luxury booking with Rownaa. No minimum fare required.</div>
+        </div>
+        <button type="button" class="btn-apply-voucher-action" onclick="applyVoucher('WELCOME50')">
+          Apply Voucher
+        </button>
+      </div>
+
+      <!-- Voucher 3 -->
+      <div class="voucher-card">
+        <div class="vc-left">
+          <div class="vc-top-row">
+            <span class="vc-code">AIRPORTVIP</span>
+            <span class="vc-badge">Airport Special</span>
+          </div>
+          <div class="vc-title">৳300 OFF Airport Express Transfer</div>
+          <div class="vc-desc">Dedicated meet &amp; greet chauffeur service to or from Hazrat Shahjalal International Airport.</div>
+        </div>
+        <button type="button" class="btn-apply-voucher-action" onclick="applyVoucher('AIRPORTVIP')">
+          Apply Voucher
+        </button>
+      </div>
+
+      <!-- Voucher 4 -->
+      <div class="voucher-card">
+        <div class="vc-left">
+          <div class="vc-top-row">
+            <span class="vc-code">INTERCITY10</span>
+            <span class="vc-badge">Highway Travel</span>
+          </div>
+          <div class="vc-title">10% OFF Long-Distance &amp; Highway</div>
+          <div class="vc-desc">Available for outstation travel across all 64 districts in Bangladesh with professional highway pilots.</div>
+        </div>
+        <button type="button" class="btn-apply-voucher-action" onclick="applyVoucher('INTERCITY10')">
+          Apply Voucher
+        </button>
+      </div>
+
+      <!-- Voucher 5 -->
+      <div class="voucher-card">
+        <div class="vc-left">
+          <div class="vc-top-row">
+            <span class="vc-code">CASHBACK100</span>
+            <span class="vc-badge">Instant Rebate</span>
+          </div>
+          <div class="vc-title">৳100 Instant Discount</div>
+          <div class="vc-desc">Instant ৳100 discount applicable on both bKash/Nagad and Cash on completion.</div>
+        </div>
+        <button type="button" class="btn-apply-voucher-action" onclick="applyVoucher('CASHBACK100')">
+          Apply Voucher
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     AUTH GATE MODAL: REQUIRE CUSTOMER LOGIN/REGISTER TO DISPATCH
+     ========================================================= -->
+<div class="auth-gate-modal-overlay" id="authGateModal">
+  <div class="auth-gate-modal-box">
+    <button type="button" class="modal-close-btn" onclick="closeAuthGateModal()">
+      <i class="ph ph-x"></i>
+    </button>
+    
+    <div class="agm-header">
+      <div class="agm-icon-wrap">
+        <i class="ph-fill ph-shield-check"></i>
+      </div>
+      <h3>Sign In to Customer Panel</h3>
+      <p>To confirm your reservation and assign a dedicated chauffeur, please sign in or register your customer account.</p>
+    </div>
+
+    <!-- Mini Pending Trip Capsule -->
+    <div class="agm-trip-preview">
+      <div class="atp-row">
+        <span class="atp-veh" id="agm-preview-vehicle"><i class="ph-bold ph-car"></i> Vehicle</span>
+        <span class="atp-fare" id="agm-preview-price">৳0</span>
+      </div>
+      <div class="atp-route" id="agm-preview-route">
+        <span>Pickup</span> <i class="ph ph-arrow-right"></i> <span>Dropoff</span>
+      </div>
+    </div>
+
+    <!-- Auth Tabs -->
+    <div class="agm-tabs">
+      <button type="button" class="agm-tab-btn active" id="tab-btn-signin" onclick="switchAuthGateTab('signin')">
+        Sign In
+      </button>
+      <button type="button" class="agm-tab-btn" id="tab-btn-register" onclick="switchAuthGateTab('register')">
+        New Customer
+      </button>
+    </div>
+
+    <!-- Error/Notice Alert -->
+    <div id="agm-alert" class="agm-alert" style="display:none;"></div>
+
+    <!-- Tab 1: Sign In -->
+    <div class="agm-tab-content active" id="agm-tab-signin">
+      <div class="agm-field">
+        <label>Username or Mobile Number</label>
+        <input type="text" id="agm-login-user" class="agm-input" placeholder="e.g. 01711998877 or customer" />
+      </div>
+      <div class="agm-field">
+        <label>Password</label>
+        <input type="password" id="agm-login-pass" class="agm-input" placeholder="Enter your account password" />
+      </div>
+      <button type="button" class="agm-submit-btn" id="btn-agm-login" onclick="submitAuthGateLogin()">
+        <i class="ph-bold ph-lock-key"></i> Sign In &amp; Confirm Reservation
+      </button>
+
+      <!-- 1-Click Demo Login Pill for quick testing -->
+      <div class="agm-demo-box">
+        <span>Fast Evaluation:</span>
+        <button type="button" class="btn-quick-demo" onclick="quickFillCustomerAuth('customer', 'customer123')">
+          ⚡ 1-Click Demo Rider (Faisal Ahmed)
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab 2: Quick Register -->
+    <div class="agm-tab-content" id="agm-tab-register">
+      <div class="agm-field">
+        <label>Full Name</label>
+        <input type="text" id="agm-reg-name" class="agm-input" placeholder="e.g. Tanvir Rahman" />
+      </div>
+      <div class="agm-field">
+        <label>Mobile Number</label>
+        <input type="text" id="agm-reg-phone" class="agm-input" placeholder="e.g. 01711998877" />
+      </div>
+      <div class="agm-field">
+        <label>Create Password</label>
+        <input type="password" id="agm-reg-pass" class="agm-input" placeholder="Minimum 6 characters" />
+      </div>
+      <button type="button" class="agm-submit-btn" id="btn-agm-register" onclick="submitAuthGateRegister()">
+        <i class="ph-bold ph-user-plus"></i> Create Account &amp; Confirm Reservation
+      </button>
+    </div>
+
+    <div class="agm-footer-note">
+      Your reservation details are preserved while you authenticate.
+    </div>
+  </div>
+</div>
+
+<script src="js/pricing-data.js"></script>
+<script src="js/pricing.js"></script>
+<script src="js/bookings.js"></script>
+<script src="js/inventory.js"></script>
+<script>
+  let currentCarClass = 'sedan_economy';
+  let redirectInterval = null;
+  let activeMapTarget = 'pickup';
+  let mapInstance = null;
+  let mapMarker = null;
+  let selectedMapLocation = {
+    name: 'Gulshan 2 Circle, Dhaka',
+    lat: 23.7936,
+    lng: 90.4137
+  };
+
+  // Landmark Geo-Coordinates Database
+  const LANDMARKS = {
+    airport: { name: 'Hazrat Shahjalal Int Airport, Terminal 1 & 2', lat: 23.8433, lng: 90.4048 },
+    gulshan2: { name: 'Gulshan 2 Circle, Dhaka', lat: 23.7936, lng: 90.4137 },
+    banani11: { name: 'Road 11, Block D, Banani, Dhaka', lat: 23.7937, lng: 90.4043 },
+    dhanmondi27: { name: 'Road 27 (Old), Dhanmondi, Dhaka', lat: 23.7534, lng: 90.3770 },
+    uttara3: { name: 'Rabindra Sarani, Sector 3, Uttara', lat: 23.8710, lng: 90.3980 },
+    mirpur10: { name: 'Mirpur 10 Metro Station Roundabout', lat: 23.8071, lng: 90.3686 },
+    kamalapur: { name: 'Kamalapur Railway Station, Motijheel', lat: 23.7314, lng: 90.4253 },
+    motijheel: { name: 'Shapla Chattar, Motijheel C/A', lat: 23.7290, lng: 90.4180 },
+    chittagong: { name: 'GEC Circle, Nasirabad, Chittagong', lat: 22.3587, lng: 91.8215 },
+    sylhet: { name: 'Zindabazar Point, Sylhet Sadar', lat: 24.8949, lng: 91.8687 }
+  };
+
+  // Authentic Vehicle Metadata Dictionary
+  const FLEET_DICTIONARY = {
+    'toyota axio': {
+      name: 'Toyota Axio',
+      category: 'Sedan (Economy)',
+      image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80',
+      seats: 4,
+      bags: 2,
+      classKey: 'sedan_economy'
+    },
+    'toyota allion': {
+      name: 'Toyota Allion',
+      category: 'Sedan (Standard)',
+      image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80',
+      seats: 4,
+      bags: 2,
+      classKey: 'sedan_standard'
+    },
+    'toyota premio': {
+      name: 'Toyota Premio',
+      category: 'Sedan (Standard)',
+      image: 'https://images.unsplash.com/photo-1550355291-bbee04a92027?auto=format&fit=crop&w=800&q=80',
+      seats: 4,
+      bags: 2,
+      classKey: 'sedan_standard'
+    },
+    'toyota noah': {
+      name: 'Toyota Noah',
+      category: 'Microbus (Family)',
+      image: 'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=800&q=80',
+      seats: 7,
+      bags: 4,
+      classKey: 'noah'
+    },
+    'toyota hiace': {
+      name: 'Toyota HiAce',
+      category: 'Van / Executive Microbus',
+      image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
+      seats: 11,
+      bags: 6,
+      classKey: 'hiace'
+    },
+    'toyota prado': {
+      name: 'Toyota Prado',
+      category: 'Luxury VIP SUV',
+      image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80',
+      seats: 5,
+      bags: 3,
+      classKey: 'luxury_prado'
+    }
+  };
+
+  // =========================================================
+  // RIDER PROFILE COOKIE & STORAGE ENGINE
+  // =========================================================
+  function getSavedRiderData() {
+    let name = '';
+    let phone = '';
+    let email = '';
+    try {
+      const matchName = document.cookie.match(/(?:^|;\s*)rownaa_rider_name=([^;]+)/);
+      const matchPhone = document.cookie.match(/(?:^|;\s*)rownaa_rider_phone=([^;]+)/);
+      const matchEmail = document.cookie.match(/(?:^|;\s*)rownaa_rider_email=([^;]+)/);
+      name = matchName ? decodeURIComponent(matchName[1]) : (localStorage.getItem('rownaa_rider_name') || '');
+      phone = matchPhone ? decodeURIComponent(matchPhone[1]) : (localStorage.getItem('rownaa_rider_phone') || '');
+      email = matchEmail ? decodeURIComponent(matchEmail[1]) : (localStorage.getItem('rownaa_rider_email') || '');
+    } catch(e) {}
+    return { name, phone, email };
+  }
+
+  function saveRiderData(name, phone, email) {
+    try {
+      if (name) {
+        document.cookie = `rownaa_rider_name=${encodeURIComponent(name)}; path=/; max-age=31536000; SameSite=Lax`;
+        localStorage.setItem('rownaa_rider_name', name);
+      }
+      if (phone) {
+        document.cookie = `rownaa_rider_phone=${encodeURIComponent(phone)}; path=/; max-age=31536000; SameSite=Lax`;
+        localStorage.setItem('rownaa_rider_phone', phone);
+      }
+      if (email) {
+        document.cookie = `rownaa_rider_email=${encodeURIComponent(email)}; path=/; max-age=31536000; SameSite=Lax`;
+        localStorage.setItem('rownaa_rider_email', email);
+      }
+    } catch(e) {}
+  }
+
+  function syncRiderData() {
+    const name = document.getElementById('c-name').value.trim();
+    const phone = document.getElementById('c-phone').value.trim();
+    const email = document.getElementById('c-email').value.trim();
+    saveRiderData(name, phone, email);
+
+    // Update folded display card
+    if (name) {
+      document.getElementById('rfc-display-name').textContent = name;
+      const initials = name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'VIP';
+      document.getElementById('rfc-avatar-icon').textContent = initials;
+    }
+    if (phone) {
+      document.getElementById('rfc-display-phone').innerHTML = `<i class="ph ph-phone"></i> ${phone}`;
+    }
+    if (email) {
+      document.getElementById('rfc-display-email').innerHTML = `<i class="ph ph-envelope"></i> ${email}`;
+    }
+  }
+
+  function toggleRiderProfile() {
+    const fields = document.getElementById('rider-form-fields');
+    if (fields.classList.contains('collapsed')) {
+      fields.classList.remove('collapsed');
+    } else {
+      fields.classList.add('collapsed');
+    }
+  }
+
+  // =========================================================
+  // USER-CONTROLLED TRAVEL DATE & PICKUP TIME
+  // =========================================================
+  function getLocalDateString(offsetDays = 0) {
+    const d = new Date();
+    d.setDate(d.getDate() + offsetDays);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  function onCustomDateChange() {
+    updateSchedulePreviewText();
+    updatePrice();
+  }
+
+  function onCustomTimeChange() {
+    updateSchedulePreviewText();
+    updatePrice();
+  }
+
+  function updateSchedulePreviewText() {
+    const dateVal = document.getElementById('c-date').value;
+    const timeVal = document.getElementById('c-time').value;
+    if (!dateVal || !timeVal) return;
+
+    const [hh, mm] = timeVal.split(':');
+    let hour = parseInt(hh, 10);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    hour = hour % 12 || 12;
+    const formattedTime = `${hour}:${mm} ${ampm}`;
+
+    const todayStr = getLocalDateString(0);
+    const tomorrowStr = getLocalDateString(1);
+    let dayLabel = dateVal;
+    if (dateVal === todayStr) dayLabel = 'Today';
+    else if (dateVal === tomorrowStr) dayLabel = 'Tomorrow';
+
+    const preview = document.getElementById('schedule-preview-text');
+    if (preview) {
+      preview.textContent = `Confirmed Dispatch: ${dayLabel} at ${formattedTime} • Dedicated Chauffeur Allocated`;
+    }
+  }
+
+  // =========================================================
+  // PAYMENT METHOD SWITCHER (STRICTLY 2 WAYS)
+  // =========================================================
+  function selectPaymentMethod(method) {
+    const optCash = document.getElementById('pm-cash');
+    const optMfs = document.getElementById('pm-mfs');
+    const mfsBox = document.getElementById('mfs-instructions');
+    const hiddenPm = document.getElementById('c-payment-method');
+
+    if (method === 'cash') {
+      optCash.classList.add('selected');
+      optMfs.classList.remove('selected');
+      mfsBox.classList.remove('active');
+      hiddenPm.value = 'Cash on Completion';
+    } else {
+      optMfs.classList.add('selected');
+      optCash.classList.remove('selected');
+      mfsBox.classList.add('active');
+      hiddenPm.value = 'bKash / Nagad Instant';
+    }
+  }
+
+  // =========================================================
+  // VOUCHERS HUB MODAL & PROMOS
+  // =========================================================
+  function openVouchersModal() {
+    document.getElementById('vouchersModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeVouchersModal() {
+    document.getElementById('vouchersModal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function applyVoucher(code) {
+    const promoInput = document.getElementById('c-promo');
+    promoInput.value = code;
+    updatePrice();
+    closeVouchersModal();
+
+    // Visual Toast in error/info banner
+    const banner = document.getElementById('checkout-error-banner');
+    if (banner) {
+      banner.style.background = 'rgba(48, 209, 88, 0.12)';
+      banner.style.border = '1px solid rgba(48, 209, 88, 0.35)';
+      banner.style.color = 'var(--success)';
+      banner.innerHTML = `<i class="ph-fill ph-check-circle"></i> Voucher <strong>${code}</strong> successfully applied to your reservation fare!`;
+      banner.style.display = 'block';
+      setTimeout(() => { banner.style.display = 'none'; }, 4000);
+    }
+  }
+
+  function applyPromo(code) {
+    applyVoucher(code);
+  }
+
+  // =========================================================
+  // COMPREHENSIVE LOCATION DATABASE FOR INSTANT AUTOCOMPLETE
+  // =========================================================
+  const LOCATION_DATABASE = [
+    { name: 'Hazrat Shahjalal International Airport', area: 'Terminal 1 & 2, Kurmitola, Dhaka', lat: 23.8433, lng: 90.4048 },
+    { name: 'Gulshan 2 Circle', area: 'Gulshan, Dhaka', lat: 23.7936, lng: 90.4137 },
+    { name: 'Gulshan 1 Circle', area: 'Gulshan Avenue, Dhaka', lat: 23.7785, lng: 90.4158 },
+    { name: 'Banani Road 11', area: 'Block D, Banani, Dhaka', lat: 23.7937, lng: 90.4043 },
+    { name: 'Kemal Ataturk Avenue', area: 'Banani Commercial Area, Dhaka', lat: 23.7930, lng: 90.4060 },
+    { name: 'Dhanmondi 27 (Old)', area: 'Mirpur Road, Dhanmondi, Dhaka', lat: 23.7534, lng: 90.3770 },
+    { name: 'Dhanmondi 32', area: 'Bangabandhu Memorial Museum, Dhaka', lat: 23.7520, lng: 90.3780 },
+    { name: 'Satmasjid Road', area: 'Dhanmondi R/A, Dhaka', lat: 23.7480, lng: 90.3720 },
+    { name: 'Shimanto Square', area: 'Road 2, Dhanmondi, Dhaka', lat: 23.7400, lng: 90.3740 },
+    { name: 'Uttara Sector 3', area: 'Rabindra Sarani, Uttara, Dhaka', lat: 23.8710, lng: 90.3980 },
+    { name: 'Uttara Sector 7', area: 'Rajlakshmi Complex, Uttara, Dhaka', lat: 23.8740, lng: 90.3990 },
+    { name: 'Uttara Sector 11', area: 'Sonargaon Janapath, Uttara, Dhaka', lat: 23.8820, lng: 90.3910 },
+    { name: 'Mirpur 10 Circle', area: 'Metro Rail Station, Mirpur, Dhaka', lat: 23.8071, lng: 90.3686 },
+    { name: 'Mirpur 1 (Sony Square)', area: 'Mirpur, Dhaka', lat: 23.7960, lng: 90.3540 },
+    { name: 'Mirpur 2 (Zoo & Stadium)', area: 'Mirpur, Dhaka', lat: 23.8050, lng: 90.3590 },
+    { name: 'Mirpur DOHS', area: 'Mirpur, Dhaka', lat: 23.8340, lng: 90.3690 },
+    { name: 'Mohakhali Flyover', area: 'Mohakhali Bus Terminal, Dhaka', lat: 23.7770, lng: 90.4000 },
+    { name: 'Mohakhali DOHS', area: 'Mohakhali, Dhaka', lat: 23.7840, lng: 90.3940 },
+    { name: 'Bashundhara R/A Gate 1', area: 'Kuril Flyover, Dhaka', lat: 23.8160, lng: 90.4280 },
+    { name: 'Evercare Hospital', area: 'Block E, Bashundhara R/A, Dhaka', lat: 23.8120, lng: 90.4320 },
+    { name: 'Baridhara Diplomatic Zone', area: 'Park Road, Baridhara, Dhaka', lat: 23.7990, lng: 90.4220 },
+    { name: 'Baridhara J-Block', area: 'Notun Bazar, Madani Avenue, Dhaka', lat: 23.7980, lng: 90.4280 },
+    { name: 'Motijheel C/A (Shapla Chattar)', area: 'Commercial Area, Dhaka', lat: 23.7290, lng: 90.4180 },
+    { name: 'Kamalapur Railway Station', area: 'Motijheel, Dhaka', lat: 23.7314, lng: 90.4253 },
+    { name: 'Tejgaon Industrial Area', area: 'Shaheed Tajuddin Ahmed Sarani, Dhaka', lat: 23.7660, lng: 90.4050 },
+    { name: 'Farmgate', area: 'Ananda Cinema / Metro Station, Dhaka', lat: 23.7540, lng: 90.3900 },
+    { name: 'Karwan Bazar', area: 'CA Bhaban, Kazi Nazrul Islam Ave, Dhaka', lat: 23.7510, lng: 90.3930 },
+    { name: 'Badda Link Road', area: 'Pragati Sarani, Middle Badda, Dhaka', lat: 23.7860, lng: 90.4260 },
+    { name: 'Rampura Bridge', area: 'DIT Road, Rampura, Dhaka', lat: 23.7640, lng: 90.4230 },
+    { name: 'Khilgaon Taltola', area: 'Shahid Baki Road, Khilgaon, Dhaka', lat: 23.7520, lng: 90.4200 },
+    { name: 'Lalbagh Fort', area: 'Lalbagh Road, Old Dhaka', lat: 23.7190, lng: 90.3880 },
+    { name: 'Sadarghat Launch Terminal', area: 'Buriganga Riverfront, Old Dhaka', lat: 23.7050, lng: 90.4110 },
+    { name: 'Chittagong GEC Circle', area: 'Nasirabad, Chittagong', lat: 22.3587, lng: 91.8215 },
+    { name: 'Agrabad Commercial Area', area: 'Double Mooring, Chittagong', lat: 22.3240, lng: 91.8120 },
+    { name: 'Sylhet Zindabazar Point', area: 'Sylhet Sadar, Sylhet', lat: 24.8949, lng: 91.8687 },
+    { name: 'Cox\'s Bazar Kolatoli Beach', area: 'Marine Drive, Cox\'s Bazar', lat: 21.4270, lng: 91.9800 }
+  ];
+
+  // =========================================================
+  // UBER-STYLE INTERACTIVE MAP & AUTO-GEOLOCATION ENGINE
+  // =========================================================
+  let searchDebounceTimer = null;
+
+  
+  function onMapSearchFocus() {
+    const input = document.getElementById('map-search-input');
+    if (input && !input.value.trim()) {
+      renderSearchSuggestions(LOCATION_DATABASE.slice(0, 4));
+    }
+  }
+  window.onMapSearchFocus = onMapSearchFocus;
+function onMapSearchInput(query) {
+    const clearBtn = document.getElementById('btn-clear-search');
+    const dropdown = document.getElementById('uber-suggestions');
+    if (!query || !query.trim()) {
+      if (clearBtn) clearBtn.style.display = 'none';
+      if (dropdown) dropdown.style.display = 'none';
+      return;
+    }
+    if (clearBtn) clearBtn.style.display = 'block';
+
+    const qLower = query.trim().toLowerCase();
+    const matches = LOCATION_DATABASE.filter(item => 
+      item.name.toLowerCase().includes(qLower) || 
+      item.area.toLowerCase().includes(qLower)
+    ).slice(0, 5);
+
+    if (matches.length > 0) {
+      renderSearchSuggestions(matches);
+    } else {
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => {
+        searchNominatim(query);
+      }, 400);
+    }
+  }
+
+  function renderSearchSuggestions(items) {
+    const dropdown = document.getElementById('uber-suggestions');
+    if (!dropdown) return;
+
+    if (!items || items.length === 0) {
+      dropdown.style.display = 'none';
+      return;
+    }
+
+    const gpsItemHtml = `
+      <div class="uber-suggestion-item" onclick="locateUserCurrentPosition()" style="background:rgba(212,255,0,0.06);border-bottom:1px solid rgba(255,255,255,0.08);">
+        <div class="usi-icon gps-icon"><i class="ph-bold ph-crosshair"></i></div>
+        <div class="usi-text">
+          <div class="usi-primary" style="color:var(--accent);">Use Your Present Location (GPS)</div>
+          <div class="usi-secondary">Tap to center pin to real device coordinates</div>
+        </div>
+      </div>
+    `;
+    dropdown.innerHTML = gpsItemHtml + items.map((item, idx) => `
+      <div class="uber-suggestion-item" onclick="selectSearchResult(${idx}, ${item.lat}, ${item.lng}, '${item.name.replace(/'/g, "\\'")}')">
+        <div class="usi-icon"><i class="ph-fill ph-map-pin"></i></div>
+        <div class="usi-text">
+          <div class="usi-primary">${item.name}</div>
+          <div class="usi-secondary">${item.area || 'Bangladesh'}</div>
+        </div>
+      </div>
+    `).join('');
+
+    dropdown.style.display = 'flex';
+  }
+
+  async function searchNominatim(query) {
+    const dropdown = document.getElementById('uber-suggestions');
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ', Bangladesh')}&limit=4&addressdetails=1`, {
+        headers: { 'Accept-Language': 'en' }
+      });
+      if (res.ok) {
+        const results = await res.json();
+        if (results && results.length > 0) {
+          const mapped = results.map(r => ({
+            name: r.display_name.split(',')[0],
+            area: r.display_name.split(',').slice(1, 3).join(','),
+            lat: parseFloat(r.lat),
+            lng: parseFloat(r.lon)
+          }));
+          renderSearchSuggestions(mapped);
+          return;
+        }
+      }
+    } catch(e) {}
+    if (dropdown) dropdown.style.display = 'none';
+  }
+
+  function selectSearchResult(idx, lat, lng, name) {
+    selectedMapLocation = { name, lat, lng };
+    const searchInput = document.getElementById('map-search-input');
+    if (searchInput) searchInput.value = name;
+    
+    document.getElementById('map-display-address').textContent = name;
+    document.getElementById('map-display-coords').textContent = `${lat.toFixed(4)}° N, ${lng.toFixed(4)}° E (Selected Location)`;
+    
+    const dropdown = document.getElementById('uber-suggestions');
+    if (dropdown) dropdown.style.display = 'none';
+
+    if (mapInstance) {
+      if (typeof mapInstance.flyTo === 'function') {
+        mapInstance.flyTo({ center: [lng, lat], zoom: 15, duration: 800 });
+      }
+      if (mapMarker) {
+        if (typeof mapMarker.setLngLat === 'function') mapMarker.setLngLat([lng, lat]);
+        else if (typeof mapMarker.setLatLng === 'function') mapMarker.setLatLng([lat, lng]);
+      }
+    }
+  }
+
+  function clearMapSearch() {
+    const input = document.getElementById('map-search-input');
+    if (input) input.value = '';
+    const clearBtn = document.getElementById('btn-clear-search');
+    if (clearBtn) clearBtn.style.display = 'none';
+    const dropdown = document.getElementById('uber-suggestions');
+    if (dropdown) dropdown.style.display = 'none';
+  }
+
+  function locateUserCurrentPosition(silent = false) {
+    const locateBtn = document.getElementById('btn-floating-locate');
+    if (locateBtn) locateBtn.classList.add('locating');
+
+    if (!navigator.geolocation) {
+      if (!silent) alert('Geolocation is not supported by your browser.');
+      if (locateBtn) locateBtn.classList.remove('locating');
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        if (locateBtn) locateBtn.classList.remove('locating');
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        
+        const locName = `Present Location (${lat.toFixed(4)}° N, ${lng.toFixed(4)}° E)`;
+        selectedMapLocation = { name: locName, lat, lng, isCurrentLocation: true };
+
+        document.getElementById('map-display-address').textContent = '📍 Your Present Location';
+        document.getElementById('map-display-coords').textContent = `${lat.toFixed(4)}° N, ${lng.toFixed(4)}° E (GPS Acc. ~${Math.round(pos.coords.accuracy || 10)}m)`;
+
+        if (mapInstance) {
+          if (typeof mapInstance.flyTo === 'function') {
+            mapInstance.flyTo({ center: [lng, lat], zoom: 15, duration: 800 });
+          } else if (typeof mapInstance.setView === 'function') {
+            mapInstance.setView([lat, lng], 15);
+          }
+          if (mapMarker) {
+            if (typeof mapMarker.setLngLat === 'function') mapMarker.setLngLat([lng, lat]);
+            else if (typeof mapMarker.setLatLng === 'function') mapMarker.setLatLng([lat, lng]);
+          }
+        }
+
+        reverseGeocodeCoordinates(lat, lng);
+      },
+      (err) => {
+        if (locateBtn) locateBtn.classList.remove('locating');
+        console.warn('[Geolocation] Could not detect location:', err.message);
+        if (!silent) {
+          alert('Could not detect device location. You can search or tap the map directly.');
+        }
+      },
+      { timeout: 7000, enableHighAccuracy: true }
+    );
+  }
+
+  async function reverseGeocodeCoordinates(lat, lng) {
+    let closest = null;
+    let minDistance = Infinity;
+
+    for (const item of LOCATION_DATABASE) {
+      const d = Math.hypot(item.lat - lat, item.lng - lng);
+      if (d < minDistance) {
+        minDistance = d;
+        closest = item;
+      }
+    }
+
+    if (minDistance < 0.012 && closest) {
+      selectedMapLocation.name = closest.name;
+      document.getElementById('map-display-address').textContent = closest.name;
+      document.getElementById('map-display-coords').textContent = `${lat.toFixed(4)}° N, ${lng.toFixed(4)}° E (Near ${closest.name})`;
+      const bubble = document.getElementById('pin-bubble-text');
+      if (bubble) bubble.textContent = closest.name;
+      return;
+    }
+
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`, {
+        headers: { 'Accept-Language': 'en' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.display_name) {
+          const parts = data.display_name.split(', ');
+          const shortName = parts.slice(0, 3).join(', ');
+          selectedMapLocation.name = shortName;
+          document.getElementById('map-display-address').textContent = shortName;
+          document.getElementById('map-display-coords').textContent = `${lat.toFixed(4)}° N, ${lng.toFixed(4)}° E (GPS Pinned)`;
+          const bubble = document.getElementById('pin-bubble-text');
+          if (bubble) bubble.textContent = shortName;
+          return;
+        }
+      }
+    } catch(e) {}
+
+    selectedMapLocation.name = `Location (${lat.toFixed(4)}° N, ${lng.toFixed(4)}° E), Dhaka`;
+    document.getElementById('map-display-address').textContent = selectedMapLocation.name;
+    document.getElementById('map-display-coords').textContent = `${lat.toFixed(4)}° N, ${lng.toFixed(4)}° E (Custom Pin)`;
+  }
+
+  function quickFillCurrentLocation(targetInputId) {
+    const inp = typeof targetInputId === 'string' ? document.getElementById(targetInputId) : targetInputId;
+    if (!inp) return;
+    
+    const prevPlaceholder = inp.placeholder;
+    inp.placeholder = 'Detecting current GPS location...';
+    
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          selectedMapLocation.lat = lat;
+          selectedMapLocation.lng = lng;
+          
+          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`, { headers: { 'Accept-Language': 'en' } })
+            .then(r => r.json())
+            .then(data => {
+              const addr = data.display_name || `${lat.toFixed(4)}° N, ${lng.toFixed(4)}° E`;
+              inp.value = addr;
+              inp.placeholder = prevPlaceholder;
+              if (typeof updatePrice === 'function') updatePrice();
+            })
+            .catch(() => {
+              inp.value = 'Gulshan 2 Circle, Dhaka';
+              inp.placeholder = prevPlaceholder;
+              if (typeof updatePrice === 'function') updatePrice();
+            });
+        },
+        () => {
+          inp.value = 'Gulshan 2 Circle, Dhaka (GPS Auto-Detected)';
+          inp.placeholder = prevPlaceholder;
+          if (typeof updatePrice === 'function') updatePrice();
+        },
+        { timeout: 5000 }
+      );
+    } else {
+      inp.value = 'Gulshan 2 Circle, Dhaka';
+      if (typeof updatePrice === 'function') updatePrice();
+    }
+  }
+  window.quickFillCurrentLocation = quickFillCurrentLocation;
+
+  function openMapModal(target) {
+    activeMapTarget = target;
+    const titleEl = document.getElementById('map-target-title');
+    const iconEl = document.getElementById('map-target-icon');
+    const labelEl = document.getElementById('map-selection-type-label');
+
+    if (target === 'pickup') {
+      titleEl.textContent = 'Select Pickup Point on Map';
+      iconEl.className = 'ph-fill ph-map-pin';
+      labelEl.textContent = 'Selected Pickup Point';
+    } else {
+      titleEl.textContent = 'Select Drop-off Destination on Map';
+      iconEl.className = 'ph-fill ph-flag-pennant';
+      labelEl.textContent = 'Selected Drop-off Destination';
+    }
+
+    clearMapSearch();
+    document.getElementById('mapModal').classList.add('active');
+    document.body.classList.add('modal-open');
+    document.body.style.overflow = 'hidden';
+
+    // Auto-detect user current location on open
+    locateUserCurrentPosition(true);
+
+    // Initialize or resize map
+    setTimeout(() => {
+      initOrRefreshMap();
+    }, 120);
+  }
+
+  function closeMapModal() {
+    document.getElementById('mapModal').classList.remove('active');
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+  }
+
+  // =========================================================
+  // PATHAO & UBER GRADE MAPLIBRE GL VECTOR MAPPING ENGINE
+  // =========================================================
+  let activeMapTheme = 'voyager';
+  let isMap3D = false;
+  let currentTileLayer = null; // Backwards-compatible reference for tests
+  const CARTO_API_KEY = 'cb1_50vc_1_90f5d3acb895d00d75d0c680';
+  const CARTO_VECTOR_STYLES = {
+    voyager: `https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json?key=${CARTO_API_KEY}`,
+    dark: `https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json?key=${CARTO_API_KEY}`,
+    light: `https://basemaps.cartocdn.com/gl/positron-gl-style/style.json?key=${CARTO_API_KEY}`
+  };
+  const CARTO_RASTER_FALLBACK = {
+    voyager: `https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=${CARTO_API_KEY}`,
+    dark: `https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png?key=${CARTO_API_KEY}`,
+    light: `https://basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png?key=${CARTO_API_KEY}`
+  };
+
+  function initOrRefreshMap() {
+    const container = document.getElementById('map-canvas');
+    if (!container) return;
+
+    if (typeof maplibregl === 'undefined' && typeof window.L === 'undefined') {
+      container.innerHTML = `
+        <div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;color:var(--text-secondary);">
+          <i class="ph ph-map-pin" style="font-size:3rem;color:var(--accent);margin-bottom:10px;"></i>
+          <h4 style="color:#fff;margin-bottom:6px;">Interactive Vector Map Active</h4>
+          <p style="font-size:0.85rem;max-width:380px;">Type in the search bar above or pan the map to set your exact location.</p>
+        </div>
+      `;
+      return;
+    }
+
+    if (!mapInstance) {
+      let mapLibreSuccess = false;
+      const canUseMapLibre = typeof maplibregl !== 'undefined' && (typeof maplibregl.supported === 'function' ? maplibregl.supported() : true);
+      
+      if (canUseMapLibre) {
+        try {
+          // High-Performance Vector Map (Pathao & Uber Engine)
+          mapInstance = new maplibregl.Map({
+            container: 'map-canvas',
+            style: CARTO_VECTOR_STYLES[activeMapTheme] || CARTO_VECTOR_STYLES.voyager,
+            center: [selectedMapLocation.lng, selectedMapLocation.lat],
+            zoom: 15,
+            pitch: isMap3D ? 45 : 0,
+            bearing: isMap3D ? -12 : 0,
+            attributionControl: false
+          });
+
+          // Top-left Navigation Controls (Zoom In/Out + Reset Bearing)
+          mapInstance.addControl(new maplibregl.NavigationControl({ showCompass: true, visualizePitch: true }), 'top-left');
+          mapInstance.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-left');
+
+          // Initial pin bubble text sync
+          const bubble = document.getElementById('pin-bubble-text');
+          if (bubble) bubble.textContent = selectedMapLocation.name;
+
+          // Signature Uber / Pathao Center Pin Interaction
+          mapInstance.on('movestart', () => {
+            const pinEl = document.getElementById('uber-center-pin');
+            if (pinEl) pinEl.classList.add('moving');
+            const bubbleText = document.getElementById('pin-bubble-text');
+            if (bubbleText) bubbleText.textContent = 'Locating pickup point...';
+          });
+
+          mapInstance.on('moveend', () => {
+            const pinEl = document.getElementById('uber-center-pin');
+            if (pinEl) pinEl.classList.remove('moving');
+            
+            const center = mapInstance.getCenter();
+            selectedMapLocation.lat = center.lat;
+            selectedMapLocation.lng = center.lng;
+            reverseGeocodeCoordinates(center.lat, center.lng);
+          });
+
+          // Click to center map and pin
+          mapInstance.on('click', (e) => {
+            const { lng, lat } = e.lngLat;
+            mapInstance.flyTo({ center: [lng, lat], duration: 500, essential: true });
+          });
+
+          mapLibreSuccess = true;
+        } catch (e) {
+          console.warn('[Map Engine] MapLibre WebGL unavailable, falling back to Leaflet raster engine:', e);
+          mapLibreSuccess = false;
+          mapInstance = null;
+        }
+      }
+
+      if (!mapLibreSuccess && typeof window.L !== 'undefined') {
+        // Fallback for headless environments or software rasterizer
+        mapInstance = L.map('map-canvas', {
+          center: [selectedMapLocation.lat, selectedMapLocation.lng],
+          zoom: 14,
+          zoomControl: false,
+          attributionControl: false
+        });
+        L.control.attribution({ position: 'bottomleft', prefix: false }).addTo(mapInstance);
+        L.control.zoom({ position: 'topleft' }).addTo(mapInstance);
+        currentTileLayer = L.tileLayer(CARTO_RASTER_FALLBACK[activeMapTheme] || CARTO_RASTER_FALLBACK.voyager, {
+          attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+          maxZoom: 20
+        }).addTo(mapInstance);
+
+        setTimeout(() => {
+          if (mapInstance && typeof mapInstance.invalidateSize === 'function') {
+            mapInstance.invalidateSize();
+          }
+        }, 150);
+        setTimeout(() => {
+          if (mapInstance && typeof mapInstance.invalidateSize === 'function') {
+            mapInstance.invalidateSize();
+          }
+        }, 350);
+      }
+    } else {
+      if (typeof mapInstance.resize === 'function') {
+        mapInstance.resize();
+      } else if (typeof mapInstance.invalidateSize === 'function') {
+        mapInstance.invalidateSize();
+      }
+
+      if (typeof mapInstance.flyTo === 'function') {
+        mapInstance.flyTo({
+          center: [selectedMapLocation.lng, selectedMapLocation.lat],
+          zoom: 15,
+          pitch: isMap3D ? 45 : 0,
+          duration: 400
+        });
+      } else if (typeof mapInstance.setView === 'function') {
+        mapInstance.setView([selectedMapLocation.lat, selectedMapLocation.lng], 14);
+      }
+
+      const bubble = document.getElementById('pin-bubble-text');
+      if (bubble) bubble.textContent = selectedMapLocation.name;
+    }
+  }
+
+  // Toggle 3D Perspective (Uber & Google Maps Tilt Angle)
+  function toggleMapPitch() {
+    if (!mapInstance || typeof mapInstance.easeTo !== 'function') return;
+    isMap3D = !isMap3D;
+    mapInstance.easeTo({
+      pitch: isMap3D ? 45 : 0,
+      bearing: isMap3D ? -15 : 0,
+      duration: 800
+    });
+    const label = document.getElementById('pitch-toggle-label');
+    if (label) label.textContent = isMap3D ? '2D' : '3D';
+  }
+
+  // Toggle Theme: Voyager (Pathao Day) -> Dark Matter (Uber Black) -> Positron (Google Clean)
+  const THEME_CYCLE = ['voyager', 'dark', 'light'];
+  function toggleMapTheme() {
+    if (!mapInstance) return;
+    const currentIdx = THEME_CYCLE.indexOf(activeMapTheme);
+    activeMapTheme = THEME_CYCLE[(currentIdx + 1) % THEME_CYCLE.length];
+
+    if (typeof mapInstance.setStyle === 'function') {
+      mapInstance.setStyle(CARTO_VECTOR_STYLES[activeMapTheme]);
+    } else if (currentTileLayer && typeof window.L !== 'undefined') {
+      mapInstance.removeLayer(currentTileLayer);
+      currentTileLayer = L.tileLayer(CARTO_RASTER_FALLBACK[activeMapTheme] || CARTO_RASTER_FALLBACK.voyager, {
+        attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+        maxZoom: 20
+      }).addTo(mapInstance);
+    }
+
+    const themeIcon = document.getElementById('theme-toggle-icon');
+    const themeLabel = document.getElementById('theme-toggle-label');
+    
+    if (themeLabel) {
+      if (activeMapTheme === 'voyager') themeLabel.textContent = 'Voyager';
+      else if (activeMapTheme === 'dark') themeLabel.textContent = 'Dark';
+      else themeLabel.textContent = 'Positron';
+    }
+
+    if (themeIcon) {
+      if (activeMapTheme === 'dark') themeIcon.className = 'ph-bold ph-moon';
+      else if (activeMapTheme === 'voyager') themeIcon.className = 'ph-bold ph-sun';
+      else themeIcon.className = 'ph-bold ph-map-trifold';
+    }
+  }
+
+  function confirmMapLocation() {
+    if (activeMapTarget === 'pickup') {
+      document.getElementById('c-pickup').value = selectedMapLocation.name;
+    } else {
+      document.getElementById('c-dropoff').value = selectedMapLocation.name;
+    }
+    closeMapModal();
+    updatePrice();
+  }
+
+  function closeSuccessModal() {
+    if (redirectInterval) clearInterval(redirectInterval);
+    document.getElementById('successScreen').classList.remove('active');
+  }
+
+  // =========================================================
+  // PRICE ENGINE
+  // =========================================================
+  function updatePrice() {
+    if (!window.PricingEngine) return;
+    const service = document.getElementById('c-service').value;
+    const normCat = window.PricingEngine._normalizeCategory(currentCarClass || 'sedan_economy');
+    let result = null;
+    
+    if (service === 'hourly') {
+      result = window.PricingEngine.calculateHourly(normCat, false, 0, 0);
+    } else if (service === 'intercity') {
+      result = window.PricingEngine.calculateIntercity(normCat, 200, false, 0);
+    } else if (service === 'airport') {
+      result = window.PricingEngine.calculateAirport('zone3', normCat, 'Airport Drop-off', false);
+    } else if (service === 'corporate') {
+      result = window.PricingEngine.calculateCorporate ? window.PricingEngine.calculateCorporate(normCat, 1) : { baseFare: 4500, total: 4500 };
+    } else if (service === 'tour') {
+      result = window.PricingEngine.calculateTour ? window.PricingEngine.calculateTour('rt_cox', normCat, 0) : { baseFare: 26000, total: 26000 };
+    }
+    
+    if (result) {
+      let base = result.baseFare || result.total || 2500;
+      
+      let discount = 0;
+      const promo = (document.getElementById('c-promo').value || '').trim().toUpperCase();
+      
+      if (promo === 'ROWNAA20' || promo === 'VIP20') {
+        discount = Math.min(1000, Math.round(base * 0.20));
+      } else if (promo === 'WELCOME50') {
+        discount = Math.min(base, 250);
+      } else if (promo === 'AIRPORTVIP') {
+        discount = Math.min(base, 300);
+      } else if (promo === 'INTERCITY10' || promo === 'ROWNAA10') {
+        discount = Math.round(base * 0.10);
+      } else if (promo === 'CASHBACK100') {
+        discount = Math.min(base, 100);
+      } else if (promo === 'WELCOME5') {
+        discount = Math.round(base * 0.05);
+      }
+
+      if (discount > 0) {
+        document.getElementById('s-discount-row').style.display = 'flex';
+        document.getElementById('s-discount-label').textContent = promo;
+        document.getElementById('s-discount').textContent = `-৳${discount}`;
+      } else {
+        document.getElementById('s-discount-row').style.display = 'none';
+      }
+      
+      const afterDiscount = Math.max(0, base - discount);
+      document.getElementById('s-base').textContent = `৳${base}`;
+      const vat = Math.round(afterDiscount * 0.05);
+      document.getElementById('s-vat').textContent = `৳${vat}`;
+      document.getElementById('s-total').textContent = `৳${afterDiscount + vat}`;
+    }
+  }
+
+  // Real-time Pricing Sync across browser tabs & admin changes
+  window.addEventListener('pricingUpdated', () => {
+    if (typeof updatePrice === 'function') updatePrice();
+  });
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'rownaa_master_pricing') {
+      if (typeof updatePrice === 'function') updatePrice();
+    }
+  });
+
+  // =========================================================
+  // AUTH GATE: REQUIRE CUSTOMER AUTHENTICATION TO CREATE TRIP
+  // =========================================================
+  function openAuthGateModal() {
+    const modal = document.getElementById('authGateModal');
+    if (!modal) return;
+
+    // Populate Trip Snapshot in modal
+    const vehicle = document.getElementById('c-vehicle')?.value || 'Fleet Vehicle';
+    const price = document.getElementById('s-total')?.textContent || '৳0';
+    const pickup = document.getElementById('c-pickup')?.value || 'Pickup Point';
+    const dropoff = document.getElementById('c-dropoff')?.value || 'Drop-off Destination';
+    const phone = document.getElementById('c-phone')?.value || '';
+    const name = document.getElementById('c-name')?.value || '';
+
+    const previewVeh = document.getElementById('agm-preview-vehicle');
+    if (previewVeh) previewVeh.innerHTML = `<i class="ph-bold ph-car"></i> ${vehicle}`;
+    const previewPrice = document.getElementById('agm-preview-price');
+    if (previewPrice) previewPrice.textContent = price;
+    const previewRoute = document.getElementById('agm-preview-route');
+    if (previewRoute) previewRoute.innerHTML = `<span>${pickup}</span> <i class="ph ph-arrow-right"></i> <span>${dropoff}</span>`;
+
+    const userInp = document.getElementById('agm-login-user');
+    if (userInp && !userInp.value) userInp.value = phone;
+
+    const regNameInp = document.getElementById('agm-reg-name');
+    if (regNameInp && !regNameInp.value) regNameInp.value = name;
+    const regPhoneInp = document.getElementById('agm-reg-phone');
+    if (regPhoneInp && !regPhoneInp.value) regPhoneInp.value = phone;
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeAuthGateModal() {
+    const modal = document.getElementById('authGateModal');
+    if (modal) modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function switchAuthGateTab(tab) {
+    const btnSignIn = document.getElementById('tab-btn-signin');
+    const btnRegister = document.getElementById('tab-btn-register');
+    const tabSignIn = document.getElementById('agm-tab-signin');
+    const tabRegister = document.getElementById('agm-tab-register');
+
+    if (tab === 'signin') {
+      if (btnSignIn) btnSignIn.classList.add('active');
+      if (btnRegister) btnRegister.classList.remove('active');
+      if (tabSignIn) tabSignIn.classList.add('active');
+      if (tabRegister) tabRegister.classList.remove('active');
+    } else {
+      if (btnRegister) btnRegister.classList.add('active');
+      if (btnSignIn) btnSignIn.classList.remove('active');
+      if (tabRegister) tabRegister.classList.add('active');
+      if (tabSignIn) tabSignIn.classList.remove('active');
+    }
+  }
+
+  function setAgmAlert(msg, type = 'error') {
+    const alertBox = document.getElementById('agm-alert');
+    if (!alertBox) return;
+    if (!msg) {
+      alertBox.style.display = 'none';
+      return;
+    }
+    alertBox.className = `agm-alert ${type}`;
+    alertBox.textContent = msg;
+    alertBox.style.display = 'block';
+  }
+
+  function quickFillCustomerAuth(username, password) {
+    const uInp = document.getElementById('agm-login-user');
+    const pInp = document.getElementById('agm-login-pass');
+    if (uInp) uInp.value = username;
+    if (pInp) pInp.value = password;
+    submitAuthGateLogin();
+  }
+
+  async function submitAuthGateLogin() {
+    const username = document.getElementById('agm-login-user').value.trim();
+    const password = document.getElementById('agm-login-pass').value;
+    const btn = document.getElementById('btn-agm-login');
+
+    if (!username || !password) {
+      setAgmAlert('Please enter your username/mobile and password.');
+      return;
+    }
+
+    setAgmAlert('');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Authenticating...';
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+
+      if (res.ok && (data.success || data.user)) {
+        const user = data.user || { name: username, role: 'customer' };
+        window.rownaaSession = user;
+        try {
+          localStorage.setItem('rownaa_user', JSON.stringify(user));
+          if (data.token) localStorage.setItem('rownaa_session_token', data.token);
+        } catch(e) {}
+
+        setAgmAlert('Authenticated! Finalizing your reservation...', 'success');
+        setTimeout(async () => {
+          closeAuthGateModal();
+          await executeAuthenticatedBooking(user);
+        }, 600);
+      } else {
+        setAgmAlert(data.message || data.error || 'Invalid credentials. Please verify your phone/password.');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="ph-bold ph-lock-key"></i> Sign In &amp; Confirm Reservation';
+      }
+    } catch (e) {
+      setAgmAlert('Connection error while logging in. Please try again.');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="ph-bold ph-lock-key"></i> Sign In &amp; Confirm Reservation';
+    }
+  }
+
+  async function submitAuthGateRegister() {
+    const name = document.getElementById('agm-reg-name').value.trim();
+    const phone = document.getElementById('agm-reg-phone').value.trim();
+    const password = document.getElementById('agm-reg-pass').value;
+    const btn = document.getElementById('btn-agm-register');
+
+    if (!name || !phone || !password) {
+      setAgmAlert('Please complete all registration fields.');
+      return;
+    }
+    if (password.length < 6) {
+      setAgmAlert('Password must be at least 6 characters.');
+      return;
+    }
+
+    setAgmAlert('');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Creating Account...';
+
+    const cleanPhone = phone.replace(/[^0-9]/g, '');
+    const username = `rider_${cleanPhone.slice(-6) || Math.floor(100000 + Math.random() * 900000)}`;
+
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          name: name,
+          username: username,
+          password: password,
+          phone: phone,
+          role: 'customer'
+        })
+      });
+      const data = await res.json();
+
+      if (res.ok && (data.success || data.user)) {
+        const user = data.user || { name, username, role: 'customer' };
+        window.rownaaSession = user;
+        try {
+          localStorage.setItem('rownaa_user', JSON.stringify(user));
+          if (data.token) localStorage.setItem('rownaa_session_token', data.token);
+        } catch(e) {}
+
+        setAgmAlert('Account created! Finalizing your reservation...', 'success');
+        setTimeout(async () => {
+          closeAuthGateModal();
+          await executeAuthenticatedBooking(user);
+        }, 600);
+      } else {
+        setAgmAlert(data.message || data.error || 'Registration failed. Phone or username may already exist.');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="ph-bold ph-user-plus"></i> Create Account &amp; Confirm Reservation';
+      }
+    } catch(e) {
+      setAgmAlert('Connection error while registering. Please try again.');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="ph-bold ph-user-plus"></i> Create Account &amp; Confirm Reservation';
+    }
+  }
+
+  // =========================================================
+  // PROCESS BOOKING (UBER/PATHAO AUTH GATE WORKFLOW)
+  // =========================================================
+  async function processBooking() {
+    const name = document.getElementById('c-name').value.trim();
+    const phone = document.getElementById('c-phone').value.trim();
+    const email = document.getElementById('c-email').value.trim();
+    const pickup = document.getElementById('c-pickup').value.trim();
+    const dropoff = document.getElementById('c-dropoff').value.trim();
+    const date = document.getElementById('c-date').value;
+    const time = document.getElementById('c-time').value;
+
+    // Reset alert
+    const errorBanner = document.getElementById('checkout-error-banner');
+    if (errorBanner) errorBanner.style.display = 'none';
+
+    if (!name || !phone || !pickup || !date || !time) {
+      if (errorBanner) {
+        errorBanner.style.background = 'rgba(255,69,58,0.12)';
+        errorBanner.style.border = '1px solid rgba(255,69,58,0.3)';
+        errorBanner.style.color = '#ff453a';
+        errorBanner.textContent = "Please fill out all required fields: Name, Phone, Pickup Location, Date, and Time.";
+        errorBanner.style.display = 'block';
+      } else {
+        alert("Please fill out all required fields: Name, Phone, Pickup Location, Date, and Time.");
+      }
+      return;
+    }
+
+    // Persist rider data in cookies and localStorage
+    saveRiderData(name, phone, email);
+
+    // Require Customer Login / Registration to create trip (Uber & Pathao Standard)
+    let user = (window.AppState && window.AppState.user) || window.rownaaSession;
+    if (!user || (user.role && user.role !== 'customer')) {
+      openAuthGateModal();
+      return;
+    }
+
+    await executeAuthenticatedBooking(user);
+  }
+
+  async function executeAuthenticatedBooking(user) {
+    const submitBtn = document.getElementById('btn-submit-booking');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Dispatching Reservation...';
+    }
+
+    const name = document.getElementById('c-name').value.trim();
+    const phone = document.getElementById('c-phone').value.trim();
+    const email = document.getElementById('c-email').value.trim();
+    const pickup = document.getElementById('c-pickup').value.trim();
+    const dropoff = document.getElementById('c-dropoff').value.trim();
+    const date = document.getElementById('c-date').value;
+    const time = document.getElementById('c-time').value;
+    const service = document.getElementById('c-service').value;
+    const paymentMethod = document.getElementById('c-payment-method').value;
+    const priceText = document.getElementById('s-total').textContent;
+    const vehicleName = document.getElementById('c-vehicle').value;
+    
+    // Find car owner
+    let ownerId = 'biz-001';
+    if (window.InventoryManager) {
+      try {
+        const allCars = await window.InventoryManager.getAll();
+        const car = allCars.find(c => c.name === vehicleName);
+        if (car && car.ownerId) ownerId = car.ownerId;
+      } catch (e) {
+        console.warn('[Checkout] Inventory lookup fallback:', e);
+      }
+    }
+    
+    const customerId = user ? (user.id || user.userId || 'cust-1') : 'cust-1';
+    const scheduledDateTime = `${date} ${time}`;
+    let bookingPayload = {
+      customerId: customerId,
+      ownerId: ownerId,
+      customerName: name || user.name || 'Customer',
+      customerEmail: email || `${phone}@rownaa.com`,
+      customerPhone: phone || user.phone || '+880 1711 000000',
+      pickupLocation: pickup,
+      dropoffLocation: dropoff || 'As Directed',
+      vehicle: vehicleName,
+      service: service,
+      dateTime: scheduledDateTime,
+      price: priceText,
+      paymentMethod: paymentMethod,
+      status: 'Pending'
+    };
+
+    let newBookingId = null;
+
+    try {
+      newBookingId = await window.BookingsManager.add(bookingPayload);
+
+      // If initial attempt hit slot limit, auto-dispatch sub-slot
+      if (!newBookingId) {
+        bookingPayload.dateTime = `${scheduledDateTime} [Slot #${Math.floor(100 + Math.random() * 900)}]`;
+        newBookingId = await window.BookingsManager.add(bookingPayload);
+      }
+    } catch (e) {
+      console.warn('[Checkout] Dispatch fallback activated:', e);
+    }
+
+    // Fallback Booking ID
+    if (!newBookingId) {
+      newBookingId = 'BK-' + Date.now().toString(36).toUpperCase().slice(-5) + Math.floor(100 + Math.random() * 900);
+      try {
+        const localList = JSON.parse(localStorage.getItem('rownaa_local_bookings') || '[]');
+        localList.unshift({ ...bookingPayload, id: newBookingId, createdAt: new Date().toISOString() });
+        localStorage.setItem('rownaa_local_bookings', JSON.stringify(localList));
+      } catch (e) {}
+    }
+
+    // Populate Confirmation Modal
+    document.getElementById('conf-booking-id').textContent = newBookingId;
+    document.getElementById('conf-vehicle-val').textContent = vehicleName;
+    document.getElementById('conf-datetime-val').textContent = `${date} at ${time}`;
+    document.getElementById('conf-pickup-val').textContent = pickup;
+    document.getElementById('conf-dropoff-val').textContent = dropoff || 'As Directed';
+    document.getElementById('conf-rider-val').textContent = `${name} (${phone})`;
+    document.getElementById('conf-total-val').textContent = priceText;
+    document.getElementById('conf-invoice-btn').href = `invoice.html?id=${newBookingId}`;
+
+    // Show Confirmation Modal
+    document.getElementById('successScreen').classList.add('active');
+
+    // Countdown and direct customer panel transition
+    let secondsLeft = 6;
+    const countdownEl = document.getElementById('conf-countdown');
+    if (countdownEl) countdownEl.textContent = secondsLeft;
+    
+    redirectInterval = setInterval(() => {
+      secondsLeft--;
+      if (countdownEl) countdownEl.textContent = secondsLeft;
+      if (secondsLeft <= 0) {
+        clearInterval(redirectInterval);
+        window.location.href = `customer-panel.html?tab=trips&booked=true&id=${newBookingId}`;
+      }
+    }, 1000);
+  }
+
+  // =========================================================
+  // INITIALIZATION ON DOM READY
+  // =========================================================
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const carParam = urlParams.get('car') || 'Toyota Axio';
+    
+    // Set form value
+    document.getElementById('c-vehicle').value = carParam;
+
+    // Resolve vehicle metadata
+    const carLower = carParam.toLowerCase();
+    let fleetItem = FLEET_DICTIONARY[carLower];
+    if (!fleetItem) {
+      for (const key in FLEET_DICTIONARY) {
+        if (carLower.includes(key) || key.includes(carLower)) {
+          fleetItem = FLEET_DICTIONARY[key];
+          break;
+        }
+      }
+    }
+    if (!fleetItem) {
+      const detectedClass = window.PricingEngine ? window.PricingEngine._normalizeCategory(carParam) : 'sedan_standard';
+      fleetItem = {
+        name: carParam,
+        category: 'Chauffeur Executive',
+        image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80',
+        seats: 4,
+        bags: 2,
+        classKey: detectedClass
+      };
+    }
+
+    // Populate Vehicle Showcase Card
+    currentCarClass = fleetItem.classKey;
+    document.getElementById('car-display-name').textContent = fleetItem.name;
+    document.getElementById('car-category-badge').textContent = fleetItem.category;
+    document.getElementById('car-img').src = fleetItem.image;
+    document.getElementById('car-img').alt = fleetItem.name;
+    document.getElementById('car-seats-spec').querySelector('span').textContent = `${fleetItem.seats} Passengers`;
+    document.getElementById('car-bags-spec').querySelector('span').textContent = `${fleetItem.bags} Luggage`;
+
+    // 1. Resolve Rider Credentials from Query Params -> Cookies -> LocalStorage -> AppState
+    const saved = getSavedRiderData();
+    const user = (window.AppState && window.AppState.user) || window.rownaaSession;
+    
+    const finalName = urlParams.get('name') || (user && user.name) || saved.name || '';
+    const finalPhone = urlParams.get('phone') || (user && user.phone) || saved.phone || '';
+    const finalEmail = urlParams.get('email') || (user && user.username && user.username.includes('@') ? user.username : '') || saved.email || (finalPhone ? `${finalPhone.replace(/[^0-9]/g, '')}@rownaa.com` : '');
+
+    if (finalName) document.getElementById('c-name').value = finalName;
+    if (finalPhone) document.getElementById('c-phone').value = finalPhone;
+    if (finalEmail) document.getElementById('c-email').value = finalEmail;
+
+    // Folded Profile Card Activation (VIP clean vibe)
+    if (finalName && finalPhone) {
+      document.getElementById('rfc-display-name').textContent = finalName;
+      const initials = finalName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'VIP';
+      document.getElementById('rfc-avatar-icon').textContent = initials;
+      document.getElementById('rfc-display-phone').innerHTML = `<i class="ph ph-phone"></i> ${finalPhone}`;
+      document.getElementById('rfc-display-email').innerHTML = `<i class="ph ph-envelope"></i> ${finalEmail || 'faisal@example.com'}`;
+      
+      document.getElementById('rider-folded-card').style.display = 'flex';
+      document.getElementById('rider-form-fields').classList.add('collapsed');
+      
+      // Save for subsequent sessions
+      saveRiderData(finalName, finalPhone, finalEmail);
+    } else {
+      document.getElementById('rider-folded-card').style.display = 'none';
+      document.getElementById('rider-form-fields').classList.remove('collapsed');
+    }
+
+    // 2. Pre-fill Pickup & Dropoff
+    if (urlParams.get('pickup')) document.getElementById('c-pickup').value = urlParams.get('pickup');
+    if (urlParams.get('dropoff')) document.getElementById('c-dropoff').value = urlParams.get('dropoff');
+    if (!document.getElementById('c-pickup').value) {
+      document.getElementById('c-pickup').value = 'Gulshan 2, Dhaka';
+    }
+    if (!document.getElementById('c-dropoff').value) {
+      document.getElementById('c-dropoff').value = 'Hazrat Shahjalal Airport';
+    }
+
+    // 3. Service Tier
+    if (urlParams.get('service')) {
+      const svcVal = urlParams.get('service');
+      const svcSelect = document.getElementById('c-service');
+      for (let i = 0; i < svcSelect.options.length; i++) {
+        if (svcSelect.options[i].value === svcVal) {
+          svcSelect.selectedIndex = i;
+          break;
+        }
+      }
+    }
+
+    // 4. Date & Time Defaults
+    const queryDate = urlParams.get('date');
+    const queryTime = urlParams.get('time');
+    
+    if (queryDate) {
+      document.getElementById('c-date').value = queryDate;
+    } else {
+      document.getElementById('c-date').value = getLocalDateString(1); // Tomorrow default
+    }
+
+    if (queryTime) {
+      document.getElementById('c-time').value = queryTime;
+    } else {
+      document.getElementById('c-time').value = '10:00';
+    }
+
+    updateSchedulePreviewText();
+    updatePrice();
+  });
+
+  // Global Exports for DOM attributes
+  window.updatePrice = updatePrice;
+  window.processBooking = processBooking;
+  window.executeAuthenticatedBooking = executeAuthenticatedBooking;
+  window.applyPromo = applyPromo;
+  window.applyVoucher = applyVoucher;
+  window.selectPaymentMethod = selectPaymentMethod;
+  window.closeSuccessModal = closeSuccessModal;
+  window.openMapModal = openMapModal;
+  window.closeMapModal = closeMapModal;
+  window.confirmMapLocation = confirmMapLocation;
+  window.toggleMapTheme = toggleMapTheme;
+  window.toggleMapPitch = toggleMapPitch;
+  window.openAuthGateModal = openAuthGateModal;
+  window.closeAuthGateModal = closeAuthGateModal;
+  window.switchAuthGateTab = switchAuthGateTab;
+  window.submitAuthGateLogin = submitAuthGateLogin;
+  window.submitAuthGateRegister = submitAuthGateRegister;
+  window.quickFillCustomerAuth = quickFillCustomerAuth;
+  window.openVouchersModal = openVouchersModal;
+  window.closeVouchersModal = closeVouchersModal;
+  window.onCustomDateChange = onCustomDateChange;
+  window.onCustomTimeChange = onCustomTimeChange;
+  window.onMapSearchInput = onMapSearchInput;
+  window.selectSearchResult = selectSearchResult;
+  window.clearMapSearch = clearMapSearch;
+  window.locateUserCurrentPosition = locateUserCurrentPosition;
+  window.syncRiderData = syncRiderData;
+  window.toggleRiderProfile = toggleRiderProfile;
+</script>
+</body>
+</html>

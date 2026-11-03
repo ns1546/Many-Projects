@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spice Garden - Admin Dashboard</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+  
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-brand">
+      <i data-lucide="leaf"></i>
+      <span>Evorise Solution</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-view="dashboard">
+        <i data-lucide="layout-dashboard"></i> Dashboard
+      </a>
+      <a href="#" class="nav-item" data-view="menu">
+        <i data-lucide="book-open"></i> Menu Items
+      </a>
+      <a href="#" class="nav-item" data-view="orders">
+        <i data-lucide="shopping-cart"></i> Orders
+      </a>
+      <a href="#" class="nav-item" data-view="banners">
+        <i data-lucide="image"></i> Banners
+      </a>
+      <a href="#" class="nav-item" data-view="offers">
+        <i data-lucide="tag"></i> Offers
+      </a>
+      <a href="#" class="nav-item" data-view="settings">
+        <i data-lucide="settings"></i> Settings
+      </a>
+      <a href="/admin/demo.html" class="nav-item">
+        <i data-lucide="monitor-play"></i> Demo Manager
+      </a>
+      <a href="/index.html" class="nav-item" target="_blank">
+        <i data-lucide="external-link"></i> View Site
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    
+    <!-- Top Bar -->
+    <header class="admin-topbar">
+      <h2 id="pageTitle">Dashboard</h2>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <button type="button" id="btnQuickSeedFirebase" class="btn btn-secondary" style="font-size:12px; padding:6px 12px; display:inline-flex; align-items:center; gap:6px; border:1px solid var(--admin-border); background:var(--admin-card-bg); cursor:pointer;">
+          <i data-lucide="cloud-lightning" style="width:14px; height:14px; color:var(--admin-primary)"></i> Seed Demo to Firebase
+        </button>
+        <div class="user-profile">
+          <img src="https://ui-avatars.com/api/?name=Admin&background=244638&color=fff" alt="Admin">
+          <div>
+            <span id="adminUserName">Admin User</span>
+            <br>
+            <a href="#" id="btnAdminLogout" style="font-size: 12px; color: #dc2626; text-decoration: none;">Sign Out</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Views -->
+    <div class="admin-content">
+      
+      <!-- Dashboard View -->
+      <div id="view-dashboard" class="view-section active">
+        <div class="stat-cards">
+          <div class="stat-card">
+            <div class="stat-icon"><i data-lucide="shopping-bag"></i></div>
+            <div class="stat-details">
+              <h3>Total Orders</h3>
+              <p id="statTotalOrders">0</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i data-lucide="utensils"></i></div>
+            <div class="stat-details">
+              <h3>Menu Items</h3>
+              <p id="statTotalItems">0</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i data-lucide="dollar-sign"></i></div>
+            <div class="stat-details">
+              <h3>Revenue</h3>
+              <p id="statRevenue">৳ 0</p>
+            </div>
+          </div>
+        </div>
+        
+        <h3 class="section-heading mt-xl">Recent Orders</h3>
+        <div class="table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="recentOrdersTbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Menu Items View -->
+      <div id="view-menu" class="view-section hidden">
+        <div class="section-header">
+          <h3 class="section-heading">Manage Categories</h3>
+          <button class="btn btn-primary" id="btnAddNewCategory">
+            <i data-lucide="plus"></i> Add New Category
+          </button>
+        </div>
+        <div class="table-container" style="margin-bottom: 40px;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Category Name</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="categoriesTbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-header">
+          <h3 class="section-heading">Manage Menu Items</h3>
+          <button class="btn btn-primary" id="btnAddNewItem">
+            <i data-lucide="plus"></i> Add New Item
+          </button>
+        </div>
+        <div class="table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Price (৳)</th>
+                <th>Dietary</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="menuItemsTbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Orders View -->
+      <div id="view-orders" class="view-section hidden">
+        <div class="section-header">
+          <h3 class="section-heading">All Orders</h3>
+          <span style="font-size:13px; color:var(--admin-text-muted); background:var(--admin-card-bg); padding:4px 12px; border-radius:20px; border:1px solid var(--admin-border);">
+            Real-time Live Sync Active
+          </span>
+        </div>
+        <div class="table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Date & Time</th>
+                <th>Table / Customer</th>
+                <th>Items Ordered</th>
+                <th>Total (৳)</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="allOrdersTbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Banners View -->
+      <div id="view-banners" class="view-section hidden">
+        <div class="section-header">
+          <h3 class="section-heading">Manage Hero Banners</h3>
+          <button class="btn btn-primary" id="btnAddNewBanner">
+            <i data-lucide="plus"></i> Add New Banner
+          </button>
+        </div>
+        <div class="table-container" style="margin-bottom: 40px;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Link / URL (Optional)</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="bannersTbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Offers View -->
+      <div id="view-offers" class="view-section hidden">
+        <div class="section-header">
+          <h3 class="section-heading">Manage Special Offers</h3>
+          <button class="btn btn-primary" id="btnAddNewOffer">
+            <i data-lucide="plus"></i> Add New Offer
+          </button>
+        </div>
+        <div class="table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Offer Details</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="offersTbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Settings View -->
+      <div id="view-settings" class="view-section hidden">
+        <h3 class="section-heading">Site Settings</h3>
+        <form id="settingsForm" novalidate>
+          <div class="settings-grid">
+            
+            <!-- Branding & Identity -->
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <i data-lucide="palette"></i>
+                <div>
+                  <h4>Branding & Identity</h4>
+                  <p>Customize your restaurant's logo and fonts</p>
+                </div>
+              </div>
+              <div class="settings-card-body">
+                <div class="form-group">
+                  <label>Restaurant Name</label>
+                  <input type="text" id="settingRestaurantName" placeholder="Spice Garden">
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Logo Image</label>
+                    <input type="hidden" id="settingLogoUrl">
+                    <div class="file-upload-wrapper">
+                      <label class="file-upload-btn">
+                        <i data-lucide="upload"></i> Upload Logo
+                        <input type="file" id="settingLogoFile" accept="image/*" class="file-upload-input" onchange="previewImage(this, 'settingLogoPreview')">
+                      </label>
+                    </div>
+                    <img id="settingLogoPreview" src="" alt="Preview" style="display: none; width: 100px; height: 100px; object-fit: cover; border-radius: 8px; margin-top: 12px; border: 1px solid var(--admin-border);">
+                  </div>
+                  <div class="form-group">
+                    <label>Favicon Icon</label>
+                    <input type="hidden" id="settingFaviconUrl">
+                    <div class="file-upload-wrapper">
+                      <label class="file-upload-btn">
+                        <i data-lucide="image"></i> Upload Favicon
+                        <input type="file" id="settingFaviconFile" accept="image/*" class="file-upload-input" onchange="previewImage(this, 'settingFaviconPreview')">
+                      </label>
+                    </div>
+                    <img id="settingFaviconPreview" src="" alt="Preview" style="display: none; width: 100px; height: 100px; object-fit: cover; border-radius: 8px; margin-top: 12px; border: 1px solid var(--admin-border);">
+                  </div>
+                </div>
+                <div class="form-row" style="margin-top: 16px;">
+                  <div class="form-group">
+                    <label>Theme Preset</label>
+                    <select id="settingThemePreset">
+                      <option value="default">Default Theme</option>
+                      <option value="elegant">Elegant (Dark Mode)</option>
+                      <option value="vibrant">Vibrant / Playful</option>
+                      <option value="minimalist">Minimalist / Clean</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Font Family</label>
+                    <select id="settingFontFamily">
+                      <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
+                      <option value="Inter">Inter (Modern)</option>
+                      <option value="Playfair Display">Playfair Display (Elegant)</option>
+                      <option value="Roboto">Roboto (Clean)</option>
+                      <option value="Outfit">Outfit (Vibrant)</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row" style="margin-top: 16px;">
+                  <div class="form-group">
+                    <label>Primary Color</label>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                      <input type="color" id="settingPrimaryColor" value="#E99545" style="width: 50px; padding: 2px; height: 38px; cursor: pointer;">
+                      <span style="font-size: 13px; color: var(--admin-text-muted)">Main brand</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Secondary Color</label>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                      <input type="color" id="settingSecondaryColor" value="#f3f4f6" style="width: 50px; padding: 2px; height: 38px; cursor: pointer;">
+                      <span style="font-size: 13px; color: var(--admin-text-muted)">Backgrounds</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row" style="margin-top: 16px;">
+                  <div class="form-group">
+                    <label>Button Color</label>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                      <input type="color" id="settingButtonColor" value="#E99545" style="width: 50px; padding: 2px; height: 38px; cursor: pointer;">
+                      <span style="font-size: 13px; color: var(--admin-text-muted)">Buttons/CTAs</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Text Color</label>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                      <input type="color" id="settingTextColor" value="#1f2937" style="width: 50px; padding: 2px; height: 38px; cursor: pointer;">
+                      <span style="font-size: 13px; color: var(--admin-text-muted)">Body text</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group" style="margin-top: 16px;">
+                  <label>Website Background</label>
+                  <input type="hidden" id="settingWebsiteBg">
+                  <div class="file-upload-wrapper">
+                    <label class="file-upload-btn">
+                      <i data-lucide="image"></i> Upload Website Background
+                      <input type="file" id="settingWebsiteBgFile" accept="image/*" class="file-upload-input" onchange="previewImage(this, 'settingWebsiteBgPreview')">
+                    </label>
+                  </div>
+                  <img id="settingWebsiteBgPreview" src="" alt="Preview" style="display: none; width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; margin-top: 12px; border: 1px solid var(--admin-border);">
+                </div>
+              </div>
+            </div>
+
+            <!-- Region & Operations -->
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <i data-lucide="globe"></i>
+                <div>
+                  <h4>Region & Operations</h4>
+                  <p>Set currency and tax details</p>
+                </div>
+              </div>
+              <div class="settings-card-body">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Currency Symbol</label>
+                    <input type="text" id="settingCurrencySymbol" placeholder="$, ৳, €, £">
+                  </div>
+                  <div class="form-group">
+                    <label>Tax Rate (%)</label>
+                    <input type="number" step="0.01" id="settingTaxRate" placeholder="0.00">
+                  </div>
+                </div>
+                
+                <h5 style="margin-top:24px; margin-bottom:16px; color: var(--admin-text)">Menu Behavior</h5>
+                <div class="form-group" style="display: flex; align-items: center; gap: 12px; background: rgba(0,0,0,0.02); padding: 16px; border-radius: 8px; border: 1px solid var(--admin-border);">
+                  <input type="checkbox" id="settingEnableSubCategories" style="width: 20px; height: 20px; cursor: pointer; accent-color: var(--admin-primary)">
+                  <div>
+                    <label for="settingEnableSubCategories" style="margin: 0; cursor: pointer;">Enable Sub-Categories</label>
+                    <span style="display:block; font-size:12px; color: var(--admin-text-muted); margin-top:4px;">Allow categorization layers inside menus</span>
+                  </div>
+                </div>
+                <div class="form-group" style="display: flex; align-items: center; gap: 12px; background: rgba(0,0,0,0.02); padding: 16px; border-radius: 8px; border: 1px solid var(--admin-border); margin-top:12px;">
+                  <input type="checkbox" id="settingEnableOffers" style="width: 20px; height: 20px; cursor: pointer; accent-color: var(--admin-primary)">
+                  <div>
+                    <label for="settingEnableOffers" style="margin: 0; cursor: pointer;">Enable Offers Section</label>
+                    <span style="display:block; font-size:12px; color: var(--admin-text-muted); margin-top:4px;">Show the special offers section on the public website</span>
+                  </div>
+                </div>
+                <div class="form-group" style="display: flex; align-items: center; gap: 12px; background: rgba(0,0,0,0.02); padding: 16px; border-radius: 8px; border: 1px solid var(--admin-border); margin-top:12px;">
+                  <input type="checkbox" id="settingEnableDemoContent" style="width: 20px; height: 20px; cursor: pointer; accent-color: var(--admin-primary)">
+                  <div>
+                    <label for="settingEnableDemoContent" style="margin: 0; cursor: pointer;">Enable Demo Content</label>
+                    <span style="display:block; font-size:12px; color: var(--admin-text-muted); margin-top:4px;">Display all 15 demo items, categories, banners & offers</span>
+                  </div>
+                </div>
+
+                <div style="margin-top:16px; padding:16px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                  <div>
+                    <strong style="color:#1e40af; font-size:14px; display:block;"><i data-lucide="cloud-lightning" style="width:16px; height:16px; display:inline-block; vertical-align:middle; margin-right:4px;"></i>Firebase Cloud Live Sync</strong>
+                    <span style="font-size:12px; color:#3b82f6;">Populate or refresh all 15 demo items, categories, banners & offers in Firebase Firestore.</span>
+                  </div>
+                  <button type="button" id="btnSeedDemoFirebase" class="btn btn-primary" style="white-space:nowrap; padding:8px 16px; font-size:13px; display:flex; align-items:center; gap:6px;">
+                    <i data-lucide="upload-cloud"></i> Sync Demo to Firebase
+                  </button>
+                </div>
+                
+                <h5 style="margin-top:24px; margin-bottom:16px; color: var(--admin-text)">Menu Master Data</h5>
+                <div class="form-group">
+                  <label>Custom Item Badges <span style="font-size:12px; font-weight:normal; color:var(--admin-text-muted)">(Comma separated. e.g. Halal, Vegan, Spicy, Chef's Special)</span></label>
+                  <input type="text" id="settingCustomBadges" placeholder="Halal, Vegan, Spicy">
+                </div>
+              </div>
+            </div>
+
+            <!-- Page Layout Builder -->
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <i data-lucide="layers"></i>
+                <div>
+                  <h4>Page Layout Builder</h4>
+                  <p>Reorder sections on the public website</p>
+                </div>
+              </div>
+              <div class="settings-card-body">
+                <div id="layoutBuilderContainer" style="display:flex; flex-direction:column; gap:8px;">
+                  <!-- Dynamically populated in JS -->
+                </div>
+                <input type="hidden" id="settingLayoutOrder">
+              </div>
+            </div>
+
+            <!-- Hero Section -->
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <i data-lucide="layout-template"></i>
+                <div>
+                  <h4>Hero Section</h4>
+                  <p>Top section of the public website</p>
+                </div>
+              </div>
+              <div class="settings-card-body">
+                <div class="form-group">
+                  <label>Hero Background Image</label>
+                  <input type="hidden" id="settingHeroImage">
+                  <div class="file-upload-wrapper">
+                    <label class="file-upload-btn" style="width: 100%; justify-content: center; padding: 24px;">
+                      <i data-lucide="image-plus"></i> Select Hero Banner
+                      <input type="file" id="settingHeroImageFile" accept="image/*" class="file-upload-input" onchange="previewImage(this, 'settingHeroImagePreview')">
+                    </label>
+                  </div>
+                  <img id="settingHeroImagePreview" src="" alt="Preview" style="display: none; width: 100%; max-height: 150px; object-fit: cover; border-radius: 8px; margin-top: 12px; border: 1px solid var(--admin-border);">
+                </div>
+                <div class="form-row" style="margin-top: 16px;">
+                  <div class="form-group">
+                    <label>Main Title</label>
+                    <input type="text" id="settingHeroTitle">
+                  </div>
+                  <div class="form-group">
+                    <label>Subtitle Text</label>
+                    <input type="text" id="settingHeroSubtitle">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Order Button Phone Number</label>
+                  <input type="text" id="settingHeroPhone">
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer & Social -->
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <i data-lucide="footprints"></i>
+                <div>
+                  <h4>Footer & Social Links</h4>
+                  <p>Bottom section and contact info</p>
+                </div>
+              </div>
+              <div class="settings-card-body">
+                <div class="form-group">
+                  <label>Footer Background Image</label>
+                  <input type="hidden" id="settingFooterImage">
+                  <div class="file-upload-wrapper">
+                    <label class="file-upload-btn">
+                      <i data-lucide="upload-cloud"></i> Upload Footer Background
+                      <input type="file" id="settingFooterImageFile" accept="image/*" class="file-upload-input" onchange="previewImage(this, 'settingFooterImagePreview')">
+                    </label>
+                  </div>
+                  <img id="settingFooterImagePreview" src="" alt="Preview" style="display: none; width: 100%; max-height: 150px; object-fit: cover; border-radius: 8px; margin-top: 12px; border: 1px solid var(--admin-border);">
+                </div>
+                
+                <h5 style="margin-top:24px; margin-bottom:12px; color: var(--admin-text)">Contact Details</h5>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Phone</label>
+                    <input type="text" id="settingFooterPhone">
+                  </div>
+                  <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="settingFooterEmail">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Physical Address</label>
+                  <input type="text" id="settingFooterAddress">
+                </div>
+                <div class="form-group">
+                  <label>Copyright Text</label>
+                  <input type="text" id="settingFooterCopyright">
+                </div>
+
+                <h5 style="margin-top:24px; margin-bottom:12px; color: var(--admin-text)">Social Media URLs</h5>
+                <div class="form-row">
+                  <div class="form-group"><label>Facebook</label><input type="text" id="settingSocialFb" placeholder="https://facebook.com/yourpage"></div>
+                  <div class="form-group"><label>Twitter / X</label><input type="text" id="settingSocialTwitter" placeholder="https://twitter.com/yourpage"></div>
+                  <div class="form-group"><label>Instagram</label><input type="text" id="settingSocialInsta" placeholder="https://instagram.com/yourpage"></div>
+                  <div class="form-group"><label>LinkedIn</label><input type="text" id="settingSocialLinkedin" placeholder="https://linkedin.com/in/yourpage"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="settings-card" style="grid-column: 1 / -1; background: transparent; border: none; box-shadow: none;">
+              <div class="form-actions" style="justify-content: flex-end; margin-top: 0;">
+                <button type="submit" class="btn btn-primary" style="padding: 12px 32px; font-size: 16px;">
+                  <i data-lucide="save"></i> Save All Settings
+                </button>
+              </div>
+            </div>
+            
+          </div>
+        </form>
+
+        <div style="background: var(--admin-surface); padding: 32px; border-radius: 12px; border: 1px solid var(--admin-border); max-width: 600px; margin-top: 24px;">
+          <form id="createAdminForm">
+            <h4 style="margin-bottom: 16px; border-bottom: 1px solid var(--admin-border); padding-bottom: 8px;">Create New Admin Account</h4>
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" id="newAdminName" required placeholder="John Doe" class="form-control" style="width: 100%; padding: 8px; border: 1px solid var(--admin-border); border-radius: 6px;">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="newAdminEmail" required placeholder="admin@example.com" class="form-control" style="width: 100%; padding: 8px; border: 1px solid var(--admin-border); border-radius: 6px;">
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="newAdminPassword" required minlength="6" placeholder="••••••••" class="form-control" style="width: 100%; padding: 8px; border: 1px solid var(--admin-border); border-radius: 6px;">
+              </div>
+            </div>
+            <div id="createAdminMsg" style="margin-bottom:16px;font-size:14px;display:none;padding:8px;border-radius:6px;"></div>
+            <div class="form-actions" style="justify-content: flex-start; margin-top: 16px;">
+              <button type="submit" class="btn btn-primary" id="btnCreateAdmin">Create Admin</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Add/Edit Item Modal -->
+  <div class="admin-modal-overlay hidden" id="itemModal">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h3 id="modalFormTitle">Add New Item</h3>
+        <button class="btn-close" id="btnModalClose"><i data-lucide="x"></i></button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="itemForm">
+          <input type="hidden" id="formId">
+          
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" id="formTitle" required>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Category</label>
+              <select id="formCategory" required>
+                <!-- Populated dynamically via JS from settings -->
+              </select>
+            </div>
+            <div class="form-group" id="formSubCategoryGroup" style="display: none;">
+              <label>Sub-category</label>
+              <select id="formSubCategory">
+                <option value="">Select Sub-category...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Base Price (৳)</label>
+              <input type="number" id="formPrice" required>
+            </div>
+            <div class="form-group">
+              <label>Dietary</label>
+              <select id="formDietary" required>
+                <option value="veg">Veg</option>
+                <option value="non-veg">Non-Veg</option>
+              </select>
+            </div>
+          </div>
+
+          <details style="margin-bottom: 16px; border: 1px solid var(--admin-border); border-radius: 8px; padding: 12px; background: #fafafa;">
+            <summary style="font-weight: 600; cursor: pointer; color: var(--admin-primary); user-select: none;">Advanced Item Settings (Add-ons, Badges, Stock)</summary>
+            <div style="margin-top: 16px;">
+              <div class="form-row">
+                <div class="form-group" style="display: flex; align-items: center; gap: 8px;">
+                  <input type="checkbox" id="formOutOfStock" style="width: 20px; height: 20px; cursor: pointer;">
+                  <label for="formOutOfStock" style="margin: 0; cursor: pointer; color: #ef4444; font-weight: 600;">Mark Out of Stock</label>
+                </div>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Portion / Weight (Optional) <small style="color:var(--admin-text-muted); font-weight:normal;">e.g. 250g, 6 pieces, 1 Litre</small></label>
+                  <input type="text" id="formPortion" placeholder="250g">
+                </div>
+                <div class="form-group">
+                  <label>Size Variants (Optional) <small style="color:var(--admin-text-muted); font-weight:normal;">Format: Name:Price (e.g. Small:10, Large:15)</small></label>
+                  <input type="text" id="formVariants" placeholder="e.g. Small:10, Large:15">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Extra Badges (Optional)</label>
+                <div id="formBadgesContainer" style="display: flex; gap: 16px; flex-wrap: wrap;">
+                  <!-- Dynamically populated by JS -->
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Add-ons (Optional) <small style="color:var(--admin-text-muted); font-weight:normal;">Format: Name:Price (e.g. Extra Cheese:2, Bacon:3)</small></label>
+                <input type="text" id="formAddons" placeholder="e.g. Extra Cheese:2, Bacon:3">
+              </div>
+            </div>
+          </details>
+
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="formDesc" rows="3" required></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Item Image</label>
+            <div style="margin-bottom: 8px;">
+              <input type="text" id="formImage" placeholder="Paste image URL (e.g. https://images.unsplash.com/...) or upload below" class="form-control" style="width: 100%; padding: 9px 12px; border: 1px solid var(--admin-border); border-radius: 8px; font-size: 13px;" oninput="document.getElementById('formImagePreview').src = this.value; document.getElementById('formImagePreview').style.display = this.value ? 'block' : 'none';">
+            </div>
+            <div class="file-upload-wrapper" style="display: flex; align-items: center; gap: 12px;">
+              <label class="file-upload-btn">
+                <i data-lucide="image-plus"></i> Upload From Device
+                <input type="file" id="formImageFile" accept="image/*" class="file-upload-input" onchange="previewImage(this, 'formImagePreview')">
+              </label>
+              <small style="color: var(--admin-text-muted);">Supports JPG, PNG, WEBP (auto-optimized)</small>
+            </div>
+            <img id="formImagePreview" src="" alt="Preview" style="display: none; width: 110px; height: 110px; object-fit: cover; border-radius: 10px; margin-top: 12px; border: 1px solid var(--admin-border); box-shadow: var(--admin-shadow-sm);">
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="btnModalCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Item</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  <!-- Banner Modal -->
+  <div class="admin-modal-overlay hidden" id="bannerModal">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h3 id="modalBannerTitle">Add New Banner</h3>
+        <button class="btn-close" id="btnBannerModalClose">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="bannerForm">
+          <input type="hidden" id="formBannerId">
+          <div class="form-group">
+            <label>Banner Title</label>
+            <input type="text" id="formBannerTitle" required>
+          </div>
+          <div class="form-group">
+            <label>Banner Description</label>
+            <textarea id="formBannerDesc" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Link / URL (Optional - Opens when banner is clicked)</label>
+            <input type="url" id="formBannerLink" placeholder="https://...">
+          </div>
+          
+          <div class="form-group">
+            <label>Banner Image</label>
+            <input type="hidden" id="formBannerImage">
+            <div class="file-upload-wrapper">
+              <label class="file-upload-btn">
+                <i data-lucide="image-plus"></i> Upload Banner Image
+                <input type="file" id="formBannerImageFile" accept="image/*" class="file-upload-input" onchange="previewImage(this, 'formBannerImagePreview')">
+              </label>
+            </div>
+            <img id="formBannerImagePreview" src="" alt="Preview" style="display: none; width: 100%; max-height: 150px; object-fit: cover; border-radius: 8px; margin-top: 12px; border: 1px solid var(--admin-border);">
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="btnBannerModalCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Banner</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Offer Modal -->
+  <div class="admin-modal-overlay hidden" id="offerModal">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h3 id="modalOfferTitle">Add New Offer</h3>
+        <button class="btn-close" id="btnOfferModalClose">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="offerForm">
+          <input type="hidden" id="formOfferId">
+          <div class="form-group">
+            <label>Offer Title / Code</label>
+            <input type="text" id="formOfferTitle" required placeholder="e.g. SUMMER20 or 20% OFF PIZZAS">
+          </div>
+          <div class="form-group">
+            <label>Offer Details</label>
+            <textarea id="formOfferDesc" rows="3" required placeholder="e.g. Get 20% off on all items this weekend!"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Offer Price / Discount Value</label>
+              <input type="text" id="formOfferPrice" placeholder="e.g. ৳ 500 or 20%">
+            </div>
+            <div class="form-group">
+              <label>Offer Image</label>
+              <input type="hidden" id="formOfferImage">
+              <div class="file-upload-wrapper">
+                <label class="file-upload-btn">
+                  <i data-lucide="image-plus"></i> Upload Offer Image
+                  <input type="file" id="formOfferImageFile" accept="image/*" class="file-upload-input" onchange="previewImage(this, 'formOfferImagePreview')">
+                </label>
+              </div>
+              <img id="formOfferImagePreview" src="" alt="Preview" style="display: none; width: 100%; max-height: 150px; object-fit: cover; border-radius: 8px; margin-top: 12px; border: 1px solid var(--admin-border);">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="btnOfferModalCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Offer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <!-- Add/Edit Category Modal -->
+  <div class="admin-modal-overlay hidden" id="categoryModal">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h3 id="modalCategoryTitle">Add New Category</h3>
+        <button class="btn-close" id="btnCategoryModalClose"><i data-lucide="x"></i></button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="categoryForm">
+          <input type="hidden" id="formCategoryId">
+          <div class="form-group">
+            <label>Category Name</label>
+            <input type="text" id="formCategoryName" required>
+          </div>
+          <div class="form-group">
+            <label>Sub-Categories <span style="font-size:12px; font-weight:normal; color:var(--admin-text-muted)">(Optional, comma separated. e.g. Chicken, Beef, Vegan)</span></label>
+            <input type="text" id="formCategorySubcategories" placeholder="Chicken, Beef, Vegan">
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="btnCategoryModalCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Category</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="/db.js"></script>
+  <script src="/auth.js"></script>
+  <script>
+    // Protect this route immediately
+    enforceAdminAccess();
+    
+    // Auth UI setup
+    onAuthChange((user) => {
+      if (user) {
+        document.getElementById('adminUserName').textContent = user.displayName || user.email;
+      }
+    });
+
+    document.getElementById('btnAdminLogout').addEventListener('click', async (e) => {
+      e.preventDefault();
+      await logoutUser();
+      window.location.href = "login.html";
+    });
+
+    const createAdminForm = document.getElementById('createAdminForm');
+    const createAdminMsg = document.getElementById('createAdminMsg');
+    const btnCreateAdmin = document.getElementById('btnCreateAdmin');
+
+    if (createAdminForm) {
+      createAdminForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const name = document.getElementById('newAdminName').value.trim();
+        const email = document.getElementById('newAdminEmail').value.trim();
+        const password = document.getElementById('newAdminPassword').value;
+        
+        btnCreateAdmin.textContent = "Creating...";
+        btnCreateAdmin.disabled = true;
+        createAdminMsg.style.display = 'none';
+
+        try {
+          if (typeof createAdminAccount === 'function') {
+            await createAdminAccount(email, password, name);
+            createAdminMsg.textContent = "Admin account created successfully!";
+            createAdminMsg.style.color = "#059669";
+            createAdminMsg.style.backgroundColor = "#ecfdf5";
+            createAdminMsg.style.border = "1px solid #a7f3d0";
+            createAdminMsg.style.display = 'block';
+            createAdminForm.reset();
+          } else {
+            throw new Error("createAdminAccount function is missing.");
+          }
+        } catch (err) {
+          console.error(err);
+          createAdminMsg.textContent = err.message || "Failed to create admin.";
+          createAdminMsg.style.color = "#dc2626";
+          createAdminMsg.style.backgroundColor = "#fef2f2";
+          createAdminMsg.style.border = "1px solid #fecaca";
+          createAdminMsg.style.display = 'block';
+        } finally {
+          btnCreateAdmin.textContent = "Create Admin";
+          btnCreateAdmin.disabled = false;
+        }
+      });
+    }
+  </script>
+
+  <!-- Universal Invoice Modal -->
+  <div id="invoiceModal" class="custom-modal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.65); backdrop-filter:blur(4px); z-index:9999; align-items:center; justify-content:center; padding:16px;">
+    <div class="invoice-modal-content" style="background:#ffffff; border-radius:16px; width:100%; max-width:520px; max-height:92vh; overflow-y:auto; box-shadow:0 25px 50px -12px rgba(0,0,0,0.25); display:flex; flex-direction:column; position:relative;">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid #E2E8F0; background:#F8FAFC; border-radius:16px 16px 0 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <i data-lucide="receipt" style="color:var(--admin-primary, #244638); width:20px; height:20px;"></i>
+          <h3 style="margin:0; font-size:16px; font-weight:700; color:#0F172A;">Restaurant Tax Invoice</h3>
+        </div>
+        <button type="button" class="close-modal" onclick="closeInvoiceModal()" style="border:none; background:transparent; cursor:pointer; color:#64748B; padding:4px;">
+          <i data-lucide="x" style="width:20px; height:20px;"></i>
+        </button>
+      </div>
+
+      <!-- Printable Receipt Body -->
+      <div id="printableInvoiceBody" style="padding:20px 24px;">
+        <!-- Injected dynamically by JS -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div style="display:flex; justify-content:flex-end; gap:12px; padding:14px 20px; border-top:1px solid #E2E8F0; background:#F8FAFC; border-radius:0 0 16px 16px;">
+        <button type="button" class="btn btn-secondary" onclick="closeInvoiceModal()" style="padding:8px 16px; border-radius:8px;">Close</button>
+        <button type="button" class="btn btn-primary" onclick="printInvoiceDocument()" style="padding:8px 20px; border-radius:8px; display:inline-flex; align-items:center; gap:8px;">
+          <i data-lucide="printer" style="width:16px; height:16px;"></i> Print Receipt
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/admin/admin.js"></script>
+</body>
+</html>

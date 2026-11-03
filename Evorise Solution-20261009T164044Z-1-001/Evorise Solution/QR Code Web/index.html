@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spice Garden QR Ordering</title>
+  
+  <meta name="description" content="Warm Bistro & Garden Luxe - Order tableside easily.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+
+  <script>
+    // Apply saved theme before paint to prevent flash
+    (function() {
+      var saved = localStorage.getItem('sg_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+  </script>
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+  
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="mobile.css">
+</head>
+<body class="public-body" style="display: flex; flex-direction: column;">
+
+  <!-- Day/Night Mode Toggle Button -->
+  <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle dark mode" onclick="toggleTheme()">
+    <i data-lucide="moon" id="iconMoon"></i>
+    <i data-lucide="sun" id="iconSun"></i>
+  </button>
+
+  <!-- Dining Table & Session Status Banner -->
+  <div id="tableSessionHeader" class="table-session-banner" style="display: none;">
+    <div class="table-session-container">
+      <div class="table-session-left">
+        <span class="table-icon-badge"><i data-lucide="utensils"></i></span>
+        <div>
+          <div class="table-label-row">
+            <strong id="sessionTableDisplay" onclick="openTableSelectModal()" style="cursor:pointer;" title="Tap to switch table">Table 1</strong>
+            <span class="session-badge active" id="sessionStatusBadge">Active Session</span>
+          </div>
+          <span class="session-id-text" id="sessionIdDisplay">SES-XXXX</span>
+        </div>
+      </div>
+      <div class="table-session-right">
+        <div id="geofenceStatusIndicator" class="geofence-chip checking">
+          <i data-lucide="map-pin"></i> <span id="geofenceStatusText">Checking Location...</span>
+        </div>
+        <button type="button" id="btnViewActiveOrder" class="btn-table-order hidden" onclick="openOrderTrackingModal(localStorage.getItem('evorise_active_order'))">
+          <i data-lucide="clock"></i> <span>Order Status</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <section class="hero-section" id="heroSection">
+    <div class="hero-overlay"></div>
+    <div class="hero-top-nav-bg"></div>
+    <nav class="hero-nav">
+      <div class="hero-logo">
+        <i data-lucide="pizza" style="width: 32px; height: 32px; color: #E99545;"></i>
+        <div>Evorise Restaurant<br><span>DIGITAL INNOVATION</span></div>
+      </div>
+      <ul class="hero-links">
+        <li><a href="#menuGrid" style="color: inherit; text-decoration: none;">MENU</a></li>
+        <li><a href="#siteFooter" style="color: inherit; text-decoration: none;">CONTACT</a></li>
+      </ul>
+      <button class="hero-order-btn" id="heroOrderPhoneDisplay" onclick="document.getElementById('menuGrid').scrollIntoView({behavior: 'smooth'})">ORDER: +34 685 778 8892</button>
+    </nav>
+    <div class="hero-content">
+      <div class="hero-subtitle" id="heroSubtitleDisplay">BEST IN TOWN</div>
+      <h1 class="hero-title" id="heroTitleDisplay">Pizza & Pasta</h1>
+      <button class="hero-cta" onclick="document.getElementById('menuGrid').scrollIntoView({behavior: 'smooth'})">SEE TODAYS MENU</button>
+    </div>
+  </section>
+  
+  <!-- Banners Section -->
+  <div id="bannersCarousel" class="banners-carousel">
+    <!-- Populated by main.js -->
+  </div>
+
+  <!-- Offers Section -->
+  <div id="offersSection" class="offers-section" style="display: none;">
+    <div class="offers-container">
+      <h2 class="offers-section-title">Special Offers</h2>
+      <div id="offersGrid" class="offers-grid">
+        <!-- Populated by main.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu Section -->
+  <section id="menuSection">
+  <!-- Filter Bar (Sticky) -->
+  <div class="filter-bar" id="stickyFilterBar">
+    <!-- Top Row: Search & Sort Button -->
+    <div class="filter-top-row">
+      <div class="search-wrapper">
+        <i data-lucide="search" class="icon-search"></i>
+        <input type="text" id="searchInput" placeholder="Search dishes, drinks, ingredients..." class="search-input" autocomplete="off">
+        <button type="button" class="btn-search-clear hidden" id="btnSearchClear" aria-label="Clear search">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <!-- Professional Sort Dropdown -->
+      <div class="sort-dropdown-container">
+        <button type="button" class="btn-sort" id="btnSortToggle" aria-label="Sort dishes" title="Sort dishes">
+          <i data-lucide="arrow-up-down"></i>
+          <span class="sort-label-text" id="sortLabelText">Sort</span>
+          <i data-lucide="chevron-down" class="sort-chevron"></i>
+        </button>
+        <div class="sort-menu hidden" id="sortMenu">
+          <div class="sort-menu-header">Sort By</div>
+          <button type="button" class="sort-option active" data-sort="default">
+            <i data-lucide="sparkles"></i> <span>Recommended</span>
+          </button>
+          <button type="button" class="sort-option" data-sort="price-asc">
+            <i data-lucide="trending-up"></i> <span>Price: Low to High</span>
+          </button>
+          <button type="button" class="sort-option" data-sort="price-desc">
+            <i data-lucide="trending-down"></i> <span>Price: High to Low</span>
+          </button>
+          <button type="button" class="sort-option" data-sort="name-asc">
+            <i data-lucide="arrow-down-a-z"></i> <span>Name: A to Z</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Dietary Filter Chips -->
+    <div class="quick-dietary-row">
+      <button type="button" class="dietary-chip active" data-dietary="all">All</button>
+      <button type="button" class="dietary-chip" data-dietary="veg"><span class="chip-veg-dot"></span> Veg Only</button>
+      <button type="button" class="dietary-chip" data-dietary="non-veg"><span class="chip-nonveg-dot"></span> Non-Veg</button>
+    </div>
+
+    <!-- Category Tabs Carousel -->
+    <nav class="category-tabs" id="categoryTabs">
+      <button class="tab active" data-filter="all">All</button>
+    </nav>
+
+    <!-- Sub-category Tabs -->
+    <nav class="sub-category-tabs" id="subCategoryTabs" style="display: none;">
+      <!-- Subcategory tabs injected dynamically by main.js -->
+    </nav>
+
+    <!-- Active Filter Status Indicator -->
+    <div class="filter-status-indicator hidden" id="filterStatusIndicator">
+      <span id="filterStatusText">Showing dishes</span>
+      <button type="button" id="btnResetFilters" class="btn-reset-filters">Reset</button>
+    </div>
+  </div>
+
+  <main class="menu-container">
+    <div class="menu-grid" id="menuGrid">
+      <!-- Shimmer Skeleton Loading Cards (DES-UI-002 §1.2 - Replaced by real items on load) -->
+      <div class="menu-card skeleton-card" style="pointer-events:none;">
+        <div class="skeleton-shimmer" style="height:190px; border-radius:14px 14px 0 0;"></div>
+        <div style="padding:16px;">
+          <div class="skeleton-shimmer" style="height:18px; width:65%; margin-bottom:10px;"></div>
+          <div class="skeleton-shimmer" style="height:12px; width:90%; margin-bottom:6px;"></div>
+          <div class="skeleton-shimmer" style="height:12px; width:45%; margin-bottom:16px;"></div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="skeleton-shimmer" style="height:22px; width:35%;"></div>
+            <div class="skeleton-shimmer" style="height:34px; width:34px; border-radius:50%;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="menu-card skeleton-card" style="pointer-events:none;">
+        <div class="skeleton-shimmer" style="height:190px; border-radius:14px 14px 0 0;"></div>
+        <div style="padding:16px;">
+          <div class="skeleton-shimmer" style="height:18px; width:70%; margin-bottom:10px;"></div>
+          <div class="skeleton-shimmer" style="height:12px; width:85%; margin-bottom:6px;"></div>
+          <div class="skeleton-shimmer" style="height:12px; width:50%; margin-bottom:16px;"></div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="skeleton-shimmer" style="height:22px; width:30%;"></div>
+            <div class="skeleton-shimmer" style="height:34px; width:34px; border-radius:50%;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="menu-card skeleton-card" style="pointer-events:none;">
+        <div class="skeleton-shimmer" style="height:190px; border-radius:14px 14px 0 0;"></div>
+        <div style="padding:16px;">
+          <div class="skeleton-shimmer" style="height:18px; width:60%; margin-bottom:10px;"></div>
+          <div class="skeleton-shimmer" style="height:12px; width:92%; margin-bottom:6px;"></div>
+          <div class="skeleton-shimmer" style="height:12px; width:40%; margin-bottom:16px;"></div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="skeleton-shimmer" style="height:22px; width:32%;"></div>
+            <div class="skeleton-shimmer" style="height:34px; width:34px; border-radius:50%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="emptyState" class="empty-state hidden">
+      <div class="empty-icon-wrap">
+        <i data-lucide="search-x" class="empty-icon"></i>
+      </div>
+      <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; color: #1F2937;">No dishes found</h3>
+      <p id="emptyStateDesc" style="color: #6B7280; font-size: 14px; margin-bottom: 18px; max-width: 320px; margin-left: auto; margin-right: auto;">Try adjusting your search terms or clearing your filters.</p>
+      <button type="button" id="btnEmptyReset" class="btn-empty-reset">
+        <i data-lucide="rotate-ccw"></i> Clear Filters & Show All
+      </button>
+    </div>
+  </main>
+  </section>
+
+  <footer class="site-footer" id="siteFooter">
+    <div class="footer-overlay"></div>
+    <div class="footer-zig-zag"></div>
+    
+    <div class="footer-content">
+      <div class="footer-logo">
+        <i data-lucide="pizza" style="width: 28px; height: 28px; color: #ff003c;"></i>
+        <div>Evorise Restaurant<br><span>DIGITAL INNOVATION</span></div>
+      </div>
+      
+      <div class="footer-group">
+        <span class="footer-label">Address:</span>
+        <span class="footer-text" id="footerAddressDisplay">Loading...</span>
+      </div>
+      
+      <div class="footer-group">
+        <span class="footer-label">Phone:</span>
+        <span class="footer-text" id="footerPhoneDisplay">Loading...</span>
+      </div>
+      
+      <div class="footer-group">
+        <span class="footer-label">Email:</span>
+        <span class="footer-text" id="footerEmailDisplay">Loading...</span>
+      </div>
+      
+      <div class="footer-socials">
+        <a href="https://www.facebook.com/evorisesolutions/" id="socialFbLink" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+        </a>
+        <a href="https://twitter.com/" id="socialTwitterLink" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+        <a href="https://instagram.com/" id="socialInstaLink" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+        </a>
+        <a href="https://linkedin.com/" id="socialLinkedinLink" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+          </svg>
+        </a>
+      </div>
+      
+      <div class="footer-copyright" id="footerCopyrightDisplay">
+        Loading...
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Active Order Tracking Pill (appears when customer has active order) -->
+  <aside class="floating-order-tracker" id="floatingOrderTracker" style="display: none;" onclick="openOrderTrackingModal()">
+    <div class="tracker-pill-inner">
+      <div style="display:flex; align-items:center;">
+        <div class="tracker-live-pulse"></div>
+        <div class="tracker-pill-text">
+          <span class="tracker-pill-id" id="floatingTrackerId">Order #ORD-123456</span>
+          <span class="tracker-pill-status" id="floatingTrackerStatus">⏳ Kitchen Received</span>
+        </div>
+      </div>
+      <button class="btn-tracker-pill-view" type="button">
+        Track <i data-lucide="arrow-right"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Floating Cart -->
+  <aside class="floating-cart" id="floatingCart" style="display: none;" onclick="openCartModal()">
+    <div class="cart-inner">
+      <div class="cart-summary">
+        <div class="cart-icon-wrapper">
+          <i data-lucide="shopping-bag"></i>
+          <span class="cart-badge" id="cartBadgeCount">0</span>
+        </div>
+        <div class="cart-text">
+          <span class="cart-total" id="cartTotalDisplay">৳ 0</span>
+          <span class="cart-label">View Cart</span>
+        </div>
+      </div>
+      <button class="btn-checkout" id="btnPlaceOrder" onclick="event.stopPropagation(); openCartModal();">
+        Checkout <i data-lucide="arrow-right"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Upgraded Customer Cart Modal -->
+  <div id="cartModal" class="custom-modal">
+    <div class="custom-modal-backdrop" onclick="closeCartModal()"></div>
+    <div class="custom-modal-content cart-modal-content">
+      <div class="cart-sheet-handle"></div>
+      <div class="modal-header cart-header">
+        <div class="cart-header-title">
+          <i data-lucide="shopping-bag" style="color:var(--color-primary); width:20px; height:20px;"></i>
+          <h3 style="margin:0;">Your Cart <span class="cart-count-pill" id="cartHeaderCount">0</span></h3>
+        </div>
+        <div class="cart-header-actions">
+          <button type="button" class="btn-clear-cart" id="btnClearEntireCart" onclick="clearEntireCart()" title="Clear cart">
+            <i data-lucide="trash-2"></i> Clear
+          </button>
+          <button type="button" class="close-modal" onclick="closeCartModal()"><i data-lucide="x"></i></button>
+        </div>
+      </div>
+
+      <!-- Table Number & Dining Preference Section -->
+      <div class="cart-dining-info">
+        <div class="dining-input-group">
+          <label for="cartTableNo"><i data-lucide="map-pin"></i> Table / Token No.</label>
+          <input type="text" id="cartTableNo" placeholder="e.g. Table 4 or Takeaway" value="Table 1" class="cart-field-input">
+        </div>
+        <div class="dining-input-group" style="margin-top:8px;">
+          <label for="cartOrderNotes"><i data-lucide="message-square"></i> Chef Instructions (Optional)</label>
+          <input type="text" id="cartOrderNotes" placeholder="e.g. Less spicy, extra sauce" class="cart-field-input">
+        </div>
+      </div>
+
+      <!-- Items List Container -->
+      <div class="cart-items-container" id="cartItemsContainer">
+        <!-- Cart items dynamically rendered with image, title, options, unit price, stepper, subtotal, and delete button -->
+      </div>
+
+      <!-- Cart Bill Breakdown -->
+      <div class="cart-footer">
+        <div class="cart-bill-breakdown">
+          <div class="bill-row">
+            <span>Items Subtotal</span>
+            <span id="cartModalSubtotalDisplay">৳ 0</span>
+          </div>
+          <div class="bill-row">
+            <span>VAT / Tax (Included)</span>
+            <span>৳ 0</span>
+          </div>
+          <div class="bill-row bill-total">
+            <span>Total Payable</span>
+            <span id="cartModalTotalDisplay">৳ 0</span>
+          </div>
+        </div>
+        <button type="button" class="btn-checkout-confirm" id="btnConfirmOrder">
+          <span>Place Order Now</span>
+          <span id="cartConfirmTotalBtn">৳ 0</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Real-Time Order Tracking Modal -->
+  <div id="orderTrackingModal" class="custom-modal" style="display:none;">
+    <div class="custom-modal-backdrop" onclick="closeOrderTrackingModal()"></div>
+    <div class="custom-modal-content tracking-modal-content">
+      <div class="cart-sheet-handle"></div>
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div class="live-dot-pulse"></div>
+          <div>
+            <h3 style="margin:0; font-size:18px;">Order Tracking</h3>
+            <span style="font-size:12px; color:#64748B;" id="trackModalOrderId">Order #ORD-123456</span>
+          </div>
+        </div>
+        <button type="button" class="close-modal" onclick="closeOrderTrackingModal()"><i data-lucide="x"></i></button>
+      </div>
+
+      <!-- Live Stepper -->
+      <div class="order-tracker-body">
+        <div class="tracker-steps" id="trackerStepsContainer">
+          <!-- Step 1: Pending -->
+          <div class="tracker-step" id="step-pending" data-step="Pending">
+            <div class="step-icon-wrap"><i data-lucide="clock"></i></div>
+            <div class="step-details">
+              <h4>Order Received</h4>
+              <p>Sent to the restaurant kitchen</p>
+            </div>
+            <div class="step-status-badge">Active</div>
+          </div>
+          <div class="step-connector" id="conn-1"></div>
+
+          <!-- Step 2: Cooking -->
+          <div class="tracker-step" id="step-cooking" data-step="Cooking">
+            <div class="step-icon-wrap"><i data-lucide="flame"></i></div>
+            <div class="step-details">
+              <h4>In the Kitchen</h4>
+              <p>Chef is preparing your fresh meal</p>
+            </div>
+            <div class="step-status-badge">Waiting</div>
+          </div>
+          <div class="step-connector" id="conn-2"></div>
+
+          <!-- Step 3: Ready -->
+          <div class="tracker-step" id="step-ready" data-step="Ready">
+            <div class="step-icon-wrap"><i data-lucide="bell"></i></div>
+            <div class="step-details">
+              <h4>Ready to Serve</h4>
+              <p>Your food is ready and coming to your table!</p>
+            </div>
+            <div class="step-status-badge">Waiting</div>
+          </div>
+          <div class="step-connector" id="conn-3"></div>
+
+          <!-- Step 4: Completed -->
+          <div class="tracker-step" id="step-completed" data-step="Completed">
+            <div class="step-icon-wrap"><i data-lucide="check-circle-2"></i></div>
+            <div class="step-details">
+              <h4>Served & Completed</h4>
+              <p>Enjoy your meal!</p>
+            </div>
+            <div class="step-status-badge">Waiting</div>
+          </div>
+        </div>
+
+        <!-- Order Summary Card -->
+        <div class="track-order-summary-card">
+          <div class="track-summary-row">
+            <span><strong>Table:</strong> <span id="trackTableNo">Table 1</span></span>
+            <span><strong>Status:</strong> <span id="trackStatusBadge" class="badge">Pending</span></span>
+          </div>
+          <div class="track-items-list" id="trackItemsList">
+            <!-- Dynamically populated -->
+          </div>
+          <div class="track-summary-row track-total-row">
+            <span>Total Amount:</span>
+            <strong id="trackOrderTotal">৳ 0</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tracking Modal Actions -->
+      <div class="tracking-modal-footer">
+        <button type="button" class="btn btn-secondary btn-track-invoice" id="btnTrackViewInvoice" onclick="viewActiveOrderInvoice()">
+          <i data-lucide="receipt"></i> View / Print Invoice
+        </button>
+        <button type="button" class="btn btn-danger btn-track-cancel" id="btnTrackCancelOrder" onclick="cancelActiveOrder()">
+          Cancel Order
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer Invoice Modal -->
+  <div id="customerInvoiceModal" class="custom-modal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.65); backdrop-filter:blur(4px); z-index:10001; align-items:center; justify-content:center; padding:16px;">
+    <div class="invoice-modal-content" style="background:#ffffff; border-radius:16px; width:100%; max-width:480px; max-height:92vh; overflow-y:auto; box-shadow:0 25px 50px -12px rgba(0,0,0,0.25); display:flex; flex-direction:column; position:relative;">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid #E2E8F0; background:#F8FAFC; border-radius:16px 16px 0 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <i data-lucide="receipt" style="color:var(--color-primary); width:20px; height:20px;"></i>
+          <h3 style="margin:0; font-size:16px; font-weight:700; color:#0F172A;">Restaurant Receipt</h3>
+        </div>
+        <button type="button" class="close-modal" onclick="closeCustomerInvoiceModal()" style="border:none; background:transparent; cursor:pointer; color:#64748B; padding:4px;">
+          <i data-lucide="x" style="width:20px; height:20px;"></i>
+        </button>
+      </div>
+
+      <div id="customerInvoiceBody" style="padding:18px 20px;">
+        <!-- Injected dynamically -->
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; padding:14px 20px; border-top:1px solid #E2E8F0; background:#F8FAFC; border-radius:0 0 16px 16px;">
+        <button type="button" class="btn btn-secondary" onclick="closeCustomerInvoiceModal()" style="padding:8px 16px; border-radius:8px;">Close</button>
+        <button type="button" class="btn btn-primary" onclick="window.print()" style="padding:8px 18px; border-radius:8px; display:inline-flex; align-items:center; gap:6px;">
+          <i data-lucide="printer" style="width:16px; height:16px;"></i> Print Receipt
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Immersive Product Detail Modal (PDP) Bottom Sheet (PRD-FE-001 §2.2) -->
+  <div id="itemDetailsModal" class="immersive-modal" role="dialog" aria-modal="true" aria-labelledby="itemDetailsTitle" aria-hidden="true">
+    <div class="immersive-modal-content">
+      <div class="pdp-drag-handle"></div>
+      <button class="close-immersive" id="btnClosePdp" onclick="closeItemDetailsModal()" aria-label="Close product details"><i data-lucide="x"></i></button>
+      
+      <div class="pdp-scrollable-body">
+        <div class="pdp-hero-image-wrapper">
+          <img src="" id="itemDetailsImg" class="pdp-hero-image" alt="Product image">
+          <div id="itemDetailsDietaryBadge" class="pdp-dietary-badge veg">
+            <span class="dietary-icon">🌱</span> <span>Vegetarian</span>
+          </div>
+        </div>
+        
+        <div class="immersive-details">
+          <div class="immersive-header">
+            <h2 id="itemDetailsTitle">Product Name</h2>
+            <div class="pdp-meta-row">
+              <span class="pdp-meta-tag"><i data-lucide="clock" style="width:13px;height:13px;"></i> <span id="itemDetailsPrepTime">15-20 mins</span></span>
+              <span class="pdp-meta-tag"><i data-lucide="tag" style="width:13px;height:13px;"></i> <span id="itemDetailsCategory">Main Dish</span></span>
+              <div id="itemDetailsBadges" class="badges-row" style="display:inline-flex; gap:4px;"></div>
+            </div>
+          </div>
+          
+          <p id="itemDetailsDesc" class="immersive-desc"></p>
+          
+          <!-- Validation Warning Alert (Disabled state helper) -->
+          <div id="pdpValidationAlert" class="pdp-validation-alert">
+            <i data-lucide="alert-circle" style="width:16px; height:16px; flex-shrink:0;"></i>
+            <span>Please select all required options to proceed.</span>
+          </div>
+
+          <!-- Modifiers Section -->
+          <div class="immersive-options" id="itemDetailsOptions">
+            <!-- Required Modifiers (Radio Buttons) -->
+            <div id="pdpRequiredModifiersGroup" class="pdp-modifier-group" style="display:none;">
+              <div class="pdp-modifier-group-header">
+                <h4 class="pdp-modifier-group-title" id="pdpRequiredGroupName">Portion / Option</h4>
+                <span class="pdp-required-badge">Required</span>
+              </div>
+              <div class="pdp-options-list" id="pdpRequiredOptionsList">
+                <!-- Dynamically populated radio options -->
+              </div>
+            </div>
+
+            <!-- Optional Modifiers & Add-ons (Checkboxes) -->
+            <div id="pdpOptionalModifiersGroup" class="pdp-modifier-group" style="display:none;">
+              <div class="pdp-modifier-group-header">
+                <h4 class="pdp-modifier-group-title">Add-ons & Extras</h4>
+                <span class="pdp-optional-badge">Optional</span>
+              </div>
+              <div class="pdp-options-list" id="pdpOptionalOptionsList">
+                <!-- Dynamically populated checkbox options -->
+              </div>
+            </div>
+
+            <!-- Customer Special Instructions Note -->
+            <div class="pdp-modifier-group" style="padding:12px 14px;">
+              <label for="pdpSpecialInstructions" style="font-size:13px; font-weight:700; color:#0F172A; display:block; margin-bottom:6px;">
+                Special Cooking Instructions
+              </label>
+              <input type="text" id="pdpSpecialInstructions" placeholder="e.g., Less spicy, no onion, allergy notes..." style="width:100%; padding:9px 12px; border:1px solid #CBD5E1; border-radius:8px; font-size:13px; font-family:inherit; background:#ffffff;">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sticky PDP Footer -->
+      <div class="immersive-footer">
+        <div class="pdp-stepper">
+          <button type="button" class="step-btn minus" onclick="updateDetailsQty(-1)" aria-label="Decrease quantity"><i data-lucide="minus"></i></button>
+          <span class="qty-val" id="itemDetailsQty">1</span>
+          <button type="button" class="step-btn plus" onclick="updateDetailsQty(1)" aria-label="Increase quantity"><i data-lucide="plus"></i></button>
+        </div>
+        <button type="button" class="btn-add-immersive" id="btnAddToCartModal" onclick="submitPdpToCart()">
+          <i data-lucide="shopping-bag" style="width:18px;height:18px;"></i>
+          <span>Add to Cart &bull; <strong id="itemDetailsPriceBtn">৳ 0</strong></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Banner Info Modal -->
+  <div id="bannerInfoModal">
+    <div class="banner-info-content">
+      <button class="close-banner-modal" onclick="document.getElementById('bannerInfoModal').classList.remove('active')"><i data-lucide="x"></i></button>
+      <img src="" id="bannerInfoImg" class="banner-info-img" alt="Banner">
+      <div class="banner-info-body">
+        <h3 class="banner-info-title" id="bannerInfoTitle"></h3>
+        <p class="banner-info-desc" id="bannerInfoDesc"></p>
+        <a href="#" id="bannerInfoLink" target="_blank" class="banner-info-btn">Learn More</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="orderSuccessModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 10000; opacity: 0; transition: opacity 0.3s ease;">
+    <div class="modal-content" style="background: white; border-radius: 16px; width: 90%; max-width: 400px; padding: 40px 24px; text-align: center; transform: translateY(20px); transition: transform 0.3s ease;">
+      <div style="background: #10B981; color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 40px; box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);">
+        <i data-lucide="check"></i>
+      </div>
+      <h2 style="font-size: 24px; font-weight: 700; color: #1f2937; margin-bottom: 12px; font-family: var(--font-family);">Order Confirmed!</h2>
+      <p style="color: #6b7280; margin-bottom: 32px; font-size: 15px; line-height: 1.6;">Your order has been sent to the kitchen. It will be ready shortly.</p>
+      <button class="btn btn-primary" style="width: 100%; height: 50px; font-size: 16px; border-radius: 25px;" onclick="closeOrderSuccessModal()">Return to Menu</button>
+    </div>
+  <!-- Mobile Sort & Filter Bottom Sheet -->
+  <div class="sort-bottom-sheet hidden" id="sortBottomSheet" aria-hidden="true">
+    <div class="sort-sheet-backdrop" id="sortSheetBackdrop"></div>
+    <div class="sort-sheet-content">
+      <div class="sort-sheet-handle"></div>
+      <div class="sort-sheet-header">
+        <div class="sort-sheet-title-group">
+          <h3 class="sort-sheet-title">Sort & Filter</h3>
+          <p class="sort-sheet-subtitle">Find your favorite dishes faster</p>
+        </div>
+        <button type="button" class="sort-sheet-close" id="btnSortSheetClose" aria-label="Close">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="sort-sheet-body">
+        <div class="sort-sheet-section-title">Sort Dishes By</div>
+        <div class="sort-sheet-options" id="sortSheetOptions">
+          <button type="button" class="sort-sheet-item active" data-sort="default">
+            <div class="sort-item-left">
+              <span class="sort-item-icon">✨</span>
+              <div class="sort-item-info">
+                <span class="sort-item-name">Recommended</span>
+                <span class="sort-item-desc">Our chef's picks & bestsellers</span>
+              </div>
+            </div>
+            <div class="sort-item-radio"><div class="sort-radio-inner"></div></div>
+          </button>
+
+          <button type="button" class="sort-sheet-item" data-sort="price-asc">
+            <div class="sort-item-left">
+              <span class="sort-item-icon">🏷️</span>
+              <div class="sort-item-info">
+                <span class="sort-item-name">Price: Low to High</span>
+                <span class="sort-item-desc">Most budget-friendly dishes first</span>
+              </div>
+            </div>
+            <div class="sort-item-radio"><div class="sort-radio-inner"></div></div>
+          </button>
+
+          <button type="button" class="sort-sheet-item" data-sort="price-desc">
+            <div class="sort-item-left">
+              <span class="sort-item-icon">💎</span>
+              <div class="sort-item-info">
+                <span class="sort-item-name">Price: High to Low</span>
+                <span class="sort-item-desc">Signature & gourmet dishes</span>
+              </div>
+            </div>
+            <div class="sort-item-radio"><div class="sort-radio-inner"></div></div>
+          </button>
+
+          <button type="button" class="sort-sheet-item" data-sort="name-asc">
+            <div class="sort-item-left">
+              <span class="sort-item-icon">🔤</span>
+              <div class="sort-item-info">
+                <span class="sort-item-name">Name: A to Z</span>
+                <span class="sort-item-desc">Alphabetical by dish name</span>
+              </div>
+            </div>
+            <div class="sort-item-radio"><div class="sort-radio-inner"></div></div>
+          </button>
+        </div>
+
+        <div class="sort-sheet-section-title" style="margin-top: 14px;">Dietary Filter</div>
+        <div class="sort-sheet-dietary-row">
+          <button type="button" class="sheet-dietary-btn active" data-dietary="all">🍽️ All</button>
+          <button type="button" class="sheet-dietary-btn" data-dietary="veg"><span class="chip-veg-dot"></span> Pure Veg</button>
+          <button type="button" class="sheet-dietary-btn" data-dietary="non-veg"><span class="chip-nonveg-dot"></span> Non-Veg</button>
+        </div>
+      </div>
+
+      <div class="sort-sheet-footer">
+        <button type="button" class="btn-sheet-apply" id="btnSortSheetApply">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Geofence Block Warning Modal -->
+  <div id="geofenceBlockModal" class="geofence-alert-modal hidden">
+    <div class="geofence-alert-box">
+      <div class="geofence-alert-icon"><i data-lucide="shield-alert"></i></div>
+      <h3>Outside Restaurant Dining Zone</h3>
+      <p id="geofenceAlertMessage">
+        You are currently outside the restaurant's geofence boundary. You may browse our full digital menu, but placing orders is strictly reserved for guests seated inside the restaurant.
+      </p>
+      <div class="geofence-distance-meter" id="geofenceDistanceMeter">
+        <span>Your Distance: <strong id="geoDistanceValue">--</strong></span>
+        <span>Allowed Limit: <strong id="geoLimitValue">100m</strong></span>
+      </div>
+      <div class="geofence-alert-actions">
+        <button type="button" class="btn-geo-dismiss" onclick="dismissGeofenceAlert()">Browse Menu in View-Only Mode</button>
+        <button type="button" class="btn-geo-retry" onclick="recheckCustomerGeofence()"><i data-lucide="refresh-cw"></i> Re-check GPS</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Session Concluded / Closed Notice Modal -->
+  <div id="sessionClosedModal" class="geofence-alert-modal hidden">
+    <div class="geofence-alert-box" style="border-top:5px solid #10b981;">
+      <div class="geofence-alert-icon" style="background:#ecfdf5; color:#059669;"><i data-lucide="check-circle-2"></i></div>
+      <h3>Dining Session Concluded</h3>
+      <p>
+        Your table session has been closed by the restaurant staff. Thank you for dining with us! We hope you enjoyed your meal.
+      </p>
+      <button type="button" class="btn-geo-dismiss" onclick="resetClosedSessionAndReload()" style="background:#244638; color:#ffffff; font-weight:700;">
+        Start Fresh / New Order
+      </button>
+    </div>
+  </div>
+
+  <!-- Interactive Table Identification / Selector Modal -->
+  <div id="tableSelectModal" class="custom-modal" style="display:none;">
+    <div class="custom-modal-backdrop" onclick="closeTableSelectModal()"></div>
+    <div class="custom-modal-content" style="max-width: 440px; padding: 24px; text-align: center;">
+      <div style="width: 52px; height: 52px; border-radius: 50%; background: var(--color-surface-dim); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; color: var(--color-primary);">
+        <i data-lucide="map-pin" style="width: 26px; height: 26px;"></i>
+      </div>
+      <h3 style="margin: 0 0 6px; font-size: 20px; font-weight: 700;">Select Your Dining Table</h3>
+      <p style="margin: 0 0 20px; font-size: 13.5px; color: var(--color-text-secondary);">
+        Please select your table number to link your digital menu and order directly to kitchen.
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px;" id="tableSelectorGrid">
+        <button type="button" class="btn btn-secondary" onclick="setCustomerTable('1')" style="padding: 14px 8px; border-radius: 12px; font-weight: 700; border: 1.5px solid var(--color-border); cursor: pointer;">Table 1</button>
+        <button type="button" class="btn btn-secondary" onclick="setCustomerTable('2')" style="padding: 14px 8px; border-radius: 12px; font-weight: 700; border: 1.5px solid var(--color-border); cursor: pointer;">Table 2</button>
+        <button type="button" class="btn btn-secondary" onclick="setCustomerTable('3')" style="padding: 14px 8px; border-radius: 12px; font-weight: 700; border: 1.5px solid var(--color-border); cursor: pointer;">Table 3</button>
+        <button type="button" class="btn btn-secondary" onclick="setCustomerTable('4')" style="padding: 14px 8px; border-radius: 12px; font-weight: 700; border: 1.5px solid var(--color-border); cursor: pointer;">Table 4</button>
+        <button type="button" class="btn btn-secondary" onclick="setCustomerTable('5')" style="padding: 14px 8px; border-radius: 12px; font-weight: 700; border: 1.5px solid var(--color-border); cursor: pointer;">Table 5</button>
+        <button type="button" class="btn btn-secondary" onclick="setCustomerTable('6')" style="padding: 14px 8px; border-radius: 12px; font-weight: 700; border: 1.5px solid var(--color-border); cursor: pointer;">Table 6</button>
+      </div>
+      <p style="font-size: 11.5px; color: var(--color-text-tertiary); margin: 0;">
+        💡 You can also scan the QR stand directly on your table.
+      </p>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="db.js?v=2.0.1"></script>
+  <script src="auth.js?v=2.0.1"></script>
+  <script src="main.js?v=2.0.1"></script>
+</body>
+</html>

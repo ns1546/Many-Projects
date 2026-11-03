@@ -1,0 +1,139 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{tcolorbox}
+\usepackage{parskip}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+\title{\Huge \textbf{Definitive System Code \& API Documentation} \\ \vspace{0.5cm} \Large A Complete Function-by-Function Exhaustive Reference}
+\author{Engineering Team}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+This document serves as the absolute final, line-by-line function dictionary and API map for the entire Smart Air Guardian project. It comprehensively details the Machine Learning pipeline, every single C++ function inside the ESP32 firmware, and the exact Web APIs powering the Frontend PWA dashboard.
+
+\section{Part 1: The Machine Learning Pipeline (\texttt{train\_final\_models.py})}
+The AI is not magical; it is a strict mathematical pipeline utilizing the \texttt{scikit-learn} library.
+
+\subsection{Functions and Process Flow}
+\begin{enumerate}
+    \item \textbf{Data Ingestion:} The script imports \texttt{Master\_AQI\_Weather.csv} using \texttt{pandas}. It drops any rows with \texttt{NaN} (missing values) to ensure mathematical integrity.
+    \item \textbf{Feature Definition ($X$):} The inputs to the AI are strictly defined as: PM2.5, CO, Temperature, and Humidity.
+    \item \textbf{Target Definitions ($Y$):}
+    \begin{itemize}
+        \item $Y_{AQI}$: The numeric AQI value 1 hour in the future.
+        \item $Y_{Hazard}$: A binary Boolean (1 if AQI $> 150$, else 0).
+        \item $Y_{RiskClass}$: Categorical integer (0=Good, 1=Moderate, 2=Unhealthy, 3=Hazardous).
+    \end{itemize}
+    \item \textbf{MinMaxScaler Transformation:} The script calculates the absolute minimum and maximum values for the $X$ array. This generates scaling constants that are later hardcoded into the C++ firmware, guaranteeing inputs are always squashed between 0.0 and 1.0.
+    \item \textbf{Model Training:}
+    \begin{itemize}
+        \item \texttt{LinearRegression().fit(X, Y\_AQI)}: Computes the 4 weights (coefficients) and 1 intercept for the 60-minute forecaster.
+        \item \texttt{LogisticRegression().fit(X, Y\_Hazard)}: Computes the weights for the $Z$-score calculation.
+        \item \texttt{DecisionTreeClassifier(max\_depth=3).fit(X, Y\_RiskClass)}: Generates the Gini-impurity based \texttt{if/else} branching flowchart.
+    \end{itemize}
+\end{enumerate}
+
+\section{Part 2: The ESP32 Firmware (\texttt{ESP32\_Air\_Quality.ino})}
+The C++ firmware is engineered for zero-latency execution. It contains exactly 14 primary functions.
+
+\subsection{Setup and Main Loop Functions}
+\begin{enumerate}
+    \item \texttt{void setup()}: The entry point. Initializes Serial (115200 baud), I2C (\texttt{Wire.begin(21,22)}), sets pin modes (e.g., \texttt{pinMode(DUST\_ILED\_PIN, OUTPUT)}), and connects to Wi-Fi. It starts the internal \texttt{WebServer(80)}.
+    \item \texttt{void loop()}: The infinite state machine. It uses a non-blocking \texttt{millis()} timer to execute a sensor read every 1.5 seconds. It handles hardware oversampling (24 rapid \texttt{analogRead} calls on the MQ sensors) and applies an Exponential Smoothing filter (\texttt{live = live*0.85 + new*0.15}).
+\end{enumerate}
+
+\subsection{EPA AQI Normalization Functions}
+These functions map raw voltages to the standardized 0-500 scale using the US EPA piecewise linear formula.
+\begin{enumerate}
+    \item \texttt{int calculateAQI\_PM25(float pm)}: Takes $PM_{2.5}$ concentration and returns the sub-index.
+    \item \texttt{int calculateAQI\_CO(float co)}: Takes Carbon Monoxide PPM and returns the sub-index.
+    \item \texttt{int calculateAQI\_VOC(float voc)}: Maps the MQ-135 VOC readings.
+\end{enumerate}
+The master AQI is calculated as: \texttt{liveAQI = max(aqi\_pm25, max(aqi\_co, aqi\_voc))}.
+
+\subsection{Edge AI Inference Functions (Quantized from Python)}
+\begin{enumerate}
+    \item \texttt{float predictFutureAQI(float pm, float co, float t, float h)}: Applies the Linear Regression equation $Y = W_1X_1 + W_2X_2 + \dots + B$.
+    \item \texttt{float predictHazardProbability(\dots)}: Calculates a $Z$ score and applies the Sigmoid activation function \texttt{1.0 / (1.0 + exp(-z))} to return a probability between 0.0 and 1.0.
+    \item \texttt{int predictRiskCategory(\dots)}: Executes the nested \texttt{if/else} branches derived from the Decision Tree.
+\end{enumerate}
+
+\subsection{Cloud \& Command Functions}
+\begin{enumerate}
+    \item \texttt{void handleFirebaseSync()}: 
+    \begin{itemize}
+        \item \textbf{Telemetry (PUT):} Creates a JSON payload and uses \texttt{HTTPClient} to push data to Firebase.
+        \item \textbf{Command Polling (GET):} Fetches the \texttt{lastCommand.json} from Firebase.
+    \end{itemize}
+    \item \texttt{void handleCommand(String cmdStr)}: The master execution parser. Checks strings using \texttt{if (cmdStr == "buzzer\_on")}. It supports commands like \texttt{buzzer\_pulse}, \texttt{oled\_off}, \texttt{led\_red}, \texttt{tare\_pm25}, \texttt{reboot}, and \texttt{led\_cathode}.
+\end{enumerate}
+
+\subsection{Hardware Display Functions}
+\begin{enumerate}
+    \item \texttt{void drawHomeScreen()}: Renders the massive AQI number and Risk text.
+    \item \texttt{void drawMLScreen()}: Renders the Forecast AQI and Hazard Probability percentages.
+    \item \texttt{void drawGasScreen()}: Renders the exact $PM_{2.5}$, CO, and $CO_2$ numbers.
+    \item \texttt{void drawWebScreen()}: Displays the ESP32's local IP address for local fallback.
+\end{enumerate}
+
+\section{Part 3: Frontend PWA APIs (\texttt{frontend\_dashboard.html})}
+The dashboard does not rely on a monolithic backend server. Instead, it utilizes 6 distinct Application Programming Interfaces (APIs) working directly inside the user's browser.
+
+\subsection{1. Firebase Realtime Database API (Cloud Sync)}
+The application imports the official Google SDK (v10.7.1) via \texttt{<script type="module">}. It utilizes \texttt{onValue()} to open a WebSocket-like persistent stream to the Firebase Cloud. When the ESP32 updates Firebase, the Firebase API instantly pushes the new JSON to the browser without the browser needing to refresh.
+
+\subsection{2. Groq / OpenAI REST API (AI Clinical Studio)}
+The frontend features a "Gemini / Groq Clinical Studio". It takes the raw telemetry JSON and makes an HTTP \texttt{fetch()} request to \texttt{https://api.groq.com/openai/v1/chat/completions}. This passes the data to a Large Language Model (LLM) which streams back a medical-grade diagnostic report in Markdown, rendered using \texttt{marked.min.js}.
+
+\subsection{3. Web Serial API (Local USB Fallback)}
+If the internet goes down, the dashboard utilizes the native browser \texttt{navigator.serial} API. This allows the web page to read and write directly to the physical USB COM port connected to the ESP32, bypassing Firebase entirely.
+
+\subsection{4. Web Speech API (Voice Commands)}
+The frontend incorporates \texttt{window.SpeechRecognition}. Users can click the microphone icon and speak commands like "Turn on the buzzer." The browser's native NLP translates this to text and routes it to the \texttt{handleCommand} parser.
+
+\subsection{5. Leaflet \& CartoDB API (Mapping)}
+The script imports \texttt{leaflet.js} and utilizes the CartoDB Dark Matter tile API (\texttt{https://\{s\}.basemaps.cartocdn.com/dark\_all/...}) to render a highly performant, zoomable global map pinpointing the exact GPS coordinate of the active sensor node.
+
+\subsection{6. Chart.js API (Telemetry Visualization)}
+The dashboard instantiates \texttt{new Chart()} to generate the real-time Line Graphs for AQI and Particulate Matter. It dynamically pushes new data points into the \texttt{chart.data.datasets} array as they arrive from Firebase.
+
+\end{document}

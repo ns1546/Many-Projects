@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Sign In — Rownaa</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/design.css"/>
+<style>
+  /* Auth specific overrides */
+  .auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 120px 4vw; background: var(--surface); }
+  .auth-card { background: var(--bg-color); border: 1px solid var(--border); border-radius: 1.5rem; padding: 4rem; width: 100%; max-width: 500px; box-shadow: 0 30px 60px rgba(0,0,0,0.5); opacity: 1 !important; transform: none !important; }
+  .auth-card h1 { font-size: 2.5rem; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .auth-card p { color: var(--text-muted); margin-bottom: 3rem; }
+  .auth-form { display: flex; flex-direction: column; gap: 1.5rem; }
+  .af-field { display: flex; flex-direction: column; gap: 0.5rem; }
+  .af-field label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+  .af-field input { background: var(--surface); border: 1px solid var(--border); padding: 1rem; border-radius: 0.5rem; color: var(--text-main); font-family: var(--font-body); font-size: 1rem; transition: border-color 0.3s; outline: none; }
+  .af-field input:focus { border-color: var(--accent); }
+  .af-submit { background: var(--text-main); color: var(--bg-color); padding: 1.25rem; font-family: var(--font-display); font-weight: 700; font-size: 1rem; text-transform: uppercase; border: none; border-radius: 0.5rem; margin-top: 1rem; transition: background 0.3s, transform 0.2s; }
+  .af-submit:hover { background: var(--accent); transform: translateY(-2px); }
+  .auth-links { margin-top: 2rem; text-align: center; font-size: 0.875rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.5rem; }
+  .auth-links a { color: var(--text-main); font-weight: 500; transition: color 0.3s; }
+  .auth-links a:hover { color: var(--accent); }
+  @media (max-width: 768px) { .auth-card { padding: 2rem; } }
+</style>
+</head>
+<body>
+
+<header class="site-nav scrolled" id="site-nav">
+  <div class="nav-wrap">
+    <a href="index.html" class="wordmark">Rownaa<sup>®</sup></a>
+    <div class="nav-right">
+      <a href="register.html" class="nav-text-link">Create Account →</a>
+    </div>
+  </div>
+</header>
+
+<div class="auth-page">
+  <div class="auth-card revealed">
+    <h1>Welcome back</h1>
+    <p>Sign in to manage your bookings and trips.</p>
+    <form class="auth-form" id="login-form">
+      <div class="af-field">
+        <label>Phone or Email</label>
+        <input type="text" placeholder="+880 1XXXXXXXXX or email" required />
+      </div>
+      <div class="af-field">
+        <label style="display:flex;justify-content:space-between">
+          <span>Password</span>
+          <a href="javascript:void(0)" onclick="alert('Password reset instructions have been dispatched to your registered contact channel, or you can contact support at info@rownaa.com.'); return false;" style="color:var(--text-muted);text-decoration:underline">Forgot?</a>
+        </label>
+        <input type="password" placeholder="Enter password" required />
+      </div>
+      <button type="submit" class="af-submit">Sign In</button>
+    </form>
+    <div class="auth-links">
+      <span>New to Rownaa? <a href="register.html">Create an account</a></span>
+      <span>Are you a car owner? <a href="owner-register.html">Register your car</a></span>
+    </div>
+  </div>
+</div>
+
+<script src="js/auth.js"></script>
+<script>
+  document.getElementById('login-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const username = this.querySelector('input[type="text"]').value;
+    const password = this.querySelector('input[type="password"]').value;
+    const submitBtn = this.querySelector('button[type="submit"]');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Signing In...';
+    }
+
+    if (window.location.protocol === 'file:') {
+      let role = 'customer';
+      let name = 'Tanvir Ahmed';
+      if (username.toLowerCase().includes('admin')) {
+        role = 'admin';
+        name = 'System Administrator';
+      } else if (username.toLowerCase().includes('owner') || username.toLowerCase().includes('fleet')) {
+        role = 'owner';
+        name = 'Apex Fleet Logistics';
+      }
+      const demoUser = { id: role + '-001', name, username: username || (role + '@rownaa.com'), role };
+      try {
+        localStorage.setItem('rownaa_user', JSON.stringify(demoUser));
+        localStorage.setItem('rownaa_active_user', role);
+      } catch(e) {}
+      if (window.switchUserSession) window.switchUserSession(role, false);
+      setTimeout(() => {
+        if (role === 'admin') window.location.href = 'admin-panel.html';
+        else if (role === 'owner') window.location.href = 'owner-panel.html';
+        else window.location.href = 'customer-panel.html';
+      }, 300);
+      return;
+    }
+    
+    fetch('/api/login', { credentials: 'include',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success || data.token) {
+        if (data.token) {
+          try { localStorage.setItem('rownaa_session_token', data.token); } catch (e) {}
+        }
+        if (data.user) {
+          try { localStorage.setItem('rownaa_user', JSON.stringify(data.user)); } catch (e) {}
+          window.rownaaSession = data.user;
+        }
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectUrl = urlParams.get('redirect');
+        const role = data.role || (data.user && data.user.role);
+        if (redirectUrl && role !== 'admin') {
+          window.location.href = redirectUrl;
+          return;
+        }
+        if (role === 'admin') window.location.href = 'admin-panel.html';
+        else if (role === 'owner') window.location.href = 'owner-panel.html';
+        else window.location.href = 'customer-panel.html';
+      } else {
+        alert(data.error || 'Login failed');
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerText = 'Sign In';
+        }
+      }
+    })
+    .catch(err => {
+      console.error('Sign in network error:', err);
+      alert('Unable to connect to server. Please try again.');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Sign In';
+      }
+    });
+  });
+</script>
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,3743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Drive with Rownaa® — Bangladesh Premier Chauffeur Network</title>
+  <meta name="description" content="Apply to join Bangladesh's elite chauffeur network. High-paying corporate & VIP trips, guaranteed weekly settlements, and 24/7 dedicated dispatch support."/>
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <script type="module" src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <style>
+    /* =========================================================
+       ROOT VARIABLES & BASE THEME (ROWNAA DARK LUXURY)
+       ========================================================= */
+    :root {
+      --bg-base: #060608;
+      --bg-panel: #0d0d11;
+      --bg-surface: #131318;
+      --bg-card: #181820;
+      --bg-input: #0a0a0e;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --border-accent: rgba(212, 255, 0, 0.45);
+      --text-primary: #f4f4f6;
+      --text-secondary: #a1a1aa;
+      --text-tertiary: #71717a;
+      --accent: #d4ff00;
+      --accent-hover: #b5d900;
+      --accent-glow: rgba(212, 255, 0, 0.25);
+      --success: #30d158;
+      --warning: #ffaa00;
+      --danger: #f87171;
+      --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-bn: 'Noto Sans Bengali', sans-serif;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font-ui);
+      min-height: 100vh;
+      line-height: 1.5;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ambient Background Glow */
+    .ambient-glow {
+      position: fixed;
+      top: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(212, 255, 0, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Suppress Dev Role Dock */
+    #rownaa-dev-dock,
+    #rownaa-dock-content,
+    #rownaa-dock-minimized {
+      display: none !important;
+    }
+
+    /* NAVIGATION */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(6, 6, 8, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      height: 64px;
+      padding: 0 20px;
+    }
+    .nav-wrap {
+      max-width: 900px;
+      height: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent) 0%, #a2c600 100%);
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
+    .wordmark {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .wordmark sup {
+      font-size: 0.55rem;
+      color: var(--accent);
+      margin-left: 2px;
+      top: -0.6em;
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .lang-toggle-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s var(--ease);
+    }
+    .lang-toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .form-settings-btn {
+      background: rgba(212, 255, 0, 0.08);
+      border: 1px solid rgba(212, 255, 0, 0.3);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.2s var(--ease);
+    }
+    .form-settings-btn:hover {
+      background: rgba(212, 255, 0, 0.16);
+      border-color: var(--accent);
+    }
+    .settings-active-badge {
+      background: var(--warning);
+      color: #000;
+      font-size: 0.6rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 9999px;
+      letter-spacing: 0.04em;
+    }
+
+    /* PAGE CONTAINER */
+    .page-container {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px 20px 80px;
+    }
+
+    /* HERO HEADER */
+    .hero-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(212, 255, 0, 0.08);
+      border: 1px solid rgba(212, 255, 0, 0.22);
+      color: var(--accent);
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+    .hero-title span {
+      color: var(--accent);
+    }
+
+    /* STEPPER NAVIGATION */
+    .stepper-container {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+    .stepper-nav {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .stepper-progress-line {
+      position: absolute;
+      top: 18px;
+      left: 30px;
+      right: 30px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 1;
+    }
+    .step-item {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .step-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+      transition: all 0.25s var(--ease);
+    }
+    .step-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-tertiary);
+      transition: color 0.2s;
+    }
+    .step-item.active .step-circle {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000;
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
+    .step-item.active .step-label {
+      color: #fff;
+    }
+    .step-item.completed .step-circle {
+      background: rgba(48, 209, 88, 0.15);
+      border-color: var(--success);
+      color: var(--success);
+    }
+    .step-item.completed .step-label {
+      color: var(--text-secondary);
+    }
+
+    /* Mobile Stepper (Hidden on Desktop) */
+    .mobile-stepper-wrap {
+      display: none;
+    }
+
+    /* DOUBLE-BEZEL FORM CONTAINER */
+    .form-shell {
+      position: relative;
+      border-radius: 20px;
+      padding: 1px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.03) 100%);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+      margin-bottom: 40px;
+    }
+    .form-core {
+      background: linear-gradient(180deg, #101014 0%, #0b0b0e 100%);
+      border-radius: 19px;
+      padding: 32px 30px;
+    }
+
+    /* Bypass Mandatory Active Banner */
+    .bypass-notice-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 170, 0, 0.08);
+      border: 1px solid rgba(255, 170, 0, 0.25);
+      border-radius: 12px;
+      padding: 12px 18px;
+      margin-bottom: 24px;
+      font-size: 0.8rem;
+    }
+    .banner-quick-restore-btn {
+      background: rgba(255, 170, 0, 0.15);
+      border: 1px solid rgba(255, 170, 0, 0.35);
+      color: var(--warning);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .banner-quick-restore-btn:hover {
+      background: var(--warning);
+      color: #000;
+    }
+
+    /* STEP PANES */
+    .step-pane {
+      display: none;
+      animation: fadeIn 0.25s var(--ease);
+    }
+    .step-pane.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SECTION HEADERS */
+    .f-sec-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .f-sec-title i {
+      color: var(--accent);
+      font-size: 1.35rem;
+    }
+    .f-sec-desc {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .bn-text { display: none !important; }
+
+    /* FORM ELEMENTS & INPUTS */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .f-group {
+      margin-bottom: 18px;
+    }
+    .f-label {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #e4e4e7;
+      margin-bottom: 6px;
+    }
+    .f-label small { display: none !important; }
+    .req {
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .req.opt-badge {
+      color: var(--text-tertiary);
+      font-weight: 500;
+      font-size: 0.72rem;
+      margin-left: 4px;
+    }
+    .f-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .prefix-icon {
+      position: absolute;
+      left: 14px;
+      color: var(--text-tertiary);
+      font-size: 1.15rem;
+      pointer-events: none;
+    }
+    .f-control {
+      width: 100%;
+      height: 46px;
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 8px 14px 8px 42px;
+      color: #fff;
+      font-family: var(--font-ui);
+      font-size: 0.88rem;
+      transition: all 0.2s var(--ease);
+      outline: none;
+    }
+    .f-control.no-prefix {
+      padding-left: 14px;
+    }
+    .f-control:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(212, 255, 0, 0.12);
+      background: #0e0e12;
+    }
+    .f-control::placeholder {
+      color: #52525b;
+    }
+    select.f-control {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 16px;
+      cursor: pointer;
+    }
+    select.f-control option {
+      background: #181820;
+      color: #fff;
+      padding: 10px;
+    }
+    .custom-dynamic-box {
+      margin-top: 8px;
+    }
+
+    /* TILES (AVAILABILITY & ROLE) */
+    .tiles-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+    .tile-opt {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .tile-opt:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .tile-opt.active {
+      background: rgba(212, 255, 0, 0.08);
+      border-color: var(--accent);
+      box-shadow: 0 0 16px rgba(212, 255, 0, 0.15);
+    }
+    .tile-opt input[type="radio"] {
+      display: none;
+    }
+    .tile-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tile-title i {
+      color: var(--accent);
+      font-size: 1.05rem;
+    }
+    .tile-desc {
+      font-size: 0.74rem;
+      color: var(--text-secondary);
+      line-height: 1.35;
+    }
+
+    /* SERVICES SELECTION GRID */
+    .services-spec-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .service-card-tile {
+      position: relative;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .service-card-tile:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .service-card-tile.selected {
+      background: rgba(212, 255, 0, 0.06);
+      border-color: var(--accent);
+      box-shadow: 0 0 16px rgba(212, 255, 0, 0.12);
+    }
+    .service-card-tile input[type="checkbox"] {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+    .svc-tile-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .svc-tile-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      flex-shrink: 0;
+    }
+    .svc-tile-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .svc-tile-desc {
+      font-size: 0.74rem;
+      color: var(--text-secondary);
+      line-height: 1.35;
+    }
+    .svc-rate-badge {
+      display: inline-block;
+      align-self: flex-start;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-tertiary);
+    }
+    .service-card-tile.selected .svc-rate-badge {
+      background: rgba(212, 255, 0, 0.12);
+      color: var(--accent);
+    }
+    .add-custom-svc-tile {
+      border: 1px dashed rgba(212, 255, 0, 0.35);
+      background: rgba(212, 255, 0, 0.02);
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .add-custom-svc-tile:hover {
+      background: rgba(212, 255, 0, 0.06);
+      border-color: var(--accent);
+    }
+    #custom-svc-creator-box {
+      display: none;
+      background: #15151a;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    /* 5 UPLOAD CARDS (DESKTOP GRID) */
+    .upload-card-full {
+      margin-bottom: 14px;
+    }
+    .upload-card-full .upload-card {
+      min-height: 84px;
+    }
+    .upload-subgrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .upload-card {
+      position: relative;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px dashed var(--border-strong);
+      border-radius: 14px;
+      padding: 16px 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s var(--ease);
+      min-height: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .upload-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--accent);
+    }
+    .upload-card.has-file {
+      border-style: solid;
+      border-color: var(--success);
+      background: rgba(48, 209, 88, 0.05);
+    }
+    .upload-card input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .upload-icon {
+      font-size: 1.6rem;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .upload-card.has-file .upload-icon {
+      color: var(--success);
+    }
+    .upload-title {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .upload-subtitle {
+      font-size: 0.72rem;
+      color: var(--text-tertiary);
+    }
+    .upload-filename {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--success);
+      margin-top: 4px;
+      display: none;
+      word-break: break-all;
+    }
+
+    /* SUMMARY REVIEW CARD */
+    .summary-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .summary-header {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .summary-header i {
+      color: var(--accent);
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .sum-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .sum-label {
+      font-size: 0.72rem;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .sum-val {
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    /* CODE OF CONDUCT BOX */
+    .verify-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+    .verify-box input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--accent);
+      cursor: pointer;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .verify-label {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      cursor: pointer;
+    }
+
+    /* BOTTOM FORM ACTIONS */
+    .form-nav-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .btn-step-prev {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      padding: 10px 22px;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s var(--ease);
+    }
+    .btn-step-prev:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    .btn-step-next,
+    .btn-submit-app {
+      background: var(--accent);
+      border: none;
+      color: #000;
+      padding: 11px 26px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+      box-shadow: 0 0 20px var(--accent-glow);
+      transition: all 0.2s var(--ease);
+    }
+    .btn-step-next:hover,
+    .btn-submit-app:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* SUCCESS RECEIPT SCREEN */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .success-icon-wrap {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: rgba(48, 209, 88, 0.15);
+      border: 2px solid var(--success);
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      margin: 0 auto 20px;
+    }
+    .success-title {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .success-badge {
+      display: inline-block;
+      background: rgba(212, 255, 0, 0.1);
+      border: 1px solid rgba(212, 255, 0, 0.3);
+      color: var(--accent);
+      font-family: monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
+    .success-p {
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+      max-width: 580px;
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+    .btn-success-action {
+      padding: 10px 22px;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .btn-success-primary {
+      background: var(--accent);
+      color: #000;
+    }
+    .btn-success-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+    }
+
+    /* SETTINGS MODAL (DESKTOP DEFAULT) */
+    .settings-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 100002;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.2s ease;
+    }
+    .settings-modal-card {
+      background: linear-gradient(180deg, #15151a 0%, #0c0c0f 100%);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.95);
+      display: flex;
+      flex-direction: column;
+    }
+    .sm-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #101014;
+    }
+    .sm-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sm-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(212, 255, 0, 0.1);
+      border: 1px solid rgba(212, 255, 0, 0.25);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+    .sm-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .sm-subtitle {
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+    .sm-close-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .sm-close-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+    .sm-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .sm-section-box {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 18px 20px;
+    }
+    .sm-section-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .sm-sec-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      flex-shrink: 0;
+    }
+    .sm-sec-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 3px;
+    }
+    .sm-sec-desc {
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+    .sm-switch {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 26px;
+    }
+    .sm-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .sm-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: rgba(255, 255, 255, 0.15);
+      transition: 0.3s;
+      border-radius: 26px;
+    }
+    .sm-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+    .sm-switch input:checked + .sm-slider {
+      background-color: var(--warning);
+    }
+    .sm-switch input:checked + .sm-slider:before {
+      transform: translateX(22px);
+      background-color: #000;
+    }
+    .sm-status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      margin-top: 12px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(16, 185, 129, 0.08);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+    .sm-status-indicator.bypass-active {
+      background: rgba(255, 170, 0, 0.08);
+      color: var(--warning);
+      border-color: rgba(255, 170, 0, 0.25);
+    }
+    .sm-status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .sm-add-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 10px;
+      align-items: flex-end;
+      margin-top: 14px;
+    }
+    .sm-custom-list-wrap {
+      margin-top: 16px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .sm-custom-list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .sm-custom-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+    .sm-custom-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      font-size: 0.78rem;
+    }
+    .sm-custom-badge {
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(212, 255, 0, 0.1);
+      color: var(--accent);
+      font-weight: 700;
+      margin-right: 8px;
+    }
+    .sm-custom-del-btn {
+      color: var(--danger);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-size: 0.95rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .sm-custom-del-btn:hover {
+      background: rgba(239, 68, 68, 0.15);
+    }
+    .sm-footer {
+      padding: 16px 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #101014;
+    }
+    .btn-reset-factory {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      color: var(--danger);
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-reset-factory:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: #f87171;
+    }
+
+    /* =========================================================
+       CRITICAL MOBILE RESPONSIVE MEDIA QUERIES (AT THE VERY END)
+       ========================================================= */
+        /* =========================================================
+       WORLD-CLASS LUXURY MOBILE ARCHITECTURE (FAANG AESTHETIC)
+       ========================================================= */
+    @media (max-width: 768px) {
+      /* Smooth Scrolling & Responsive Root */
+      html, body {
+        overflow-x: hidden !important;
+        -webkit-text-size-adjust: 100%;
+        touch-action: manipulation;
+        background: #09090b !important;
+      }
+      .page-container {
+        padding: 14px 12px 64px !important;
+        max-width: 100% !important;
+      }
+
+      /* Navigation Header */
+      .site-nav {
+        height: 56px !important;
+        padding: 0 14px !important;
+        background: rgba(9, 9, 11, 0.85) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+      }
+      .nav-wrap {
+        gap: 8px !important;
+      }
+      .brand-group {
+        gap: 8px !important;
+      }
+      .brand-icon {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 1.05rem !important;
+        border-radius: 8px !important;
+      }
+      .wordmark {
+        font-size: 1.15rem !important;
+        font-weight: 800 !important;
+      }
+      .nav-actions {
+        gap: 8px !important;
+      }
+      .lang-toggle-btn {
+        height: 32px !important;
+        padding: 0 10px !important;
+        font-size: 0.74rem !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+        gap: 5px !important;
+        background: rgba(255, 255, 255, 0.04) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      }
+      .form-settings-btn {
+        height: 32px !important;
+        padding: 0 10px !important;
+        font-size: 0.74rem !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+        gap: 5px !important;
+        background: rgba(255, 255, 255, 0.04) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      }
+      .settings-active-badge {
+        font-size: 0.58rem !important;
+        padding: 2px 5px !important;
+        border-radius: 4px !important;
+      }
+
+      /* Hero Title & Badge */
+      .hero-header {
+        margin-bottom: 14px !important;
+        text-align: center !important;
+      }
+      .badge-pill {
+        font-size: 0.68rem !important;
+        padding: 4px 10px !important;
+        margin-bottom: 8px !important;
+        border-radius: 9999px !important;
+        background: rgba(212, 255, 0, 0.08) !important;
+        border: 1px solid rgba(212, 255, 0, 0.22) !important;
+        color: var(--accent) !important;
+      }
+      .hero-title {
+        font-size: 1.55rem !important;
+        font-weight: 800 !important;
+        line-height: 1.22 !important;
+        letter-spacing: -0.02em !important;
+      }
+
+      /* Modern Linear-Style Segmented Stepper */
+      .stepper-container {
+        padding: 12px 14px !important;
+        margin-bottom: 14px !important;
+        border-radius: 14px !important;
+        background: rgba(18, 19, 24, 0.7) !important;
+        backdrop-filter: blur(16px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.06) !important;
+      }
+      .stepper-nav {
+        display: none !important;
+      }
+      .mobile-stepper-wrap {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+      }
+      .mobile-stepper-head {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+      }
+      .mobile-step-badge {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+      }
+      .ms-pill {
+        background: rgba(212, 255, 0, 0.12) !important;
+        color: #d4ff00 !important;
+        border: 1px solid rgba(212, 255, 0, 0.3) !important;
+        font-size: 0.62rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.06em !important;
+        padding: 3px 8px !important;
+        border-radius: 6px !important;
+        text-transform: uppercase !important;
+      }
+      .ms-title {
+        font-size: 0.84rem !important;
+        font-weight: 600 !important;
+        color: #f4f4f5 !important;
+        letter-spacing: -0.01em !important;
+      }
+      .ms-percent {
+        font-size: 0.72rem !important;
+        font-weight: 600 !important;
+        color: #a1a1aa !important;
+      }
+      .mobile-progress-track {
+        width: 100% !important;
+        height: 4px !important;
+        background: rgba(255, 255, 255, 0.06) !important;
+        border-radius: 9999px !important;
+        overflow: hidden !important;
+      }
+      .mobile-progress-fill {
+        height: 100% !important;
+        background: linear-gradient(90deg, #b0df00 0%, #d4ff00 100%) !important;
+        box-shadow: 0 0 10px rgba(212, 255, 0, 0.45) !important;
+        border-radius: 9999px !important;
+        transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      }
+      .mobile-step-pills {
+        display: grid !important;
+        grid-template-columns: repeat(5, 1fr) !important;
+        gap: 4px !important;
+        margin-top: 2px !important;
+      }
+      .m-pill {
+        padding: 5px 2px !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.06) !important;
+        color: #71717a !important;
+        font-size: 0.68rem !important;
+        font-weight: 600 !important;
+        border-radius: 6px !important;
+        cursor: pointer !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+        transition: all 0.2s ease !important;
+      }
+      .m-pill.active {
+        background: rgba(212, 255, 0, 0.12) !important;
+        border-color: rgba(212, 255, 0, 0.4) !important;
+        color: #d4ff00 !important;
+      }
+      .m-pill.completed {
+        background: rgba(16, 185, 129, 0.08) !important;
+        border-color: rgba(16, 185, 129, 0.25) !important;
+        color: #10b981 !important;
+      }
+
+      /* Refined Card Shell (Luxury Dark Glass) */
+      .form-shell {
+        border-radius: 16px !important;
+        padding: 1px !important;
+        margin-bottom: 20px !important;
+        background: rgba(18, 19, 24, 0.75) !important;
+        border: 1px solid rgba(255, 255, 255, 0.06) !important;
+        backdrop-filter: blur(24px) !important;
+        box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.6) !important;
+      }
+      .form-core {
+        padding: 18px 14px 22px !important;
+        border-radius: 15px !important;
+        background: transparent !important;
+      }
+      .f-sec-title {
+        font-size: 1.15rem !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        letter-spacing: -0.01em !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        margin-bottom: 4px !important;
+      }
+      .f-sec-title i {
+        color: #d4ff00 !important;
+        font-size: 1.25rem !important;
+      }
+      .f-sec-desc {
+        font-size: 0.78rem !important;
+        color: #a1a1aa !important;
+        line-height: 1.45 !important;
+        margin-bottom: 18px !important;
+      }
+
+      /* Clean Ergonomic Inputs (46px Touch Standard) */
+      .grid-2, .grid-3 {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 14px !important;
+        margin-bottom: 14px !important;
+      }
+      .f-group {
+        margin-bottom: 14px !important;
+      }
+      .f-label {
+        font-size: 0.80rem !important;
+        font-weight: 600 !important;
+        color: #e4e4e7 !important;
+        margin-bottom: 6px !important;
+        letter-spacing: 0.01em !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+      }
+      .f-label small, .bn-text {
+        display: none !important;
+      }
+      .f-control {
+        height: 46px !important;
+        min-height: 46px !important;
+        padding: 10px 14px 10px 42px !important;
+        font-size: 14px !important;
+        border-radius: 12px !important;
+        background: rgba(255, 255, 255, 0.035) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        color: #ffffff !important;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        box-sizing: border-box !important;
+      }
+      .f-control:focus {
+        border-color: rgba(212, 255, 0, 0.5) !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        box-shadow: 0 0 0 3px rgba(212, 255, 0, 0.12) !important;
+        outline: none !important;
+      }
+      .f-control.no-prefix {
+        padding-left: 14px !important;
+      }
+      .prefix-icon {
+        left: 14px !important;
+        font-size: 1.15rem !important;
+        color: #71717a !important;
+        transition: color 0.2s !important;
+      }
+      .f-input-wrap:focus-within .prefix-icon {
+        color: #d4ff00 !important;
+      }
+
+      /* Option Tiles (Role & Availability) */
+      .tiles-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        margin-bottom: 16px !important;
+      }
+      .tile-opt {
+        padding: 14px 14px !important;
+        border-radius: 12px !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.07) !important;
+        min-height: auto !important;
+        gap: 6px !important;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      }
+      .tile-opt.selected {
+        background: rgba(212, 255, 0, 0.04) !important;
+        border-color: rgba(212, 255, 0, 0.45) !important;
+        box-shadow: 0 0 16px rgba(212, 255, 0, 0.06) !important;
+      }
+      .tile-title {
+        font-size: 0.88rem !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+      }
+      .tile-desc {
+        font-size: 0.74rem !important;
+        color: #a1a1aa !important;
+        line-height: 1.35 !important;
+      }
+
+      /* Service Selection Cards */
+      .services-spec-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        margin-bottom: 18px !important;
+      }
+      .service-card-tile {
+        padding: 14px 14px !important;
+        border-radius: 12px !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.07) !important;
+        gap: 6px !important;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      }
+      .service-card-tile.selected {
+        background: rgba(212, 255, 0, 0.04) !important;
+        border-color: rgba(212, 255, 0, 0.45) !important;
+        box-shadow: 0 0 16px rgba(212, 255, 0, 0.06) !important;
+      }
+      .svc-tile-head {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        margin-bottom: 4px !important;
+      }
+      .svc-tile-icon {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 1.05rem !important;
+        border-radius: 8px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        color: #d4ff00 !important;
+      }
+      .svc-tile-title {
+        font-size: 0.88rem !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+      }
+      .svc-tile-desc {
+        font-size: 0.74rem !important;
+        color: #a1a1aa !important;
+        line-height: 1.35 !important;
+      }
+      .svc-rate-badge {
+        font-size: 0.68rem !important;
+        font-weight: 600 !important;
+        padding: 3px 8px !important;
+        border-radius: 6px !important;
+      }
+      .service-card-tile input[type="checkbox"] {
+        width: 18px !important;
+        height: 18px !important;
+        top: 14px !important;
+        right: 14px !important;
+        accent-color: var(--accent) !important;
+      }
+
+      /* Step 5 Upload Cards */
+      .upload-card-full {
+        margin-bottom: 10px !important;
+      }
+      .upload-card-full .upload-card {
+        min-height: 80px !important;
+        padding: 14px !important;
+        border-radius: 12px !important;
+        border: 1.5px dashed rgba(255, 255, 255, 0.12) !important;
+        background: rgba(255, 255, 255, 0.02) !important;
+      }
+      .upload-subgrid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+        margin-bottom: 10px !important;
+      }
+      .upload-card {
+        min-height: 86px !important;
+        padding: 14px 10px !important;
+        border-radius: 12px !important;
+        border: 1.5px dashed rgba(255, 255, 255, 0.12) !important;
+        background: rgba(255, 255, 255, 0.02) !important;
+        transition: all 0.2s ease !important;
+      }
+      .upload-card:active {
+        background: rgba(212, 255, 0, 0.04) !important;
+        border-color: rgba(212, 255, 0, 0.4) !important;
+      }
+      .upload-icon {
+        font-size: 1.4rem !important;
+        color: #d4ff00 !important;
+        margin-bottom: 4px !important;
+      }
+      .upload-title {
+        font-size: 0.78rem !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        margin-bottom: 2px !important;
+      }
+      .upload-subtitle {
+        font-size: 0.68rem !important;
+        color: #a1a1aa !important;
+        line-height: 1.25 !important;
+      }
+      .upload-filename {
+        font-size: 0.68rem !important;
+        font-weight: 600 !important;
+        color: #10b981 !important;
+        margin-top: 4px !important;
+      }
+
+      /* Summary Review Card */
+      .summary-card {
+        padding: 16px !important;
+        border-radius: 14px !important;
+        background: rgba(255, 255, 255, 0.025) !important;
+        border: 1px solid rgba(255, 255, 255, 0.07) !important;
+        margin-bottom: 16px !important;
+      }
+      .summary-header {
+        font-size: 0.88rem !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        margin-bottom: 12px !important;
+        padding-bottom: 8px !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+      }
+      .summary-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+      }
+      .sum-item {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 4px 0 !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
+      }
+      .sum-label {
+        font-size: 0.72rem !important;
+        color: #a1a1aa !important;
+      }
+      .sum-val {
+        font-size: 0.78rem !important;
+        font-weight: 600 !important;
+        color: #ffffff !important;
+      }
+
+      /* Agreement Label */
+      .verify-label {
+        font-size: 0.76rem !important;
+        line-height: 1.45 !important;
+        color: #a1a1aa !important;
+      }
+
+      /* Bottom Navigation Actions (Tactile 48px Buttons) */
+      .form-nav-actions {
+        display: flex !important;
+        flex-direction: column-reverse !important;
+        gap: 10px !important;
+        margin-top: 20px !important;
+        padding-top: 14px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+      }
+      .btn-step-prev {
+        width: 100% !important;
+        min-height: 44px !important;
+        padding: 10px 16px !important;
+        border-radius: 12px !important;
+        font-size: 0.84rem !important;
+        font-weight: 600 !important;
+        justify-content: center !important;
+        background: rgba(255, 255, 255, 0.04) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        color: #a1a1aa !important;
+      }
+      .btn-step-next,
+      .btn-submit-app {
+        width: 100% !important;
+        min-height: 48px !important;
+        padding: 12px 18px !important;
+        border-radius: 12px !important;
+        font-size: 0.90rem !important;
+        font-weight: 700 !important;
+        justify-content: center !important;
+        background: #d4ff00 !important;
+        color: #000000 !important;
+        box-shadow: 0 4px 16px rgba(212, 255, 0, 0.22) !important;
+      }
+
+      /* Settings Modal Overlay on Mobile */
+      .settings-modal-overlay {
+        padding: 8px !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .settings-modal-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+        max-height: 92vh !important;
+        border-radius: 14px !important;
+      }
+      .sm-header {
+        padding: 12px 14px !important;
+        gap: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+      }
+      .sm-title-group {
+        min-width: 0 !important;
+        flex: 1 !important;
+        gap: 8px !important;
+        overflow: hidden !important;
+      }
+      .sm-icon {
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 1rem !important;
+        flex-shrink: 0 !important;
+        border-radius: 8px !important;
+      }
+      .sm-title {
+        font-size: 0.88rem !important;
+        line-height: 1.25 !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+      }
+      .sm-subtitle {
+        font-size: 0.68rem !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+      }
+      .sm-close-btn {
+        flex-shrink: 0 !important;
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 1rem !important;
+      }
+      .sm-body {
+        padding: 12px !important;
+        gap: 12px !important;
+        overflow-x: hidden !important;
+      }
+      .sm-section-box {
+        padding: 12px !important;
+        border-radius: 10px !important;
+        overflow-x: hidden !important;
+      }
+      .sm-sec-icon {
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 1rem !important;
+      }
+      .sm-sec-title {
+        font-size: 0.82rem !important;
+      }
+      .sm-sec-desc {
+        font-size: 0.68rem !important;
+      }
+      .sm-add-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 8px !important;
+        align-items: stretch !important;
+      }
+      .sm-add-grid select,
+      .sm-add-grid input,
+      .sm-add-grid button {
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      .sm-add-grid button {
+        height: 40px !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+      }
+      .sm-footer {
+        padding: 10px 12px !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        align-items: stretch !important;
+      }
+      .btn-reset-factory {
+        width: 100% !important;
+        justify-content: center !important;
+        height: 38px !important;
+      }
+      .sm-footer > div {
+        width: 100% !important;
+        display: flex !important;
+        gap: 8px !important;
+      }
+      .sm-footer > div > button {
+        flex: 1 !important;
+        justify-content: center !important;
+        height: 40px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow"></div>
+
+  <!-- NAVIGATION -->
+  <header class="site-nav" id="site-nav">
+    <div class="nav-wrap">
+      <a href="index.html" class="brand-group">
+        <div class="brand-icon"><i class="ph-fill ph-steering-wheel"></i></div>
+        <div class="wordmark">ROWNAA<sup>®</sup></div>
+      </a>
+      <div class="nav-actions">
+        <button type="button" class="lang-toggle-btn" onclick="toggleLanguage()" id="lang-btn" title="Toggle Language">
+          <i class="ph-bold ph-translate"></i> <span id="lang-btn-text">বাংলা সংস্করণ</span>
+        </button>
+        <button type="button" class="form-settings-btn" onclick="openDriverSettingsModal()" id="btn-open-settings" title="Driver Form Configuration & Settings">
+          <i class="ph-bold ph-gear-six"></i>
+          <span class="lang-en">Settings</span>
+          <span class="lang-bn" style="display:none;">সেটিংস</span>
+          <span class="settings-active-badge" id="settings-badge" style="display:none;">BYPASS</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CHAUFFEUR APPLICATION FLOW -->
+  <main class="page-container">
+    
+    <!-- Hero Header -->
+    <div class="hero-header">
+      <div class="badge-pill">
+        <i class="ph-fill ph-seal-check"></i> 
+        <span class="lang-en">Elite Chauffeur Network · Bangladesh</span>
+        <span class="lang-bn" style="display:none;">অভিজাত শফার নেটওয়ার্ক · বাংলাদেশ</span>
+      </div>
+      <h1 class="hero-title">
+        <span class="lang-en">Drive with <span>Rownaa®</span></span>
+        <span class="lang-bn" style="display:none;"><span>রওনা’র</span> সাথে ড্রাইভ করুন</span>
+      </h1>
+    </div>
+
+    <!-- Stepper Navigation Header -->
+    <div class="stepper-container">
+      <div class="stepper-nav">
+        <div class="stepper-progress-line" id="stepper-bar"></div>
+        <div class="step-item active" onclick="goToStep(1)" id="step-node-1">
+          <div class="step-circle">1</div>
+          <div class="step-label" id="step-lbl-1">Personal & NID</div>
+        </div>
+        <div class="step-item" onclick="goToStep(2)" id="step-node-2">
+          <div class="step-circle">2</div>
+          <div class="step-label" id="step-lbl-2">License & Skills</div>
+        </div>
+        <div class="step-item" onclick="goToStep(3)" id="step-node-3">
+          <div class="step-circle">3</div>
+          <div class="step-label" id="step-lbl-3">Services & Time</div>
+        </div>
+        <div class="step-item" onclick="goToStep(4)" id="step-node-4">
+          <div class="step-circle">4</div>
+          <div class="step-label" id="step-lbl-4">Role & Payout</div>
+        </div>
+        <div class="step-item" onclick="goToStep(5)" id="step-node-5">
+          <div class="step-circle">5</div>
+          <div class="step-label" id="step-lbl-5">Documents & Review</div>
+        </div>
+      </div>
+      <!-- Advanced Mobile Step Navigation & Indicator -->
+      <div class="mobile-stepper-wrap" id="mobile-stepper-wrap">
+        <div class="mobile-stepper-head">
+          <div class="mobile-step-badge">
+            <span class="ms-pill" id="ms-badge-pill">STEP 1/5</span>
+            <span class="ms-title" id="mobile-step-text">Personal & NID Credentials</span>
+          </div>
+          <span class="ms-percent" id="mobile-step-percent">20% Done</span>
+        </div>
+        <div class="mobile-progress-track">
+          <div class="mobile-progress-fill" id="mobile-progress-bar" style="width: 20%;"></div>
+        </div>
+        <div class="mobile-step-pills">
+          <button type="button" class="m-pill active" onclick="goToStep(1)" id="m-pill-1">1. Info</button>
+          <button type="button" class="m-pill" onclick="goToStep(2)" id="m-pill-2">2. License</button>
+          <button type="button" class="m-pill" onclick="goToStep(3)" id="m-pill-3">3. Services</button>
+          <button type="button" class="m-pill" onclick="goToStep(4)" id="m-pill-4">4. Role</button>
+          <button type="button" class="m-pill" onclick="goToStep(5)" id="m-pill-5">5. Review</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Application Form Shell (Double-Bezel Architecture) -->
+    <div class="form-shell" id="driver-app-shell">
+      <div class="form-core">
+        
+        <!-- Bypass Mandatory Active Banner -->
+        <div id="bypass-mandatory-notice" class="bypass-notice-banner" style="display:none;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <i class="ph-fill ph-warning-diamond" style="color:var(--warning); font-size:1.2rem;"></i>
+            <div>
+              <strong style="color:var(--warning);" id="bypass-banner-title">Mandatory Validation Bypassed:</strong>
+              <span style="opacity:0.9;" id="bypass-banner-desc">All required constraints (*) are relaxed. You can skip any field during registration.</span>
+            </div>
+          </div>
+          <button type="button" onclick="toggleMandatoryBypass(false)" class="banner-quick-restore-btn" id="btn-restore-strict">
+            <i class="ph-bold ph-shield-check"></i> <span>Restore Strict Mode</span>
+          </button>
+        </div>
+
+        <form id="driver-register-form" onsubmit="handleDriverApplication(event)">
+          
+          <!-- STEP 1: PERSONAL & NID DETAILS -->
+          <div class="step-pane active" id="pane-step-1">
+            <div class="f-sec-title">
+              <i class="ph-fill ph-user-circle"></i>
+              <span id="title-step-1">1. Personal & Contact Information</span>
+            </div>
+            <div class="f-sec-desc">
+              <span id="desc-step-1">Enter your legal identity exactly as shown on your NID (Smart Card) and BRTA Driving License.</span>
+            </div>
+
+            <div class="grid-2">
+              <div class="f-group">
+                <label class="f-label" for="drv-name">
+                  <span id="lbl-name">Full Legal Name <span class="req">*</span></span>
+                </label>
+                <div class="f-input-wrap">
+                  <i class="ph ph-user prefix-icon"></i>
+                  <input type="text" id="drv-name" class="f-control" required placeholder="e.g. Md. Kamal Hossain"/>
+                </div>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="drv-phone">
+                  <span id="lbl-phone">Mobile Number (WhatsApp) <span class="req">*</span></span>
+                </label>
+                <div class="f-input-wrap">
+                  <i class="ph ph-phone prefix-icon"></i>
+                  <input type="tel" id="drv-phone" class="f-control" required placeholder="e.g. 01711223344" maxlength="16"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="f-group">
+                <label class="f-label" for="drv-nid">
+                  <span id="lbl-nid">National ID (NID / Smart Card) <span class="req">*</span></span>
+                </label>
+                <div class="f-input-wrap">
+                  <i class="ph ph-identification-card prefix-icon"></i>
+                  <input type="text" id="drv-nid" class="f-control" required placeholder="10, 13, or 17 digit NID number"/>
+                </div>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="drv-city">
+                  <span id="lbl-city">Base Residential City / Area <span class="req">*</span></span>
+                </label>
+                <div class="f-input-wrap">
+                  <i class="ph ph-map-pin prefix-icon"></i>
+                  <select id="drv-city" class="f-control" onchange="handleDynamicCitySelect(this.value)">
+                    <option value="Dhaka - Uttara & Airport Zone">Dhaka — Uttara & Airport DAC Zone</option>
+                    <option value="Dhaka - Gulshan, Banani, Baridhara">Dhaka — Gulshan, Banani & Baridhara</option>
+                    <option value="Dhaka - Dhanmondi & Mohammadpur">Dhaka — Dhanmondi & Mohammadpur</option>
+                    <option value="Dhaka - Mirpur & Pallabi">Dhaka — Mirpur & Pallabi</option>
+                    <option value="Dhaka - Motijheel & Old Dhaka">Dhaka — Motijheel & Old Dhaka</option>
+                    <option value="Dhaka - Bashundhara & Badda">Dhaka — Bashundhara & Badda</option>
+                    <option value="Gazipur & Tongi Industrial Hub">Gazipur & Tongi Industrial Hub</option>
+                    <option value="Savar & Ashulia EPZ Zone">Savar & Ashulia EPZ Zone</option>
+                    <option value="Narayanganj City & Port">Narayanganj City & Port</option>
+                    <option value="Chattogram Metro & Port">Chattogram Metro & Port Zone</option>
+                    <option value="Sylhet Metro & Osmani Hub">Sylhet Metro & Osmani Hub</option>
+                    <option value="Cox's Bazar & Tourist Corridor">Cox's Bazar & Tourist Corridor</option>
+                    <option value="Bogura & North Bengal">Bogura & North Bengal</option>
+                    <option value="Comilla & Highway Axis">Comilla & Highway Axis</option>
+                    <option value="__custom__">➕ + Add Other District / Area...</option>
+                  </select>
+                </div>
+                <div id="wrap-custom-city" class="custom-dynamic-box" style="display:none;">
+                  <input type="text" id="drv-city-custom" class="f-control no-prefix" placeholder="Type your specific town, district, or thana (e.g. Mymensingh, Khulna, Tangail, Feni)..."/>
+                </div>
+              </div>
+            </div>
+
+            <!-- Emergency Contact -->
+            <div class="grid-2">
+              <div class="f-group">
+                <label class="f-label" for="drv-emergency-name">
+                  <span id="lbl-em-name">Emergency Contact Name <span class="req">*</span></span>
+                </label>
+                <div class="f-input-wrap">
+                  <i class="ph ph-users prefix-icon"></i>
+                  <input type="text" id="drv-emergency-name" class="f-control" required placeholder="e.g. Md. Rafiqul Islam (Brother)"/>
+                </div>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="drv-emergency-phone">
+                  <span id="lbl-em-phone">Emergency Contact Phone <span class="req">*</span></span>
+                </label>
+                <div class="f-input-wrap">
+                  <i class="ph ph-phone-call prefix-icon"></i>
+                  <input type="tel" id="drv-emergency-phone" class="f-control" required placeholder="e.g. 018XXXXXXXX"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-nav-actions">
+              <div></div>
+              <button type="button" class="btn-step-next" onclick="validateAndNext(1)" id="btn-next-1">
+                <span>Continue to License & Experience</span>
+                <i class="ph-bold ph-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+
+          <!-- STEP 2: DRIVING CREDENTIALS & EXPERIENCE -->
+          <div class="step-pane" id="pane-step-2">
+            <div class="f-sec-title">
+              <i class="ph-fill ph-steering-wheel"></i>
+              <span id="title-step-2">2. BRTA Driving License & Professional Experience</span>
+            </div>
+            <div class="f-sec-desc">
+              <span id="desc-step-2">All Rownaa chauffeurs must hold an active, non-expired BRTA license.</span>
+            </div>
+
+            <div class="grid-2">
+              <div class="f-group">
+                <label class="f-label" for="drv-license">
+                  <span id="lbl-license">BRTA Driving License Number <span class="req">*</span></span>
+                </label>
+                <div class="f-input-wrap">
+                  <i class="ph ph-cardholder prefix-icon"></i>
+                  <input type="text" id="drv-license" class="f-control" required placeholder="e.g. DK0129384L" style="text-transform:uppercase;"/>
+                </div>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="drv-license-type">
+                  <span id="lbl-license-type">License Classification <span class="req">*</span></span>
+                </label>
+                <div class="f-input-wrap">
+                  <i class="ph ph-certificate prefix-icon"></i>
+                  <select id="drv-license-type" class="f-control" required onchange="handleDynamicLicenseSelect(this.value)">
+                    <option value="Professional Light" selected>Professional (Light Motor Vehicle)</option>
+                    <option value="Professional Medium/Heavy">Professional (Medium / Heavy Commercial)</option>
+                    <option value="Professional PSV">Professional PSV (Public Service Vehicle Specialist)</option>
+                    <option value="Non-Professional Light">Non-Professional (Light / Private)</option>
+                    <option value="__custom__">➕ + Other License Category...</option>
+                  </select>
+                </div>
+                <div id="wrap-custom-license" class="custom-dynamic-box" style="display:none;">
+                  <input type="text" id="drv-license-custom" class="f-control no-prefix" placeholder="Specify your exact license endorsement or category..."/>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="f-group">
+                <label class="f-label" for="drv-exp">
+                  <span id="lbl-exp">Total Commercial Driving Experience <span class="req">*</span></span>
+                </label>
+                <div class="f-input-wrap">
+                  <i class="ph ph-clock-countdown prefix-icon"></i>
+                  <select id="drv-exp" class="f-control" required>
+                    <option value="2-3 Years">2 to 3 Years Commercial Driving</option>
+                    <option value="3-5 Years">3 to 5 Years Corporate/Rental Driver</option>
+                    <option value="5-10 Years" selected>5 to 10 Years Experienced Executive Chauffeur</option>
+                    <option value="10+ Years">10+ Years Senior Master Chauffeur</option>
+                  </select>
+                </div>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="drv-expiry">
+                  <span id="lbl-expiry">License Expiration Date <span class="req">*</span></span>
+                </label>
+                <div class="f-input-wrap">
+                  <i class="ph ph-calendar prefix-icon"></i>
+                  <input type="date" id="drv-expiry" class="f-control" required/>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="f-group">
+                <label class="f-label" for="drv-languages">
+                  <span id="lbl-lang">Language & VIP Communication Skills</span>
+                </label>
+                <div class="f-input-wrap">
+                  <i class="ph ph-translate prefix-icon"></i>
+                  <select id="drv-languages" class="f-control" onchange="handleDynamicLangSelect(this.value)">
+                    <option value="Bangla Native + Conversational English">Bangla Native + Conversational English (VIP Preferred)</option>
+                    <option value="Fluent Bangla & Hindi/Urdu">Fluent Bangla & Hindi/Urdu</option>
+                    <option value="Arabic Speaking (Hajj & Middle East Returnees)">Arabic Speaking (Gulf & Middle East Returnees)</option>
+                    <option value="Bangla Native Only">Bangla Native Only</option>
+                    <option value="__custom__">➕ + Add Custom Language...</option>
+                  </select>
+                </div>
+                <div id="wrap-custom-lang" class="custom-dynamic-box" style="display:none;">
+                  <input type="text" id="drv-lang-custom" class="f-control no-prefix" placeholder="Enter other languages (e.g. Japanese, Chinese, German, Sign Language)..."/>
+                </div>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="drv-highway-exp">
+                  <span id="lbl-highway">Highway & Night Driving Comfort</span>
+                </label>
+                <div class="f-input-wrap">
+                  <i class="ph ph-road-horizon prefix-icon"></i>
+                  <select id="drv-highway-exp" class="f-control">
+                    <option value="Highways & Night Expert">Expert in Dhaka-Chittagong, Sylhet, Padma Bridge & Night</option>
+                    <option value="Daytime Highways & City">City & Daytime Highway Driving</option>
+                    <option value="City Driving Only">Inside City Driving Dedicated</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-nav-actions">
+              <button type="button" class="btn-step-prev" onclick="goToStep(1)">
+                <i class="ph-bold ph-arrow-left"></i>
+                <span class="btn-prev-text">Back</span>
+              </button>
+              <button type="button" class="btn-step-next" onclick="validateAndNext(2)" id="btn-next-2">
+                <span>Continue to Services & Availability</span>
+                <i class="ph-bold ph-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+
+          <!-- STEP 3: CORE SERVICES SELECTION & AVAILABILITY -->
+          <div class="step-pane" id="pane-step-3">
+            <div class="f-sec-title">
+              <i class="ph-fill ph-check-square-offset"></i>
+              <span id="title-step-3">3. Service Preference & Working Availability</span>
+            </div>
+            <div class="f-sec-desc">
+              <span id="desc-step-3">Select which services you are available for. You can also click "+ Add Custom Service" to offer new trip types.</span>
+            </div>
+
+            <!-- 6 Services Grid + Dynamic Slot -->
+            <div class="services-spec-grid" id="services-grid-container">
+              <label class="service-card-tile selected" onclick="toggleServiceCheckbox(this)">
+                <input type="checkbox" name="services" value="Airport Transfer" checked/>
+                <div class="svc-tile-head">
+                  <div class="svc-tile-icon"><i class="ph-fill ph-airplane-takeoff"></i></div>
+                  <div class="svc-tile-title" id="svc-title-airport">Airport Transfer</div>
+                </div>
+                <div class="svc-tile-desc" id="svc-desc-airport">Hazrat Shahjalal DAC Airport meet & greet, luggage assistance, terminal drop.</div>
+                <div class="svc-rate-badge">Highest Tipping Rate</div>
+              </label>
+
+              <label class="service-card-tile selected" onclick="toggleServiceCheckbox(this)">
+                <input type="checkbox" name="services" value="Corporate Transport" checked/>
+                <div class="svc-tile-head">
+                  <div class="svc-tile-icon"><i class="ph-fill ph-briefcase"></i></div>
+                  <div class="svc-tile-title" id="svc-title-corp">Corporate Transport</div>
+                </div>
+                <div class="svc-tile-desc" id="svc-desc-corp">Monthly & weekly corporate executives, office standby, and embassy guests.</div>
+                <div class="svc-rate-badge">Guaranteed Retainer</div>
+              </label>
+
+              <label class="service-card-tile selected" onclick="toggleServiceCheckbox(this)">
+                <input type="checkbox" name="services" value="Car Rental with Hourly" checked/>
+                <div class="svc-tile-head">
+                  <div class="svc-tile-icon"><i class="ph-fill ph-clock"></i></div>
+                  <div class="svc-tile-title" id="svc-title-hourly">Car Rental with Hourly</div>
+                </div>
+                <div class="svc-tile-desc" id="svc-desc-hourly">4-Hour and 10-Hour flexible city trips with pre-set overtime charges.</div>
+                <div class="svc-rate-badge">Steady Daily Fares</div>
+              </label>
+
+              <label class="service-card-tile selected" onclick="toggleServiceCheckbox(this)">
+                <input type="checkbox" name="services" value="Intercity Travel" checked/>
+                <div class="svc-tile-head">
+                  <div class="svc-tile-icon"><i class="ph-fill ph-navigation-arrow"></i></div>
+                  <div class="svc-tile-title" id="svc-title-intercity">Intercity Highway Travel</div>
+                </div>
+                <div class="svc-tile-desc" id="svc-desc-intercity">Dhaka to Chittagong, Sylhet, Bogura, Rajshahi point-to-point highway express.</div>
+                <div class="svc-rate-badge">High Distance Fare</div>
+              </label>
+
+              <label class="service-card-tile" onclick="toggleServiceCheckbox(this)">
+                <input type="checkbox" name="services" value="Travel & Tour Booking"/>
+                <div class="svc-tile-head">
+                  <div class="svc-tile-icon"><i class="ph-fill ph-mountains"></i></div>
+                  <div class="svc-tile-title" id="svc-title-tour">Travel & Tour Booking</div>
+                </div>
+                <div class="svc-tile-desc" id="svc-desc-tour">Multi-day Cox’s Bazar, Sajek, Sylhet tours. Food & hotel allowance fully included.</div>
+                <div class="svc-rate-badge">৳1,500/night Allowance</div>
+              </label>
+
+              <label class="service-card-tile" onclick="toggleServiceCheckbox(this)">
+                <input type="checkbox" name="services" value="Event & Wedding Transport"/>
+                <div class="svc-tile-head">
+                  <div class="svc-tile-icon"><i class="ph-fill ph-sparkle"></i></div>
+                  <div class="svc-tile-title" id="svc-title-event">Event & Wedding VIP</div>
+                </div>
+                <div class="svc-tile-desc" id="svc-desc-event">Luxury motorcades, wedding fleet convoy, and corporate event VIP delegations.</div>
+                <div class="svc-rate-badge">Premium Executive</div>
+              </label>
+
+              <div class="service-card-tile add-custom-svc-tile" onclick="toggleCustomServiceCreator()" id="btn-add-custom-service-tile">
+                <div class="svc-tile-icon" style="background:rgba(212,255,0,0.14);"><i class="ph-bold ph-plus"></i></div>
+                <div class="svc-tile-title" style="color:var(--accent);">+ Add Custom Service</div>
+                <div class="svc-tile-desc">Offer a specialized route or trip type not in list</div>
+              </div>
+            </div>
+
+            <!-- Custom Service Creator Card -->
+            <div id="custom-svc-creator-box">
+              <div style="font-family:var(--font-display); font-size:1rem; font-weight:700; color:var(--accent); margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+                <i class="ph-bold ph-sparkle"></i> Define a New Custom Service
+              </div>
+              <p style="font-size:0.78rem; color:var(--text-secondary); margin-bottom:14px;">
+                Enter a specialized service name (e.g. "Hospital & Medical Emergency VIP", "Chauffeur Only Drive Client's Car").
+              </p>
+              <div class="grid-2">
+                <input type="text" id="new-svc-name" class="f-control no-prefix" placeholder="Service Name (e.g. Chauffeur Only Drive My Car)"/>
+                <input type="text" id="new-svc-badge" class="f-control no-prefix" placeholder="Earnings / Rate Perk (e.g. ৳2,000/day Standby)"/>
+              </div>
+              <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:12px;">
+                <button type="button" onclick="toggleCustomServiceCreator()" class="btn-step-prev" style="padding:8px 18px; font-size:0.8rem;">Cancel</button>
+                <button type="button" onclick="addCustomServiceCard()" class="btn-submit-custom-svc" style="background:var(--accent); color:#000; font-weight:800; font-size:0.85rem; padding:8px 22px; border-radius:9999px; border:none; cursor:pointer;">+ Add Service Tile</button>
+              </div>
+            </div>
+
+            <!-- Working Availability Commitment -->
+            <div class="f-group" style="margin-top:14px;">
+              <label class="f-label">
+                <span id="lbl-avail">Working Availability Commitment <span class="req">*</span></span>
+              </label>
+              <div class="tiles-grid">
+                <label class="tile-opt active" onclick="selectTile(this, 'drv-avail-val', 'full_time')">
+                  <input type="radio" name="driver_avail" value="full_time" checked/>
+                  <div class="tile-title"><i class="ph-fill ph-check-circle"></i> <span id="avail-opt-1-title">Full-Time Dedicated</span></div>
+                  <div class="tile-desc" id="avail-opt-1-desc">Available 6 days/week. Priority allocation for high-paying corporate contracts.</div>
+                </label>
+                <label class="tile-opt" onclick="selectTile(this, 'drv-avail-val', 'part_time')">
+                  <input type="radio" name="driver_avail" value="part_time"/>
+                  <div class="tile-title"><i class="ph-fill ph-calendar-blank"></i> <span id="avail-opt-2-title">Part-Time Flex</span></div>
+                  <div class="tile-desc" id="avail-opt-2-desc">Fixed shifts or evening hours. Ideal for standby city chauffeurs.</div>
+                </label>
+                <label class="tile-opt" onclick="selectTile(this, 'drv-avail-val', 'weekend_ondemand')">
+                  <input type="radio" name="driver_avail" value="weekend_ondemand"/>
+                  <div class="tile-title"><i class="ph-fill ph-lightning"></i> <span id="avail-opt-3-title">Weekend & On-Demand</span></div>
+                  <div class="tile-desc" id="avail-opt-3-desc">Available Friday/Saturday for highway intercity tours & airport transfers.</div>
+                </label>
+              </div>
+              <input type="hidden" id="drv-avail-val" value="full_time"/>
+            </div>
+
+            <div class="form-nav-actions">
+              <button type="button" class="btn-step-prev" onclick="goToStep(2)">
+                <i class="ph-bold ph-arrow-left"></i>
+                <span class="btn-prev-text">Back</span>
+              </button>
+              <button type="button" class="btn-step-next" onclick="validateAndNext(3)" id="btn-next-3">
+                <span>Continue to Role & Payout</span>
+                <i class="ph-bold ph-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+
+          <!-- STEP 4: ROLE, PAYOUT & FLEET INFO -->
+          <div class="step-pane" id="pane-step-4">
+            <div class="f-sec-title">
+              <i class="ph-fill ph-car"></i>
+              <span id="title-step-4">4. Chauffeur Role, Payout Wallet & Fleet Info</span>
+            </div>
+            <div class="f-sec-desc">
+              <span id="desc-step-4">Specify your employment mode and provide your mobile wallet for instant payments and trip allowances.</span>
+            </div>
+
+            <!-- Role Tiles -->
+            <div class="f-group" style="margin-bottom:14px;">
+              <label class="f-label">
+                <span id="lbl-role">Select Your Driving Status <span class="req">*</span></span>
+              </label>
+              <div class="tiles-grid">
+                <label class="tile-opt active" onclick="selectRoleTile(this, 'seeking_fleet_car')">
+                  <input type="radio" name="driver_role" value="seeking_fleet_car" checked/>
+                  <div class="tile-title"><i class="ph-fill ph-handshake"></i> <span id="role-opt-1-title">Fleet Chauffeur</span></div>
+                  <div class="tile-desc" id="role-opt-1-desc">Professional chauffeur looking to be assigned to a Rownaa Fleet Partner's vehicle.</div>
+                </label>
+                <label class="tile-opt" onclick="selectRoleTile(this, 'car_owner_driver')">
+                  <input type="radio" name="driver_role" value="car_owner_driver"/>
+                  <div class="tile-title"><i class="ph-fill ph-car-profile"></i> <span id="role-opt-2-title">Owner-Driver</span></div>
+                  <div class="tile-desc" id="role-opt-2-desc">I own a personal vehicle (Sedan/SUV/HiAce) and will drive it myself for Rownaa.</div>
+                </label>
+                <label class="tile-opt" onclick="selectRoleTile(this, 'part_time_freelance')">
+                  <input type="radio" name="driver_role" value="part_time_freelance"/>
+                  <div class="tile-title"><i class="ph-fill ph-briefcase"></i> <span id="role-opt-3-title">On-Demand Standby</span></div>
+                  <div class="tile-desc" id="role-opt-3-desc">Available for airport emergency dispatch, tour replacement, and VIP standbys.</div>
+                </label>
+              </div>
+              <input type="hidden" id="drv-role-val" value="seeking_fleet_car"/>
+            </div>
+
+            <!-- Conditional Owner-Driver Vehicle Details -->
+            <div id="owner-vehicle-section" style="display:none; background:rgba(255,255,255,0.02); border:1px solid var(--border-subtle); border-radius:12px; padding:16px; margin-bottom:16px;">
+              <div style="font-family:var(--font-display); font-size:1rem; font-weight:700; color:var(--accent); margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+                <i class="ph-fill ph-car"></i> <span id="lbl-vehicle-title">Your Vehicle Profile</span>
+              </div>
+              <p style="font-size:0.76rem; color:var(--text-secondary); margin-bottom:14px;" id="lbl-vehicle-desc">
+                Since you are registering as an Owner-Driver, enter your car's model and registration details as per BRTA documents.
+              </p>
+              <div class="grid-2">
+                <div class="f-group">
+                  <label class="f-label" for="drv-car-model"><span id="lbl-car-model">Car Model & Make</span></label>
+                  <select id="drv-car-model" class="f-control no-prefix" onchange="handleDynamicCarModelSelect(this.value)">
+                    <option value="Toyota Allion A15">Toyota Allion A15</option>
+                    <option value="Toyota Premio F / EX">Toyota Premio F / EX</option>
+                    <option value="Toyota Axio Hybrid">Toyota Axio Hybrid</option>
+                    <option value="Toyota Noah Hybrid / X">Toyota Noah Hybrid / X (7-Seater)</option>
+                    <option value="Toyota Esquire Gi">Toyota Esquire Gi Luxury (7-Seater)</option>
+                    <option value="Toyota HiAce Grand Cabin">Toyota HiAce Grand Cabin (11-Seater)</option>
+                    <option value="Toyota Land Cruiser Prado">Toyota Land Cruiser Prado (SUV)</option>
+                    <option value="Mitsubishi Pajero Sport">Mitsubishi Pajero Sport</option>
+                    <option value="Chander Gari 4x4">Chander Gari 4x4 Tour Specialist</option>
+                    <option value="__custom__">➕ + Add Other Vehicle Model...</option>
+                  </select>
+                  <div id="wrap-custom-car-model" class="custom-dynamic-box" style="display:none;">
+                    <input type="text" id="drv-car-model-custom" class="f-control no-prefix" placeholder="Type your vehicle make & model (e.g. Honda Grace, Hyundai Staria)..."/>
+                  </div>
+                </div>
+                <div class="f-group">
+                  <label class="f-label" for="drv-car-plate"><span id="lbl-car-plate">Number Plate</span></label>
+                  <input type="text" id="drv-car-plate" class="f-control no-prefix" placeholder="e.g. Dhaka Metro GA 21-8901"/>
+                </div>
+              </div>
+              <div class="grid-3">
+                <div class="f-group">
+                  <label class="f-label" for="drv-car-seats"><span id="lbl-car-seats">Seating Capacity</span></label>
+                  <select id="drv-car-seats" class="f-control no-prefix" onchange="handleDynamicSeatsSelect(this.value)">
+                    <option value="4 Seats (Sedan)">4 Seats (Sedan)</option>
+                    <option value="7 Seats (Noah/Esquire)">7 Seats (Noah/Esquire)</option>
+                    <option value="11 Seats (HiAce Microbus)">11 Seats (HiAce Microbus)</option>
+                    <option value="6-8 Seats (Luxury SUV/Prado)">6-8 Seats (Luxury SUV)</option>
+                    <option value="__custom__">➕ + Custom Seats...</option>
+                  </select>
+                  <div id="wrap-custom-seats" class="custom-dynamic-box" style="display:none;">
+                    <input type="text" id="drv-car-seats-custom" class="f-control no-prefix" placeholder="e.g. 14 Seats (Coaster) / 5 Seats"/>
+                  </div>
+                </div>
+                <div class="f-group">
+                  <label class="f-label" for="drv-car-year"><span id="lbl-car-year">Manufacture Year</span></label>
+                  <input type="number" id="drv-car-year" class="f-control no-prefix" placeholder="e.g. 2019" min="2010" max="2026"/>
+                </div>
+                <div class="f-group">
+                  <label class="f-label" for="drv-car-fitness"><span id="lbl-car-fitness">Fitness Expiry</span></label>
+                  <input type="date" id="drv-car-fitness" class="f-control no-prefix"/>
+                </div>
+              </div>
+            </div>
+
+            <!-- Payout Information -->
+            <div style="font-family:var(--font-display); font-size:1rem; font-weight:700; color:#fff; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+              <i class="ph-fill ph-wallet" style="color:var(--accent);"></i> <span id="lbl-payout-heading">Payout & Expense Reimbursement</span>
+            </div>
+
+            <div class="grid-2">
+              <div class="f-group">
+                <label class="f-label" for="drv-payout-method">
+                  <span id="lbl-payout-method">Payout Mobile Wallet Method <span class="req">*</span></span>
+                </label>
+                <div class="f-input-wrap">
+                  <i class="ph ph-credit-card prefix-icon"></i>
+                  <select id="drv-payout-method" class="f-control" required onchange="handleDynamicPayoutSelect(this.value)">
+                    <option value="bKash Personal" selected>bKash Personal</option>
+                    <option value="bKash Merchant">bKash Merchant / Agent</option>
+                    <option value="Nagad Personal">Nagad Personal</option>
+                    <option value="Rocket">Rocket Personal</option>
+                    <option value="Upay MFS">Upay Wallet</option>
+                    <option value="Cellfin (IBBL)">Cellfin (IBBL)</option>
+                    <option value="Bank Transfer">Commercial Bank Account</option>
+                    <option value="__custom__">➕ + Other Wallet / Payment Option...</option>
+                  </select>
+                </div>
+                <div id="wrap-custom-payout" class="custom-dynamic-box" style="display:none;">
+                  <input type="text" id="drv-payout-custom" class="f-control no-prefix" placeholder="Enter custom wallet name or bank (e.g. Tap, SureCash, City Bank)..."/>
+                </div>
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="drv-payout-number">
+                  <span id="lbl-payout-num">Wallet / Account Number <span class="req">*</span></span>
+                </label>
+                <div class="f-input-wrap">
+                  <i class="ph ph-hash prefix-icon"></i>
+                  <input type="text" id="drv-payout-number" class="f-control" required placeholder="e.g. 017XXXXXXXX / Account No."/>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-nav-actions">
+              <button type="button" class="btn-step-prev" onclick="goToStep(3)">
+                <i class="ph-bold ph-arrow-left"></i>
+                <span class="btn-prev-text">Back</span>
+              </button>
+              <button type="button" class="btn-step-next" onclick="validateAndNext(4)" id="btn-next-4">
+                <span>Continue to Documents & Review</span>
+                <i class="ph-bold ph-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+
+          <!-- STEP 5: DOCUMENT UPLOADS & FINAL AFFIRMATION (5 UPLOAD CARDS) -->
+          <div class="step-pane" id="pane-step-5">
+            <div class="f-sec-title">
+              <i class="ph-fill ph-file-text"></i>
+              <span id="title-step-5">5. Verification Documents & Application Review</span>
+            </div>
+            <div class="f-sec-desc">
+              <span id="desc-step-5">Upload clear photographs of your identity documents (Front & Back) and review your application summary.</span>
+            </div>
+
+            <!-- Upload Zone 1: Portrait Photo -->
+            <div class="upload-card-full">
+              <div class="upload-card" id="card-photo">
+                <input type="file" id="file-photo" accept="image/*" capture="user" onchange="handleFileSelected(this, 'photo-name', 'card-photo')"/>
+                <div class="upload-icon"><i class="ph-fill ph-user-focus"></i></div>
+                <div class="upload-title" id="up-title-photo">Chauffeur Portrait Photo</div>
+                <div class="upload-subtitle" id="up-sub-photo">Clean front-facing headshot or portrait</div>
+                <div class="upload-filename" id="photo-name"></div>
+              </div>
+            </div>
+
+            <!-- Upload Zone 2 & 3: Driving License Front & Back -->
+            <div class="upload-subgrid">
+              <div class="upload-card" id="card-lic-front">
+                <input type="file" id="file-license-front" accept="image/*,.pdf" onchange="handleFileSelected(this, 'lic-front-name', 'card-lic-front')"/>
+                <div class="upload-icon"><i class="ph-fill ph-cardholder"></i></div>
+                <div class="upload-title" id="up-title-lic-front">BRTA License (Front)</div>
+                <div class="upload-subtitle" id="up-sub-lic-front">Clear front side of card</div>
+                <div class="upload-filename" id="lic-front-name"></div>
+              </div>
+
+              <div class="upload-card" id="card-lic-back">
+                <input type="file" id="file-license-back" accept="image/*,.pdf" onchange="handleFileSelected(this, 'lic-back-name', 'card-lic-back')"/>
+                <div class="upload-icon"><i class="ph-fill ph-cardholder"></i></div>
+                <div class="upload-title" id="up-title-lic-back">BRTA License (Back)</div>
+                <div class="upload-subtitle" id="up-sub-lic-back">Clear back side of card</div>
+                <div class="upload-filename" id="lic-back-name"></div>
+              </div>
+            </div>
+
+            <!-- Upload Zone 4 & 5: NID Smart Card Front & Back -->
+            <div class="upload-subgrid">
+              <div class="upload-card" id="card-nid-front">
+                <input type="file" id="file-nid-front" accept="image/*,.pdf" onchange="handleFileSelected(this, 'nid-front-name', 'card-nid-front')"/>
+                <div class="upload-icon"><i class="ph-fill ph-identification-card"></i></div>
+                <div class="upload-title" id="up-title-nid-front">NID Smart Card (Front)</div>
+                <div class="upload-subtitle" id="up-sub-nid-front">Clear front side of card</div>
+                <div class="upload-filename" id="nid-front-name"></div>
+              </div>
+
+              <div class="upload-card" id="card-nid-back">
+                <input type="file" id="file-nid-back" accept="image/*,.pdf" onchange="handleFileSelected(this, 'nid-back-name', 'card-nid-back')"/>
+                <div class="upload-icon"><i class="ph-fill ph-identification-card"></i></div>
+                <div class="upload-title" id="up-title-nid-back">NID Smart Card (Back)</div>
+                <div class="upload-subtitle" id="up-sub-nid-back">Clear back side of card</div>
+                <div class="upload-filename" id="nid-back-name"></div>
+              </div>
+            </div>
+
+            <!-- Live Review Summary Card -->
+            <div class="summary-card">
+              <div class="summary-header">
+                <i class="ph-bold ph-clipboard-text"></i> <span id="sum-header-title">Application Review Summary</span>
+              </div>
+              <div class="summary-grid">
+                <div class="sum-item">
+                  <span class="sum-label" id="sum-lbl-name">Applicant Name:</span>
+                  <span class="sum-val" id="sum-name">—</span>
+                </div>
+                <div class="sum-item">
+                  <span class="sum-label" id="sum-lbl-phone">Mobile (WhatsApp):</span>
+                  <span class="sum-val" id="sum-phone">—</span>
+                </div>
+                <div class="sum-item">
+                  <span class="sum-label" id="sum-lbl-nid">NID Number:</span>
+                  <span class="sum-val" id="sum-nid">—</span>
+                </div>
+                <div class="sum-item">
+                  <span class="sum-label" id="sum-lbl-lic">BRTA License & Expiry:</span>
+                  <span class="sum-val" id="sum-license">—</span>
+                </div>
+                <div class="sum-item">
+                  <span class="sum-label" id="sum-lbl-role">Role & Base Area:</span>
+                  <span class="sum-val" id="sum-role-area">—</span>
+                </div>
+                <div class="sum-item">
+                  <span class="sum-label" id="sum-lbl-svcs">Services Selected:</span>
+                  <span class="sum-val" id="sum-services">—</span>
+                </div>
+                <div class="sum-item">
+                  <span class="sum-label" id="sum-lbl-payout">Payout Wallet:</span>
+                  <span class="sum-val" id="sum-payout">—</span>
+                </div>
+                <div class="sum-item">
+                  <span class="sum-label" id="sum-lbl-docs">Uploaded Documents:</span>
+                  <span class="sum-val" id="sum-docs">—</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Code of Conduct Affirmation -->
+            <div class="verify-box">
+              <input type="checkbox" id="drv-agreement" required/>
+              <label for="drv-agreement" class="verify-label" id="lbl-agreement">I hereby certify that all information submitted is accurate and that I possess a clean police record with zero criminal history. I pledge to adhere to Rownaa's VIP Chauffeur Standards: strict punctuality, executive courtesy, defensive driving, zero smoking inside vehicles, and polite passenger care.</label>
+            </div>
+
+            <div class="form-nav-actions">
+              <button type="button" class="btn-step-prev" onclick="goToStep(4)">
+                <i class="ph-bold ph-arrow-left"></i>
+                <span class="btn-prev-text">Back</span>
+              </button>
+              <button type="submit" class="btn-submit-app" id="btn-submit-drv">
+                <span id="btn-submit-text">Submit Chauffeur Application</span>
+                <i class="ph-bold ph-paper-plane-tilt"></i>
+              </button>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+    <!-- SUCCESS RECEIPT SCREEN -->
+    <div class="form-shell success-screen" id="driver-success-screen">
+      <div class="form-core">
+        <div class="success-icon-wrap">
+          <i class="ph-fill ph-check"></i>
+        </div>
+        <h2 class="success-title" id="succ-title">Application Received!</h2>
+        <div class="success-badge" id="success-ref-badge">REF: #DRV-DAC-7821</div>
+        <p class="success-p" id="succ-desc">
+          Congratulations! Your chauffeur application has been officially logged into the Rownaa Operations Registry and synced in real-time to the Executive Fleet Onboarding Ledger. Our verification officer will contact your WhatsApp within 24 hours to schedule verification and orientation.
+        </p>
+        <div class="success-actions" style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
+          <a href="index.html" class="btn-success-action btn-success-primary" id="btn-succ-home">Return to Main Website</a>
+          <button type="button" onclick="resetDriverForm()" class="btn-success-action btn-success-secondary" id="btn-succ-another">Submit Another Application</button>
+          <button type="button" onclick="exportLocalApplicationsToCsv()" class="btn-success-action btn-success-secondary" style="display:flex; align-items:center; gap:6px;">
+            <i class="ph-bold ph-download-simple"></i> <span id="btn-succ-csv">Download CSV</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- =========================================================
+       DRIVER FORM CONFIGURATION & SETTINGS MODAL
+       ========================================================= -->
+  <div class="settings-modal-overlay" id="driver-settings-overlay" onclick="closeDriverSettingsModal(event)" style="display:none;">
+    <div class="settings-modal-card" id="driver-settings-card" onclick="event.stopPropagation()">
+      <!-- Modal Header -->
+      <div class="sm-header">
+        <div class="sm-title-group">
+          <div class="sm-icon"><i class="ph-bold ph-gear-six"></i></div>
+          <div>
+            <h3 class="sm-title">
+              <span class="lang-en">Registration Controls & Settings</span>
+              <span class="lang-bn" style="display:none;">রেজিস্ট্রেশন কন্ট্রোল ও সেটিংস</span>
+            </h3>
+            <p class="sm-subtitle">
+              <span class="lang-en">Bypass mandatory fields or add custom dropdown options</span>
+              <span class="lang-bn" style="display:none;">বাধ্যতামূলক ফিল্ড স্কিপ করুন এবং নতুন অপশন যোগ করুন</span>
+            </p>
+          </div>
+        </div>
+        <button type="button" class="sm-close-btn" onclick="closeDriverSettingsModal()" title="Close Settings">
+          <i class="ph ph-x"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="sm-body">
+
+        <!-- Section 1: Mandatory Fields Remover / Bypass -->
+        <div class="sm-section-box">
+          <div class="sm-section-header">
+            <div class="sm-sec-icon" style="background:rgba(255,170,0,0.12); color:var(--warning);"><i class="ph-bold ph-shield-slash"></i></div>
+            <div style="flex:1;">
+              <div class="sm-sec-title">
+                <span class="lang-en">Mandatory Field Remover (Skip Any Required Option)</span>
+                <span class="lang-bn" style="display:none;">বাধ্যতামূলক ফিল্ড রিমুভার (রিকোয়ার্ড অপশন স্কিপ করুন)</span>
+              </div>
+              <div class="sm-sec-desc">
+                <span class="lang-en">When enabled, all mandatory validation constraints are relaxed. Drivers or admins can skip any field and complete submissions.</span>
+                <span class="lang-bn" style="display:none;">চালু করলে ফর্মের সকল রিকোয়ার্ড ফিল্ড ঐচ্ছিক হয়ে যাবে। যেকোনো তথ্য ছাড়া সরাসরি পরবর্তী ধাপে যাওয়া ও সাবমিট করা যাবে।</span>
+              </div>
+            </div>
+            <div class="sm-toggle-wrap">
+              <label class="sm-switch">
+                <input type="checkbox" id="setting-bypass-mandatory" onchange="toggleMandatoryBypass(this.checked)"/>
+                <span class="sm-slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="sm-status-indicator" id="sm-bypass-status-tag">
+            <span class="sm-status-dot"></span>
+            <span id="sm-bypass-status-text">Strict Mode Active (All required fields enforced)</span>
+          </div>
+        </div>
+
+        <!-- Section 2: Custom Dropdown Options Manager -->
+        <div class="sm-section-box">
+          <div class="sm-section-header">
+            <div class="sm-sec-icon" style="background:rgba(212,255,0,0.12); color:var(--accent);"><i class="ph-bold ph-plus-circle"></i></div>
+            <div style="flex:1;">
+              <div class="sm-sec-title">
+                <span class="lang-en">Add New Option to Fixed Select Fields</span>
+                <span class="lang-bn" style="display:none;">ড্রপডাউন লিস্টে নতুন অপশন যুক্ত করুন</span>
+              </div>
+              <div class="sm-sec-desc">
+                <span class="lang-en">Add permanent custom values to fixed select dropdowns (Districts, License Classes, Languages, Vehicle Models, Seating, Payout Wallets, Services).</span>
+                <span class="lang-bn" style="display:none;">যেকোনো ড্রপডাউনে নতুন এলাকা, লাইসেন্স শ্রেণি, ভাষা, গাড়ির মডেল বা পেমেন্ট ওয়ালেট যুক্ত করুন।</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add Option Inputs (Mobile-Responsive Stack) -->
+          <div class="sm-add-grid">
+            <div class="f-group" style="margin:0;">
+              <label class="f-label" style="font-size:0.74rem;">Target Dropdown Field</label>
+              <select id="sm-target-field" class="f-control no-prefix" style="height:38px; font-size:0.8rem;">
+                <option value="drv-city">📍 Base District / Operating Area (জেলা / এলাকা)</option>
+                <option value="drv-license-type">🪪 BRTA License Class (লাইসেন্স শ্রেণি)</option>
+                <option value="drv-languages">🗣️ Language Skills (ভাষা ও যোগাযোগ)</option>
+                <option value="drv-car-model">🚗 Vehicle Model & Make (গাড়ির মডেল)</option>
+                <option value="drv-car-seats">💺 Seating Capacity (আসন সংখ্যা)</option>
+                <option value="drv-payout-method">💳 Payout Wallet / Bank (টাকা তোলার মাধ্যম)</option>
+                <option value="services">🛠️ Driver Service Category (সার্ভিস ক্যাটাগরি)</option>
+              </select>
+            </div>
+            <div class="f-group" style="margin:0;">
+              <label class="f-label" style="font-size:0.74rem;">New Option Label / Name</label>
+              <input type="text" id="sm-new-option-val" class="f-control no-prefix" placeholder="e.g. Barishal (বরিশাল) / Hyundai Staria" style="height:38px; font-size:0.8rem;"/>
+            </div>
+            <button type="button" class="btn-primary" onclick="addCustomOptionFromSettings()" style="height:38px; padding:0 16px; font-size:0.8rem; border-radius:8px; display:inline-flex; align-items:center; gap:6px;">
+              <i class="ph-bold ph-plus"></i> <span>Add Option</span>
+            </button>
+          </div>
+
+          <!-- Custom Options List -->
+          <div class="sm-custom-list-wrap">
+            <div class="sm-custom-list-header">
+              <span>Saved Custom Options (<span id="sm-custom-count">0</span> active)</span>
+              <button type="button" onclick="clearAllCustomOptions()" style="color:var(--danger); font-size:0.72rem; cursor:pointer; background:none; border:none; text-decoration:underline;">Clear All Options</button>
+            </div>
+            <div class="sm-custom-list" id="sm-custom-options-container">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+      <div class="sm-footer">
+        <button type="button" class="btn-reset-factory" onclick="resetDriverSettingsToDefault()" title="Reset all custom settings to factory defaults">
+          <i class="ph-bold ph-arrow-counter-clockwise"></i>
+          <span>Reset to Defaults</span>
+        </button>
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="btn-step-prev" onclick="closeDriverSettingsModal()" style="height:38px; padding:0 16px; font-size:0.8rem;">
+            Close
+          </button>
+          <button type="button" class="btn-primary" onclick="saveAndApplySettingsModal()" style="height:38px; padding:0 20px; font-size:0.8rem; border-radius:8px;">
+            <i class="ph-bold ph-floppy-disk"></i>
+            <span>Save & Apply</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       DRIVER REGISTRATION ENGINE & I18N BILINGUAL SYSTEM
+       ========================================================= -->
+  <script>
+    // Configuration for Google Sheets Live Database Webhook
+    const DEFAULT_GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwuaHLdJ1sQe9RI5m1ioU2CsbSTLTvM34udGNIObnlRgs3c_Q3XmhyJs3JbExjqDlkuuQ/exec';
+    let GOOGLE_SHEET_WEBHOOK_URL = DEFAULT_GOOGLE_SHEET_URL;
+
+    // Suppress Dev Dock permanently on Driver Intake Form
+    window.DISABLE_ROLE_DOCK = true;
+
+    // =========================================================
+    // PERSISTENT FORM SETTINGS & EXTENSIBILITY ENGINE
+    // =========================================================
+    const SETTINGS_KEY = 'rownaa_driver_form_settings';
+
+    let driverSettings = {
+      bypassMandatory: false,
+      customOptions: [],
+      sheetWebhookUrl: DEFAULT_GOOGLE_SHEET_URL
+    };
+
+    function loadDriverSettings() {
+      try {
+        const raw = localStorage.getItem(SETTINGS_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          driverSettings = Object.assign({}, driverSettings, parsed);
+        }
+      } catch(e) {
+        console.warn('Error loading driver form settings:', e);
+      }
+      return driverSettings;
+    }
+
+    function saveDriverSettings(newSettings) {
+      driverSettings = Object.assign(driverSettings, newSettings);
+      try {
+        localStorage.setItem(SETTINGS_KEY, JSON.stringify(driverSettings));
+      } catch(e) {
+        console.warn('Error saving driver form settings:', e);
+      }
+    }
+
+    function applyDriverSettings() {
+      const isBypass = !!driverSettings.bypassMandatory;
+
+      // 1. Mandatory Fields Controller
+      const allFormInputs = document.querySelectorAll('#driver-register-form input, #driver-register-form select, #driver-register-form textarea');
+      allFormInputs.forEach(el => {
+        if (el.hasAttribute('required') && !el.hasAttribute('data-orig-required')) {
+          el.setAttribute('data-orig-required', 'true');
+        }
+        if (isBypass) {
+          el.removeAttribute('required');
+        } else {
+          if (el.getAttribute('data-orig-required') === 'true') {
+            el.setAttribute('required', '');
+          }
+        }
+      });
+
+      // Update Labels (* asterisks vs (Optional))
+      document.querySelectorAll('.f-label .req').forEach(reqSpan => {
+        if (isBypass) {
+          reqSpan.innerHTML = '<span class="opt-badge">' + (currentLang === 'bn' ? '(ঐচ্ছিক)' : '(Optional)') + '</span>';
+        } else {
+          reqSpan.innerHTML = '*';
+        }
+      });
+
+      // Update Form Notice Banner & Nav Badges
+      const banner = document.getElementById('bypass-mandatory-notice');
+      const navBadge = document.getElementById('settings-badge');
+      const modalSwitch = document.getElementById('setting-bypass-mandatory');
+      const statusTag = document.getElementById('sm-bypass-status-tag');
+      const statusText = document.getElementById('sm-bypass-status-text');
+
+      if (banner) banner.style.display = isBypass ? 'flex' : 'none';
+      if (navBadge) {
+        const hasCustom = driverSettings.customOptions && driverSettings.customOptions.length > 0;
+        navBadge.style.display = (isBypass || hasCustom) ? 'inline-block' : 'none';
+        navBadge.textContent = isBypass ? (currentLang === 'bn' ? 'বাইপাস' : 'BYPASS') : (currentLang === 'bn' ? 'কাস্টম' : 'CUSTOM');
+      }
+      if (modalSwitch) modalSwitch.checked = isBypass;
+      if (statusTag) {
+        statusTag.className = isBypass ? 'sm-status-indicator bypass-active' : 'sm-status-indicator';
+        if (statusText) {
+          statusText.textContent = isBypass 
+            ? (currentLang === 'bn' ? 'বাইপাস সক্রিয় (সকল রিকোয়ার্ড ফিল্ড ঐচ্ছিক)' : 'Bypass Active (All mandatory constraints relaxed)')
+            : (currentLang === 'bn' ? 'কঠোর মোড সক্রিয় (সকল ফিল্ড পূরণ বাধ্যতামূলক)' : 'Strict Mode Active (All required fields enforced)');
+        }
+      }
+
+      // 2. Custom Dropdown Options Injector
+      if (Array.isArray(driverSettings.customOptions)) {
+        driverSettings.customOptions.forEach(opt => {
+          injectCustomOptionIntoDom(opt);
+        });
+      }
+
+      // 3. Webhook Sync Setting
+      if (driverSettings.sheetWebhookUrl) {
+        GOOGLE_SHEET_WEBHOOK_URL = driverSettings.sheetWebhookUrl;
+      }
+      // Webhook managed internally
+
+      renderCustomOptionsInSettings();
+    }
+
+    function injectCustomOptionIntoDom(opt) {
+      if (!opt || !opt.fieldId || !opt.value) return;
+
+      if (opt.fieldId === 'services') {
+        const grid = document.getElementById('services-grid-container');
+        const addTile = document.getElementById('btn-add-custom-service-tile');
+        const existingCb = document.querySelector(`input[name="services"][value="${CSS.escape(opt.value)}"]`);
+        if (!existingCb && grid && addTile) {
+          const newCard = document.createElement('label');
+          newCard.className = 'service-card-tile selected custom-injected-svc';
+          newCard.setAttribute('data-custom-opt-id', opt.value);
+          newCard.setAttribute('onclick', 'toggleServiceCheckbox(this)');
+          newCard.innerHTML = `
+            <input type="checkbox" name="services" value="${opt.value}" checked/>
+            <div class="svc-tile-head">
+              <div class="svc-tile-icon" style="background:rgba(212,255,0,0.14); color:var(--accent);"><i class="ph-fill ph-sparkle"></i></div>
+              <div class="svc-tile-title">${opt.label}</div>
+            </div>
+            <div class="svc-tile-desc">Custom specialized service category</div>
+            <div class="svc-rate-badge" style="background:rgba(212,255,0,0.15); color:var(--accent);">Custom Service</div>
+          `;
+          grid.insertBefore(newCard, addTile);
+        }
+        return;
+      }
+
+      const selectEl = document.getElementById(opt.fieldId);
+      if (!selectEl) return;
+
+      let existingOption = Array.from(selectEl.options).find(o => o.value === opt.value);
+      if (!existingOption) {
+        const optionEl = document.createElement('option');
+        optionEl.value = opt.value;
+        optionEl.textContent = opt.label;
+        optionEl.className = 'custom-injected-opt';
+
+        const customOpt = selectEl.querySelector('option[value="__custom__"]');
+        if (customOpt) {
+          selectEl.insertBefore(optionEl, customOpt);
+        } else {
+          selectEl.appendChild(optionEl);
+        }
+      }
+    }
+
+    function openDriverSettingsModal() {
+      const overlay = document.getElementById('driver-settings-overlay');
+      if (overlay) overlay.style.display = 'flex';
+      renderCustomOptionsInSettings();
+      // Webhook managed internally
+    }
+
+    function closeDriverSettingsModal(e) {
+      if (e && e.target && e.target.id !== 'driver-settings-overlay' && !e.target.closest('.sm-close-btn') && !e.target.closest('button')) {
+        return;
+      }
+      const overlay = document.getElementById('driver-settings-overlay');
+      if (overlay) overlay.style.display = 'none';
+    }
+
+    function toggleMandatoryBypass(checked) {
+      driverSettings.bypassMandatory = checked;
+      saveDriverSettings({ bypassMandatory: checked });
+      applyDriverSettings();
+    }
+
+    function addCustomOptionFromSettings() {
+      const fieldSelect = document.getElementById('sm-target-field');
+      const valInput = document.getElementById('sm-new-option-val');
+      const targetField = fieldSelect ? fieldSelect.value : 'drv-city';
+      const optionVal = valInput ? valInput.value.trim() : '';
+
+      if (!optionVal) {
+        alert(currentLang === 'bn' ? 'অনুগ্রহ করে নতুন অপশনের একটি নাম লিখুন।' : 'Please enter a name or title for the new option.');
+        if (valInput) valInput.focus();
+        return;
+      }
+
+      const exists = (driverSettings.customOptions || []).some(o => o.fieldId === targetField && o.value.toLowerCase() === optionVal.toLowerCase());
+      if (exists) {
+        alert(currentLang === 'bn' ? 'এই অপশনটি ইতিমধ্যেই তালিকায় বিদ্যমান।' : 'This custom option already exists for the selected field.');
+        return;
+      }
+
+      if (!driverSettings.customOptions) driverSettings.customOptions = [];
+      const newOpt = {
+        fieldId: targetField,
+        value: optionVal,
+        label: optionVal
+      };
+      driverSettings.customOptions.push(newOpt);
+      saveDriverSettings({ customOptions: driverSettings.customOptions });
+      applyDriverSettings();
+
+      const targetSelect = document.getElementById(targetField);
+      if (targetSelect) {
+        targetSelect.value = optionVal;
+      }
+
+      if (valInput) valInput.value = '';
+      alert(currentLang === 'bn' ? `✅ "${optionVal}" সফলভাবে যুক্ত করা হয়েছে!` : `✅ Custom option "${optionVal}" successfully added!`);
+    }
+
+    function removeCustomOption(index) {
+      if (!driverSettings.customOptions || !driverSettings.customOptions[index]) return;
+      const removed = driverSettings.customOptions[index];
+
+      if (removed.fieldId === 'services') {
+        const injectedCard = document.querySelector(`label.custom-injected-svc[data-custom-opt-id="${CSS.escape(removed.value)}"]`);
+        if (injectedCard) injectedCard.remove();
+      } else {
+        const selectEl = document.getElementById(removed.fieldId);
+        if (selectEl) {
+          const optEl = Array.from(selectEl.options).find(o => o.value === removed.value);
+          if (optEl) optEl.remove();
+        }
+      }
+
+      driverSettings.customOptions.splice(index, 1);
+      saveDriverSettings({ customOptions: driverSettings.customOptions });
+      applyDriverSettings();
+    }
+
+    function clearAllCustomOptions() {
+      if (!driverSettings.customOptions || driverSettings.customOptions.length === 0) return;
+      if (!confirm(currentLang === 'bn' ? 'আপনি কি সকল কাস্টম অপশন মুছে ফেলতে চান?' : 'Clear all custom options you added?')) return;
+
+      document.querySelectorAll('.custom-injected-opt, .custom-injected-svc').forEach(el => el.remove());
+      driverSettings.customOptions = [];
+      saveDriverSettings({ customOptions: [] });
+      applyDriverSettings();
+    }
+
+    function renderCustomOptionsInSettings() {
+      const container = document.getElementById('sm-custom-options-container');
+      const countEl = document.getElementById('sm-custom-count');
+      if (!container) return;
+
+      const opts = driverSettings.customOptions || [];
+      if (countEl) countEl.textContent = opts.length;
+
+      if (opts.length === 0) {
+        container.innerHTML = `<div style="font-size:0.75rem; color:var(--text-tertiary); text-align:center; padding:12px;">${currentLang === 'bn' ? 'কোনো কাস্টম অপশন এখনও যোগ করা হয়নি।' : 'No custom options added yet.'}</div>`;
+        return;
+      }
+
+      const fieldNames = {
+        'drv-city': 'District/City',
+        'drv-license-type': 'License Class',
+        'drv-languages': 'Language',
+        'drv-car-model': 'Vehicle Model',
+        'drv-car-seats': 'Seating',
+        'drv-payout-method': 'Payout Method',
+        'services': 'Service Category'
+      };
+
+      container.innerHTML = opts.map((opt, idx) => `
+        <div class="sm-custom-item">
+          <div>
+            <span class="sm-custom-badge">${fieldNames[opt.fieldId] || opt.fieldId}</span>
+            <span style="color:#fff; font-weight:600;">${opt.label}</span>
+          </div>
+          <button type="button" class="sm-custom-del-btn" onclick="removeCustomOption(${idx})" title="Delete option">
+            <i class="ph ph-trash"></i>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function saveAndApplySettingsModal() {
+      // Webhook URL preserved internally
+      saveDriverSettings(driverSettings);
+      applyDriverSettings();
+      closeDriverSettingsModal();
+      alert(currentLang === 'bn' ? '✅ সেটিংস সংরক্ষিত এবং কার্যকর করা হয়েছে!' : '✅ Driver form settings saved and applied!');
+    }
+
+    function resetDriverSettingsToDefault() {
+      if (!confirm(currentLang === 'bn' ? 'সকল সেটিংস ডিফল্ট অবস্থায় ফিরিয়ে আনবেন?' : 'Reset all configuration to factory defaults?')) return;
+      document.querySelectorAll('.custom-injected-opt, .custom-injected-svc').forEach(el => el.remove());
+      driverSettings = {
+        bypassMandatory: false,
+        customOptions: [],
+        sheetWebhookUrl: DEFAULT_GOOGLE_SHEET_URL
+      };
+      GOOGLE_SHEET_WEBHOOK_URL = DEFAULT_GOOGLE_SHEET_URL;
+      localStorage.removeItem(SETTINGS_KEY);
+      localStorage.removeItem('rownaa_gsheet_url');
+      applyDriverSettings();
+      alert(currentLang === 'bn' ? '✅ সফলভাবে ফ্যাক্টরি ডিফল্টে রিসেট করা হয়েছে!' : '✅ Reset to factory defaults completed!');
+    }
+
+    async function testSheetConnection() {
+      const resultDiv = document.getElementById('sm-sheet-ping-result');
+      const urlInput = document.getElementById('sm-sheet-url');
+      const testUrl = urlInput ? urlInput.value.trim() : GOOGLE_SHEET_WEBHOOK_URL;
+
+      if (!testUrl) {
+        if (resultDiv) {
+          resultDiv.style.display = 'block';
+          resultDiv.style.color = 'var(--danger)';
+          resultDiv.textContent = currentLang === 'bn' ? '⚠️ অনুগ্রহ করে একটি বৈধ গুগল শিট ওয়েবহুক URL লিখুন।' : '⚠️ Please enter a Google Apps Script Webhook URL.';
+        }
+        return;
+      }
+
+      if (resultDiv) {
+        resultDiv.style.display = 'block';
+        resultDiv.style.color = 'var(--warning)';
+        resultDiv.innerHTML = '<i class="ph-bold ph-spinner" style="animation:spin 1s linear infinite;"></i> ' + (currentLang === 'bn' ? 'সার্ভারে পিং পাঠানো হচ্ছে...' : 'Pinging Google Apps Script endpoint...');
+      }
+
+      try {
+        const resp = await fetch(testUrl, { method: 'GET', mode: 'no-cors' });
+        if (resultDiv) {
+          resultDiv.style.color = '#10b981';
+          resultDiv.innerHTML = '<i class="ph-bold ph-check-circle"></i> ' + (currentLang === 'bn' ? 'সার্ভার সক্রিয় ও সংযুক্ত! (HTTP Endpoint Ready)' : 'Endpoint Reachable & Ready! Connected to Google Apps Script.');
+        }
+      } catch (err) {
+        if (resultDiv) {
+          resultDiv.style.color = 'var(--danger)';
+          resultDiv.innerHTML = '<i class="ph-bold ph-warning-circle"></i> Connection error: ' + err.message;
+        }
+      }
+    }
+
+    // =========================================================
+    // COMPREHENSIVE BILINGUAL TRANSLATION SYSTEM (EN / BN)
+    // =========================================================
+    let currentLang = 'en';
+
+    const I18N = {
+      en: {
+        langBtn: 'বাংলা সংস্করণ',
+        settingsBtn: 'Settings',
+        bypassActive: 'BYPASS',
+        customActive: 'CUSTOM',
+        stepLabels: ['Personal & NID', 'License & Skills', 'Services & Time', 'Role & Payout', 'Documents & Review'],
+        mobileStepNames: [
+          'Personal & NID Credentials',
+          'Driving License & Road Expertise',
+          'Preferred Services & Working Hours',
+          'Role, Payout & Fleet Profile',
+          'Document Uploads & Final Affirmation'
+        ],
+        mobilePills: ['1. Info', '2. License', '3. Services', '4. Role', '5. Review'],
+        bypassTitle: 'Mandatory Validation Bypassed:',
+        bypassDesc: 'All required constraints (*) are relaxed. You can skip any field during registration.',
+        restoreStrict: 'Restore Strict Mode',
+        step1: {
+          title: '1. Personal & Contact Information',
+          desc: 'Enter your legal identity exactly as shown on your NID (Smart Card) and BRTA Driving License.',
+          lblName: 'Full Legal Name',
+          lblPhone: 'Mobile Number (WhatsApp)',
+          lblNid: 'National ID (NID / Smart Card)',
+          lblCity: 'Base Residential City / Area',
+          lblEmName: 'Emergency Contact Name',
+          lblEmPhone: 'Emergency Contact Phone',
+          btnNext: 'Continue to License & Experience'
+        },
+        step2: {
+          title: '2. BRTA Driving License & Professional Experience',
+          desc: 'All Rownaa chauffeurs must hold an active, non-expired BRTA license.',
+          lblLicense: 'BRTA Driving License Number',
+          lblLicenseType: 'License Classification',
+          lblExp: 'Total Commercial Driving Experience',
+          lblExpiry: 'License Expiration Date',
+          lblLang: 'Language & VIP Communication Skills',
+          lblHighway: 'Highway & Night Driving Comfort',
+          btnNext: 'Continue to Services & Availability'
+        },
+        step3: {
+          title: '3. Service Preference & Working Availability',
+          desc: 'Select which services you are available for. You can also click "+ Add Custom Service" to offer new trip types.',
+          lblAvail: 'Working Availability Commitment',
+          avail1Title: 'Full-Time Dedicated',
+          avail1Desc: 'Available 6 days/week. Priority allocation for high-paying corporate contracts.',
+          avail2Title: 'Part-Time Flex',
+          avail2Desc: 'Fixed shifts or evening hours. Ideal for standby city chauffeurs.',
+          avail3Title: 'Weekend & On-Demand',
+          avail3Desc: 'Available Friday/Saturday for highway intercity tours & airport transfers.',
+          btnNext: 'Continue to Role & Payout'
+        },
+        step4: {
+          title: '4. Chauffeur Role, Payout Wallet & Fleet Info',
+          desc: 'Specify your employment mode and provide your mobile wallet for instant payments and trip allowances.',
+          lblRole: 'Select Your Driving Status',
+          role1Title: 'Fleet Chauffeur',
+          role1Desc: 'Professional chauffeur looking to be assigned to a Rownaa Fleet Partner\'s vehicle.',
+          role2Title: 'Owner-Driver',
+          role2Desc: 'I own a personal vehicle (Sedan/SUV/HiAce) and will drive it myself for Rownaa.',
+          role3Title: 'On-Demand Standby',
+          role3Desc: 'Available for airport emergency dispatch, tour replacement, and VIP standbys.',
+          vehicleTitle: 'Your Vehicle Profile',
+          vehicleDesc: 'Since you are registering as an Owner-Driver, enter your car\'s model and registration details as per BRTA documents.',
+          lblCarModel: 'Car Model & Make',
+          lblCarPlate: 'Number Plate',
+          lblCarSeats: 'Seating Capacity',
+          lblCarYear: 'Manufacture Year',
+          lblCarFitness: 'Fitness Expiry',
+          payoutHeading: 'Payout & Expense Reimbursement',
+          lblPayoutMethod: 'Payout Mobile Wallet Method',
+          lblPayoutNum: 'Wallet / Account Number',
+          btnNext: 'Continue to Documents & Review'
+        },
+        step5: {
+          title: '5. Verification Documents & Application Review',
+          desc: 'Upload clear photographs of your identity documents (Front & Back) and review your application summary.',
+          upPhotoTitle: 'Chauffeur Portrait Photo',
+          upPhotoSub: 'Clean front-facing headshot or portrait',
+          upLicFrontTitle: 'BRTA License (Front)',
+          upLicFrontSub: 'Clear front side of card',
+          upLicBackTitle: 'BRTA License (Back)',
+          upLicBackSub: 'Clear back side of card',
+          upNidFrontTitle: 'NID Smart Card (Front)',
+          upNidFrontSub: 'Clear front side of card',
+          upNidBackTitle: 'NID Smart Card (Back)',
+          upNidBackSub: 'Clear back side of card',
+          sumHeader: 'Application Review Summary',
+          btnSubmit: 'Submit Chauffeur Application'
+        },
+        btnBack: 'Back',
+        optionalBadge: '(Optional)'
+      },
+      bn: {
+        langBtn: 'English Version',
+        settingsBtn: 'সেটিংস',
+        bypassActive: 'বাইপাস',
+        customActive: 'কাস্টম',
+        stepLabels: ['ব্যক্তিগত ও এনআইডি', 'লাইসেন্স ও অভিজ্ঞতা', 'সার্ভিস ও সময়', 'ভূমিকা ও পেমেন্ট', 'কাগজপত্র ও রিভিউ'],
+        mobileStepNames: [
+          'ব্যক্তিগত তথ্য ও জাতীয় পরিচয়পত্র',
+          'বিআরটিএ লাইসেন্স ও ড্রাইভিং দক্ষতা',
+          'পছন্দের সার্ভিস ও কাজের সময়সূচি',
+          'কাজের ভূমিকা ও পেমেন্ট তথ্য',
+          'কাগজপত্র আপলোড ও চূড়ান্ত আবেদন'
+        ],
+        mobilePills: ['১. তথ্য', '২. লাইসেন্স', '৩. সার্ভিস', '৪. ভূমিকা', '৫. রিভিউ'],
+        bypassTitle: 'বাধ্যতামূলক ফিল্ড রিমুভ সক্রিয়:',
+        bypassDesc: 'সকল রিকোয়ার্ড ফিল্ড (*) শিথিল করা হয়েছে। যেকোনো তথ্য ছাড়া স্কিপ করে নিবন্ধন সম্পন্ন করা যাবে।',
+        restoreStrict: 'কঠোর মোড পুনঃস্থাপন করুন',
+        step1: {
+          title: '১. ব্যক্তিগত তথ্য ও যোগাযোগের বিবরণ',
+          desc: 'আপনার জাতীয় পরিচয়পত্র (এনআইডি) এবং ড্রাইভিং লাইসেন্স অনুযায়ী সঠিক তথ্য প্রদান করুন।',
+          lblName: 'পূর্ণ নাম (জাতীয় পরিচয়পত্র অনুযায়ী)',
+          lblPhone: 'মোবাইল নম্বর (হোয়াটসঅ্যাপ সক্রিয়)',
+          lblNid: 'জাতীয় পরিচয়পত্র (এনআইডি নম্বর)',
+          lblCity: 'প্রধান কাজের এলাকা / জেলা',
+          lblEmName: 'জরুরি যোগাযোগের ব্যক্তির নাম ও সম্পর্ক',
+          lblEmPhone: 'জরুরি যোগাযোগের মোবাইল নম্বর',
+          btnNext: 'পরবর্তী ধাপ: লাইসেন্স ও অভিজ্ঞতা →'
+        },
+        step2: {
+          title: '২. বিআরটিএ ড্রাইভিং লাইসেন্স ও অভিজ্ঞতা',
+          desc: 'রওনার সকল শফারকে বিআরটিএ অনুমোদিত বৈধ লাইসেন্সধারী হতে হবে।',
+          lblLicense: 'বিআরটিএ ড্রাইভিং লাইসেন্স নম্বর',
+          lblLicenseType: 'লাইসেন্সের শ্রেণি / ক্যাটাগরি',
+          lblExp: 'মোট পেশাদার ড্রাইভিং অভিজ্ঞতা',
+          lblExpiry: 'লাইসেন্সের মেয়াদ উত্তীর্ণের তারিখ',
+          lblLang: 'ভাষা ও যোগাযোগ দক্ষতা',
+          lblHighway: 'হাইওয়ে ও রাতের ড্রাইভিং অভিজ্ঞতা',
+          btnNext: 'পরবর্তী ধাপ: সার্ভিস ও সময়সূচি →'
+        },
+        step3: {
+          title: '৩. পছন্দের সার্ভিস ও কাজের সময়সূচি',
+          desc: 'আপনি রওনার কোন কোন ট্রিপে কাজ করতে চান তা নির্বাচন করুন অথবা নতুন কোনো সার্ভিস যোগ করুন।',
+          lblAvail: 'কাজের সময়সূচি ও প্রাপ্যতা',
+          avail1Title: 'ফুল-টাইম ডেডিকেটেড',
+          avail1Desc: 'সপ্তাহে ৬ দিন উপলব্ধ। কর্পোরেট এক্সিকিউটিভ ও উচ্চ আয়ের চুক্তিতে অগ্রাধিকার।',
+          avail2Title: 'পার্ট-টাইম ফ্লেক্স',
+          avail2Desc: 'নির্দিষ্ট শিফট বা সন্ধ্যার সময়। লোকাল সিটি স্ট্যান্ডবাই শফারের জন্য উপযুক্ত।',
+          avail3Title: 'উইকেন্ড ও অন-ডিমান্ড',
+          avail3Desc: 'শুক্র/শনিবার হাইওয়ে ট্যুর ও এয়ারপোর্ট ইমার্জেন্সি ডিসপ্যাচে কাজ।',
+          btnNext: 'পরবর্তী ধাপ: ভূমিকা ও পেমেন্ট →'
+        },
+        step4: {
+          title: '৪. কাজের ভূমিকা, পেমেন্ট ওয়ালেট ও গাড়ির তথ্য',
+          desc: 'নিজের গাড়ি চালাবেন নাকি কোম্পানির গাড়ি চালাবেন তা নির্ধারণ করুন এবং পেমেন্ট নম্বর দিন।',
+          lblRole: 'আপনার কাজের ধরন নির্বাচন করুন',
+          role1Title: 'ফ্লিট শফার (কোম্পানির গাড়ি)',
+          role1Desc: 'রওনার নিবন্ধিত ফ্লিট পার্টনারের গাড়ি ড্রাইভ করতে ইচ্ছুক পেশাদার ড্রাইভার।',
+          role2Title: 'ওনার-ড্রাইভার (নিজের গাড়ি)',
+          role2Desc: 'আমার নিজস্ব ব্যক্তিগত গাড়ি রয়েছে (সেডান/এসইউভি) এবং আমি নিজেই ড্রাইভ করব।',
+          role3Title: 'অন-ডিমান্ড স্ট্যান্ডবাই',
+          role3Desc: 'জরুরি এয়ারপোর্ট ট্রান্সফার ও ট্যুর রিপ্লেসমেন্ট ড্রাইভার হিসেবে কাজ।',
+          vehicleTitle: 'আপনার গাড়ির বিবরণ (Vehicle Profile)',
+          vehicleDesc: 'যেহেতু আপনি ওনার-ড্রাইভার হিসেবে নিবন্ধন করছেন, গাড়ির বিআরটিএ রেজিস্ট্রেশন তথ্য দিন।',
+          lblCarModel: 'গাড়ির ব্র্যান্ড ও মডেল',
+          lblCarPlate: 'মেট্রো নম্বর প্লেট',
+          lblCarSeats: 'আসন সংখ্যা (Seating Capacity)',
+          lblCarYear: 'উৎপাদনের বছর (Year)',
+          lblCarFitness: 'ফিটনেস মেয়াদ',
+          payoutHeading: 'টাকা উত্তোলন ও ভাতা প্রাপ্তির তথ্য (Payout)',
+          lblPayoutMethod: 'পেমেন্ট ওয়ালেট মাধ্যম',
+          lblPayoutNum: 'বিকাশ / নগদ / ব্যাংক অ্যাকাউন্ট নম্বর',
+          btnNext: 'পরবর্তী ধাপ: কাগজপত্র ও রিভিউ →'
+        },
+        step5: {
+          title: '৫. কাগজপত্র আপলোড ও চূড়ান্ত আবেদন',
+          desc: 'আপনার ছবি ও প্রয়োজনীয় নথিপত্র (সামনে ও পেছনে) পরিষ্কারভাবে আপলোড করুন এবং তথ্য পর্যালোচনা করুন।',
+          upPhotoTitle: 'শফারের ছবি',
+          upPhotoSub: 'পরিষ্কার সেলফি বা পাসপোর্ট ছবি',
+          upLicFrontTitle: 'ড্রাইভিং লাইসেন্স (সামনের অংশ)',
+          upLicFrontSub: 'লাইসেন্সের সামনের স্পষ্ট ছবি',
+          upLicBackTitle: 'ড্রাইভিং লাইসেন্স (পেছনের অংশ)',
+          upLicBackSub: 'লাইসেন্সের পেছনের স্পষ্ট ছবি',
+          upNidFrontTitle: 'স্মার্ট এনআইডি (সামনের অংশ)',
+          upNidFrontSub: 'এনআইডির সামনের স্পষ্ট ছবি',
+          upNidBackTitle: 'স্মার্ট এনআইডি (পেছনের অংশ)',
+          upNidBackSub: 'এনআইডির পেছনের স্পষ্ট ছবি',
+          sumHeader: 'আবেদনের সারসংক্ষেপ পর্যালোচনা',
+          btnSubmit: 'শফার আবেদনপত্র জমা দিন 🚀',
+          agreementText: 'আমি শপথ করছি যে প্রদত্ত সকল তথ্য সত্য এবং আমার কোনো অপরাধমূলক রেকর্ড নেই। আমি রওনার ভিআইপি শফার নীতিমালা মেনে চলব।'
+        },
+        btnBack: 'পূর্ববর্তী ধাপ',
+        optionalBadge: '(ঐচ্ছিক)'
+      }
+    };
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('rownaa_lang', lang);
+      const t = I18N[lang] || I18N.en;
+
+      // Update lang button text
+      const langBtnText = document.getElementById('lang-btn-text');
+      if (langBtnText) langBtnText.textContent = t.langBtn;
+
+      // Toggle span.lang-en and span.lang-bn
+      document.querySelectorAll('.lang-en').forEach(el => el.style.display = (lang === 'bn' ? 'none' : 'inline'));
+      document.querySelectorAll('.lang-bn').forEach(el => el.style.display = (lang === 'bn' ? 'inline' : 'none'));
+
+      // Update Stepper Labels
+      for (let i = 1; i <= 5; i++) {
+        const stepLbl = document.getElementById(`step-lbl-${i}`);
+        if (stepLbl) stepLbl.textContent = t.stepLabels[i - 1];
+        const mPill = document.getElementById(`m-pill-${i}`);
+        if (mPill) mPill.textContent = t.mobilePills[i - 1];
+      }
+
+      // Update current step name in mobile stepper
+      updateMobileStepHeader(currentStep);
+
+      // Bypass banner
+      const bpTitle = document.getElementById('bypass-banner-title');
+      const bpDesc = document.getElementById('bypass-banner-desc');
+      const bpBtn = document.getElementById('btn-restore-strict');
+      if (bpTitle) bpTitle.textContent = t.bypassTitle;
+      if (bpDesc) bpDesc.textContent = t.bypassDesc;
+      if (bpBtn) bpBtn.querySelector('span').textContent = t.restoreStrict;
+
+      // Step 1
+      const s1 = t.step1;
+      const t1 = document.getElementById('title-step-1'); if (t1) t1.textContent = s1.title;
+      const d1 = document.getElementById('desc-step-1'); if (d1) d1.textContent = s1.desc;
+      const ln = document.getElementById('lbl-name'); if (ln) ln.innerHTML = `${s1.lblName} <span class="req">${driverSettings.bypassMandatory ? t.optionalBadge : '*'}</span>`;
+      const lp = document.getElementById('lbl-phone'); if (lp) lp.innerHTML = `${s1.lblPhone} <span class="req">${driverSettings.bypassMandatory ? t.optionalBadge : '*'}</span>`;
+      const lnd = document.getElementById('lbl-nid'); if (lnd) lnd.innerHTML = `${s1.lblNid} <span class="req">${driverSettings.bypassMandatory ? t.optionalBadge : '*'}</span>`;
+      const lc = document.getElementById('lbl-city'); if (lc) lc.innerHTML = `${s1.lblCity} <span class="req">${driverSettings.bypassMandatory ? t.optionalBadge : '*'}</span>`;
+      const len = document.getElementById('lbl-em-name'); if (len) len.innerHTML = `${s1.lblEmName} <span class="req">${driverSettings.bypassMandatory ? t.optionalBadge : '*'}</span>`;
+      const lep = document.getElementById('lbl-em-phone'); if (lep) lep.innerHTML = `${s1.lblEmPhone} <span class="req">${driverSettings.bypassMandatory ? t.optionalBadge : '*'}</span>`;
+      const bn1 = document.getElementById('btn-next-1'); if (bn1) bn1.querySelector('span').textContent = s1.btnNext;
+
+      // Step 2
+      const s2 = t.step2;
+      const t2 = document.getElementById('title-step-2'); if (t2) t2.textContent = s2.title;
+      const d2 = document.getElementById('desc-step-2'); if (d2) d2.textContent = s2.desc;
+      const llic = document.getElementById('lbl-license'); if (llic) llic.innerHTML = `${s2.lblLicense} <span class="req">${driverSettings.bypassMandatory ? t.optionalBadge : '*'}</span>`;
+      const llt = document.getElementById('lbl-license-type'); if (llt) llt.innerHTML = `${s2.lblLicenseType} <span class="req">${driverSettings.bypassMandatory ? t.optionalBadge : '*'}</span>`;
+      const lexp = document.getElementById('lbl-exp'); if (lexp) lexp.innerHTML = `${s2.lblExp} <span class="req">${driverSettings.bypassMandatory ? t.optionalBadge : '*'}</span>`;
+      const lexpiry = document.getElementById('lbl-expiry'); if (lexpiry) lexpiry.innerHTML = `${s2.lblExpiry} <span class="req">${driverSettings.bypassMandatory ? t.optionalBadge : '*'}</span>`;
+      const llang = document.getElementById('lbl-lang'); if (llang) llang.textContent = s2.lblLang;
+      const lhigh = document.getElementById('lbl-highway'); if (lhigh) lhigh.textContent = s2.lblHighway;
+      const bn2 = document.getElementById('btn-next-2'); if (bn2) bn2.querySelector('span').textContent = s2.btnNext;
+
+      // Step 3
+      const s3 = t.step3;
+      const t3 = document.getElementById('title-step-3'); if (t3) t3.textContent = s3.title;
+      const d3 = document.getElementById('desc-step-3'); if (d3) d3.textContent = s3.desc;
+      const lav = document.getElementById('lbl-avail'); if (lav) lav.innerHTML = `${s3.lblAvail} <span class="req">${driverSettings.bypassMandatory ? t.optionalBadge : '*'}</span>`;
+      const av1t = document.getElementById('avail-opt-1-title'); if (av1t) av1t.textContent = s3.avail1Title;
+      const av1d = document.getElementById('avail-opt-1-desc'); if (av1d) av1d.textContent = s3.avail1Desc;
+      const av2t = document.getElementById('avail-opt-2-title'); if (av2t) av2t.textContent = s3.avail2Title;
+      const av2d = document.getElementById('avail-opt-2-desc'); if (av2d) av2d.textContent = s3.avail2Desc;
+      const av3t = document.getElementById('avail-opt-3-title'); if (av3t) av3t.textContent = s3.avail3Title;
+      const av3d = document.getElementById('avail-opt-3-desc'); if (av3d) av3d.textContent = s3.avail3Desc;
+      const bn3 = document.getElementById('btn-next-3'); if (bn3) bn3.querySelector('span').textContent = s3.btnNext;
+
+      // Step 4
+      const s4 = t.step4;
+      const t4 = document.getElementById('title-step-4'); if (t4) t4.textContent = s4.title;
+      const d4 = document.getElementById('desc-step-4'); if (d4) d4.textContent = s4.desc;
+      const lrole = document.getElementById('lbl-role'); if (lrole) lrole.innerHTML = `${s4.lblRole} <span class="req">${driverSettings.bypassMandatory ? t.optionalBadge : '*'}</span>`;
+      const r1t = document.getElementById('role-opt-1-title'); if (r1t) r1t.textContent = s4.role1Title;
+      const r1d = document.getElementById('role-opt-1-desc'); if (r1d) r1d.textContent = s4.role1Desc;
+      const r2t = document.getElementById('role-opt-2-title'); if (r2t) r2t.textContent = s4.role2Title;
+      const r2d = document.getElementById('role-opt-2-desc'); if (r2d) r2d.textContent = s4.role2Desc;
+      const r3t = document.getElementById('role-opt-3-title'); if (r3t) r3t.textContent = s4.role3Title;
+      const r3d = document.getElementById('role-opt-3-desc'); if (r3d) r3d.textContent = s4.role3Desc;
+      const lvt = document.getElementById('lbl-vehicle-title'); if (lvt) lvt.textContent = s4.vehicleTitle;
+      const lvd = document.getElementById('lbl-vehicle-desc'); if (lvd) lvd.textContent = s4.vehicleDesc;
+      const lcm = document.getElementById('lbl-car-model'); if (lcm) lcm.textContent = s4.lblCarModel;
+      const lcp = document.getElementById('lbl-car-plate'); if (lcp) lcp.textContent = s4.lblCarPlate;
+      const lcs = document.getElementById('lbl-car-seats'); if (lcs) lcs.textContent = s4.lblCarSeats;
+      const lcy = document.getElementById('lbl-car-year'); if (lcy) lcy.textContent = s4.lblCarYear;
+      const lcf = document.getElementById('lbl-car-fitness'); if (lcf) lcf.textContent = s4.lblCarFitness;
+      const lph = document.getElementById('lbl-payout-heading'); if (lph) lph.textContent = s4.payoutHeading;
+      const lpm = document.getElementById('lbl-payout-method'); if (lpm) lpm.innerHTML = `${s4.lblPayoutMethod} <span class="req">${driverSettings.bypassMandatory ? t.optionalBadge : '*'}</span>`;
+      const lpn = document.getElementById('lbl-payout-num'); if (lpn) lpn.innerHTML = `${s4.lblPayoutNum} <span class="req">${driverSettings.bypassMandatory ? t.optionalBadge : '*'}</span>`;
+      const bn4 = document.getElementById('btn-next-4'); if (bn4) bn4.querySelector('span').textContent = s4.btnNext;
+
+      // Step 5 (5 Upload Cards)
+      const s5 = t.step5;
+      const t5 = document.getElementById('title-step-5'); if (t5) t5.textContent = s5.title;
+      const d5 = document.getElementById('desc-step-5'); if (d5) d5.textContent = s5.desc;
+      const uptp = document.getElementById('up-title-photo'); if (uptp) uptp.textContent = s5.upPhotoTitle;
+      const upsp = document.getElementById('up-sub-photo'); if (upsp) upsp.textContent = s5.upPhotoSub;
+      const uptlf = document.getElementById('up-title-lic-front'); if (uptlf) uptlf.textContent = s5.upLicFrontTitle;
+      const upslf = document.getElementById('up-sub-lic-front'); if (upslf) upslf.textContent = s5.upLicFrontSub;
+      const uptlb = document.getElementById('up-title-lic-back'); if (uptlb) uptlb.textContent = s5.upLicBackTitle;
+      const upslb = document.getElementById('up-sub-lic-back'); if (upslb) upslb.textContent = s5.upLicBackSub;
+      const uptnf = document.getElementById('up-title-nid-front'); if (uptnf) uptnf.textContent = s5.upNidFrontTitle;
+      const upsnf = document.getElementById('up-sub-nid-front'); if (upsnf) upsnf.textContent = s5.upNidFrontSub;
+      const uptnb = document.getElementById('up-title-nid-back'); if (uptnb) uptnb.textContent = s5.upNidBackTitle;
+      const upsnb = document.getElementById('up-sub-nid-back'); if (upsnb) upsnb.textContent = s5.upNidBackSub;
+      const sumH = document.getElementById('sum-header-title'); if (sumH) sumH.textContent = s5.sumHeader;
+      const bsub = document.getElementById('btn-submit-text'); if (bsub) bsub.textContent = s5.btnSubmit;
+
+      // All Back buttons
+      document.querySelectorAll('.btn-prev-text').forEach(el => el.textContent = t.btnBack);
+
+      // Summary table labels
+      const sumNameLbl = document.getElementById('sum-lbl-name'); if (sumNameLbl) sumNameLbl.textContent = (lang === 'bn' ? 'আবেদনকারীর নাম:' : 'Applicant Name:');
+      const sumPhoneLbl = document.getElementById('sum-lbl-phone'); if (sumPhoneLbl) sumPhoneLbl.textContent = (lang === 'bn' ? 'মোবাইল (হোয়াটসঅ্যাপ):' : 'Mobile (WhatsApp):');
+      const sumNidLbl = document.getElementById('sum-lbl-nid'); if (sumNidLbl) sumNidLbl.textContent = (lang === 'bn' ? 'এনআইডি নম্বর:' : 'NID Number:');
+      const sumLicLbl = document.getElementById('sum-lbl-lic'); if (sumLicLbl) sumLicLbl.textContent = (lang === 'bn' ? 'বিআরটিএ লাইসেন্স:' : 'BRTA License & Expiry:');
+      const sumRoleLbl = document.getElementById('sum-lbl-role'); if (sumRoleLbl) sumRoleLbl.textContent = (lang === 'bn' ? 'কাজের ভূমিকা ও এলাকা:' : 'Role & Base Area:');
+      const sumSvcLbl = document.getElementById('sum-lbl-svcs'); if (sumSvcLbl) sumSvcLbl.textContent = (lang === 'bn' ? 'নির্বাচিত সার্ভিস:' : 'Services Selected:');
+      const sumPayLbl = document.getElementById('sum-lbl-payout'); if (sumPayLbl) sumPayLbl.textContent = (lang === 'bn' ? 'পেমেন্ট ওয়ালেট:' : 'Payout Wallet:');
+      const lagr = document.getElementById('lbl-agreement'); if (lagr && t.agreementText) lagr.textContent = t.agreementText;
+      const sumDocLbl = document.getElementById('sum-lbl-docs'); if (sumDocLbl) sumDocLbl.textContent = (lang === 'bn' ? 'সংযুক্ত নথিপত্র:' : 'Uploaded Documents:');
+    }
+
+    function toggleLanguage() {
+      const nextLang = currentLang === 'en' ? 'bn' : 'en';
+      setLanguage(nextLang);
+    }
+
+    // =========================================================
+    // STEP NAVIGATION & FORM PROGRESSION
+    // =========================================================
+    let currentStep = 1;
+    const totalSteps = 5;
+
+    function goToStep(step) {
+      if (step < 1 || step > totalSteps) return;
+
+      document.querySelectorAll('.step-pane').forEach(p => p.classList.remove('active'));
+      const activePane = document.getElementById(`pane-step-${step}`);
+      if (activePane) activePane.classList.add('active');
+
+      for (let i = 1; i <= totalSteps; i++) {
+        const node = document.getElementById(`step-node-${i}`);
+        if (!node) continue;
+        node.classList.remove('active', 'completed');
+        if (i === step) {
+          node.classList.add('active');
+        } else if (i < step) {
+          node.classList.add('completed');
+        }
+      }
+
+      updateMobileStepHeader(step);
+
+      currentStep = step;
+      if (step === 5) {
+        populateSummary();
+      }
+
+      window.scrollTo({ top: 120, behavior: 'smooth' });
+    }
+
+    function updateMobileStepHeader(step) {
+      const t = I18N[currentLang] || I18N.en;
+      const stepText = document.getElementById('mobile-step-text');
+      const stepPill = document.getElementById('ms-badge-pill');
+      const percentEl = document.getElementById('mobile-step-percent');
+      const bar = document.getElementById('mobile-progress-bar');
+
+      const pct = Math.round((step / totalSteps) * 100);
+      if (bar) bar.style.width = `${pct}%`;
+      if (percentEl) percentEl.textContent = currentLang === 'bn' ? `${pct}% সম্পন্ন` : `${pct}% Done`;
+      if (stepPill) stepPill.textContent = currentLang === 'bn' ? `ধাপ ${step}/৫` : `STEP ${step}/5`;
+      if (stepText) stepText.textContent = t.mobileStepNames[step - 1] || `Step ${step}`;
+
+      for (let i = 1; i <= totalSteps; i++) {
+        const pill = document.getElementById(`m-pill-${i}`);
+        if (!pill) continue;
+        pill.classList.remove('active', 'completed');
+        if (i === step) pill.classList.add('active');
+        else if (i < step) pill.classList.add('completed');
+      }
+    }
+
+    function validateAndNext(step) {
+      const isBypass = !!(driverSettings && driverSettings.bypassMandatory);
+
+      if (!isBypass) {
+        const currentPane = document.getElementById(`pane-step-${step}`);
+        if (currentPane) {
+          const requiredInputs = currentPane.querySelectorAll('input[required], select[required], textarea[required]');
+          for (let input of requiredInputs) {
+            if (!input.checkValidity() || !input.value.trim()) {
+              input.reportValidity();
+              input.focus();
+              return;
+            }
+          }
+        }
+      }
+
+      goToStep(step + 1);
+    }
+
+    // Interactive Tile Selectors
+    function selectTile(tileEl, hiddenInputId, val) {
+      const parent = tileEl.parentElement;
+      parent.querySelectorAll('.tile-opt').forEach(el => el.classList.remove('active'));
+      tileEl.classList.add('active');
+      const radio = tileEl.querySelector('input[type="radio"]');
+      if (radio) radio.checked = true;
+      const hidden = document.getElementById(hiddenInputId);
+      if (hidden) hidden.value = val;
+    }
+
+    function selectRoleTile(tileEl, val) {
+      selectTile(tileEl, 'drv-role-val', val);
+      const vehicleSec = document.getElementById('owner-vehicle-section');
+      if (vehicleSec) {
+        vehicleSec.style.display = (val === 'car_owner_driver') ? 'block' : 'none';
+      }
+    }
+
+    function toggleServiceCheckbox(tileEl) {
+      const cb = tileEl.querySelector('input[type="checkbox"]');
+      if (!cb) return;
+      cb.checked = !cb.checked;
+      if (cb.checked) {
+        tileEl.classList.add('selected');
+      } else {
+        tileEl.classList.remove('selected');
+      }
+    }
+
+    // Dynamic Select Field Handlers
+    function handleDynamicCitySelect(val) {
+      const wrap = document.getElementById('wrap-custom-city');
+      if (wrap) wrap.style.display = (val === '__custom__') ? 'block' : 'none';
+    }
+    function handleDynamicLicenseSelect(val) {
+      const wrap = document.getElementById('wrap-custom-license');
+      if (wrap) wrap.style.display = (val === '__custom__') ? 'block' : 'none';
+    }
+    function handleDynamicLangSelect(val) {
+      const wrap = document.getElementById('wrap-custom-lang');
+      if (wrap) wrap.style.display = (val === '__custom__') ? 'block' : 'none';
+    }
+    function handleDynamicCarModelSelect(val) {
+      const wrap = document.getElementById('wrap-custom-car-model');
+      if (wrap) wrap.style.display = (val === '__custom__') ? 'block' : 'none';
+    }
+    function handleDynamicSeatsSelect(val) {
+      const wrap = document.getElementById('wrap-custom-seats');
+      if (wrap) wrap.style.display = (val === '__custom__') ? 'block' : 'none';
+    }
+    function handleDynamicPayoutSelect(val) {
+      const wrap = document.getElementById('wrap-custom-payout');
+      if (wrap) wrap.style.display = (val === '__custom__') ? 'block' : 'none';
+    }
+
+    function toggleCustomServiceCreator() {
+      const box = document.getElementById('custom-svc-creator-box');
+      if (box) box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function addCustomServiceCard() {
+      const nameInput = document.getElementById('new-svc-name');
+      const badgeInput = document.getElementById('new-svc-badge');
+      const svcName = nameInput ? nameInput.value.trim() : '';
+      const svcBadge = badgeInput ? badgeInput.value.trim() : 'Custom Rate';
+
+      if (!svcName) {
+        alert(currentLang === 'bn' ? 'অনুগ্রহ করে সার্ভিসের নাম লিখুন।' : 'Please enter a name for the custom service.');
+        return;
+      }
+
+      const grid = document.getElementById('services-grid-container');
+      const addTile = document.getElementById('btn-add-custom-service-tile');
+      const newCard = document.createElement('label');
+      newCard.className = 'service-card-tile selected custom-injected-svc';
+      newCard.setAttribute('onclick', 'toggleServiceCheckbox(this)');
+      newCard.innerHTML = `
+        <input type="checkbox" name="services" value="${svcName}" checked/>
+        <div class="svc-tile-head">
+          <div class="svc-tile-icon" style="background:rgba(212,255,0,0.14); color:var(--accent);"><i class="ph-fill ph-sparkle"></i></div>
+          <div class="svc-tile-title">${svcName}</div>
+        </div>
+        <div class="svc-tile-desc">Custom specialized chauffeur service</div>
+        <div class="svc-rate-badge" style="background:rgba(212,255,0,0.15); color:var(--accent);">${svcBadge}</div>
+      `;
+      grid.insertBefore(newCard, addTile);
+
+      if (!driverSettings.customOptions) driverSettings.customOptions = [];
+      driverSettings.customOptions.push({ fieldId: 'services', value: svcName, label: svcName });
+      saveDriverSettings({ customOptions: driverSettings.customOptions });
+
+      if (nameInput) nameInput.value = '';
+      if (badgeInput) badgeInput.value = '';
+      toggleCustomServiceCreator();
+      alert(currentLang === 'bn' ? `✅ "${svcName}" সার্ভিস যুক্ত করা হয়েছে!` : `✅ Custom Service "${svcName}" added and selected!`);
+    }
+
+    function handleFileSelected(input, labelId, cardId) {
+      const card = document.getElementById(cardId);
+      const label = document.getElementById(labelId);
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        card.classList.add('has-file');
+        label.textContent = `✓ ${file.name} (${Math.round(file.size / 1024)} KB)`;
+        label.style.display = 'block';
+      } else {
+        card.classList.remove('has-file');
+        label.style.display = 'none';
+      }
+      populateSummary();
+    }
+
+    function resolveFieldValue(selectId, customInputId) {
+      const sel = document.getElementById(selectId);
+      if (!sel) return '';
+      if (sel.value === '__custom__') {
+        const customEl = document.getElementById(customInputId);
+        return customEl ? customEl.value.trim() : '';
+      }
+      return sel.value;
+    }
+
+    function populateSummary() {
+      const name = document.getElementById('drv-name').value || '—';
+      const phone = document.getElementById('drv-phone').value || '—';
+      const nid = document.getElementById('drv-nid').value || '—';
+      const licVal = document.getElementById('drv-license').value || '—';
+      const licExp = document.getElementById('drv-expiry').value || '—';
+      const role = document.getElementById('drv-role-val').value;
+      const roleMap = {
+        'seeking_fleet_car': currentLang === 'bn' ? 'ফ্লিট শফার' : 'Fleet Chauffeur',
+        'car_owner_driver': currentLang === 'bn' ? 'ওনার-ড্রাইভার' : 'Owner-Driver',
+        'part_time_freelance': currentLang === 'bn' ? 'অন-ডিমান্ড স্ট্যান্ডবাই' : 'On-Demand Standby'
+      };
+      const city = resolveFieldValue('drv-city', 'drv-city-custom');
+      const payoutMethod = resolveFieldValue('drv-payout-method', 'drv-payout-custom');
+      const payoutNum = document.getElementById('drv-payout-number').value || '—';
+
+      const svcs = [];
+      document.querySelectorAll('input[name="services"]:checked').forEach(cb => svcs.push(cb.value));
+
+      // Docs summary
+      const docsArr = [];
+      if (document.getElementById('file-photo')?.files?.[0]) docsArr.push(currentLang === 'bn' ? 'ছবি ✓' : 'Photo ✓');
+      if (document.getElementById('file-license-front')?.files?.[0]) docsArr.push(currentLang === 'bn' ? 'লাইসেন্স (সামনে) ✓' : 'Lic Front ✓');
+      if (document.getElementById('file-license-back')?.files?.[0]) docsArr.push(currentLang === 'bn' ? 'লাইসেন্স (পেছনে) ✓' : 'Lic Back ✓');
+      if (document.getElementById('file-nid-front')?.files?.[0]) docsArr.push(currentLang === 'bn' ? 'এনআইডি (সামনে) ✓' : 'NID Front ✓');
+      if (document.getElementById('file-nid-back')?.files?.[0]) docsArr.push(currentLang === 'bn' ? 'এনআইডি (পেছনে) ✓' : 'NID Back ✓');
+
+      document.getElementById('sum-name').textContent = name;
+      document.getElementById('sum-phone').textContent = phone;
+      document.getElementById('sum-nid').textContent = nid;
+      document.getElementById('sum-license').textContent = `${licVal} (Exp: ${licExp})`;
+      document.getElementById('sum-role-area').textContent = `${roleMap[role] || role} · ${city}`;
+      document.getElementById('sum-services').textContent = svcs.length > 0 ? svcs.join(', ') : 'None';
+      document.getElementById('sum-payout').textContent = `${payoutMethod} (${payoutNum})`;
+      const docSummaryEl = document.getElementById('sum-docs');
+      if (docSummaryEl) {
+        docSummaryEl.textContent = docsArr.length > 0 ? docsArr.join(', ') : (currentLang === 'bn' ? 'কোনোটি নয়' : 'None uploaded');
+      }
+    }
+
+    function readFileAsBase64(file) {
+      return new Promise((resolve) => {
+        if (!file) return resolve(null);
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => resolve(null);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // =========================================================
+    // SUBMISSION HANDLER & GOOGLE SHEET SYNC (5 DOCUMENTS)
+    // =========================================================
+    async function handleDriverApplication(e) {
+      e.preventDefault();
+      const isBypass = !!(driverSettings && driverSettings.bypassMandatory);
+      const btn = document.getElementById('btn-submit-drv');
+
+      const agreementCb = document.getElementById('drv-agreement');
+      if (!isBypass && agreementCb && !agreementCb.checked) {
+        alert(currentLang === 'bn' ? 'অনুগ্রহ করে নীতিমালার সাথে সম্মতি প্রদান করুন।' : 'Please review and affirm the VIP Chauffeur Code of Conduct agreement.');
+        if (agreementCb) agreementCb.focus();
+        return;
+      }
+
+      btn.innerHTML = '<i class="ph-bold ph-spinner" style="animation:spin 1s linear infinite;"></i> ' + (currentLang === 'bn' ? 'জমা হচ্ছে...' : 'Processing...');
+      btn.disabled = true;
+
+      // Extract all 5 document files
+      const photoFile = document.getElementById('file-photo')?.files?.[0];
+      const licFrontFile = document.getElementById('file-license-front')?.files?.[0];
+      const licBackFile = document.getElementById('file-license-back')?.files?.[0];
+      const nidFrontFile = document.getElementById('file-nid-front')?.files?.[0];
+      const nidBackFile = document.getElementById('file-nid-back')?.files?.[0];
+
+      const [photoBase64, licFrontBase64, licBackBase64, nidFrontBase64, nidBackBase64] = await Promise.all([
+        readFileAsBase64(photoFile),
+        readFileAsBase64(licFrontFile),
+        readFileAsBase64(licBackFile),
+        readFileAsBase64(nidFrontFile),
+        readFileAsBase64(nidBackFile)
+      ]);
+
+      const selectedServices = [];
+      document.querySelectorAll('input[name="services"]:checked').forEach(cb => {
+        selectedServices.push(cb.value);
+      });
+
+      const cityFinal = resolveFieldValue('drv-city', 'drv-city-custom');
+      const licTypeFinal = resolveFieldValue('drv-license-type', 'drv-license-custom');
+      const langFinal = resolveFieldValue('drv-languages', 'drv-lang-custom');
+      const carModelFinal = resolveFieldValue('drv-car-model', 'drv-car-model-custom');
+      const carSeatsFinal = resolveFieldValue('drv-car-seats', 'drv-car-seats-custom');
+      const payoutMethodFinal = resolveFieldValue('drv-payout-method', 'drv-payout-custom');
+
+      const rawName = document.getElementById('drv-name').value.trim();
+      const rawPhone = document.getElementById('drv-phone').value.trim();
+      const rawNid = document.getElementById('drv-nid').value.trim();
+
+      const appId = 'DRV-DAC-' + Math.floor(1000 + Math.random() * 9000);
+      const submissionTimestamp = new Date().toISOString();
+
+      const applicationPayload = {
+        applicationId: appId,
+        id: appId,
+        submittedAt: submissionTimestamp,
+        fullName: rawName || 'Applicant Chauffeur',
+        name: rawName || 'Applicant Chauffeur',
+        phone: rawPhone || '01700000000',
+        nidNumber: rawNid || 'N/A',
+        nid: rawNid || 'N/A',
+        baseCity: cityFinal || 'Dhaka',
+        city: cityFinal || 'Dhaka',
+        emergencyContact: {
+          name: document.getElementById('drv-emergency-name').value.trim() || 'Family',
+          phone: document.getElementById('drv-emergency-phone').value.trim() || 'N/A'
+        },
+        licenseNumber: document.getElementById('drv-license').value.trim() || 'N/A',
+        licenseType: licTypeFinal || 'Professional Light',
+        licenseExpiry: document.getElementById('drv-expiry').value || '2030-01-01',
+        experience: document.getElementById('drv-exp').value || '5-10 Years',
+        languages: langFinal || 'Bangla Native + Conversational English',
+        highwayExp: document.getElementById('drv-highway-exp').value || 'Highways & Night Expert',
+        services: selectedServices.length > 0 ? selectedServices : ['Airport Transfer', 'Corporate Transport'],
+        availability: document.getElementById('drv-avail-val').value || 'full_time',
+        role: document.getElementById('drv-role-val').value || 'seeking_fleet_car',
+        driverRole: document.getElementById('drv-role-val').value || 'seeking_fleet_car',
+        ownerCar: (document.getElementById('drv-role-val').value === 'car_owner_driver') ? {
+          model: carModelFinal || 'Toyota Premio',
+          plateNumber: document.getElementById('drv-car-plate').value.trim() || 'Dhaka Metro GA',
+          seats: carSeatsFinal || '4 Seats',
+          year: document.getElementById('drv-car-year').value || '2019',
+          fitnessExpiry: document.getElementById('drv-car-fitness').value || '2027-01-01'
+        } : null,
+        payoutMethod: payoutMethodFinal || 'bKash Personal',
+        payoutNumber: document.getElementById('drv-payout-number').value.trim() || rawPhone,
+        payoutWallet: `${payoutMethodFinal || 'bKash'} - ${document.getElementById('drv-payout-number').value.trim() || rawPhone}`,
+        status: 'Pending Verification',
+        photoBase64: photoBase64,
+        licenseFrontBase64: licFrontBase64,
+        licenseBackBase64: licBackBase64,
+        licenseDocBase64: licFrontBase64, // Legacy fallback
+        nidFrontBase64: nidFrontBase64,
+        nidBackBase64: nidBackBase64,
+        nidDocBase64: nidFrontBase64 // Legacy fallback
+      };
+
+      // 1. Save Locally to Browser Storage
+      try {
+        const localList = JSON.parse(localStorage.getItem('rownaa_driver_applications') || '[]');
+        localList.unshift(applicationPayload);
+        localStorage.setItem('rownaa_driver_applications', JSON.stringify(localList));
+      } catch (err) {
+        console.warn('LocalStorage save error:', err);
+      }
+
+      // 2. Dispatch to Google Apps Script Webhook
+      const targetWebhook = GOOGLE_SHEET_WEBHOOK_URL || DEFAULT_GOOGLE_SHEET_URL;
+
+      if (targetWebhook) {
+        try {
+          await fetch(targetWebhook, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(applicationPayload)
+          });
+        } catch (fetchErr) {
+          console.warn('Google Sheet Webhook sync error (offline fallback preserved):', fetchErr);
+        }
+      }
+
+      // Show Success Screen
+      document.getElementById('driver-app-shell').style.display = 'none';
+      const successScreen = document.getElementById('driver-success-screen');
+      successScreen.style.display = 'block';
+      document.getElementById('success-ref-badge').textContent = `REF: #${appId}`;
+
+      window.scrollTo({ top: 100, behavior: 'smooth' });
+    }
+
+    function resetDriverForm() {
+      document.getElementById('driver-register-form').reset();
+      document.querySelectorAll('.upload-card').forEach(c => c.classList.remove('has-file'));
+      document.querySelectorAll('.upload-filename').forEach(f => f.style.display = 'none');
+      document.getElementById('driver-app-shell').style.display = 'block';
+      document.getElementById('driver-success-screen').style.display = 'none';
+      goToStep(1);
+    }
+
+    // Export Applications to CSV
+    function exportLocalApplicationsToCsv() {
+      try {
+        const raw = localStorage.getItem('rownaa_driver_applications');
+        const drivers = raw ? JSON.parse(raw) : [];
+        if (!drivers || drivers.length === 0) {
+          alert(currentLang === 'bn' ? 'কোনো আবেদন এখনও জমা পড়েনি।' : 'No driver applications recorded yet in this browser.');
+          return;
+        }
+        const headers = ['Application ID', 'Submission Date', 'Full Name', 'Phone', 'NID Number', 'Base District', 'Emergency Contact', 'License Number', 'License Class', 'License Expiry', 'Experience', 'Languages', 'Services', 'Role', 'Car Details', 'Payout Wallet', 'Status'];
+        const escapeCsv = (val) => {
+          if (val === null || val === undefined) return '""';
+          return `"${String(val).replace(/"/g, '""')}"`;
+        };
+        const rows = drivers.map(d => [
+          escapeCsv(d.id),
+          escapeCsv(d.submittedAt),
+          escapeCsv(d.name),
+          escapeCsv(d.phone),
+          escapeCsv(d.nidNumber),
+          escapeCsv(d.baseCity),
+          escapeCsv(typeof d.emergencyContact === 'object' && d.emergencyContact ? `${d.emergencyContact?.name} (${d.emergencyContact?.phone})` : (d.emergencyContact || '—')),
+          escapeCsv(d.licenseNumber),
+          escapeCsv(d.licenseType),
+          escapeCsv(d.licenseExpiry),
+          escapeCsv(d.experience),
+          escapeCsv(d.languages),
+          escapeCsv(Array.isArray(d.services) ? d.services.join(', ') : (d.services || '—')),
+          escapeCsv(d.driverRole),
+          escapeCsv(typeof d.ownerCar === 'object' && d.ownerCar ? `${d.ownerCar.model} [${d.ownerCar.plateNumber || ''}]` : (d.ownerCar || 'N/A (Fleet)')),
+          escapeCsv(`${d.payoutMethod || ''} - ${d.payoutNumber || ''}`),
+          escapeCsv(d.status)
+        ].join(','));
+
+        const csvContent = '\uFEFF' + [headers.join(','), ...rows].join('\r\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `rownaa_driver_registrations_${new Date().toISOString().slice(0, 10)}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch(e) {
+        alert('Export error: ' + e.message);
+      }
+    }
+
+    // Initialize on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('#driver-register-form input[required], #driver-register-form select[required], #driver-register-form textarea[required]').forEach(el => {
+        el.setAttribute('data-orig-required', 'true');
+      });
+
+      loadDriverSettings();
+      applyDriverSettings();
+
+      const savedLang = localStorage.getItem('rownaa_lang') || 'en';
+      setLanguage(savedLang);
+    });
+  </script>
+
+  <style>
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+  </style>
+
+</body>
+</html>

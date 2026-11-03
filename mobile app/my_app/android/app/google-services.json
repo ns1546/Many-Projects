@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "925946145863",
+    "project_id": "my-love-55ed8",
+    "storage_bucket": "my-love-55ed8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:925946145863:android:54e44d13afc380a8729562",
+        "android_client_info": {
+          "package_name": "com.evo.mylove"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "925946145863-e99753vfiv2nv3g6u6vq6m189iurt7ur.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfhOlogJav0f6pTFqFlkLMxx-7xnzS-bY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "925946145863-e99753vfiv2nv3g6u6vq6m189iurt7ur.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

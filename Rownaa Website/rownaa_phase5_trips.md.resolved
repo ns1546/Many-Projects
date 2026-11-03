@@ -1,0 +1,174 @@
+# ROWNAA — Phase 5: Trip Lifecycle & Payment Workflow
+
+> Every booking goes through a strict state machine. Payments are tied to states. No state can be skipped.
+
+---
+
+## 1. Trip State Machine
+
+### States (in order)
+```
+pending → confirmed → ongoing → completed → [payment_received]
+                  ↘ cancelled (can happen from pending or confirmed only)
+```
+
+### State Transition Rules (ENFORCED — both frontend and backend)
+
+| Transition | Who Can Trigger | Condition | Action |
+|---|---|---|---|
+| `pending → confirmed` | Admin (assigns car/driver) | Car + driver assigned | SMS to customer + owner |
+| `confirmed → ongoing` | Owner/Driver (Start Trip) OR Admin override | Must be `confirmed` | Record `trip_started_at = NOW()` |
+| `ongoing → completed` | Owner/Driver (End Trip) OR Admin override | Must be `ongoing` | Record `trip_ended_at = NOW()` |
+| `completed → payment_received` | Admin (Mark Payment) | Must be `completed` | Record payment details |
+| `pending → cancelled` | Admin or Customer | Anytime before `confirmed` | Trigger refund if advance paid |
+| `confirmed → cancelled` | Admin only | Refund note required | Manual refund process |
+
+### Backend Enforcement (API level)
+Every `PATCH /api/bookings/:id/status` endpoint must:
+1. Fetch current status from DB
+2. Validate the requested transition is legal (using a transition map object)
+3. If illegal → return `400 Bad Request` with message "Invalid status transition from X to Y"
+4. If legal → update DB and trigger the corresponding notification
+
+---
+
+## 2. Trip Lifecycle UI — Owner/Driver Side
+
+### "Start Trip" Button
+- Location: Owner Dashboard → Bookings tab → Upcoming section → Booking card
+- Visibility: ONLY shown when booking status = `confirmed`
+- Disabled state: If status is NOT `confirmed`, button does not render
+- On click: Confirmation dialog: "Confirm you have picked up the customer?"
+  - "Yes, Start Trip" → `PATCH /api/bookings/:id/start-trip`
+  - Response success → booking card moves from "Upcoming" to "Ongoing" section
+  - Status badge updates to "Ongoing" (purple)
+  - `trip_started_at` is recorded with current server timestamp
+
+### "End Trip" Button
+- Location: Owner Dashboard → Bookings tab → Ongoing section → Active trip card
+- Visibility: ONLY shown when booking status = `ongoing`
+- Disabled state: If status is NOT `ongoing`, button does not render (hard UI block)
+- On click: Opens "End Trip Modal":
+
+**End Trip Modal Fields:**
+| Field | Type | Notes |
+|---|---|---|
+| Total Bill Amount | Number input (৳) | Includes base fare + any extras |
+| Extra Charges Breakdown | Text area (optional) | "e.g. Waiting: ৳100, Extra KM: ৳200" |
+| Payment Received From Customer | Toggle: Yes / No | |
+| Payment Method | Dropdown: Cash / bKash / Nagad | |
+| "Confirm End Trip" | Button (accent) | |
+
+- On confirm → `PATCH /api/bookings/:id/end-trip` with `{ final_amount, extra_notes, amount_received, payment_method }`
+- Backend: status → `completed`, `trip_ended_at = NOW()`, `commission_amount = final_amount * 0.10` (auto-calculated)
+- UI feedback: "Trip Completed!" success toast. Booking moves to History tab.
+
+---
+
+## 3. Trip Lifecycle UI — Admin Side (Panel 3)
+
+### Booking Detail — Status Control Section
+
+**Visual: Horizontal status progress bar showing all 5 stages with current stage highlighted**
+
+```
+[PENDING] → [CONFIRMED] → [ONGOING] → [COMPLETED] → [PAID]
+```
+
+- Current stage: filled accent circle
+- Completed stages: filled green circle
+- Future stages: empty muted circle
+
+**Admin Override Buttons (appear only when relevant):**
+- If `confirmed` and driver hasn't started: "Force Start Trip" (admin emergency use)
+- If `ongoing` and driver hasn't ended: "Force Complete Trip" (admin emergency use)
+- These log the action as "Admin Override" in the booking's activity log
+
+---
+
+## 4. Payment Flow (Step-by-Step)
+
+### 4A — Advance Payment (20% — At Booking Confirmation)
+
+**When:** Customer clicks "Confirm & Pay" on the booking confirmation screen.
+
+**Amount Calculation:**
+- `advance_amount = estimated_fare * 0.20`
+- If no estimated fare yet → set a fixed advance (e.g. ৳500 flat) — admin configurable
+
+**Payment Methods:**
+
+**Option 1: SSLCommerz**
+1. Backend calls SSLCommerz `init` API with order details
+2. SSLCommerz returns a payment URL
+3. Customer is redirected to SSLCommerz payment page
+4. Customer completes payment
+5. SSLCommerz calls back Rownaa's `success_url` with transaction data
+6. Backend verifies the transaction via SSLCommerz `validate` API
+7. On success: `bookings.advance_paid = true`, `advance_txn_id = txn_id`, `advance_payment_method = 'sslcommerz'`
+
+**Option 2: bKash (Manual)**
+1. Show bKash merchant number on screen
+2. Customer sends money via bKash to that number
+3. Show input field: "Enter your bKash transaction ID"
+4. Admin verifies manually in admin panel and marks advance as paid
+5. Note in UI: "Your booking will be confirmed after manual payment verification (usually within 1 hour)"
+
+**Option 3: Bank Transfer**
+- Same manual flow as bKash with bank account details shown
+
+---
+
+### 4B — Final Payment (After Trip Completion)
+
+**Who enters it:** Owner/Driver enters final bill amount in "End Trip" modal (Step 2 above).
+
+**Commission Auto-Calculation:**
+```
+commission_amount = amount_received * 0.10
+net_owner_amount = amount_received - commission_amount
+```
+
+**Where it shows:**
+- Booking detail (admin): Total Bill | Received | Commission (10%) | Net to Owner | Payment Status
+- Earnings tab (owner): Net payable (after commission deduction)
+
+**Admin "Mark Payment Received" Button:**
+- In admin booking detail view, after status = `completed`
+- Click → "Payment Received" modal:
+  - Shows: Total Bill: ৳2,500 | Commission (10%): ৳250 | Net to Owner: ৳2,250
+  - Payment Method: [auto-filled from owner's entry]
+  - "Confirm" → `payment_status = 'paid'`, logged to payments table
+
+---
+
+## 5. Refund & Cancellation Handling
+
+### Customer-Initiated Cancellation (Before Confirmation)
+- Customer can cancel from "My Bookings" if status = `pending`
+- If advance was paid via SSLCommerz → trigger SSLCommerz refund API
+- If advance was paid via bKash/Bank → admin manually processes refund, marks as refunded
+- Booking status → `cancelled`, refund_status field updated
+
+### Admin-Initiated Cancellation
+- Admin can cancel any booking from the booking detail view
+- Mandatory text field: "Reason for cancellation" (stored in DB)
+- System prompts: "Was advance payment received? If yes, initiate refund."
+- Admin checks refund checkbox → flagged for manual processing
+
+---
+
+## 6. Notification Triggers (Full Map)
+
+| Event | Who Gets Notified | Method | Message Template |
+|---|---|---|---|
+| New booking created | Admin | In-app + Email | "New booking #ID for [service] from [customer name]" |
+| Car assigned (confirmed) | Customer | SMS | "Your Rownaa booking is confirmed. Driver: [name], Car: [model]. Contact: [phone]" |
+| Trip started | Customer | SMS | "Your Rownaa trip has started. Driver is on the way. Booking #ID" |
+| Trip completed | Customer | SMS | "Your trip is complete. Thank you for using Rownaa! Rate your experience." |
+| New registration submitted | Admin | In-app + Email | "New owner registration from [name]. Review pending." |
+| Business approved | Owner | SMS + Email | "Congratulations! Your Rownaa registration is approved." |
+| Business rejected | Owner | SMS + Email | "Registration not approved. Reason: [reason]" |
+| Car approved | Owner | SMS | "Your car [plate] is now active on Rownaa." |
+| Fitness cert expiring in 7 days | Admin + Owner | SMS + In-app alert | "Fitness certificate for [plate] expires on [date]. Upload renewal." |
+| Subscription expiring in 7 days | Owner | SMS + Email | "Your Rownaa Premium subscription expires on [date]. Renew to keep benefits." |

@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rownaa — Authentication</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <style>
+    /* ROWNAA THEME VARIABLES */
+    :root {
+      --bg-color: #060606;
+      --text-main: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --accent: #d4ff00;
+      --accent-dark: #b5d900;
+      --surface: #121212;
+      --border: rgba(255,255,255,0.1);
+      --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-color);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      color: var(--text-main);
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      max-width: 1000px;
+      height: 600px;
+      background: var(--surface);
+      border-radius: 20px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .forms-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+
+    .signin-signup {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      left: 75%;
+      width: 50%;
+      transition: 1s 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+      display: grid;
+      grid-template-columns: 1fr;
+      z-index: 5;
+    }
+
+    form {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 0 4rem;
+      transition: all 0.2s 0.7s;
+      overflow: hidden;
+      grid-column: 1 / 2;
+      grid-row: 1 / 2;
+    }
+
+    form.sign-up-form {
+      opacity: 0;
+      z-index: 1;
+    }
+
+    form.sign-in-form {
+      z-index: 2;
+    }
+
+    .title {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      color: var(--text-main);
+      margin-bottom: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+
+    .input-field {
+      max-width: 380px;
+      width: 100%;
+      background-color: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      margin: 10px 0;
+      height: 55px;
+      border-radius: 8px;
+      display: grid;
+      grid-template-columns: 15% 85%;
+      padding: 0 0.4rem;
+      position: relative;
+      transition: 0.3s;
+    }
+
+    .input-field:focus-within {
+      background-color: rgba(255,255,255,0.08);
+      border-color: var(--accent);
+      box-shadow: 0 0 15px rgba(212, 255, 0, 0.1);
+    }
+
+    .input-field svg {
+      margin: auto;
+      color: var(--text-muted);
+      transition: 0.5s;
+      width: 20px;
+      height: 20px;
+    }
+    .input-field:focus-within svg {
+      color: var(--accent);
+    }
+
+    .input-field input {
+      background: none;
+      outline: none;
+      border: none;
+      line-height: 1;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 1rem;
+      color: var(--text-main);
+      width: 100%;
+    }
+
+    .input-field input::placeholder {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .btn {
+      width: 100%;
+      max-width: 380px;
+      background-color: var(--accent);
+      border: none;
+      outline: none;
+      height: 55px;
+      border-radius: 8px;
+      color: #000;
+      text-transform: uppercase;
+      font-weight: 700;
+      font-family: var(--font-display);
+      margin: 20px 0 10px 0;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+    }
+
+    .btn:hover {
+      background-color: #fff;
+    }
+
+    .panels-container {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .panel {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: space-around;
+      text-align: center;
+      z-index: 6;
+    }
+
+    .left-panel {
+      pointer-events: all;
+      padding: 3rem 17% 2rem 12%;
+    }
+
+    .right-panel {
+      pointer-events: none;
+      padding: 3rem 12% 2rem 17%;
+    }
+
+    .panel .content {
+      color: #fff;
+      transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+      transition-delay: 0.6s;
+    }
+
+    .panel h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      line-height: 1.1;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .panel p {
+      font-size: 1rem;
+      padding: 0.7rem 0;
+      color: rgba(255,255,255,0.8);
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    .btn.transparent {
+      margin: 0;
+      background: none;
+      border: 1px solid #fff;
+      width: 160px;
+      height: 48px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #fff;
+      border-radius: 100px;
+      margin-top: 20px;
+    }
+
+    .btn.transparent:hover {
+      background: #fff;
+      color: #000;
+      transform: translateY(-2px);
+    }
+
+    .right-panel .content {
+      transform: translateX(800px);
+    }
+
+    /* THE SLIDING SHAPE */
+    .container:before {
+      content: "";
+      position: absolute;
+      height: 2000px;
+      width: 2000px;
+      top: -10%;
+      right: 48%;
+      transform: translateY(-50%);
+      background: linear-gradient(-45deg, #0d1a00 0%, #1a3300 100%);
+      transition: 1.8s cubic-bezier(0.65, 0, 0.35, 1);
+      border-radius: 50%;
+      z-index: 6;
+      border: 1px solid rgba(212,255,0,0.1);
+    }
+    
+    /* Subtle geometric overlay to make it look premium */
+    .container:after {
+      content: "";
+      position: absolute;
+      height: 2000px;
+      width: 2000px;
+      top: -10%;
+      right: 48%;
+      transform: translateY(-50%);
+      background-image: radial-gradient(circle at center, rgba(212,255,0,0.05) 1px, transparent 1px);
+      background-size: 30px 30px;
+      transition: 1.8s cubic-bezier(0.65, 0, 0.35, 1);
+      border-radius: 50%;
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    /* ANIMATION STATES */
+    .container.sign-up-mode:before,
+    .container.sign-up-mode:after {
+      transform: translate(100%, -50%);
+      right: 52%;
+    }
+
+    .container.sign-up-mode .left-panel .content {
+      transform: translateX(-800px);
+    }
+
+    .container.sign-up-mode .signin-signup {
+      left: 25%;
+    }
+
+    .container.sign-up-mode form.sign-up-form {
+      opacity: 1;
+      z-index: 2;
+    }
+
+    .container.sign-up-mode form.sign-in-form {
+      opacity: 0;
+      z-index: 1;
+    }
+
+    .container.sign-up-mode .right-panel .content {
+      transform: translateX(0%);
+    }
+
+    .container.sign-up-mode .left-panel {
+      pointer-events: none;
+    }
+
+    .container.sign-up-mode .right-panel {
+      pointer-events: all;
+    }
+
+    /* Social Icons */
+    .social-text {
+      padding: 1rem 0;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .social-media {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .social-icon {
+      height: 46px;
+      width: 46px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      color: var(--text-muted);
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .social-icon:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .brand-logo {
+      position: absolute;
+      top: 30px;
+      left: 40px;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-main);
+      z-index: 20;
+      text-transform: uppercase;
+    }
+    .brand-logo sup { color: var(--accent); }
+
+    .btn-quick {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-quick:hover {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    /* ================================================= */
+    /* THE CINEMATIC ANIMATED CAR                        */
+    /* ================================================= */
+    .cinematic-car-wrapper {
+      position: absolute;
+      bottom: 10px;
+      right: 15%;
+      width: 280px;
+      z-index: 10;
+      transition: right 1.2s cubic-bezier(0.68, -0.15, 0.265, 1.15);
+      pointer-events: none;
+      transform: scale(0.65); /* Scale down for elegance */
+      transform-origin: bottom center;
+    }
+
+    /* Handles the U-Turn flip independently */
+    .car-direction {
+      width: 100%;
+      transition: transform 0.4s ease-in-out;
+    }
+
+    /* Handles the physics (squat/rev) independently */
+    .car-physics {
+      width: 100%;
+      transition: transform 0.3s ease;
+    }
+
+    /* THE PURE CSS CAR ART (TITANIUM SILVER) */
+    .css-car {
+      position: relative;
+      width: 280px;
+      height: 75px;
+      margin: 0 auto;
+      filter: drop-shadow(0 20px 20px rgba(0,0,0,0.8));
+    }
+    
+    .css-car-chassis {
+      position: absolute;
+      bottom: 12px;
+      width: 100%;
+      height: 38px;
+      background: linear-gradient(180deg, #ffffff 0%, #909090 100%);
+      border-radius: 12px 60px 18px 15px; /* Sleek coupe shape */
+      border-top: 1px solid rgba(255,255,255,0.8);
+      border-bottom: 2px solid #555;
+      z-index: 2;
+    }
+    
+    .css-car-roof {
+      position: absolute;
+      bottom: 45px;
+      left: 70px;
+      width: 110px;
+      height: 30px;
+      background: linear-gradient(180deg, #e0e0e0 0%, #b0b0b0 100%);
+      border-radius: 40px 60px 0 0;
+      border-top: 1px solid rgba(255,255,255,0.9);
+      z-index: 1;
+    }
+    
+    .css-car-window {
+      position: absolute;
+      bottom: 48px;
+      left: 75px;
+      width: 95px;
+      height: 24px;
+      background: linear-gradient(135deg, #0d1a00 0%, #000 100%);
+      border-radius: 35px 50px 0 0;
+      border: 2px solid #555;
+      border-bottom: none;
+      z-index: 3;
+    }
+    .css-car-window::after {
+      content: '';
+      position: absolute;
+      left: 55px;
+      top: 0;
+      width: 6px;
+      height: 100%;
+      background: #a0a0a0;
+      transform: skewX(-20deg);
+    }
+    
+    /* Pure CSS Wheels */
+    .css-car-wheel {
+      position: absolute;
+      bottom: 0;
+      width: 48px;
+      height: 48px;
+      background: #0a0a0a;
+      border-radius: 50%;
+      border: 4px solid #151515;
+      z-index: 4;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.8), inset 0 0 5px #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .wheel-front { right: 30px; }
+    .wheel-rear { left: 35px; }
+    
+    .wheel-rim {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px dashed var(--accent);
+      background: radial-gradient(circle, #222 0%, #000 100%);
+    }
+    
+    /* Neon Lights */
+    .css-car-headlight {
+      position: absolute;
+      bottom: 25px;
+      right: -2px;
+      width: 12px;
+      height: 12px;
+      background: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 15px var(--accent), 0 0 30px var(--accent);
+      z-index: 3;
+    }
+    .css-car-taillight {
+      position: absolute;
+      bottom: 30px;
+      left: -2px;
+      width: 8px;
+      height: 12px;
+      background: #ff3333;
+      border-radius: 3px;
+      box-shadow: 0 0 10px #ff3333;
+      z-index: 3;
+    }
+
+    /* Headlight Flares */
+    .headlight-flare {
+      position: absolute;
+      width: 300px;
+      height: 100px;
+      background: radial-gradient(ellipse at left, rgba(212,255,0,0.4) 0%, transparent 60%);
+      top: 60%;
+      left: 10px; /* Aligned to pure CSS car front */
+      transform: rotate(-15deg);
+      mix-blend-mode: screen;
+      opacity: 0.6;
+      animation: flicker 4s infinite alternate;
+      z-index: 2;
+    }
+
+    /* Floor Shadow */
+    .car-shadow {
+      position: absolute;
+      bottom: -10px;
+      left: 10%;
+      width: 80%;
+      height: 20px;
+      background: rgba(0,0,0,0.8);
+      border-radius: 50%;
+      filter: blur(10px);
+      animation: shadowIdle 2s infinite alternate ease-in-out;
+    }
+
+    /* The Sleek Neon Track */
+    .neon-track {
+      position: absolute;
+      bottom: 12px;
+      left: 5%;
+      width: 90%;
+      height: 1px;
+      background: rgba(212, 255, 0, 0.1);
+      z-index: 1;
+    }
+    .neon-track::after {
+      content: '';
+      position: absolute;
+      top: -1px;
+      right: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--accent);
+      box-shadow: 0 0 15px var(--accent);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 1.2s cubic-bezier(0.68, -0.15, 0.265, 1.15);
+      opacity: 0;
+    }
+
+    /* DRIVING STATE (Added via JS) */
+    .container.is-driving .neon-track::after {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+    .container.is-driving .wheel-rim {
+      animation: spinWheel 0.3s linear infinite; /* Spin the pure CSS wheels */
+    }
+    .container.is-driving .car-physics {
+      transform: scaleY(0.95) scaleX(1.05) rotate(-2deg); /* Squat from acceleration */
+    }
+
+    /* ACTION REACTIONS (Form Submit) */
+    
+    /* 1. Loading (Revving) */
+    .container.is-loading .car-physics {
+      animation: revShake 0.1s infinite;
+    }
+    .container.is-loading .headlight-flare {
+      animation: pulseLight 0.5s infinite alternate;
+    }
+
+    /* 2. Error (Red flash, headshake) */
+    .container.is-error .css-car-headlight,
+    .container.is-error .css-car-taillight {
+      background: #ff3333;
+      box-shadow: 0 0 30px #ff3333;
+    }
+    .container.is-error .headlight-flare {
+      background: radial-gradient(ellipse at left, rgba(255,51,51,0.6) 0%, transparent 60%);
+    }
+    .container.is-error .car-physics {
+      animation: errorShake 0.4s ease-in-out;
+    }
+
+    /* 3. Success (Warp Speed Launch) */
+    .container.is-success .headlight-flare {
+      background: radial-gradient(ellipse at left, rgba(255,255,255,0.9) 0%, transparent 70%);
+      width: 500px;
+    }
+    .container.is-success .css-car-headlight {
+      box-shadow: 0 0 60px #fff;
+    }
+    .container.is-success .cinematic-car-wrapper {
+      transition: right 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+    }
+    /* Drive off screen right */
+    .container.is-success:not(.sign-up-mode) .cinematic-car-wrapper {
+      right: -100%;
+    }
+    /* Drive off screen left */
+    .container.is-success.sign-up-mode .cinematic-car-wrapper {
+      right: 150%;
+    }
+
+    /* SIGN-UP MODE POSITIONS (Left Panel) */
+    .container.sign-up-mode .cinematic-car-wrapper {
+      right: 65%;
+    }
+    .container.sign-up-mode .car-direction {
+      transform: scaleX(-1); /* U-Turn via mirroring applied to direction wrapper */
+    }
+    .container.sign-up-mode .neon-track::after {
+      transform-origin: left;
+    }
+    .container.sign-up-mode .headlight-flare {
+      left: auto;
+      right: -150px;
+      background: radial-gradient(ellipse at right, rgba(212,255,0,0.4) 0%, transparent 60%);
+      transform: rotate(15deg);
+    }
+    .container.sign-up-mode .speed-lines {
+      right: auto;
+      left: -100px;
+    }
+
+    /* KEYFRAMES */
+    @keyframes spinWheel {
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes revShake {
+      0% { transform: scale(0.65) translateY(0px) rotate(0deg); }
+      50% { transform: scale(0.65) translateY(-1px) rotate(0.2deg); }
+      100% { transform: scale(0.65) translateY(1px) rotate(-0.2deg); }
+    }
+    @keyframes errorShake {
+      0%, 100% { transform: scale(0.65) translateX(0); }
+      20% { transform: scale(0.65) translateX(-15px); }
+      40% { transform: scale(0.65) translateX(15px); }
+      60% { transform: scale(0.65) translateX(-10px); }
+      80% { transform: scale(0.65) translateX(10px); }
+    }
+    @keyframes pulseLight {
+      0% { opacity: 0.3; }
+      100% { opacity: 1; transform: rotate(-15deg) scale(1.2); }
+    }
+    @keyframes shadowIdle {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.1); opacity: 0.5; }
+    }
+    @keyframes flicker {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 0.4; }
+      55% { opacity: 0.8; }
+      60% { opacity: 0.4; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV BAR -->
+  <div style="position:fixed; top:0; left:0; right:0; height:70px; padding:0 36px; display:flex; justify-content:space-between; align-items:center; z-index:100; background:rgba(6,6,6,0.85); backdrop-filter:blur(10px); border-bottom:1px solid rgba(255,255,255,0.06);">
+    <a href="index.html" class="brand-logo" style="position:static; text-decoration:none;">Rownaa<sup>®</sup></a>
+    <div style="display:flex; gap:20px; align-items:center;">
+      <a href="index.html" style="color:var(--text-muted); font-size:0.85rem; text-decoration:none; display:flex; align-items:center; gap:6px; transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text-muted)'">← Return to Home</a>
+      <a href="find-cars.html" style="color:var(--accent); font-size:0.85rem; text-decoration:none; font-weight:700;">Browse Fleet →</a>
+    </div>
+  </div>
+
+  <div class="container" id="auth-container" style="margin-top:40px;">
+    <div class="forms-container">
+      <div class="signin-signup">
+        
+        <!-- Sign In Form -->
+        <form class="sign-in-form" id="signInForm">
+          <h2 class="title">Sign in</h2>
+          
+          <!-- QUICK DEMO PERSONAS BAR -->
+          <div style="background:rgba(212,255,0,0.05); border:1px solid rgba(212,255,0,0.2); border-radius:8px; padding:10px 14px; margin-bottom:16px; width:100%; max-width:380px;">
+            <div style="font-size:0.7rem; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px; text-align:center;">
+              ⚡ Instant Demo Access (1-Click Login):
+            </div>
+            <div style="display:flex; gap:6px; justify-content:center;">
+              <button type="button" class="btn-quick" onclick="quickLogin('admin', 'admin123')">👑 Admin</button>
+              <button type="button" class="btn-quick" onclick="quickLogin('customer', 'customer123')">👤 Customer</button>
+              <button type="button" class="btn-quick" onclick="quickLogin('owner', 'owner123')">🚗 Owner</button>
+            </div>
+          </div>
+
+          <div id="signInError" style="color:#ff5555;background:rgba(255,85,85,0.1);border:1px solid #ff5555;padding:8px 16px;border-radius:6px;font-size:0.85rem;margin-bottom:12px;display:none;width:100%;max-width:380px;text-align:center;"></div>
+          <div class="input-field">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            <input type="text" placeholder="Username (e.g., admin)" required name="username" />
+          </div>
+          <div class="input-field">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <input type="password" placeholder="Passkey" required name="password" />
+          </div>
+          <input type="submit" value="Authenticate" class="btn solid" id="btnSignIn" />
+          <p class="social-text">Or continue with</p>
+          <div class="social-media">
+            <a href="javascript:void(0)" onclick="alert('Google Social Sign-in: Please use standard credentials (e.g. admin/admin123, owner/owner123, or customer/customer123) for instant verification.'); return false;" class="social-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+            </a>
+            <a href="javascript:void(0)" onclick="alert('Social Sign-in: Please use standard credentials (e.g. admin/admin123, owner/owner123, or customer/customer123) for instant verification.'); return false;" class="social-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.989C18.343 21.129 22 16.99 22 12c0-5.523-4.477-10-10-10z"/></svg>
+            </a>
+          </div>
+        </form>
+
+        <!-- Sign Up Form -->
+        <form class="sign-up-form" id="signUpForm">
+          <h2 class="title">Sign up</h2>
+          <div id="signUpError" style="color:#ff5555;background:rgba(255,85,85,0.1);border:1px solid #ff5555;padding:8px 16px;border-radius:6px;font-size:0.85rem;margin-bottom:12px;display:none;width:100%;max-width:380px;text-align:center;"></div>
+          <div class="input-field">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <input type="text" placeholder="Full Name" required name="name" />
+          </div>
+          <div class="input-field">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            <input type="text" placeholder="Username (e.g. johndoe)" required name="username" />
+          </div>
+          <div class="input-field">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <input type="password" placeholder="Create Passkey" required name="password" />
+          </div>
+          <input type="submit" value="Register" class="btn" id="btnSignUp" />
+        </form>
+      </div>
+    </div>
+
+    <!-- Sliding Panels -->
+    <div class="panels-container">
+      
+      <!-- SLEEK NEON TRACK -->
+      <div class="neon-track"></div>
+
+      <!-- CINEMATIC ANIMATED CAR -->
+      <div class="cinematic-car-wrapper" id="animated-car">
+        <div class="car-direction">
+          <div class="car-physics">
+            <div class="car-shadow"></div>
+            
+            <!-- PURE CSS CAR ART -->
+            <div class="css-car">
+              <div class="headlight-flare"></div>
+              <div class="css-car-roof"></div>
+              <div class="css-car-chassis"></div>
+              <div class="css-car-window"></div>
+              <div class="css-car-wheel wheel-front">
+                <div class="wheel-rim"></div>
+              </div>
+              <div class="css-car-wheel wheel-rear">
+                <div class="wheel-rim"></div>
+              </div>
+              <div class="css-car-headlight"></div>
+              <div class="css-car-taillight"></div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="panel left-panel">
+        <div class="content">
+          <h3>New to Rownaa?</h3>
+          <p>Join Bangladesh's premier car rental network. Verified drivers, luxury fleet, zero hassle.</p>
+          <button class="btn transparent" id="sign-up-btn">
+            Create Account
+          </button>
+        </div>
+      </div>
+      <div class="panel right-panel">
+        <div class="content">
+          <h3>Welcome Back</h3>
+          <p>Sign in to manage your bookings, track your driver, and view receipts.</p>
+          <button class="btn transparent" id="sign-in-btn">
+            Sign In
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const signInBtn = document.querySelector("#sign-in-btn");
+    const signUpBtn = document.querySelector("#sign-up-btn");
+    const container = document.querySelector(".container");
+    const forms = document.querySelectorAll("form");
+
+    // ==========================================
+    // PROCEDURAL AUDIO SYNTHESIZER ENGINE
+    // ==========================================
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx;
+
+    // Initialize audio context on first user interaction to comply with browser autoplay policies
+    function initAudio() {
+      try {
+        const AudioCtor = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtor) return;
+        if (!audioCtx) {
+          audioCtx = new AudioCtor();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume().catch(() => {});
+        }
+      } catch (e) {
+        // AudioContext not supported or restricted in environment
+      }
+    }
+    document.body.addEventListener('click', initAudio, { once: true });
+    document.body.addEventListener('mousemove', initAudio, { once: true });
+
+    const SoundEngine = {
+      playWhoosh: () => {
+        // Wind rushing past a speeding car (highway whoosh)
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        const filter = audioCtx.createBiquadFilter();
+
+        osc.type = 'sawtooth'; // Rougher than sine for wind texture
+        osc.frequency.setValueAtTime(50, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(30, audioCtx.currentTime + 0.8);
+
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(100, audioCtx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.3);
+        filter.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.8);
+
+        gain.gain.setValueAtTime(0, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.8, audioCtx.currentTime + 0.3);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.8);
+      },
+      playSputter: () => {
+        // Mechanical sputter/click (like a starter motor failing)
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'square'; 
+        osc.frequency.setValueAtTime(40, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.05);
+
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.05);
+      },
+      playKeyFob: () => {
+        // Two quick high-pitched chirps (Beep-Beep!) like locking an expensive car
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'square'; // Typical alarm siren oscillator
+        
+        // Chirp 1
+        osc.frequency.setValueAtTime(2500, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 0.01);
+        gain.gain.setValueAtTime(0, audioCtx.currentTime + 0.06);
+
+        // Chirp 2
+        osc.frequency.setValueAtTime(2500, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime + 0.11);
+        gain.gain.setValueAtTime(0, audioCtx.currentTime + 0.16);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.2);
+      },
+      playEngineIdle: () => {
+        // Low rumbling V8 Engine idle
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = 'sawtooth'; // Rich harmonics for engine rumble
+        // Throttle revving up and down slightly
+        osc.frequency.setValueAtTime(30, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(45, audioCtx.currentTime + 0.3);
+        osc.frequency.linearRampToValueAtTime(35, audioCtx.currentTime + 0.8);
+        osc.frequency.linearRampToValueAtTime(50, audioCtx.currentTime + 1.2);
+        osc.frequency.linearRampToValueAtTime(30, audioCtx.currentTime + 1.5);
+        
+        gain.gain.setValueAtTime(0, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.6, audioCtx.currentTime + 0.1);
+        gain.gain.linearRampToValueAtTime(0.4, audioCtx.currentTime + 0.7);
+        gain.gain.linearRampToValueAtTime(0.7, audioCtx.currentTime + 1.2);
+        gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.5);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 1.5);
+      },
+      playCarHorn: () => {
+        // Dissonant dual-tone chord (like a loud car horn)
+        if (!audioCtx) return;
+        
+        // Horn 1
+        const osc1 = audioCtx.createOscillator();
+        const gain1 = audioCtx.createGain();
+        osc1.type = 'square';
+        osc1.frequency.setValueAtTime(350, audioCtx.currentTime); // F4
+        gain1.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain1.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+        osc1.connect(gain1);
+        gain1.connect(audioCtx.destination);
+        osc1.start();
+        osc1.stop(audioCtx.currentTime + 0.4);
+
+        // Horn 2
+        const osc2 = audioCtx.createOscillator();
+        const gain2 = audioCtx.createGain();
+        osc2.type = 'square';
+        osc2.frequency.setValueAtTime(415, audioCtx.currentTime); // G#4 (Dissonant interval)
+        gain2.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+        osc2.connect(gain2);
+        gain2.connect(audioCtx.destination);
+        osc2.start();
+        osc2.stop(audioCtx.currentTime + 0.4);
+      },
+      playEngineRev: () => {
+        // Aggressive acceleration (Peeling out)
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sawtooth'; 
+        osc.frequency.setValueAtTime(40, audioCtx.currentTime); // Idle
+        osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.8); // Rev hard
+
+        gain.gain.setValueAtTime(0, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.8, audioCtx.currentTime + 0.5);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.0);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 1.0);
+      }
+    };
+
+    // Trigger driving physics during the transition
+    function triggerDriveAnimation() {
+      SoundEngine.playWhoosh();
+      container.classList.add("is-driving");
+      setTimeout(() => {
+        container.classList.remove("is-driving");
+      }, 1000); // Remove after the CSS transition finishes
+    }
+
+    signUpBtn.addEventListener("click", () => {
+      container.classList.add("sign-up-mode");
+      triggerDriveAnimation();
+    });
+
+    signInBtn.addEventListener("click", () => {
+      container.classList.remove("sign-up-mode");
+      triggerDriveAnimation();
+    });
+
+    // Form Action Physics Setup
+    forms.forEach(form => {
+      form.removeAttribute("onsubmit");
+    });
+
+    // ==========================================
+    // VECTOR REPULSION & MAGNETIC ATTRACTION
+    // ==========================================
+    const submitBtns = document.querySelectorAll("input[type='submit'].btn");
+    
+    submitBtns.forEach(btn => {
+      // Ultra-smooth transition for physics tracking
+      btn.style.transition = "transform 0.1s ease-out, background-color 0.3s, color 0.3s, box-shadow 0.3s";
+      
+      const form = btn.closest("form");
+      const inputs = form.querySelectorAll("input[required]");
+      const originalText = form.classList.contains("sign-in-form") ? "Authenticate" : "Register";
+      
+      // Track mouse approach relative to the form
+      form.addEventListener("mousemove", (e) => {
+        // Validation check
+        let isValid = true;
+        inputs.forEach(input => {
+          if (!input.checkValidity() || input.value.trim() === "") {
+            isValid = false;
+          }
+        });
+
+        // Get button center coordinates
+        const rect = btn.getBoundingClientRect();
+        // Since the button moves via transform, we use its original un-transformed position center.
+        // But getBoundingClientRect includes the transform! 
+        // To fix this without complex math, if it's already dodging, the center shifts.
+        // A simple trick is to make the bounding box larger, but we'll use the current visual center.
+        const btnCenterX = rect.left + rect.width / 2;
+        const btnCenterY = rect.top + rect.height / 2;
+        
+        // Vector from button center to cursor
+        const dx = e.clientX - btnCenterX;
+        const dy = e.clientY - btnCenterY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        // Interaction Field Radius
+        const radius = 200; // Increased radius to detect fast mouse movements earlier
+        
+        if (distance < radius) {
+          if (!isValid) {
+            // FORCEFIELD REPULSION
+            const force = (radius - distance) / radius;
+            
+            // Much stronger jump to prevent catching it
+            const maxJump = 120; 
+            const moveX = -(dx / distance) * force * maxJump;
+            const moveY = -(dy / distance) * force * maxJump;
+            
+            const computedStyle = window.getComputedStyle(btn);
+            const matrix = new DOMMatrix(computedStyle.transform);
+            let currentX = matrix.e || 0;
+            let currentY = matrix.f || 0;
+            
+            // Expanded boundaries so it can run further away
+            const newX = Math.max(-150, Math.min(150, currentX + moveX));
+            const newY = Math.max(-80, Math.min(80, currentY + moveY));
+
+            // Scale down slightly to make it a harder target
+            btn.style.transform = `translate(${newX}px, ${newY}px) scale(0.85)`;
+            btn.style.backgroundColor = "#ffaa00"; 
+            btn.style.boxShadow = "0 0 15px rgba(255, 170, 0, 0.4)";
+            btn.style.color = "#000";
+            btn.value = "Fill Form!";
+            
+            // Throttle the sputter sound
+            const now = Date.now();
+            if (now - btn.dataset.lastZap > 300) {
+              SoundEngine.playSputter();
+              btn.dataset.lastZap = now;
+            }
+          } else {
+            // MAGNETIC ATTRACTION
+            const pullForce = 0.2;
+            const moveX = dx * pullForce;
+            const moveY = dy * pullForce;
+            
+            const clampedX = Math.max(-15, Math.min(15, moveX));
+            const clampedY = Math.max(-15, Math.min(15, moveY));
+            
+            btn.style.transform = `translate(${clampedX}px, ${clampedY}px) scale(1)`;
+            btn.style.backgroundColor = "var(--accent)";
+            btn.style.boxShadow = "0 0 20px rgba(212, 255, 0, 0.6)";
+            btn.style.color = "#000";
+            btn.value = originalText;
+            
+            // Play key fob once when it enters lock-in range
+            if (!btn.dataset.lockedIn) {
+              SoundEngine.playKeyFob();
+              btn.dataset.lockedIn = "true";
+            }
+          }
+        } else {
+          // Out of radius, relax to center
+          btn.style.transform = "translate(0px, 0px) scale(1)";
+          btn.dataset.lockedIn = ""; // Reset lock-in flag
+          if (!isValid) {
+             btn.style.backgroundColor = "var(--accent)";
+             btn.style.boxShadow = "none";
+             btn.style.color = "#000";
+             btn.value = originalText;
+          }
+        }
+      });
+
+      // PANIC JUMP: If they move the mouse insanely fast and actually touch it, teleport it.
+      btn.addEventListener("mouseenter", () => {
+        let isValid = true;
+        inputs.forEach(input => {
+          if (!input.checkValidity() || input.value.trim() === "") isValid = false;
+        });
+
+        if (!isValid) {
+          const panicY = Math.random() > 0.5 ? 120 : -120;
+          const panicX = (Math.random() - 0.5) * 150;
+          btn.style.transition = "transform 0.05s linear"; // Instant snap
+          btn.style.transform = `translate(${panicX}px, ${panicY}px) scale(0.7)`;
+          SoundEngine.playSputter(); // Extra loud sputter
+          
+          // Restore smooth transition after panic jump
+          setTimeout(() => {
+            btn.style.transition = "transform 0.1s ease-out, background-color 0.3s, color 0.3s, box-shadow 0.3s";
+          }, 50);
+        }
+      });
+      
+      // Initialize dataset flags for audio throttling
+      btn.dataset.lastZap = 0;
+      btn.dataset.lockedIn = "";
+      
+      // Reset button if mouse fully leaves the form area
+      form.addEventListener("mouseleave", () => {
+         btn.style.transform = "translate(0px, 0px)";
+         btn.style.backgroundColor = "var(--accent)";
+         btn.style.boxShadow = "none";
+         btn.style.color = "#000";
+         btn.value = originalText;
+      });
+    });
+
+    // Wire Real Backend Authentication
+    const signInForm = document.getElementById('signInForm');
+    const signInError = document.getElementById('signInError');
+    if (signInForm) {
+      signInForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        initAudio();
+        const usernameInput = signInForm.querySelector('input[name="username"]') || (signInForm.elements && signInForm.elements['username']);
+        const passwordInput = signInForm.querySelector('input[name="password"]') || (signInForm.elements && signInForm.elements['password']);
+        const username = usernameInput ? usernameInput.value.trim() : '';
+        const password = passwordInput ? passwordInput.value : '';
+        const btn = document.getElementById('btnSignIn');
+        if (signInError) signInError.style.display = 'none';
+
+        container.classList.add('is-loading');
+        if (btn) btn.value = 'Authenticating...';
+
+        // Direct File Explorer / Offline Protocol Support
+        if (window.location.protocol === 'file:') {
+          container.classList.remove('is-loading');
+          container.classList.add('is-success');
+          if (btn) {
+            btn.value = 'Authenticated!';
+            btn.style.backgroundColor = '#10b981';
+          }
+          const urlParams = new URLSearchParams(window.location.search);
+          const redirectUrl = urlParams.get('redirect') || '';
+          let role = 'customer';
+          let name = 'Tanvir Ahmed';
+          if (username.toLowerCase().includes('admin') || redirectUrl.includes('admin')) {
+            role = 'admin';
+            name = 'System Administrator';
+          } else if (username.toLowerCase().includes('owner') || username.toLowerCase().includes('fleet') || redirectUrl.includes('owner')) {
+            role = 'owner';
+            name = 'Apex Fleet Logistics';
+          }
+          const demoUser = { id: role + '-001', name, username: username || (role + '@rownaa.com'), role };
+          try {
+            localStorage.setItem('rownaa_user', JSON.stringify(demoUser));
+            localStorage.setItem('rownaa_active_user', role);
+          } catch(e) {}
+          if (window.switchUserSession) window.switchUserSession(role, false);
+          setTimeout(() => {
+            if (role === 'admin') window.location.href = 'admin-panel.html';
+            else if (role === 'owner') window.location.href = 'owner-panel.html';
+            else window.location.href = 'customer-panel.html';
+          }, 400);
+          return;
+        }
+
+        try {
+          const res = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ username, password })
+          });
+          const data = await res.json();
+          container.classList.remove('is-loading');
+
+          if (data.success || data.token) {
+            if (data.token) {
+              try { localStorage.setItem('rownaa_session_token', data.token); } catch (e) {}
+            }
+            if (data.user) {
+              try { localStorage.setItem('rownaa_user', JSON.stringify(data.user)); } catch (e) {}
+              window.rownaaSession = data.user;
+              if (window.AppState) window.AppState.user = data.user;
+            }
+            container.classList.add('is-success');
+            SoundEngine.playKeyFob();
+            if (btn) {
+              btn.value = 'Authenticated!';
+              btn.style.backgroundColor = '#10b981';
+            }
+            setTimeout(() => {
+              const urlParams = new URLSearchParams(window.location.search);
+              const redirectUrl = urlParams.get('redirect');
+              const role = data.role || (data.user && data.user.role);
+              if (redirectUrl) {
+                if (redirectUrl.includes('admin') && role !== 'admin') {
+                  // Fallback to assigned role panel
+                } else if (redirectUrl.includes('owner') && role !== 'owner' && role !== 'admin') {
+                  // Fallback to assigned role panel
+                } else {
+                  window.location.href = redirectUrl;
+                  return;
+                }
+              }
+              if (role === 'admin') window.location.href = 'admin-panel.html';
+              else if (role === 'owner') window.location.href = 'owner-panel.html';
+              else window.location.href = 'customer-panel.html';
+            }, 800);
+          } else {
+            container.classList.add('is-error');
+            SoundEngine.playSputter();
+            if (btn) {
+              btn.value = 'Authenticate';
+              btn.style.backgroundColor = 'var(--accent)';
+            }
+            if (signInError) {
+              signInError.textContent = data.error || 'Authentication failed. Please verify credentials.';
+              signInError.style.display = 'block';
+            }
+            setTimeout(() => container.classList.remove('is-error'), 1200);
+          }
+        } catch (err) {
+          container.classList.remove('is-loading');
+          container.classList.add('is-error');
+          SoundEngine.playSputter();
+          if (btn) btn.value = 'Authenticate';
+          if (signInError) {
+            signInError.textContent = 'Server connection error. Please try again.';
+            signInError.style.display = 'block';
+          }
+          setTimeout(() => container.classList.remove('is-error'), 1200);
+        }
+      });
+    }
+
+    const signUpForm = document.getElementById('signUpForm');
+    const signUpError = document.getElementById('signUpError');
+    if (signUpForm) {
+      signUpForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        initAudio();
+        const nameInput = signUpForm.querySelector('input[name="name"]') || (signUpForm.elements && signUpForm.elements['name']);
+        const usernameInput = signUpForm.querySelector('input[name="username"]') || (signUpForm.elements && signUpForm.elements['username']);
+        const passwordInput = signUpForm.querySelector('input[name="password"]') || (signUpForm.elements && signUpForm.elements['password']);
+        const name = nameInput ? nameInput.value.trim() : '';
+        const username = usernameInput ? usernameInput.value.trim() : '';
+        const password = passwordInput ? passwordInput.value : '';
+        const btn = document.getElementById('btnSignUp');
+        if (signUpError) signUpError.style.display = 'none';
+
+        container.classList.add('is-loading');
+        if (btn) btn.value = 'Creating Account...';
+
+        try {
+          const res = await fetch('/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ name, username, password, role: 'customer' })
+          });
+          const data = await res.json();
+          container.classList.remove('is-loading');
+
+          if (data.success || data.token) {
+            if (data.token) {
+              try { localStorage.setItem('rownaa_session_token', data.token); } catch (e) {}
+            }
+            if (data.user) {
+              try { localStorage.setItem('rownaa_user', JSON.stringify(data.user)); } catch (e) {}
+              window.rownaaSession = data.user;
+              if (window.AppState) window.AppState.user = data.user;
+            }
+            container.classList.add('is-success');
+            SoundEngine.playKeyFob();
+            if (btn) {
+              btn.value = 'Welcome to Rownaa!';
+              btn.style.backgroundColor = '#10b981';
+            }
+            setTimeout(() => {
+              const urlParams = new URLSearchParams(window.location.search);
+              const redirectUrl = urlParams.get('redirect');
+              if (redirectUrl) {
+                window.location.href = redirectUrl;
+                return;
+              }
+              window.location.href = 'customer-panel.html';
+            }, 800);
+          } else {
+            container.classList.add('is-error');
+            SoundEngine.playSputter();
+            if (btn) btn.value = 'Register';
+            if (signUpError) {
+              signUpError.textContent = data.error || 'Registration failed. Please check inputs.';
+              signUpError.style.display = 'block';
+            }
+            setTimeout(() => container.classList.remove('is-error'), 1200);
+          }
+        } catch (err) {
+          container.classList.remove('is-loading');
+          container.classList.add('is-error');
+          SoundEngine.playSputter();
+          if (btn) btn.value = 'Register';
+          if (signUpError) {
+            signUpError.textContent = 'Server connection error. Please try again.';
+            signUpError.style.display = 'block';
+          }
+          setTimeout(() => container.classList.remove('is-error'), 1200);
+        }
+      });
+    }
+
+    window.quickLogin = function(u, p) {
+      initAudio();
+      const form = document.getElementById('signInForm');
+      if (form) {
+        const uInput = form.querySelector('input[name="username"]') || (form.elements && form.elements['username']);
+        const pInput = form.querySelector('input[name="password"]') || (form.elements && form.elements['password']);
+        if (uInput) uInput.value = u;
+        if (pInput) pInput.value = p;
+        const btn = document.getElementById('btnSignIn');
+        if (btn) btn.click();
+      }
+    };
+  
+// Auto-injected to fix Vite module scoping
+window.initAudio = initAudio;
+window.triggerDriveAnimation = triggerDriveAnimation;
+</script>
+</body>
+</html>

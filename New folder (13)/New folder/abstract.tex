@@ -1,0 +1,22 @@
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+Federated Learning (FL) enables collaborative medical image diagnosis without
+sharing raw patient data, supporting privacy regulations such as HIPAA and
+GDPR. In practice, medical FL faces non-IID data drift, communication
+bottlenecks, and gradient-leakage risks. Existing studies often address these
+issues separately and rarely evaluate full pipelines under edge constraints.
+This report presents FEDMED-X, a communication-efficient and
+privacy-preserving federated learning system for medical image classification.
+The framework integrates FedProx ($\mu = 0.01$), DP-SGD ($\epsilon = 1.0$,
+$\delta = 1 \times 10^{-5}$), TopK 50\% + INT8 compression, and a lightweight
+MedNet-CBAM model designed for edge deployment. On MedMNIST PneumoniaMNIST
+with 5 Dirichlet non-IID clients ($\alpha = 0.5$), FedProx reached 85.58\%
+accuracy. With privacy and compression together, FEDMED-X achieved 75.16\%
+accuracy while reducing communication by 90\% under $\epsilon = 1.0$.
+Edge-oriented evaluation targets NVIDIA Jetson Nano deployment with 0.20~ms per
+image inference latency.
+
+\vspace{6pt}
+\noindent\textbf{Keywords:} Federated Learning; Differential Privacy; Edge
+Computing; Medical Image Classification; FedProx; TopK; Jetson Nano.

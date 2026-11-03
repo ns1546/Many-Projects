@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Details | Spice Garden</title>
+  
+  <script>
+    // Apply saved theme before paint
+    (function() {
+      var saved = localStorage.getItem('sg_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+  
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="mobile.css">
+  
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans, "Plus Jakarta Sans", sans-serif);
+      background-color: #F8FAFC;
+      color: #1E293B;
+      min-height: 100vh;
+      padding-bottom: 100px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .detail-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .back-btn {
+      background: #F1F5F9;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #334155;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .back-btn:hover { background: #E2E8F0; }
+    .back-btn:active { transform: scale(0.95); }
+    .nav-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #0F172A;
+      max-width: 220px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .nav-cart-btn {
+      position: relative;
+      background: #F1F5F9;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #334155;
+    }
+    .nav-cart-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--color-primary, #E99545);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #fff;
+    }
+
+    .detail-container {
+      max-width: 640px;
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+      min-height: calc(100vh - 70px);
+    }
+
+    /* Media Hero */
+    .hero-media-wrapper {
+      position: relative;
+      width: 100%;
+      height: 320px;
+      background: #0F172A;
+      overflow: hidden;
+    }
+    .hero-media-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-media-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+      pointer-events: none;
+    }
+    .hero-dietary-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 10;
+      background: #fff;
+      padding: 6px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-out-of-stock {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(220, 38, 38, 0.9);
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 1.5px;
+      padding: 8px 24px;
+      border-radius: 30px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    }
+
+    /* Details Content */
+    .detail-content {
+      padding: 24px 20px 40px;
+    }
+    .badges-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .badge-pill {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-category { background: #EEF2F6; color: #475569; text-transform: capitalize; }
+    .badge-subcategory { background: #FEF3C7; color: #B45309; }
+    .badge-highlight { background: #DCFCE7; color: #15803D; }
+    .badge-prep { background: #F1F5F9; color: #64748B; font-weight: 600; }
+    .badge-offer-tag { background: #FEE2E2; color: #DC2626; text-transform: uppercase; letter-spacing: 1px; }
+
+    .item-main-title {
+      font-family: var(--font-serif, "Playfair Display", serif);
+      font-size: 26px;
+      font-weight: 700;
+      color: #0F172A;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+    .item-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .item-current-price {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--color-primary, #E99545);
+    }
+    .item-original-price {
+      font-size: 16px;
+      color: #94A3B8;
+      text-decoration: line-through;
+    }
+
+    .detail-terms-box {
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 13px;
+      color: #15803D;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .detail-desc-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #64748B;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .detail-description {
+      font-size: 15px;
+      line-height: 1.7;
+      color: #475569;
+      margin-bottom: 24px;
+    }
+
+    /* Option Sections (Variants, Addons) */
+    .option-group {
+      margin-bottom: 24px;
+      padding-top: 18px;
+      border-top: 1px solid #E2E8F0;
+    }
+    .option-group-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0F172A;
+      margin-bottom: 12px;
+    }
+    .variant-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .variant-chip {
+      padding: 10px 16px;
+      background: #F8FAFC;
+      border: 1.5px solid #CBD5E1;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .variant-chip.active {
+      background: #FFF7ED;
+      border-color: var(--color-primary, #E99545);
+      color: var(--color-primary, #E99545);
+      box-shadow: 0 2px 8px rgba(233, 149, 69, 0.15);
+    }
+
+    .addons-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .addon-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .addon-item input {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--color-primary, #E99545);
+    }
+
+    /* Sticky Bottom Action Bar */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-top: 1px solid #E2E8F0;
+      padding: 14px 20px;
+      z-index: 100;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+    }
+    .bottom-bar-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .stepper {
+      display: flex;
+      align-items: center;
+      background: #F1F5F9;
+      border-radius: 12px;
+      padding: 4px;
+      border: 1px solid #E2E8F0;
+      flex-shrink: 0;
+    }
+    .stepper-btn {
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: #fff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #334155;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .stepper-btn:hover { background: #F8FAFC; }
+    .stepper-qty {
+      font-size: 16px;
+      font-weight: 700;
+      min-width: 36px;
+      text-align: center;
+      color: #0F172A;
+    }
+    .btn-add-cart {
+      flex: 1;
+      background: var(--color-primary, #E99545);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(233, 149, 69, 0.35);
+      transition: transform 0.1s, background 0.2s;
+    }
+    .btn-add-cart:active { transform: scale(0.98); }
+    .btn-add-cart:disabled {
+      background: #CBD5E1;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .btn-full-cta {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: var(--color-primary, #E99545);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 12px;
+      padding: 15px;
+      font-weight: 700;
+      font-size: 16px;
+      box-shadow: 0 4px 14px rgba(233, 149, 69, 0.3);
+      margin-top: 16px;
+    }
+
+    .btn-full-cta.secondary {
+      background: #0F172A;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2);
+    }
+
+    /* State messages */
+    .state-container {
+      padding: 80px 24px;
+      text-align: center;
+      color: #64748B;
+    }
+    .state-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0F172A;
+      margin: 16px 0 8px;
+    }
+
+    /* Toast */
+    .toast-popup {
+      position: fixed;
+      bottom: 86px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0F172A;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 200;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .toast-popup.visible {
+      opacity: 1;
+    }
+    /* Day / Night Mode - Dark Palette */
+    [data-theme="dark"] body {
+      background-color: #0B1120;
+      color: #F8FAFC;
+    }
+    [data-theme="dark"] .detail-nav {
+      background: rgba(15, 23, 42, 0.95);
+      border-bottom-color: rgba(51, 65, 85, 0.8);
+    }
+    [data-theme="dark"] .back-btn,
+    [data-theme="dark"] .nav-cart-btn {
+      background: #1E293B;
+      color: #F8FAFC;
+    }
+    [data-theme="dark"] .back-btn:hover {
+      background: #334155;
+    }
+    [data-theme="dark"] .nav-title,
+    [data-theme="dark"] .item-main-title {
+      color: #F8FAFC;
+    }
+    [data-theme="dark"] .detail-container {
+      background: #0F172A;
+      color: #F8FAFC;
+    }
+    [data-theme="dark"] .detail-card,
+    [data-theme="dark"] .portion-btn,
+    [data-theme="dark"] .addon-item,
+    [data-theme="dark"] .variant-chip {
+      background: #1E293B;
+      border-color: #334155;
+      color: #F8FAFC;
+    }
+    [data-theme="dark"] .detail-description {
+      color: #94A3B8;
+    }
+    [data-theme="dark"] .bottom-bar {
+      background: rgba(15, 23, 42, 0.95);
+      border-top-color: #334155;
+    }
+    [data-theme="dark"] .stepper {
+      background: #1E293B;
+      border-color: #334155;
+    }
+    [data-theme="dark"] .stepper-btn {
+      background: #0F172A;
+      color: #F8FAFC;
+    }
+    [data-theme="dark"] .stepper-qty {
+      color: #F8FAFC;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Nav -->
+  <header class="detail-nav">
+    <div class="nav-left">
+      <button class="back-btn" onclick="goBack()" aria-label="Go Back">
+        <i data-lucide="arrow-left" style="width:20px;height:20px;"></i>
+      </button>
+      <span class="nav-title" id="navTitle">Loading details...</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <button class="back-btn" id="detailThemeToggleBtn" onclick="toggleDetailTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <i data-lucide="moon" id="detailIconMoon" style="width:18px;height:18px;"></i>
+        <i data-lucide="sun" id="detailIconSun" style="width:18px;height:18px;display:none;color:#fbbf24;"></i>
+      </button>
+      <button class="nav-cart-btn" onclick="window.location.href='index.html'" aria-label="View Cart">
+        <i data-lucide="shopping-bag" style="width:20px;height:20px;"></i>
+        <span class="nav-cart-badge" id="navCartCount" style="display:none;">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="detail-container">
+    <div id="pageContent">
+      <div class="state-container">
+        <i data-lucide="loader-2" style="width:36px;height:36px;color:var(--color-primary, #E99545);animation:spin 1s linear infinite;"></i>
+        <h3 class="state-title">Loading details...</h3>
+        <p>Please wait while we retrieve the dish information.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Sticky Bottom Bar -->
+  <aside class="bottom-bar" id="bottomBar" style="display:none;">
+    <div class="bottom-bar-inner">
+      <div class="stepper" id="itemStepper">
+        <button class="stepper-btn" onclick="changeQty(-1)"><i data-lucide="minus" style="width:16px;"></i></button>
+        <span class="stepper-qty" id="displayQty">1</span>
+        <button class="stepper-btn" onclick="changeQty(1)"><i data-lucide="plus" style="width:16px;"></i></button>
+      </div>
+      <button class="btn-add-cart" id="btnAddCart" onclick="handleAddToCart()">
+        <i data-lucide="shopping-bag" style="width:18px;"></i>
+        <span id="btnAddCartText">Add to Order</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Toast Notification -->
+  <div class="toast-popup" id="toastNotification">
+    <i data-lucide="check-circle-2" style="width:18px;height:18px;color:#10B981;"></i>
+    <span id="toastMessage">Item added to cart</span>
+  </div>
+
+  <script src="db.js"></script>
+  <script>
+    let currentItem = null;
+    let currentType = 'item';
+    let currentQty = 1;
+    let selectedVariant = null;
+    let selectedVariantPrice = 0;
+    let currencySymbol = '৳';
+
+    function goBack() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tbl = urlParams.get('table') || sessionStorage.getItem('evorise_table_param');
+      if (tbl) sessionStorage.setItem('evorise_table_param', tbl);
+      
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = tbl ? 'index.html?table=' + encodeURIComponent(tbl) : 'index.html';
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastNotification');
+      const toastMsg = document.getElementById('toastMessage');
+      toastMsg.textContent = msg;
+      toast.classList.add('visible');
+      setTimeout(() => toast.classList.remove('visible'), 2200);
+    }
+
+    async function updateCartCountBadge() {
+      try {
+        const cart = await getCart();
+        const total = cart.reduce((sum, item) => sum + (parseInt(item.quantity) || 0), 0);
+        const badge = document.getElementById('navCartCount');
+        if (total > 0) {
+          badge.textContent = total;
+          badge.style.display = 'flex';
+        } else {
+          badge.style.display = 'none';
+        }
+      } catch(e) {}
+    }
+
+    function changeQty(delta) {
+      currentQty = Math.max(1, currentQty + delta);
+      document.getElementById('displayQty').textContent = currentQty;
+      updateAddButtonPrice();
+    }
+
+    function updateAddButtonPrice() {
+      if (!currentItem) return;
+      const base = selectedVariant ? selectedVariantPrice : parseFloat(currentItem.price || 0);
+      const total = base * currentQty;
+      document.getElementById('btnAddCartText').textContent = `Add to Order • ${currencySymbol} ${total.toLocaleString()}`;
+    }
+
+    async function handleAddToCart() {
+      if (!currentItem || currentItem.outOfStock) return;
+
+      const basePrice = selectedVariant ? selectedVariantPrice : parseFloat(currentItem.price || 0);
+      const cartItemId = `${currentItem.id}-${selectedVariant ? selectedVariant.name : 'base'}`;
+
+      const cartItem = {
+        cartItemId: cartItemId,
+        id: currentItem.id,
+        title: currentItem.title,
+        price: basePrice,
+        quantity: currentQty,
+        variant: selectedVariant ? selectedVariant.name : null,
+        addons: []
+      };
+
+      await addToCart(cartItem);
+      await updateCartCountBadge();
+      showToast(`Added ${currentQty}x ${currentItem.title} to order!`);
+    }
+
+    async function loadDetails() {
+      lucide.createIcons();
+      await updateCartCountBadge();
+
+      const params = new URLSearchParams(window.location.search);
+      let type = (params.get('type') || '').toLowerCase().trim();
+      let id = (params.get('id') || '').trim();
+
+      const content = document.getElementById('pageContent');
+      const bottomBar = document.getElementById('bottomBar');
+
+      let settings = {};
+      try { settings = await getSettings(); } catch(e) {}
+      if (settings.currencySymbol) currencySymbol = settings.currencySymbol;
+      if (settings.primaryColor) {
+        document.documentElement.style.setProperty('--color-primary', settings.primaryColor);
+      }
+      if (settings.fontFamily) {
+        document.documentElement.style.setProperty('--font-sans', `'${settings.fontFamily}', sans-serif`);
+        document.body.style.fontFamily = `'${settings.fontFamily}', sans-serif`;
+      }
+
+      // If id is missing, show not found
+      if (!id) {
+        renderNotFound('No item or promotion ID specified in the URL.');
+        return;
+      }
+
+      let allItems = [];
+      let allOffers = [];
+      let allBanners = [];
+
+      try { allItems = await getItems(); } catch(e) {}
+      try { allOffers = await getOffers(); } catch(e) {}
+      try { allBanners = await getBanners(); } catch(e) {}
+
+      // Resolve item and type with robust matching
+      let resolvedItem = null;
+      let resolvedType = type;
+
+      if (type === 'offer') {
+        resolvedItem = allOffers.find(o => String(o.id).toLowerCase() === id.toLowerCase());
+      } else if (type === 'banner') {
+        resolvedItem = allBanners.find(b => String(b.id).toLowerCase() === id.toLowerCase());
+      } else if (type === 'item' || type === 'product' || type === 'menu') {
+        resolvedItem = allItems.find(i => String(i.id).toLowerCase() === id.toLowerCase());
+      }
+
+      // Fallback cross-search if not found under specific type or if type was omitted
+      if (!resolvedItem) {
+        resolvedItem = allItems.find(i => String(i.id).toLowerCase() === id.toLowerCase());
+        if (resolvedItem) {
+          resolvedType = 'item';
+        } else {
+          resolvedItem = allOffers.find(o => String(o.id).toLowerCase() === id.toLowerCase());
+          if (resolvedItem) {
+            resolvedType = 'offer';
+          } else {
+            resolvedItem = allBanners.find(b => String(b.id).toLowerCase() === id.toLowerCase());
+            if (resolvedItem) resolvedType = 'banner';
+          }
+        }
+      }
+
+      // Fallback to static mock datasets if still not found
+      if (!resolvedItem) {
+        if (typeof demoMockItems !== 'undefined') {
+          resolvedItem = demoMockItems.find(i => String(i.id).toLowerCase() === id.toLowerCase());
+          if (resolvedItem) resolvedType = 'item';
+        }
+        if (!resolvedItem && typeof demoMockOffers !== 'undefined') {
+          resolvedItem = demoMockOffers.find(o => String(o.id).toLowerCase() === id.toLowerCase());
+          if (resolvedItem) resolvedType = 'offer';
+        }
+        if (!resolvedItem && typeof demoMockBanners !== 'undefined') {
+          resolvedItem = demoMockBanners.find(b => String(b.id).toLowerCase() === id.toLowerCase());
+          if (resolvedItem) resolvedType = 'banner';
+        }
+      }
+
+      if (!resolvedItem) {
+        renderNotFound(`The requested item or offer (ID: "${id}") could not be found.`);
+        return;
+      }
+
+      currentItem = resolvedItem;
+      currentType = resolvedType;
+
+      // Update Nav title
+      document.getElementById('navTitle').textContent = resolvedItem.title || 'Details';
+      document.title = `${resolvedItem.title || 'Details'} | ${settings.restaurantName || 'Spice Garden'}`;
+
+      if (resolvedType === 'item') {
+        renderItemView(resolvedItem);
+        bottomBar.style.display = 'block';
+        updateAddButtonPrice();
+      } else if (resolvedType === 'offer') {
+        renderOfferView(resolvedItem);
+        bottomBar.style.display = 'none';
+      } else {
+        renderBannerView(resolvedItem);
+        bottomBar.style.display = 'none';
+      }
+
+      lucide.createIcons();
+    }
+
+    function renderItemView(item) {
+      const isOutOfStock = item.outOfStock === true;
+      const content = document.getElementById('pageContent');
+
+      // Dietary tag
+      const dietaryHtml = item.dietary === 'veg'
+        ? `<div class="hero-dietary-badge" title="Vegetarian"><div class="veg-dot" style="width:12px;height:12px;border-radius:50%;background:#16a34a;"></div></div>`
+        : `<div class="hero-dietary-badge" title="Non-Vegetarian"><div class="non-veg-triangle" style="width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:12px solid #dc2626;"></div></div>`;
+
+      // Out of stock overlay
+      const stockOverlay = isOutOfStock
+        ? `<div class="hero-out-of-stock">SOLD OUT</div>`
+        : '';
+
+      // Badges
+      let badgesHtml = '';
+      if (item.category) badgesHtml += `<span class="badge-pill badge-category">📂 ${item.category}</span>`;
+      if (item.subCategory) badgesHtml += `<span class="badge-pill badge-subcategory">🏷️ ${item.subCategory}</span>`;
+      if (item.prepTime) badgesHtml += `<span class="badge-pill badge-prep">⏱️ ${item.prepTime}</span>`;
+      if (item.badges && Array.isArray(item.badges)) {
+        item.badges.forEach(b => {
+          badgesHtml += `<span class="badge-pill badge-highlight">⭐ ${b}</span>`;
+        });
+      }
+
+      // Variants
+      let variantsHtml = '';
+      if (item.variants && Array.isArray(item.variants) && item.variants.length > 0) {
+        variantsHtml = `
+          <div class="option-group">
+            <h4 class="option-group-title">Select Size / Variant</h4>
+            <div class="variant-chips" id="variantChips">
+              ${item.variants.map((v, i) => `
+                <div class="variant-chip ${i === 0 ? 'active' : ''}" onclick="selectVariant(${i})">
+                  ${v.name} • ${currencySymbol} ${v.price}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        selectedVariant = item.variants[0];
+        selectedVariantPrice = parseFloat(item.variants[0].price);
+      }
+
+      // Addons
+      let addonsHtml = '';
+      if (item.addons && typeof item.addons === 'string' && item.addons.trim() !== '') {
+        const addonList = item.addons.split(',').map(s => s.trim()).filter(Boolean);
+        if (addonList.length > 0) {
+          addonsHtml = `
+            <div class="option-group">
+              <h4 class="option-group-title">Available Add-ons</h4>
+              <div class="addons-list">
+                ${addonList.map(a => `
+                  <div class="addon-item">
+                    <span>✨ ${a}</span>
+                    <span style="font-size:12px;color:#64748B;">Included / Special</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      content.innerHTML = `
+        <div class="hero-media-wrapper">
+          <img src="${item.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80'}" class="hero-media-img" alt="${item.title || 'Dish'}">
+          <div class="hero-media-overlay"></div>
+          ${dietaryHtml}
+          ${stockOverlay}
+        </div>
+        <div class="detail-content">
+          <div class="badges-strip">${badgesHtml}</div>
+          <h1 class="item-main-title">${item.title}</h1>
+          <div class="item-price-row">
+            <span class="item-current-price" id="displayItemPrice">${currencySymbol} ${(selectedVariant ? selectedVariantPrice : item.price).toLocaleString()}</span>
+          </div>
+          <div class="detail-desc-title">About this dish</div>
+          <p class="detail-description">${item.desc || 'Prepared fresh with high quality ingredients and authentic seasonings.'}</p>
+          ${variantsHtml}
+          ${addonsHtml}
+        </div>
+      `;
+
+      if (isOutOfStock) {
+        document.getElementById('btnAddCart').disabled = true;
+        document.getElementById('btnAddCartText').textContent = 'Item Sold Out';
+      }
+    }
+
+    function selectVariant(index) {
+      if (!currentItem || !currentItem.variants) return;
+      selectedVariant = currentItem.variants[index];
+      selectedVariantPrice = parseFloat(selectedVariant.price);
+
+      const chips = document.querySelectorAll('.variant-chip');
+      chips.forEach((c, idx) => c.classList.toggle('active', idx === index));
+
+      document.getElementById('displayItemPrice').textContent = `${currencySymbol} ${selectedVariantPrice.toLocaleString()}`;
+      updateAddButtonPrice();
+    }
+
+    function renderOfferView(offer) {
+      const content = document.getElementById('pageContent');
+      content.innerHTML = `
+        <div class="hero-media-wrapper">
+          <img src="${offer.image || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80'}" class="hero-media-img" alt="${offer.title}">
+          <div class="hero-media-overlay"></div>
+        </div>
+        <div class="detail-content">
+          <div class="badges-strip">
+            <span class="badge-pill badge-offer-tag">🔥 Special Offer</span>
+            ${offer.badge ? `<span class="badge-pill badge-highlight">${offer.badge}</span>` : ''}
+          </div>
+          <h1 class="item-main-title">${offer.title}</h1>
+          ${offer.price ? `<div class="item-price-row"><span class="item-current-price">${currencySymbol} ${offer.price}</span></div>` : ''}
+          ${offer.terms ? `<div class="detail-terms-box"><i data-lucide="info" style="width:18px;height:18px;flex-shrink:0;"></i><span>${offer.terms}</span></div>` : ''}
+          <div class="detail-desc-title">Offer Details</div>
+          <p class="detail-description">${offer.desc || 'Take advantage of this limited-time special offer during your dine-in or takeaway visit!'}</p>
+          <a href="index.html" class="btn-full-cta">🍽️ Browse Full Menu & Order</a>
+        </div>
+      `;
+    }
+
+    function renderBannerView(banner) {
+      const content = document.getElementById('pageContent');
+      const hasLink = banner.link && banner.link !== '#' && banner.link !== '';
+      content.innerHTML = `
+        <div class="hero-media-wrapper">
+          <img src="${banner.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'}" class="hero-media-img" alt="${banner.title}">
+          <div class="hero-media-overlay"></div>
+        </div>
+        <div class="detail-content">
+          <div class="badges-strip">
+            <span class="badge-pill badge-offer-tag">📢 Featured Promotion</span>
+          </div>
+          <h1 class="item-main-title">${banner.title}</h1>
+          <div class="detail-desc-title">Announcement Details</div>
+          <p class="detail-description">${banner.desc || 'Check out our featured seasonal specials and upcoming events.'}</p>
+          ${hasLink ? `<a href="${banner.link}" target="_blank" class="btn-full-cta secondary" style="margin-bottom:12px;">Visit Promo Link ↗</a>` : ''}
+          <a href="index.html" class="btn-full-cta">🍽️ View Full Menu</a>
+        </div>
+      `;
+    }
+
+    function renderNotFound(msg) {
+      document.getElementById('bottomBar').style.display = 'none';
+      document.getElementById('navTitle').textContent = 'Item Not Found';
+      document.getElementById('pageContent').innerHTML = `
+        <div class="state-container">
+          <i data-lucide="search-x" style="width:48px;height:48px;color:#94A3B8;"></i>
+          <h3 class="state-title">Item Not Found</h3>
+          <p style="margin-bottom:24px;">${msg}</p>
+          <a href="index.html" class="btn-full-cta" style="max-width:240px;margin:0 auto;">Back to Menu</a>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function toggleDetailTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme') || 'light';
+      const next = current === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('sg_theme', next);
+      updateDetailThemeIcons(next);
+    }
+
+    function updateDetailThemeIcons(theme) {
+      const moon = document.getElementById('detailIconMoon');
+      const sun = document.getElementById('detailIconSun');
+      if (moon && sun) {
+        if (theme === 'dark') {
+          moon.style.display = 'none';
+          sun.style.display = 'block';
+        } else {
+          moon.style.display = 'block';
+          sun.style.display = 'none';
+        }
+      }
+    }
+
+    // Initialize icon on load
+    updateDetailThemeIcons(localStorage.getItem('sg_theme') || 'light');
+
+    loadDetails();
+  </script>
+</body>
+</html>

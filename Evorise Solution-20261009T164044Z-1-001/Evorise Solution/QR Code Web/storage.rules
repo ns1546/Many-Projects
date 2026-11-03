@@ -1,0 +1,22 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Default Deny
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+
+    // Function to check if user is logged in
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Anyone can read images, but only authenticated admins/staff can upload
+    match /{folder}/{imageId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+  }
+}

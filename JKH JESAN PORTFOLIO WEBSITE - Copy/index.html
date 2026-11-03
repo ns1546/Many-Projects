@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO & Social Sharing Tags (New) -->
+    <title>JKH Jesan | Music Producer & Composer</title>
+    <meta name="description"
+        content="Official portfolio of JKH Jesan, a professional Music Producer, Composer, and Audio Engineer based in Niketon, Dhaka. Specializing in OST, BGM, and Mixing.">
+    <meta name="keywords"
+        content="JKH Jesan, Music Producer, Bangladesh, Composer, Niketon Studio, Bumble Bee Productions, Bangla Natok OST">
+    <meta name="author" content="JKH Jesan">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jkhjesan.com/">
+    <meta property="og:title" content="JKH Jesan | Sonic Legacy">
+    <meta property="og:description"
+        content="Composer, Producer, and Audio Engineer with over 13+ years of experience in the Bangladeshi music industry. Specializing in OST, BGM, and Mixing.">
+    <meta property="og:image" content="assets/images/about-jesan.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="assets/images/about-jesan.jpg">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Manrope:wght@300;400;600&display=swap"
+        rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            400: '#FACC15',
+                            500: '#EAB308',
+                            600: '#CA8A04',
+                        },
+                        dark: {
+                            900: '#0a0a0a',
+                            800: '#171717',
+                            700: '#262626',
+                        }
+                    },
+                    fontFamily: {
+                        header: ['Cinzel', 'serif'],
+                        body: ['Manrope', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'glow': 'glow 3s ease-in-out infinite',
+                        'music-float': 'musicFloat linear infinite',
+                        'blob': 'blob 7s infinite',
+                        'scroll': 'scroll 20s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        glow: {
+                            '0%, 100%': { boxShadow: '0 0 5px rgba(234, 179, 8, 0.2)', borderColor: 'rgba(234, 179, 8, 0.3)' },
+                            '50%': { boxShadow: '0 0 20px rgba(234, 179, 8, 0.6)', borderColor: 'rgba(234, 179, 8, 0.8)' },
+                        },
+                        musicFloat: {
+                            '0%': { transform: 'translateY(100vh) rotate(0deg)', opacity: '0' },
+                            '10%': { opacity: '0.3' },
+                            '90%': { opacity: '0.3' },
+                            '100%': { transform: 'translateY(-10vh) rotate(360deg)', opacity: '0' }
+                        },
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' }
+                        },
+                        scroll: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #EAB308;
+        }
+
+        /* Glassmorphism Utilities */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(234, 179, 8, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(234, 179, 8, 0.1);
+        }
+
+        /* Music Bars Animation */
+        .bar {
+            width: 6px;
+            background: #EAB308;
+            animation: equalize 1.5s infinite;
+        }
+
+        .bar:nth-child(1) {
+            animation-delay: -0.4s;
+            height: 40px;
+        }
+
+        .bar:nth-child(2) {
+            animation-delay: -0.2s;
+            height: 60px;
+        }
+
+        .bar:nth-child(3) {
+            animation-delay: -0.6s;
+            height: 30px;
+        }
+
+        .bar:nth-child(4) {
+            animation-delay: -0.1s;
+            height: 70px;
+        }
+
+        .bar:nth-child(5) {
+            animation-delay: -0.3s;
+            height: 50px;
+        }
+
+        @keyframes equalize {
+
+            0%,
+            100% {
+                transform: scaleY(1);
+            }
+
+            50% {
+                transform: scaleY(0.5);
+            }
+        }
+
+        /* Fade In On Scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Gradient Text */
+        .text-gradient {
+            background: linear-gradient(to right, #FACC15, #CA8A04);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Filter Hide Class */
+        .hidden-item {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body class="bg-dark-900 text-gray-300 font-body overflow-x-hidden selection:bg-gold-500 selection:text-black">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 glass transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-header font-bold text-white tracking-widest">
+                JKH <span class="text-gold-500">JESAN</span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#home" class="hover:text-gold-400 transition-colors text-sm uppercase tracking-widest">Home</a>
+                <a href="#about"
+                    class="hover:text-gold-400 transition-colors text-sm uppercase tracking-widest">About</a>
+                <a href="#works"
+                    class="hover:text-gold-400 transition-colors text-sm uppercase tracking-widest">Works</a>
+                <a href="#gear" class="hover:text-gold-400 transition-colors text-sm uppercase tracking-widest">Gear</a>
+                <a href="#gallery"
+                    class="hover:text-gold-400 transition-colors text-sm uppercase tracking-widest">Gallery</a>
+                <a href="#contact"
+                    class="px-6 py-2 border border-gold-500 text-gold-500 hover:bg-gold-500 hover:text-black transition-all duration-300 text-sm uppercase tracking-widest font-bold">Contact</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="menu-btn" class="md:hidden text-gold-500 text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-dark-900 border-t border-gray-800 absolute w-full">
+            <div class="flex flex-col p-6 space-y-4 text-center">
+                <a href="#home" class="mobile-link hover:text-gold-400">Home</a>
+                <a href="#about" class="mobile-link hover:text-gold-400">About</a>
+                <a href="#works" class="mobile-link hover:text-gold-400">Works</a>
+                <a href="#gear" class="mobile-link hover:text-gold-400">Gear</a>
+                <a href="#gallery" class="mobile-link hover:text-gold-400">Gallery</a>
+                <a href="#contact" class="text-gold-500">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+        <!-- Background Elements -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+            <!-- Animated Floating Blobs -->
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-gold-500/20 rounded-full blur-[100px] animate-blob">
+            </div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-900/30 rounded-full blur-[100px] animate-blob"
+                style="animation-delay: 2s"></div>
+            <div class="absolute bottom-0 left-1/3 w-80 h-80 bg-blue-900/20 rounded-full blur-[100px] animate-blob"
+                style="animation-delay: 4s"></div>
+
+            <!-- Floating Musical Elements -->
+            <div class="absolute inset-0 w-full h-full pointer-events-none">
+                <i class="fas fa-music absolute text-gold-500/20 text-2xl animate-music-float"
+                    style="left: 10%; animation-duration: 15s; animation-delay: 0s;"></i>
+                <i class="fas fa-compact-disc absolute text-purple-500/20 text-4xl animate-music-float"
+                    style="left: 85%; animation-duration: 20s; animation-delay: 5s;"></i>
+                <i class="fas fa-music absolute text-white/10 text-xl animate-music-float"
+                    style="left: 45%; animation-duration: 12s; animation-delay: 2s;"></i>
+                <i class="fas fa-headphones absolute text-gold-500/10 text-6xl animate-music-float"
+                    style="left: 70%; animation-duration: 25s; animation-delay: 8s;"></i>
+                <i class="fas fa-sliders-h absolute text-blue-500/20 text-3xl animate-music-float"
+                    style="left: 20%; animation-duration: 18s; animation-delay: 10s;"></i>
+                <i class="fas fa-star absolute text-gold-500/20 text-sm animate-music-float"
+                    style="left: 60%; animation-duration: 22s; animation-delay: 1s;"></i>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10 grid md:grid-cols-2 gap-12 items-center">
+            <div class="text-center md:text-left space-y-6">
+                <a href="https://maps.app.goo.gl/mhhoDxDb7K4WBGL18" target="_blank"
+                    class="inline-flex items-center px-4 py-2 rounded-full glass border-gold-500/30 text-gold-400 text-xs uppercase tracking-[0.2em] animate-glow hover:bg-gold-500/10 transition-colors duration-300">
+                    <i class="fas fa-map-marker-alt mr-3 text-gold-500 animate-bounce"></i>
+                    <span>Studio in Niketon, Dhaka</span>
+                </a>
+
+                <h1 class="text-5xl md:text-7xl font-header font-bold text-white leading-tight">
+                    Crafting <br>
+                    <span class="text-gradient">Sonic Legacy</span>
+                </h1>
+
+                <p class="text-gray-400 text-lg md:max-w-md leading-relaxed">
+                    Composer, Producer, and Audio Engineer with over 13+ years of defining the soundscape of Bangladesh's
+                    music and film industry.
+                </p>
+
+                <div class="flex flex-col md:flex-row gap-4 justify-center md:justify-start pt-4">
+                    <a href="#works"
+                        class="px-8 py-4 bg-gold-500 text-black font-bold uppercase tracking-wider hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(234,179,8,0.3)]">
+                        Listen to Works
+                    </a>
+                    <a href="#contact"
+                        class="px-8 py-4 border border-white/20 hover:border-gold-500 hover:text-gold-500 transition-all duration-300 uppercase tracking-wider flex items-center justify-center gap-2 group">
+                        <span>Let's Collaborate</span>
+                        <i class="fas fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+
+                <!-- Stats -->
+                <div id="stats-section" class="grid grid-cols-3 gap-6 pt-8 border-t border-gray-800 mt-8">
+                    <div>
+                        <h3 class="text-3xl font-header text-white"><span class="counter" data-target="13">0</span>+</h3>
+                        <p class="text-xs text-gray-500 uppercase tracking-widest">Years Exp.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-3xl font-header text-white"><span class="counter" data-target="50">0</span>+
+                        </h3>
+                        <p class="text-xs text-gray-500 uppercase tracking-widest">Projects</p>
+                    </div>
+                    <div>
+                        <h3 class="text-3xl font-header text-white"><span class="counter" data-target="1">0</span>M+
+                        </h3>
+                        <p class="text-xs text-gray-500 uppercase tracking-widest">Streams</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visual Element -->
+            <div class="relative hidden md:flex justify-center items-center">
+                <div class="relative w-80 h-80 animate-float">
+                    <!-- Vinyl Record Animation -->
+                    <div
+                        class="absolute inset-0 rounded-full border-4 border-gray-900 flex items-center justify-center bg-dark-800 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+                        <!-- Spinning Disc -->
+                        <div class="relative w-72 h-72 rounded-full bg-gradient-to-br from-gray-800 to-black flex items-center justify-center animate-spin-slow"
+                            style="animation-duration: 4s;">
+
+                            <!-- Vinyl Grooves (Visual Texture) -->
+                            <div class="absolute inset-0 rounded-full border border-gray-700/30 scale-95"></div>
+                            <div class="absolute inset-0 rounded-full border border-gray-700/30 scale-90"></div>
+                            <div class="absolute inset-0 rounded-full border border-gray-700/30 scale-85"></div>
+                            <div class="absolute inset-0 rounded-full border border-gray-700/30 scale-75"></div>
+                            <div class="absolute inset-0 rounded-full border border-gray-700/30 scale-65"></div>
+                            <div class="absolute inset-0 rounded-full border border-gray-700/30 scale-55"></div>
+
+                            <!-- Label (YouTube Thumbnail) -->
+                            <div
+                                class="w-36 h-36 rounded-full overflow-hidden border-4 border-dark-900 relative shadow-lg z-10">
+                                <!-- Using the thumbnail for Video ID: clDnz-5Gsic -->
+                                <img src="https://img.youtube.com/vi/clDnz-5Gsic/hqdefault.jpg" alt="Song Cover"
+                                    class="w-full h-full object-cover scale-150 opacity-90">
+
+                                <!-- Center Spindle Hole -->
+                                <div
+                                    class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-black rounded-full border border-gray-700 shadow-inner">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audio Bars Overlay -->
+                    <div class="absolute -bottom-10 left-1/2 transform -translate-x-1/2 flex space-x-2 items-end h-20">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-dark-800 relative">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row gap-16 items-center">
+                <div class="md:w-1/2 relative reveal">
+                    <div class="aspect-square bg-gray-800 rounded-lg overflow-hidden relative group">
+                        <!-- User Image -->
+                        <img src="assets/images/about-jesan.jpg" alt="JKH Jesan"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 grayscale group-hover:grayscale-0">
+
+                        <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black to-transparent">
+                            <h3 class="text-2xl font-header text-white">JKH Jesan</h3>
+                            <p class="text-gold-500 text-sm tracking-widest">JKH Jesan Studio | Niketon, Dhaka</p>
+                        </div>
+                    </div>
+                    <!-- Decorative square -->
+                    <div class="absolute -z-10 -top-4 -left-4 w-full h-full border border-gold-500/30 rounded-lg"></div>
+                </div>
+
+                <div class="md:w-1/2 space-y-8 reveal">
+                    <div>
+                        <h2 class="text-sm font-bold text-gold-500 uppercase tracking-[0.3em] mb-2">The Artist</h2>
+                        <h3 class="text-4xl font-header text-white mb-6">Bridging Emotion & Technology</h3>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed">
+                        Based in Niketon, Dhaka, I am a Music Producer and Composer dedicated to the art of sound. With
+                        a deep connection to the Bangladeshi media industry, my work spans from heart-touching OSTs for
+                        Bangla Natoks to high-fidelity mixing for fictions.
+                    </p>
+                    <p class="text-gray-400 leading-relaxed">
+                        Whether it's composing the background score (BGM) for a dramatic scene or mixing & mastering a track for
+                        digital platforms like Apple Music & Spotify, I bring a blend of creative intuition and
+                        technical precision to every project.
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 glass border-l-2 border-gold-500">
+                            <i class="fas fa-sliders-h text-gold-500 mb-2"></i>
+                            <h4 class="text-white font-bold">Mixing Engineer</h4>
+                        </div>
+                        <div class="p-4 glass border-l-2 border-gold-500">
+                            <i class="fas fa-guitar text-gold-500 mb-2"></i>
+                            <h4 class="text-white font-bold">Composer</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Selected Works (Discography) -->
+    <section id="works" class="py-24 bg-dark-900">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <span class="text-gold-500 text-xs font-bold uppercase tracking-[0.3em] mb-2 block">Portfolio & Discography</span>
+                <h2 class="text-4xl md:text-5xl font-header text-white mb-4">Selected Works</h2>
+                <div class="w-24 h-1 bg-gold-500 mx-auto"></div>
+                <p class="text-gray-400 mt-4 max-w-xl mx-auto text-sm">Original background scores, hit drama OSTs, singles, and mixing projects produced and scored by JKH Jesan.</p>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="flex justify-center flex-wrap gap-3 mb-12 text-xs md:text-sm tracking-widest reveal">
+                <button
+                    class="filter-btn px-5 py-2.5 text-black bg-gold-500 border border-gold-500 font-bold transition-all duration-300 rounded-sm"
+                    data-filter="all">ALL</button>
+                <button
+                    class="filter-btn px-5 py-2.5 text-gray-400 border border-gray-700 hover:border-gold-500 hover:text-gold-500 transition-all duration-300 rounded-sm"
+                    data-filter="songs">NEW SONGS</button>
+                <button
+                    class="filter-btn px-5 py-2.5 text-gray-400 border border-gray-700 hover:border-gold-500 hover:text-gold-500 transition-all duration-300 rounded-sm"
+                    data-filter="bgm">BGM</button>
+                <button
+                    class="filter-btn px-5 py-2.5 text-gray-400 border border-gray-700 hover:border-gold-500 hover:text-gold-500 transition-all duration-300 rounded-sm"
+                    data-filter="ost">OST</button>
+                <button
+                    class="filter-btn px-5 py-2.5 text-gray-400 border border-gray-700 hover:border-gold-500 hover:text-gold-500 transition-all duration-300 rounded-sm"
+                    data-filter="prod">MIX / PROD</button>
+                <button
+                    class="filter-btn px-5 py-2.5 text-gray-400 border border-gray-700 hover:border-gold-500 hover:text-gold-500 transition-all duration-300 rounded-sm"
+                    data-filter="film">FILM</button>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="work-grid">
+
+                <!-- 1. Tomake Paoar Baji (NEW SONG from PDF) -->
+                <a href="https://www.youtube.com/watch?v=M2D5lK2l6V4" target="_blank"
+                    class="work-item group block reveal" data-category="songs ost">
+                    <div
+                        class="glass-card p-0 rounded-xl h-full relative overflow-hidden group-hover:-translate-y-2 transition-transform duration-300">
+                        <div class="absolute inset-0">
+                            <img src="https://img.youtube.com/vi/M2D5lK2l6V4/hqdefault.jpg" alt="Tomake Paoar Baji"
+                                class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        </div>
+                        <div
+                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i class="fas fa-play-circle text-5xl text-gold-500 drop-shadow-2xl"></i>
+                        </div>
+                        <div class="relative p-6 h-64 flex flex-col justify-end z-10 pointer-events-none">
+                            <div class="flex justify-between items-end mb-2">
+                                <span
+                                    class="text-xs text-amber-400 border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 rounded uppercase tracking-wider backdrop-blur-sm font-semibold">NEW SONG / OST</span>
+                            </div>
+                            <h3
+                                class="text-xl text-white font-header leading-tight mb-1 group-hover:text-gold-500 transition-colors">
+                                Tomake Paoar Baji | তোমাকে পাওয়ার বাজি</h3>
+                            <p class="text-gray-400 text-xs line-clamp-2">Pinky & Jesan | Apurbo & Totini | Capital Music</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 2. Bosh Korila Mon (NEW SONG from PDF) -->
+                <a href="https://www.youtube.com/watch?v=f6Gg23HC7JY" target="_blank"
+                    class="work-item group block reveal" data-category="songs">
+                    <div
+                        class="glass-card p-0 rounded-xl h-full relative overflow-hidden group-hover:-translate-y-2 transition-transform duration-300">
+                        <div class="absolute inset-0">
+                            <img src="https://img.youtube.com/vi/f6Gg23HC7JY/hqdefault.jpg" alt="Bosh Korila Mon"
+                                class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        </div>
+                        <div
+                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i class="fas fa-play-circle text-5xl text-gold-500 drop-shadow-2xl"></i>
+                        </div>
+                        <div class="relative p-6 h-64 flex flex-col justify-end z-10 pointer-events-none">
+                            <div class="flex justify-between items-end mb-2">
+                                <span
+                                    class="text-xs text-rose-400 border border-rose-500/30 bg-rose-500/10 px-2.5 py-1 rounded uppercase tracking-wider backdrop-blur-sm font-semibold">NEW SONG</span>
+                            </div>
+                            <h3
+                                class="text-xl text-white font-header leading-tight mb-1 group-hover:text-gold-500 transition-colors">
+                                Bosh Korila Mon (বশ করিলা মন)</h3>
+                            <p class="text-gray-400 text-xs line-clamp-2">Singer & Music: Jkh Jesan | feat. Saad Naovi | Laser Vision</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 3. Ek Jibone Eto Betha (NEW SONG from PDF) -->
+                <a href="https://www.youtube.com/watch?v=FnsjJAc6j18" target="_blank"
+                    class="work-item group block reveal" data-category="songs ost">
+                    <div
+                        class="glass-card p-0 rounded-xl h-full relative overflow-hidden group-hover:-translate-y-2 transition-transform duration-300">
+                        <div class="absolute inset-0">
+                            <img src="https://img.youtube.com/vi/FnsjJAc6j18/hqdefault.jpg" alt="Ek Jibone Eto Betha"
+                                class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        </div>
+                        <div
+                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i class="fas fa-play-circle text-5xl text-gold-500 drop-shadow-2xl"></i>
+                        </div>
+                        <div class="relative p-6 h-64 flex flex-col justify-end z-10 pointer-events-none">
+                            <div class="flex justify-between items-end mb-2">
+                                <span
+                                    class="text-xs text-purple-400 border border-purple-500/30 bg-purple-500/10 px-2.5 py-1 rounded uppercase tracking-wider backdrop-blur-sm font-semibold">OST / SONG</span>
+                            </div>
+                            <h3
+                                class="text-xl text-white font-header leading-tight mb-1 group-hover:text-gold-500 transition-colors">
+                                Ek Jibone Eto Betha (এক জীবনে এত ব্যথা)</h3>
+                            <p class="text-gray-400 text-xs line-clamp-2">Khairul Wasi | Ojana Maya Natok Song | Laser Vision</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 4. Premer Meye (NEW SONG from PDF) -->
+                <a href="https://www.youtube.com/watch?v=hO7xP4xwPzQ" target="_blank"
+                    class="work-item group block reveal" data-category="songs prod">
+                    <div
+                        class="glass-card p-0 rounded-xl h-full relative overflow-hidden group-hover:-translate-y-2 transition-transform duration-300">
+                        <div class="absolute inset-0">
+                            <img src="https://img.youtube.com/vi/hO7xP4xwPzQ/hqdefault.jpg" alt="Premer Meye"
+                                class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        </div>
+                        <div
+                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i class="fas fa-play-circle text-5xl text-gold-500 drop-shadow-2xl"></i>
+                        </div>
+                        <div class="relative p-6 h-64 flex flex-col justify-end z-10 pointer-events-none">
+                            <div class="flex justify-between items-end mb-2">
+                                <span
+                                    class="text-xs text-emerald-400 border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 rounded uppercase tracking-wider backdrop-blur-sm font-semibold">MUSIC VIDEO</span>
+                            </div>
+                            <h3
+                                class="text-xl text-white font-header leading-tight mb-1 group-hover:text-gold-500 transition-colors">
+                                Premer Meye | প্রেমের মেয়ে</h3>
+                            <p class="text-gray-400 text-xs line-clamp-2">Mahtim Shakib | Dir. Sabbir Ahmed MS | Music Video</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 5. Aponjon (BGM from PDF) -->
+                <a href="https://www.youtube.com/watch?v=_cqPDqx54RE" target="_blank"
+                    class="work-item group block reveal" data-category="bgm">
+                    <div
+                        class="glass-card p-0 rounded-xl h-full relative overflow-hidden group-hover:-translate-y-2 transition-transform duration-300">
+                        <div class="absolute inset-0">
+                            <img src="https://img.youtube.com/vi/_cqPDqx54RE/hqdefault.jpg" alt="Aponjon"
+                                class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        </div>
+                        <div
+                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i class="fas fa-play-circle text-5xl text-gold-500 drop-shadow-2xl"></i>
+                        </div>
+                        <div class="relative p-6 h-64 flex flex-col justify-end z-10 pointer-events-none">
+                            <div class="flex justify-between items-end mb-2">
+                                <span
+                                    class="text-xs text-yellow-400 border border-yellow-500/30 bg-yellow-500/10 px-2.5 py-1 rounded uppercase tracking-wider backdrop-blur-sm font-semibold">BGM / SCORE</span>
+                            </div>
+                            <h3
+                                class="text-xl text-white font-header leading-tight mb-1 group-hover:text-gold-500 transition-colors">
+                                Aponjon | আপনজন</h3>
+                            <p class="text-gray-400 text-xs line-clamp-2">Background Score | Dir. Prio Ahmed | Nirjon Nahuel & Arohi Mim</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 6. Anarkoli (BGM from PDF) -->
+                <a href="https://www.youtube.com/watch?v=80opMhwlldo" target="_blank"
+                    class="work-item group block reveal" data-category="bgm">
+                    <div
+                        class="glass-card p-0 rounded-xl h-full relative overflow-hidden group-hover:-translate-y-2 transition-transform duration-300">
+                        <div class="absolute inset-0">
+                            <img src="https://img.youtube.com/vi/80opMhwlldo/hqdefault.jpg" alt="Anarkoli"
+                                class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        </div>
+                        <div
+                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i class="fas fa-play-circle text-5xl text-gold-500 drop-shadow-2xl"></i>
+                        </div>
+                        <div class="relative p-6 h-64 flex flex-col justify-end z-10 pointer-events-none">
+                            <div class="flex justify-between items-end mb-2">
+                                <span
+                                    class="text-xs text-yellow-400 border border-yellow-500/30 bg-yellow-500/10 px-2.5 py-1 rounded uppercase tracking-wider backdrop-blur-sm font-semibold">BGM / SCORE</span>
+                            </div>
+                            <h3
+                                class="text-xl text-white font-header leading-tight mb-1 group-hover:text-gold-500 transition-colors">
+                                Anarkoli (আনারকলি)</h3>
+                            <p class="text-gray-400 text-xs line-clamp-2">Background Score | Saad Naovi & Sadnima | Dir. L R Sohel | Laser Vision</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 7. Ojana Maya (BGM from PDF) -->
+                <a href="https://www.youtube.com/watch?v=D9vDMc9_2AE&t=2529s" target="_blank"
+                    class="work-item group block reveal" data-category="bgm">
+                    <div
+                        class="glass-card p-0 rounded-xl h-full relative overflow-hidden group-hover:-translate-y-2 transition-transform duration-300">
+                        <div class="absolute inset-0">
+                            <img src="https://img.youtube.com/vi/D9vDMc9_2AE/hqdefault.jpg" alt="Ojana Maya"
+                                class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        </div>
+                        <div
+                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i class="fas fa-play-circle text-5xl text-gold-500 drop-shadow-2xl"></i>
+                        </div>
+                        <div class="relative p-6 h-64 flex flex-col justify-end z-10 pointer-events-none">
+                            <div class="flex justify-between items-end mb-2">
+                                <span
+                                    class="text-xs text-yellow-400 border border-yellow-500/30 bg-yellow-500/10 px-2.5 py-1 rounded uppercase tracking-wider backdrop-blur-sm font-semibold">BGM / SCORE</span>
+                            </div>
+                            <h3
+                                class="text-xl text-white font-header leading-tight mb-1 group-hover:text-gold-500 transition-colors">
+                                Ojana Maya | অজানা মায়া</h3>
+                            <p class="text-gray-400 text-xs line-clamp-2">Background Score | Saad Naovi & Priyontee Urbee | Dir. Sohel | Laser Vision</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 8. Kothay Pabo Tare (OST) -->
+                <a href="https://www.youtube.com/watch?v=f023KdTlYBk" target="_blank"
+                    class="work-item group block reveal" data-category="ost songs">
+                    <div
+                        class="glass-card p-0 rounded-xl h-full relative overflow-hidden group-hover:-translate-y-2 transition-transform duration-300">
+                        <div class="absolute inset-0">
+                            <img src="https://img.youtube.com/vi/f023KdTlYBk/hqdefault.jpg" alt="Kothay Pabo Tare"
+                                class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        </div>
+                        <div
+                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i class="fas fa-play-circle text-5xl text-gold-500 drop-shadow-2xl"></i>
+                        </div>
+                        <div class="relative p-6 h-64 flex flex-col justify-end z-10 pointer-events-none">
+                            <div class="flex justify-between items-end mb-2">
+                                <span
+                                    class="text-xs text-gold-500 border border-gold-500/30 bg-gold-500/10 px-2.5 py-1 rounded uppercase tracking-wider backdrop-blur-sm font-semibold">OST</span>
+                            </div>
+                            <h3
+                                class="text-xl text-white font-header leading-tight mb-1 group-hover:text-gold-500 transition-colors">
+                                Kothay Pabo Tare</h3>
+                            <p class="text-gray-400 text-xs line-clamp-2">Singer, Lyrics & Composition | G Series</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 9. Ridoy Nayer Boitha (OST) -->
+                <a href="https://www.youtube.com/watch?v=PwU--Y4GWJg" target="_blank"
+                    class="work-item group block reveal" data-category="ost songs">
+                    <div
+                        class="glass-card p-0 rounded-xl h-full relative overflow-hidden group-hover:-translate-y-2 transition-transform duration-300">
+                        <div class="absolute inset-0">
+                            <img src="https://img.youtube.com/vi/PwU--Y4GWJg/hqdefault.jpg" alt="Ridoy Nayer Boitha"
+                                class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        </div>
+                        <div
+                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i class="fas fa-play-circle text-5xl text-gold-500 drop-shadow-2xl"></i>
+                        </div>
+                        <div class="relative p-6 h-64 flex flex-col justify-end z-10 pointer-events-none">
+                            <div class="flex justify-between items-end mb-2">
+                                <span
+                                    class="text-xs text-purple-400 border border-purple-500/30 bg-purple-500/10 px-2.5 py-1 rounded uppercase tracking-wider backdrop-blur-sm font-semibold">OST</span>
+                            </div>
+                            <h3
+                                class="text-xl text-white font-header leading-tight mb-1 group-hover:text-gold-500 transition-colors">
+                                Ridoy Nayer Boitha</h3>
+                            <p class="text-gray-400 text-xs line-clamp-2">feat. Jovan & Sarika</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 10. Mondo Hotona (MIX) -->
+                <a href="https://www.youtube.com/watch?v=YJaAkLxK4X8" target="_blank"
+                    class="work-item group block reveal" data-category="prod">
+                    <div
+                        class="glass-card p-0 rounded-xl h-full relative overflow-hidden group-hover:-translate-y-2 transition-transform duration-300">
+                        <div class="absolute inset-0">
+                            <img src="https://img.youtube.com/vi/YJaAkLxK4X8/hqdefault.jpg" alt="Mondo Hotona"
+                                class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        </div>
+                        <div
+                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i class="fas fa-play-circle text-5xl text-gold-500 drop-shadow-2xl"></i>
+                        </div>
+                        <div class="relative p-6 h-64 flex flex-col justify-end z-10 pointer-events-none">
+                            <div class="flex justify-between items-end mb-2">
+                                <span
+                                    class="text-xs text-blue-400 border border-blue-500/30 bg-blue-500/10 px-2.5 py-1 rounded uppercase tracking-wider backdrop-blur-sm font-semibold">MIX/MASTER</span>
+                            </div>
+                            <h3
+                                class="text-xl text-white font-header leading-tight mb-1 group-hover:text-gold-500 transition-colors">
+                                Mondo Hotona</h3>
+                            <p class="text-gray-400 text-xs line-clamp-2">Ghumpori (Chorki Original)</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 11. Maya Dubi (FILM) -->
+                <a href="https://www.youtube.com/watch?v=g5sZzxounac" target="_blank"
+                    class="work-item group block reveal" data-category="film prod">
+                    <div
+                        class="glass-card p-0 rounded-xl h-full relative overflow-hidden group-hover:-translate-y-2 transition-transform duration-300">
+                        <div class="absolute inset-0">
+                            <img src="https://img.youtube.com/vi/g5sZzxounac/hqdefault.jpg" alt="Maya Dubi"
+                                class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        </div>
+                        <div
+                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i class="fas fa-play-circle text-5xl text-gold-500 drop-shadow-2xl"></i>
+                        </div>
+                        <div class="relative p-6 h-64 flex flex-col justify-end z-10 pointer-events-none">
+                            <div class="flex justify-between items-end mb-2">
+                                <span
+                                    class="text-xs text-green-400 border border-green-500/30 bg-green-500/10 px-2.5 py-1 rounded uppercase tracking-wider backdrop-blur-sm font-semibold">FILM</span>
+                            </div>
+                            <h3
+                                class="text-xl text-white font-header leading-tight mb-1 group-hover:text-gold-500 transition-colors">
+                                Maya Dubi</h3>
+                            <p class="text-gray-400 text-xs line-clamp-2">Dubbing Recordist | FH Multimedia</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 12. Amake Nao (SINGLE) -->
+                <a href="https://www.youtube.com/watch?v=ItHlbrjm4yY" target="_blank"
+                    class="work-item group block reveal" data-category="songs prod">
+                    <div
+                        class="glass-card p-0 rounded-xl h-full relative overflow-hidden group-hover:-translate-y-2 transition-transform duration-300">
+                        <div class="absolute inset-0">
+                            <img src="https://img.youtube.com/vi/ItHlbrjm4yY/hqdefault.jpg" alt="Amake Nao"
+                                class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        </div>
+                        <div
+                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i class="fas fa-play-circle text-5xl text-gold-500 drop-shadow-2xl"></i>
+                        </div>
+                        <div class="relative p-6 h-64 flex flex-col justify-end z-10 pointer-events-none">
+                            <div class="flex justify-between items-end mb-2">
+                                <span
+                                    class="text-xs text-red-400 border border-red-500/30 bg-red-500/10 px-2.5 py-1 rounded uppercase tracking-wider backdrop-blur-sm font-semibold">SINGLE</span>
+                            </div>
+                            <h3
+                                class="text-xl text-white font-header leading-tight mb-1 group-hover:text-gold-500 transition-colors">
+                                Amake Nao</h3>
+                            <p class="text-gray-400 text-xs line-clamp-2">Bumble Bee Productions</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 13. Pheshey Jaai (COVER) -->
+                <a href="https://www.youtube.com/watch?v=_NIBldnOQmA" target="_blank"
+                    class="work-item group block reveal" data-category="songs prod">
+                    <div
+                        class="glass-card p-0 rounded-xl h-full relative overflow-hidden group-hover:-translate-y-2 transition-transform duration-300">
+                        <div class="absolute inset-0">
+                            <img src="https://img.youtube.com/vi/_NIBldnOQmA/hqdefault.jpg" alt="Pheshey Jaai"
+                                class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        </div>
+                        <div
+                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i class="fas fa-play-circle text-5xl text-gold-500 drop-shadow-2xl"></i>
+                        </div>
+                        <div class="relative p-6 h-64 flex flex-col justify-end z-10 pointer-events-none">
+                            <div class="flex justify-between items-end mb-2">
+                                <span
+                                    class="text-xs text-gold-400 border border-gold-500/30 bg-gold-500/10 px-2.5 py-1 rounded uppercase tracking-wider backdrop-blur-sm font-semibold">COVER</span>
+                            </div>
+                            <h3
+                                class="text-xl text-white font-header leading-tight mb-1 group-hover:text-gold-500 transition-colors">
+                                Pheshey Jaai</h3>
+                            <p class="text-gray-400 text-xs line-clamp-2">Toofan Movie Song Cover</p>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+
+            <div class="mt-14 text-center">
+                <a href="https://www.youtube.com/results?search_query=JKH+Jesan" target="_blank"
+                    class="inline-flex items-center space-x-3 px-8 py-3.5 border border-gold-500/50 text-gold-400 hover:text-black hover:bg-gold-500 transition-all duration-300 text-xs uppercase tracking-widest font-bold shadow-[0_0_20px_rgba(234,179,8,0.15)] rounded-sm group">
+                    <span>View Full Discography On YouTube</span>
+                    <i class="fas fa-external-link-alt transform group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-24 bg-dark-800 relative overflow-hidden">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-header text-white mb-4">Trusted By</h2>
+                <div class="w-24 h-1 bg-gold-500 mx-auto"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="glass p-8 rounded-xl border-l-4 border-gold-500 reveal">
+                    <div class="text-gold-500 text-2xl mb-4"><i class="fas fa-quote-left"></i></div>
+                    <p class="text-gray-300 italic mb-6">"Jesan's ability to capture the emotion of a scene through his
+                        background scores is truly exceptional. He brings a unique depth to every project."</p>
+                    <div class="flex items-center">
+                        <div
+                            class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white font-bold mr-3">
+                            SA</div>
+                        <div>
+                            <h4 class="text-white font-bold">Sabbir Ahmed MS</h4>
+                            <p class="text-xs text-gray-500">Director, G Series Natok</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="glass p-8 rounded-xl border-l-4 border-purple-500 reveal">
+                    <div class="text-purple-500 text-2xl mb-4"><i class="fas fa-quote-left"></i></div>
+                    <p class="text-gray-300 italic mb-6">"A brilliant composer and a sound engineer who understands the
+                        nuances of modern sound. Working with him on 'Mondo Hotona' was a great experience."</p>
+                    <div class="flex items-center">
+                        <div
+                            class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white font-bold mr-3">
+                            AD</div>
+                        <div>
+                            <h4 class="text-white font-bold">Antu Dash</h4>
+                            <p class="text-xs text-gray-500">Music Composer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gear Section (Marquee) -->
+    <section id="gear" class="py-16 bg-black border-t border-gray-800 overflow-hidden">
+        <div class="container mx-auto px-6 mb-8 text-center">
+            <span class="text-sm text-gray-500 uppercase tracking-[0.3em]">Studio Arsenal</span>
+        </div>
+
+        <div class="relative w-full overflow-hidden">
+            <div class="flex whitespace-nowrap animate-scroll w-max">
+                <!-- Gear Items (Duplicated for seamless loop) -->
+                <div class="flex items-center space-x-16 mx-8 text-gray-600 font-header text-2xl font-bold uppercase">
+                    <span><i class="fas fa-microphone mr-2"></i> Neumann</span>
+                    <span><i class="fas fa-sliders-h mr-2"></i> FL Studio</span>
+                    <span><i class="fas fa-headphones mr-2"></i> Sennheiser</span>
+                    <span><i class="fas fa-wave-square mr-2"></i> Focusrite</span>
+                    <span><i class="fas fa-keyboard mr-2"></i> M-Audio</span>
+                    <span><i class="fas fa-guitar mr-2"></i> Fender</span>
+                    <span><i class="fas fa-laptop-code mr-2"></i> Cubase</span>
+
+                    <!-- Duplicate -->
+                    <span><i class="fas fa-microphone mr-2"></i> Neumann</span>
+                    <span><i class="fas fa-sliders-h mr-2"></i> FL Studio</span>
+                    <span><i class="fas fa-headphones mr-2"></i> Sennheiser</span>
+                    <span><i class="fas fa-wave-square mr-2"></i> Focusrite</span>
+                    <span><i class="fas fa-keyboard mr-2"></i> M-Audio</span>
+                    <span><i class="fas fa-guitar mr-2"></i> Fender</span>
+                    <span><i class="fas fa-laptop-code mr-2"></i> Cubase</span>
+                </div>
+            </div>
+            <!-- Fade effect on edges -->
+            <div class="absolute top-0 left-0 w-20 h-full bg-gradient-to-r from-black to-transparent"></div>
+            <div class="absolute top-0 right-0 w-20 h-full bg-gradient-to-l from-black to-transparent"></div>
+        </div>
+    </section>
+
+    <!-- Gallery Section (New) -->
+    <section id="gallery" class="py-24 bg-dark-900 border-t border-gray-800">
+        <!-- ... existing gallery content ... -->
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-header text-white mb-4">Studio Visuals</h2>
+                <div class="w-24 h-1 bg-gold-500 mx-auto"></div>
+                <p class="text-gray-400 mt-4">A glimpse into the world where the music happens.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- ... existing images ... -->
+                <!-- Image 1 (Large) - Session Mode -->
+                <div class="md:col-span-2 aspect-video rounded-xl overflow-hidden relative group cursor-pointer reveal">
+                    <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=2070&auto=format&fit=crop"
+                        alt="Studio Session"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0">
+                    <div
+                        class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <span class="text-gold-500 font-header text-xl tracking-widest uppercase">Session Mode</span>
+                    </div>
+                </div>
+
+                <!-- Image 2 - Live Recording -->
+                <div
+                    class="aspect-square md:aspect-auto rounded-xl overflow-hidden relative group cursor-pointer reveal">
+                    <img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?q=80&w=2070&auto=format&fit=crop"
+                        alt="Guitar Session"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0">
+                    <div
+                        class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <span class="text-gold-500 font-header text-xl tracking-widest uppercase">Live Recording</span>
+                    </div>
+                </div>
+
+                <!-- Image 3 - Mixing Console -->
+                <div
+                    class="aspect-square md:aspect-auto rounded-xl overflow-hidden relative group cursor-pointer reveal">
+                    <img src="https://images.unsplash.com/photo-1598653222000-6b7b7a552625?q=80&w=2070&auto=format&fit=crop"
+                        alt="Mixing Console"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0">
+                    <div
+                        class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <span class="text-gold-500 font-header text-xl tracking-widest uppercase">Mixing Console</span>
+                    </div>
+                </div>
+
+                <!-- Image 4 (Large) - Vocal Booth -->
+                <div class="md:col-span-2 aspect-video rounded-xl overflow-hidden relative group cursor-pointer reveal">
+                    <img src="https://images.unsplash.com/photo-1525201548942-d8732f6617a0?q=80&w=2070&auto=format&fit=crop"
+                        alt="Vocal Booth"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0">
+                    <div
+                        class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <span class="text-gold-500 font-header text-xl tracking-widest uppercase">Vocal Booth</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners / Clients Section (NEW) -->
+    <section class="py-20 bg-black border-t border-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 reveal">
+                <span class="text-gold-500 text-sm uppercase tracking-[0.3em] font-bold">Collaborations</span>
+                <h3 class="text-2xl text-gray-400 mt-2 font-header">Proudly Working With</h3>
+            </div>
+
+            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-70">
+                <!-- Partner 1 -->
+                <div class="group reveal">
+                    <h4
+                        class="text-3xl font-header text-gray-600 group-hover:text-white transition-colors cursor-default">
+                        G SERIES</h4>
+                </div>
+                <!-- Partner 2 -->
+                <div class="group reveal">
+                    <h4
+                        class="text-3xl font-header text-gray-600 group-hover:text-red-500 transition-colors cursor-default">
+                        CHORKI</h4>
+                </div>
+                <!-- Partner 3 -->
+                <div class="group reveal">
+                    <h4
+                        class="text-3xl font-header text-gray-600 group-hover:text-gold-500 transition-colors cursor-default">
+                        SULTAN ENT.</h4>
+                </div>
+                <!-- Partner 4 -->
+                <div class="group reveal">
+                    <h4
+                        class="text-3xl font-header text-gray-600 group-hover:text-blue-500 transition-colors cursor-default">
+                        LASER VISION</h4>
+                </div>
+                <!-- Partner 5 -->
+                <div class="group reveal">
+                    <h4
+                        class="text-3xl font-header text-gray-600 group-hover:text-yellow-400 transition-colors cursor-default">
+                        BUMBLE BEE</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-black relative overflow-hidden">
+        <!-- Bg glow -->
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-gold-600/10 blur-3xl rounded-full pointer-events-none"></div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-5xl mx-auto glass p-8 md:p-12 rounded-2xl border border-gray-800 reveal">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-header text-white mb-4">Start Your Project</h2>
+                    <p class="text-gray-400">Connect with me on your preferred platform.</p>
+                </div>
+
+                <!-- Contact Grid -->
+                <div class="flex flex-wrap justify-center gap-6 text-center">
+
+                    <!-- Facebook -->
+                    <a href="https://www.facebook.com/jkh.jesan.9/" target="_blank"
+                        class="group p-6 rounded-xl border border-gray-800 hover:bg-blue-900/10 hover:border-blue-500 transition-all duration-300 w-full sm:w-64 flex-grow">
+                        <div
+                            class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white text-2xl mb-3 mx-auto group-hover:scale-110 transition-transform shadow-lg shadow-blue-900/50">
+                            <i class="fab fa-facebook-f"></i>
+                        </div>
+                        <h4 class="text-white font-bold group-hover:text-blue-400 transition-colors">Facebook</h4>
+                        <p class="text-xs text-gray-500 mt-1">Follow & Message</p>
+                    </a>
+
+                    <!-- YouTube -->
+                    <a href="https://youtube.com/@jkhjesan?si=00dHez7xnIWZATza" target="_blank"
+                        class="group p-6 rounded-xl border border-gray-800 hover:bg-red-900/10 hover:border-red-500 transition-all duration-300 w-full sm:w-64 flex-grow">
+                        <div
+                            class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center text-white text-2xl mb-3 mx-auto group-hover:scale-110 transition-transform shadow-lg shadow-red-900/50">
+                            <i class="fab fa-youtube"></i>
+                        </div>
+                        <h4 class="text-white font-bold group-hover:text-red-400 transition-colors">YouTube</h4>
+                        <p class="text-xs text-gray-500 mt-1">Watch Videos</p>
+                    </a>
+
+                    <!-- Spotify -->
+                    <a href="https://open.spotify.com/artist/1vglzg9TEGd8oZGOyuNQ94?si=etdauentSBmpLOu87YKOnQ"
+                        target="_blank"
+                        class="group p-6 rounded-xl border border-gray-800 hover:bg-green-900/10 hover:border-green-500 transition-all duration-300 w-full sm:w-64 flex-grow">
+                        <div
+                            class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center text-black text-2xl mb-3 mx-auto group-hover:scale-110 transition-transform shadow-lg shadow-green-900/50">
+                            <i class="fab fa-spotify"></i>
+                        </div>
+                        <h4 class="text-white font-bold group-hover:text-green-400 transition-colors">Spotify</h4>
+                        <p class="text-xs text-gray-500 mt-1">Stream Latest Hits</p>
+                    </a>
+
+                    <!-- WhatsApp -->
+                    <a href="https://wa.me/8801938172454" target="_blank"
+                        class="group p-6 rounded-xl border border-gray-800 hover:bg-teal-900/10 hover:border-teal-500 transition-all duration-300 w-full sm:w-64 flex-grow">
+                        <div
+                            class="w-16 h-16 bg-teal-600 rounded-full flex items-center justify-center text-white text-2xl mb-3 mx-auto group-hover:scale-110 transition-transform shadow-lg shadow-teal-900/50">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <h4 class="text-white font-bold group-hover:text-teal-400 transition-colors">WhatsApp</h4>
+                        <p class="text-xs text-gray-500 mt-1">+880 1938-172454</p>
+                    </a>
+
+                    <!-- Gmail -->
+                    <a href="mailto:jkhjesan@gmail.com"
+                        class="group p-6 rounded-xl border border-gray-800 hover:bg-red-900/10 hover:border-red-500 transition-all duration-300 w-full sm:w-64 flex-grow">
+                        <div
+                            class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-red-600 text-2xl mb-3 mx-auto group-hover:scale-110 transition-transform shadow-lg shadow-red-900/50">
+                            <i class="fab fa-google"></i>
+                        </div>
+                        <h4 class="text-white font-bold group-hover:text-red-400 transition-colors">Gmail</h4>
+                        <p class="text-xs text-gray-500 mt-1">jkhjesan@gmail.com</p>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark-900 py-8 border-t border-gray-800">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <span class="font-header font-bold text-white text-lg">JKH <span
+                        class="text-gold-500">JESAN</span></span>
+            </div>
+            <div class="text-gray-600 text-xs">
+                &copy; 2025 JKH Jesan. All Rights Reserved. | Niketon, Dhaka.
+            </div>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <a href="https://open.spotify.com/artist/1vglzg9TEGd8oZGOyuNQ94?si=etdauentSBmpLOu87YKOnQ"
+                    target="_blank"
+                    class="text-gray-500 hover:text-green-500 transition-colors transform hover:scale-110"><i
+                        class="fab fa-spotify text-xl"></i></a>
+                <a href="https://www.facebook.com/jkh.jesan.9/" target="_blank"
+                    class="text-gray-500 hover:text-blue-500 transition-colors transform hover:scale-110"><i
+                        class="fab fa-facebook text-xl"></i></a>
+                <a href="https://youtube.com/@jkhjesan?si=00dHez7xnIWZATza" target="_blank"
+                    class="text-gray-500 hover:text-red-500 transition-colors transform hover:scale-110"><i
+                        class="fab fa-youtube text-xl"></i></a>
+                <a href="https://www.instagram.com/jkh_jesan?igsh=MTlyZ3kxY2RnZXhiNg==" target="_blank"
+                    class="text-gray-500 hover:text-pink-500 transition-colors transform hover:scale-110"><i
+                        class="fab fa-instagram text-xl"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Local Background Music Player -->
+    <!-- Make sure your file is named 'music.mp3' and is in the same folder -->
+    <audio id="bg-music" loop>
+        <source src="music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Music Toggle Button -->
+    <button id="music-toggle"
+        class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gold-500 text-black flex items-center justify-center shadow-[0_0_20px_rgba(234,179,8,0.4)] hover:scale-110 transition-transform duration-300 group">
+        <div class="absolute inset-0 rounded-full border-2 border-gold-500 animate-ping opacity-75 hidden"
+            id="music-ping"></div>
+        <i class="fas fa-play text-xl" id="music-icon"></i>
+        <!-- Tooltip -->
+        <span
+            class="absolute right-16 bg-black text-white text-xs px-3 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Play
+            Background Music</span>
+    </button>
+
+    <!-- Back To Top Button (NEW) -->
+    <button id="back-to-top"
+        class="fixed bottom-24 right-6 z-40 w-10 h-10 rounded-full bg-dark-800 border border-gray-700 text-gold-500 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 hover:bg-gold-500 hover:text-black shadow-lg">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            // Back to top logic
+            const backToTopBtn = document.getElementById('back-to-top');
+
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-dark-900/95', 'shadow-lg');
+                nav.classList.remove('glass');
+            } else {
+                nav.classList.remove('bg-dark-900/95', 'shadow-lg');
+                nav.classList.add('glass');
+            }
+
+            // Show/Hide Back to Top Button
+            if (window.scrollY > 500) {
+                backToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+                backToTopBtn.classList.add('opacity-100', 'pointer-events-auto');
+            } else {
+                backToTopBtn.classList.add('opacity-0', 'pointer-events-none');
+                backToTopBtn.classList.remove('opacity-100', 'pointer-events-auto');
+            }
+        });
+
+        // Back to Top Scroll Function
+        document.getElementById('back-to-top').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Scroll Reveal Animation
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal(); // Trigger on load
+
+        // Work Filter Logic
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const workItems = document.querySelectorAll('.work-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active styles from all buttons
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-gold-500', 'text-black', 'font-bold');
+                    b.classList.add('text-gray-400', 'border-gray-700');
+                });
+
+                // Add active styles to clicked button
+                btn.classList.remove('text-gray-400', 'border-gray-700');
+                btn.classList.add('bg-gold-500', 'text-black', 'font-bold');
+
+                const filterValue = btn.getAttribute('data-filter');
+
+                workItems.forEach(item => {
+                    if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+                        item.classList.remove('hidden-item');
+                        // Add a small animation fade effect
+                        item.classList.add('reveal', 'active');
+                    } else {
+                        item.classList.add('hidden-item');
+                        item.classList.remove('reveal', 'active');
+                    }
+                });
+            });
+        });
+
+        // Counter Animation Logic
+        const statsSection = document.getElementById('stats-section');
+        const counters = document.querySelectorAll('.counter');
+        let hasAnimated = false;
+
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const duration = 2000; // 2 seconds total animation time
+                const startTime = performance.now();
+
+                const updateCounter = (currentTime) => {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+
+                    // Ease out quart function for smooth finish
+                    const easeOut = 1 - Math.pow(1 - progress, 4);
+
+                    const currentVal = Math.floor(easeOut * target);
+                    counter.innerText = currentVal;
+
+                    if (progress < 1) {
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                requestAnimationFrame(updateCounter);
+            });
+        };
+
+        // Trigger animation when stats section is visible
+        const observerStats = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !hasAnimated) {
+                animateCounters();
+                hasAnimated = true;
+            }
+        }, { threshold: 0.5 });
+
+        if (statsSection) observerStats.observe(statsSection);
+
+        // --- Local Audio Player Script ---
+        const audioPlayer = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-toggle');
+        const musicIcon = document.getElementById('music-icon');
+        const musicPing = document.getElementById('music-ping');
+
+        // Use audio element's internal state instead of manual variable
+
+        // Set initial volume to 10%
+        audioPlayer.volume = 0.1;
+
+        // Sync UI with actual audio state
+        audioPlayer.onplay = function () {
+            musicIcon.classList.remove('fa-play');
+            musicIcon.classList.add('fa-pause');
+            musicPing.classList.remove('hidden');
+        };
+
+        audioPlayer.onpause = function () {
+            musicIcon.classList.remove('fa-pause');
+            musicIcon.classList.add('fa-play');
+            musicPing.classList.add('hidden');
+        };
+
+        // Try to autoplay (browsers may block this)
+        window.addEventListener('load', function () {
+            audioPlayer.play().catch(error => {
+                console.log("Autoplay blocked by browser - User interaction required.");
+                // We don't do anything here, button remains in "Play" state automatically via onpause logic
+            });
+        });
+
+        // Toggle Button Logic
+        musicBtn.addEventListener('click', () => {
+            if (!audioPlayer.paused) {
+                audioPlayer.pause();
+            } else {
+                // Catch errors if user clicks too fast or browser intervenes
+                audioPlayer.play().catch(e => console.log(e));
+            }
+        });
+
+    </script>
+</body>
+
+</html>

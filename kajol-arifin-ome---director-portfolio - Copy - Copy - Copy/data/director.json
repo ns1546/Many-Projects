@@ -1,0 +1,237 @@
+{
+  "awards": [
+    {
+      "id": 1,
+      "name": "CJFB Performance Award",
+      "year": 2021,
+      "category": "Best Director – Single Drama",
+      "project": "Sorry Sir",
+      "organization": "Channel i",
+      "status": "Won",
+      "certificate": "",
+      "officialLink": "#",
+      "description": "Awarded by Channel i for outstanding direction in 'Sorry Sir', which sparked national conversations about educational culture in Bangladesh."
+    },
+    {
+      "id": 2,
+      "name": "Meril Prothom Alo Award",
+      "year": 2022,
+      "category": "Best Web Series",
+      "project": "Bachelor Point",
+      "organization": "Prothom Alo / Meril",
+      "status": "Nominated",
+      "certificate": "",
+      "officialLink": "#",
+      "description": "Nominated for the prestigious Meril Prothom Alo Award recognizing Bachelor Point's unprecedented cultural impact."
+    },
+    {
+      "id": 3,
+      "name": "YouTube Milestone Recognition",
+      "year": 2020,
+      "category": "100 Million Views Club",
+      "project": "Bachelor Point",
+      "organization": "YouTube / Google",
+      "status": "Achieved",
+      "certificate": "",
+      "officialLink": "#",
+      "description": "Boom Films' channel received YouTube's recognition for surpassing 100 million total views — a first for Bangladeshi digital content."
+    },
+    {
+      "id": 4,
+      "name": "Digital Content Excellence Award",
+      "year": 2023,
+      "category": "Best OTT Series",
+      "project": "Girgiti",
+      "organization": "Bangladesh Digital Media Awards",
+      "status": "Won",
+      "certificate": "",
+      "officialLink": "#",
+      "description": "Awarded for Girgiti's pioneering role in establishing high-quality thriller content for Bangladeshi OTT platforms."
+    }
+  ],
+  "milestones": [
+    { "stat": "500M+", "label": "Total Views", "description": "Across all YouTube and OTT platforms combined" },
+    { "stat": "100M+", "label": "Bachelor Point Views", "description": "Per season — a Bangladeshi record" },
+    { "stat": "20M+", "label": "Sorry Sir Views", "description": "In the first 72 hours of release" },
+    { "stat": "5", "label": "Seasons of Bachelor Point", "description": "Bangladesh's longest-running web series" },
+    { "stat": "1", "label": "National Award Won", "description": "CJFB Best Director 2021" },
+    { "stat": "10+", "label": "Years of Directing", "description": "From 2013 to present" }
+  ],
+  "quotes": [
+    { "text": "Directing is not about telling people what to do. It's about creating a space where truth can happen.", "context": "On filmmaking" },
+    { "text": "I don't make stories. I find them. They're already living in the world — I just give them a frame.", "context": "On storytelling" },
+    { "text": "Bachelor Point is not just a comedy. It's a love letter to every young man who ever ate cold rice alone and called it dinner.", "context": "On Bachelor Point" },
+    { "text": "The best social commentary doesn't shout. It whispers — and lets that whisper echo for days.", "context": "On Sorry Sir" },
+    { "text": "Failure is just a first draft. The real film is still ahead.", "context": "On failure" },
+    { "text": "My job is to make the audience forget they're watching a screen.", "context": "On immersion" },
+    { "text": "Bangladesh has extraordinary stories. We just haven't told them well enough yet.", "context": "On the industry" },
+    { "text": "I want to make a film that makes you call your father.", "context": "On emotional storytelling" }
+  ],
+  "press": [
+    {
+      "id": 1,
+      "headline": "Director Kajal Arefin Ome postpones throat surgery for Bachelor Point Season 5",
+      "publication": "The Daily Star",
+      "date": "September 2026",
+      "type": "News",
+      "url": "https://www.thedailystar.net/entertainment/tv-film/news/kajal-arefin-ome-postpones-surgery-complete-bachelor-point-s5-3428956",
+      "thumbnail": "/gallery/ome.jpg",
+      "excerpt": "Despite doctors advising immediate surgery for a vocal cord polyp cyst, director Kajal Arefin Ome has chosen to delay the procedure to ensure the uninterrupted release of 'Bachelor Point' Season 5."
+    },
+    {
+      "id": 2,
+      "headline": "Kajal Arefin Ome's 'Oshomoy': A reflection of our time",
+      "publication": "Dhaka Tribune",
+      "date": "January 2024",
+      "type": "Interview",
+      "url": "https://www.dhakatribune.com/showtime/336495/kajal-arefin-ome-s-%E2%80%98oshomoy%E2%80%99-a-reflection-of-our",
+      "thumbnail": "https://img.youtube.com/vi/q4x131uM3pQ/hqdefault.jpg",
+      "excerpt": "Director Kajal Arefin Ome shares his thoughts on the project, describing it as 'a reflection of our time' rather than a story about a specific person."
+    },
+    {
+      "id": 3,
+      "headline": "Bachelor Point: The comedy that changed Bangladeshi television",
+      "publication": "The Daily Star",
+      "date": "March 2021",
+      "type": "Feature",
+      "url": "https://www.thedailystar.net/entertainment/tv-film/news/bachelor-point-the-comedy-changed-bangladeshi-television-2059349",
+      "thumbnail": "https://img.youtube.com/vi/XQhT0l47iI0/hqdefault.jpg",
+      "excerpt": "In a media landscape long dominated by tired formats, Kajal Arefin Ome's Bachelor Point emerged as something genuinely new, capturing the urban youth culture perfectly."
+    },
+    {
+      "id": 4,
+      "headline": "Hotel Relax breaks streaming records on Binge",
+      "publication": "Binge",
+      "date": "April 2023",
+      "type": "News",
+      "url": "https://binge.buzz/",
+      "thumbnail": "https://img.youtube.com/vi/OqJ9TzC3o-I/hqdefault.jpg",
+      "excerpt": "Kajal Arefin Ome has consistently surprised us. With Hotel Relax, he brought his massive digital audience seamlessly into the premium OTT space, shattering all previous subscription records."
+    },
+    {
+      "id": 5,
+      "headline": "Viral Girl tackles the dark side of internet fame",
+      "publication": "The Daily Star",
+      "date": "January 2021",
+      "type": "Review",
+      "url": "https://www.thedailystar.net/arts-entertainment/news/viral-girl-tackles-the-dark-side-internet-fame-2025345",
+      "thumbnail": "https://img.youtube.com/vi/h2fE4B0mCDE/hqdefault.jpg",
+      "excerpt": "Ome takes on cyberbullying and online harassment with a sensitivity and courage that forces the audience to reflect on their own digital behavior."
+    },
+    {
+      "id": 6,
+      "headline": "Sorry Sir: A critical look at society and student life",
+      "publication": "Prothom Alo",
+      "date": "August 2020",
+      "type": "Review",
+      "url": "https://en.prothomalo.com/entertainment",
+      "thumbnail": "https://img.youtube.com/vi/b5A6k21XfLg/hqdefault.jpg",
+      "excerpt": "It is rare that a single drama causes an entire nation to pause and look at itself. Sorry Sir stands out as a powerful dramatic work from a director known primarily for comedy."
+    },
+    {
+      "id": 7,
+      "headline": "Ome's dedication: Why he refused surgery to finish Bachelor Point",
+      "publication": "Tob News",
+      "date": "September 2026",
+      "type": "Feature",
+      "url": "https://tob.news/entertainment/",
+      "thumbnail": "/gallery/photo-1.jpg",
+      "excerpt": "Ome expressed his sense of responsibility toward his audience, noting that undergoing surgery now would require a long recovery period and disrupt the series' schedule."
+    },
+    {
+      "id": 8,
+      "headline": "The Rise of Boom Films and Kajal Arefin Ome",
+      "publication": "Channel i",
+      "date": "November 2021",
+      "type": "Feature",
+      "url": "https://www.youtube.com/@BoomFilmsOfficial",
+      "thumbnail": "/gallery/photo-6.jpg",
+      "excerpt": "Inside the production company that is single-handedly changing what Bangladeshi audiences expect from their digital screens and establishing new standards in local entertainment."
+    }
+  ],
+  "philosophy": [
+    {
+      "question": "What does directing mean to you?",
+      "answer": "Directing is an act of radical empathy. It means sitting with a story until you understand every character's truth — not just the hero's, but the villain's, the bystander's, the forgotten character in the background. A director without empathy is just a traffic manager."
+    },
+    {
+      "question": "What kind of stories do you want to tell?",
+      "answer": "I want to tell Bangladeshi stories. Not the stories we imagine foreigners want to see — but the real ones. The awkward ones. The funny ones. The ones that happen in small apartments in Dhaka at 2am when no one is watching. Those stories are universal precisely because they are specific."
+    },
+    {
+      "question": "What inspires you?",
+      "answer": "People. Always people. The way a father looks at his son when the son isn't looking. The way two strangers share an umbrella without speaking. The way the world keeps moving even when someone's heart is completely broken. These moments — they're all potential films."
+    },
+    {
+      "question": "What is your approach to working with actors?",
+      "answer": "I give actors as much information as I can — then I get out of their way. My job in a scene is to create the conditions where something real can happen. If I'm micro-managing an actor, I've already failed. The best performances are the ones that surprise me."
+    },
+    {
+      "question": "What is your approach to visual storytelling?",
+      "answer": "The camera should be invisible. If an audience is thinking about a beautiful shot, they've stopped thinking about the story. I only break that rule intentionally — when I want the image itself to carry a meaning that dialogue cannot. Otherwise, the camera serves the character, always."
+    },
+    {
+      "question": "What do you want audiences to feel?",
+      "answer": "I want them to feel less alone. That is the oldest and most important function of storytelling. When someone watches my work and thinks 'that's exactly how I feel but I could never say it' — that's the moment I'm working toward."
+    },
+    {
+      "question": "Which project changed you most?",
+      "answer": "Sorry Sir changed me. It was the first time I directed something I was genuinely afraid to make — afraid of the reaction, afraid of the consequences. The fear meant the story mattered. And the response taught me that courage in storytelling is always rewarded."
+    },
+    {
+      "question": "What principles guide your work?",
+      "answer": "Truth first. If a scene doesn't feel true, it doesn't matter how beautiful it looks or how clever the dialogue is. Then empathy. Then courage — the willingness to tell a story even when it's uncomfortable. And finally, patience. Great art cannot be rushed."
+    }
+  ],
+  "futurePlans": [
+    {
+      "title": "Feature Film — Untitled",
+      "type": "Feature Film",
+      "status": "Pre-Production",
+      "year": "2025-2026",
+      "description": "Kajal Arefin Ome's first feature-length film — a dramatic thriller set in contemporary Dhaka. Details remain confidential, but early reports suggest it will be his most ambitious project to date.",
+      "genre": ["Drama", "Thriller"],
+      "ambition": "International theatrical release"
+    },
+    {
+      "title": "International Collaboration",
+      "type": "Web Series",
+      "status": "Development",
+      "year": "2025",
+      "description": "A co-production with a South Asian streaming platform exploring shared cultural heritage across Bangladesh, India, and the diaspora.",
+      "genre": ["Drama", "Cultural"],
+      "ambition": "South Asian streaming platform premiere"
+    },
+    {
+      "title": "Bachelor Point — Final Season",
+      "type": "Web Series",
+      "status": "In Production",
+      "year": "2024-2025",
+      "description": "The highly anticipated final season of Bachelor Point promises a cinematic conclusion worthy of its legendary status.",
+      "genre": ["Comedy", "Drama"],
+      "ambition": "Biggest season in the series history"
+    }
+  ],
+  "socialMedia": {
+    "facebook": "https://facebook.com/kajal.arefin.ome",
+    "instagram": "https://instagram.com/kajalarefinome",
+    "youtube_director": "https://youtube.com/@KajalArefinOmeOfficial",
+    "youtube_boom": "https://youtube.com/@BoomFilmsOfficial",
+    "facebook_boom": "https://facebook.com/Boomfilmsofficial"
+  },
+  "contact": {
+    "email": "hello@omeproductions.com",
+    "agent_email": "agent@omeproductions.com",
+    "production_email": "boomfilms@omeproductions.com",
+    "location": "Dhaka, Bangladesh",
+    "enquiry_categories": ["Commercial Direction", "Web Series Production", "Feature Film", "Speaking Engagement", "Press & Media", "General Inquiry"]
+  },
+  "firsts": [
+    { "milestone": "First TV Direction", "year": 2013, "detail": "A small television drama that earned immediate critical attention for its naturalistic performance style." },
+    { "milestone": "First Web Series", "year": 2016, "detail": "Entered the nascent web series space in Bangladesh before it became mainstream." },
+    { "milestone": "First Viral Drama", "year": 2019, "detail": "To Let became the first Bangladeshi drama to go nationally viral on social media overnight." },
+    { "milestone": "First Award Win", "year": 2021, "detail": "Won the CJFB Performance Award for Best Director — his first major industry recognition." },
+    { "milestone": "First OTT Exclusive", "year": 2022, "detail": "Became one of the first Bangladeshi directors to create content exclusively for an OTT platform (Binge)." },
+    { "milestone": "First International Interest", "year": 2023, "detail": "Bachelor Point received its first international licensing inquiry from South Asian diaspora streaming services." }
+  ]
+}

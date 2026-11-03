@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banner 2: Dark Luxe & Amber Glow (1080x1080)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #09090b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .banner-canvas {
+      position: relative;
+      width: 1080px;
+      height: 1080px;
+      overflow: hidden;
+      background-color: #0b0b0e;
+      background-image: url('editorial-bg.jpg');
+      background-size: cover;
+      background-position: 85% center;
+      color: #ffffff;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9);
+    }
+
+    /* Dramatic dark vignette with left-weighted contrast */
+    .banner-canvas::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        #09090b 0%,
+        rgba(9, 9, 11, 0.95) 45%,
+        rgba(9, 9, 11, 0.6) 70%,
+        rgba(9, 9, 11, 0.2) 100%
+      );
+      z-index: 1;
+    }
+
+    /* Accent rim glow */
+    .banner-canvas::after {
+      content: '';
+      position: absolute;
+      top: -200px;
+      left: -200px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(230, 162, 60, 0.15) 0%, transparent 70%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .content-layer {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      padding: 85px 85px 80px 85px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-symbol {
+      width: 38px;
+      height: 38px;
+      border: 1.5px solid #e5a952;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      color: #e5a952;
+      transform: rotate(45deg);
+    }
+
+    .brand-symbol span {
+      transform: rotate(-45deg);
+    }
+
+    .brand-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+
+    .status-pill {
+      background: #18181c;
+      border: 1px solid #2a2a32;
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: #9d9da8;
+      text-transform: uppercase;
+    }
+
+    /* Hero Text Zone */
+    .middle-section {
+      max-width: 580px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .headline-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #e5a952;
+    }
+
+    .headline-pill::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: #e5a952;
+    }
+
+    .headline {
+      font-family: 'Syne', sans-serif;
+      font-size: 70px;
+      font-weight: 800;
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+
+    .headline .highlight {
+      color: transparent;
+      -webkit-text-stroke: 1.5px #e5a952;
+    }
+
+    /* Price / Offer Highlight Block */
+    .pricing-hero-block {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      background: rgba(24, 24, 28, 0.85);
+      border: 1px solid rgba(229, 169, 82, 0.3);
+      padding: 20px 28px;
+      border-radius: 6px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .price-tag {
+      font-family: 'Syne', sans-serif;
+      font-size: 48px;
+      font-weight: 800;
+      color: #e5a952;
+      line-height: 1;
+    }
+
+    .price-strike {
+      font-size: 18px;
+      color: #71717a;
+      text-decoration: line-through;
+      margin-left: 6px;
+      font-weight: 500;
+    }
+
+    .divider-line {
+      width: 1px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .offer-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .offer-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+
+    .offer-subtitle {
+      font-size: 12px;
+      color: #a1a1aa;
+      line-height: 1.4;
+    }
+
+    /* Footer & CTA */
+    .bottom-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 28px;
+    }
+
+    .guarantee {
+      font-size: 12px;
+      color: #71717a;
+      letter-spacing: 0.05em;
+      line-height: 1.6;
+    }
+
+    .guarantee strong {
+      color: #d4d4d8;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      height: 56px;
+      padding: 0 36px;
+      background: #e5a952;
+      color: #09090b;
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 4px;
+      box-shadow: 0 12px 30px rgba(229, 169, 82, 0.3);
+      transition: transform 0.2s ease;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="banner-canvas" id="banner-dark">
+    <div class="content-layer">
+
+      <!-- Top Row -->
+      <header class="header-row">
+        <div class="brand-logo">
+          <div class="brand-symbol"><span>M</span></div>
+          <div class="brand-title">MAISON SCISSORS</div>
+        </div>
+        <div class="status-pill">This Week Only</div>
+      </header>
+
+      <!-- Center Body -->
+      <main class="middle-section">
+        <div class="headline-pill">Master Stylist Session</div>
+        <h1 class="headline">
+          SCULPTED<br>
+          <span class="highlight">HAIRCUT</span>
+        </h1>
+
+        <div class="pricing-hero-block">
+          <div>
+            <span class="price-tag">$45</span>
+            <span class="price-strike">$75</span>
+          </div>
+          <div class="divider-line"></div>
+          <div class="offer-meta">
+            <div class="offer-title">First Visit Privilege</div>
+            <div class="offer-subtitle">Full consultation &bull; Wash &bull; Bespoke cut &bull; Texturizing finish</div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Bottom Row -->
+      <footer class="bottom-row">
+        <div class="guarantee">
+          <strong>100% Precision Guarantee</strong><br>
+          Downtown Studio &bull; Valet parking included
+        </div>
+
+        <a href="#" class="cta-button">
+          Reserve Chair
+        </a>
+      </footer>
+
+    </div>
+  </div>
+
+</body>
+</html>
