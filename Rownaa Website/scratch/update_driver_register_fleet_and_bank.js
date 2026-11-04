@@ -543,3 +543,4 @@ html = html.replace(appPayloadTarget, appPayloadReplacement);
 
 fs.writeFileSync('driver-register.html', html, 'utf8');
 console.log('✅ driver-register.html successfully updated with dynamic rental fleet & bank features!');
+

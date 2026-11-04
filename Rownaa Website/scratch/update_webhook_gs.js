@@ -47,3 +47,4 @@ if (!code.includes(targetVeh)) {
 code = code.replace(targetVeh, repVeh);
 fs.writeFileSync('google_sheet_webhook.gs', code, 'utf8');
 console.log('✅ google_sheet_webhook.gs updated successfully!');
+

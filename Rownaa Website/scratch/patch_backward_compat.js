@@ -55,3 +55,4 @@ html = html.replace(appPayloadTarget, appPayloadRep);
 
 fs.writeFileSync('driver-register.html', html, 'utf8');
 console.log('✅ Backward-compatible payload updated in driver-register.html');
+
