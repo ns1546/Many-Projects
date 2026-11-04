@@ -35,12 +35,6 @@ var MAX_PAYLOAD_BYTES = 10 * 1024 * 1024;  // 10MB security ceiling
  * Custom UI Menu added to Google Sheets top toolbar upon opening.
  */
 function onOpen() {
-  try {
-    installDailyBackupTrigger();
-  } catch (e) {
-    Logger.log("Backup trigger check note: " + e.toString());
-  }
-
   var ui = SpreadsheetApp.getUi();
   ui.createMenu("⚡ Rownaa Driver & Car Manager")
     .addItem("🔄 Setup & Align All Sheets (Safe)", "safeRebuildAndSetup")
@@ -1377,23 +1371,6 @@ function createDailyBackup() {
   var backupSheetCopy = ssFile.makeCopy(backupSheetName, backupFolder);
   var sheetBackupUrl = backupSheetCopy.getUrl();
 
-  var excelFileUrl = "";
-  try {
-    var url = "https://docs.google.com/spreadsheets/d/" + ss.getId() + "/export?format=xlsx";
-    var params = {
-      headers: { "Authorization": "Bearer " + ScriptApp.getOAuthToken() },
-      muteHttpExceptions: true
-    };
-    var response = UrlFetchApp.fetch(url, params);
-    if (response.getResponseCode() === 200) {
-      var excelBlob = response.getBlob().setName("Rownaa_Operations_Export_" + dateStamp + ".xlsx");
-      var excelFile = backupFolder.createFile(excelBlob);
-      excelFileUrl = excelFile.getUrl();
-    }
-  } catch (err) {
-    Logger.log("Excel export note: " + err.toString());
-  }
-
   try {
     pruneOldBackups(backupFolder, 30);
   } catch (pErr) {}
@@ -1402,7 +1379,7 @@ function createDailyBackup() {
     status: "success",
     timestamp: dateStamp,
     sheetBackupUrl: sheetBackupUrl,
-    excelBackupUrl: excelFileUrl
+    excelBackupUrl: ""
   };
 }
 
@@ -1422,19 +1399,6 @@ function pruneOldBackups(folder, maxRetention) {
   }
 }
 
-function installDailyBackupTrigger() {
-  var triggers = ScriptApp.getProjectTriggers();
-  for (var i = 0; i < triggers.length; i++) {
-    if (triggers[i].getHandlerFunction() === "createDailyBackup") {
-      return;
-    }
-  }
-  ScriptApp.newTrigger("createDailyBackup")
-    .timeBased()
-    .everyDays(1)
-    .atHour(2)
-    .create();
-}
 
 function manualBackupToDrive() {
   var res = createDailyBackup();
@@ -1508,3 +1472,4 @@ try {
 fs.writeFileSync('google_sheet_webhook.gs', code, 'utf8');
 fs.writeFileSync('netlify-driver-portal/google_sheet_webhook.gs', code, 'utf8');
 console.log('✅ Successfully written to google_sheet_webhook.gs and netlify-driver-portal/google_sheet_webhook.gs');
+
