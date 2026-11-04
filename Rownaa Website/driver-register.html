@@ -3700,7 +3700,11 @@
         phone: '01712000001',
         nid: '1989269458000123',
         license: 'DK0892341A',
-        vehicleIndex: 0
+        vehicleIndex: 0,
+        licenseFront: null,
+        licenseFrontName: '',
+        licenseBack: null,
+        licenseBackName: ''
       }
     ];
 
@@ -3849,6 +3853,35 @@
                 <option value="-1" ${d.vehicleIndex == -1 ? 'selected' : ''}>🔄 ${currentLang === 'bn' ? 'ঘূর্ণায়মান পুল / স্ট্যান্ডবাই' : 'Rotating / Standby Pool'}</option>
               </select>
             </div>
+
+            <!-- Driving License Document Uploads (Front & Back) for this Fleet Driver -->
+            <div style="grid-column: 1 / -1; display:grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap:10px; margin-top:6px; padding-top:10px; border-top:1px dashed rgba(255,255,255,0.1);">
+              <!-- License Front -->
+              <div class="f-group" style="margin-bottom:0;">
+                <label class="f-label" style="font-size:0.72rem; display:flex; justify-content:space-between; align-items:center;">
+                  <span>${currentLang === 'bn' ? 'ড্রাইভিং লাইসেন্স (সামনের অংশ)' : 'Driving License (Front)'}</span>
+                  <span style="font-size:0.65rem; color:var(--text-tertiary);">JPG/PNG</span>
+                </label>
+                <input type="file" id="fleet-lic-front-${idx}" accept="image/*" style="display:none;" onchange="handleFleetDriverLicenseUpload(this, ${idx}, 'licenseFront')"/>
+                <button type="button" onclick="document.getElementById('fleet-lic-front-${idx}').click()" style="width:100%; padding:8px 12px; background:rgba(255,255,255,0.03); border:1px solid ${d.licenseFront ? 'var(--accent)' : 'rgba(255,255,255,0.12)'}; border-radius:8px; color:${d.licenseFront ? 'var(--accent)' : '#fff'}; font-size:0.75rem; font-weight:600; display:flex; align-items:center; justify-content:center; gap:6px; cursor:pointer; transition:all 0.2s;">
+                  <i class="ph-bold ${d.licenseFront ? 'ph-check-circle' : 'ph-upload-simple'}"></i>
+                  <span>${d.licenseFrontName || (currentLang === 'bn' ? 'লাইসেন্স (সামনে) আপলোড' : 'Upload License (Front)')}</span>
+                </button>
+              </div>
+
+              <!-- License Back -->
+              <div class="f-group" style="margin-bottom:0;">
+                <label class="f-label" style="font-size:0.72rem; display:flex; justify-content:space-between; align-items:center;">
+                  <span>${currentLang === 'bn' ? 'ড্রাইভিং লাইসেন্স (পেছনের অংশ)' : 'Driving License (Back)'}</span>
+                  <span style="font-size:0.65rem; color:var(--text-tertiary);">JPG/PNG</span>
+                </label>
+                <input type="file" id="fleet-lic-back-${idx}" accept="image/*" style="display:none;" onchange="handleFleetDriverLicenseUpload(this, ${idx}, 'licenseBack')"/>
+                <button type="button" onclick="document.getElementById('fleet-lic-back-${idx}').click()" style="width:100%; padding:8px 12px; background:rgba(255,255,255,0.03); border:1px solid ${d.licenseBack ? 'var(--accent)' : 'rgba(255,255,255,0.12)'}; border-radius:8px; color:${d.licenseBack ? 'var(--accent)' : '#fff'}; font-size:0.75rem; font-weight:600; display:flex; align-items:center; justify-content:center; gap:6px; cursor:pointer; transition:all 0.2s;">
+                  <i class="ph-bold ${d.licenseBack ? 'ph-check-circle' : 'ph-upload-simple'}"></i>
+                  <span>${d.licenseBackName || (currentLang === 'bn' ? 'লাইসেন্স (পেছনে) আপলোড' : 'Upload License (Back)')}</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       `).join('');
@@ -3872,7 +3905,11 @@
         phone: '',
         nid: '',
         license: '',
-        vehicleIndex: 0
+        vehicleIndex: 0,
+        licenseFront: null,
+        licenseFrontName: '',
+        licenseBack: null,
+        licenseBackName: ''
       });
       renderFleetDrivers();
     }
@@ -3889,6 +3926,19 @@
     function updateDriverField(index, field, value) {
       if (fleetDrivers[index]) {
         fleetDrivers[index][field] = value;
+      }
+    }
+
+    async function handleFleetDriverLicenseUpload(input, idx, field) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const compressed = await compressAndEncodeImage(file, 1400, 1400, 0.78);
+        if (fleetDrivers[idx]) {
+          fleetDrivers[idx][field] = compressed;
+          fleetDrivers[idx][field + 'Name'] = '✓ ' + file.name + ' (' + Math.round(file.size / 1024) + ' KB)';
+          renderFleetDrivers();
+          populateSummary();
+        }
       }
     }
 
@@ -4204,13 +4254,20 @@
       const nidBackFile = document.getElementById('file-nid-back')?.files?.[0];
 
       // Compress and encode all 5 documents in parallel via off-screen HTML5 Canvas (takes ~100ms)
-      const [photoBase64, licFrontBase64, licBackBase64, nidFrontBase64, nidBackBase64] = await Promise.all([
+      let [photoBase64, licFrontBase64, licBackBase64, nidFrontBase64, nidBackBase64] = await Promise.all([
         compressAndEncodeImage(photoFile, 1280, 1280, 0.80),
         compressAndEncodeImage(licFrontFile, 1400, 1400, 0.78),
         compressAndEncodeImage(licBackFile, 1400, 1400, 0.78),
         compressAndEncodeImage(nidFrontFile, 1400, 1400, 0.78),
         compressAndEncodeImage(nidBackFile, 1400, 1400, 0.78)
       ]);
+
+      // If registering as Rental Fleet and main license inputs were skipped in Step 5,
+      // fallback to fleet driver #1's uploaded license front & back
+      if (selectedRole === 'rental_fleet_operator' && fleetDrivers.length > 0) {
+        if (!licFrontBase64 && fleetDrivers[0].licenseFront) licFrontBase64 = fleetDrivers[0].licenseFront;
+        if (!licBackBase64 && fleetDrivers[0].licenseBack) licBackBase64 = fleetDrivers[0].licenseBack;
+      }
 
       btn.innerHTML = '<i class="ph-bold ph-cloud-arrow-up" style="animation:pulse 1s infinite;"></i> ' + (currentLang === 'bn' ? 'নিবন্ধন সম্পন্ন হচ্ছে...' : 'Securing application...');
 
@@ -4264,11 +4321,25 @@
       let ownerCarPayload = null;
 
       if (selectedRole === 'rental_fleet_operator') {
+        // Prepare fleet drivers with license front & back documents
+        const formattedFleetDrivers = fleetDrivers.map((d, dIdx) => ({
+          name: d.name || ('Driver #' + (dIdx + 1)),
+          phone: d.phone || 'N/A',
+          nid: d.nid || 'N/A',
+          license: d.license || 'N/A',
+          vehicleIndex: d.vehicleIndex,
+          licenseFront: d.licenseFront || null,
+          licenseBack: d.licenseBack || null,
+          licenseFrontBase64: d.licenseFront || null,
+          licenseBackBase64: d.licenseBack || null,
+          hasLicenseDocs: !!(d.licenseFront && d.licenseBack)
+        }));
+
         fleetPayload = {
           totalCars: fleetVehicles.length,
           totalDrivers: fleetDrivers.length,
           vehicles: fleetVehicles,
-          drivers: fleetDrivers
+          drivers: formattedFleetDrivers
         };
         const carsSummary = fleetVehicles.map((v, i) => `${i + 1}. ${v.model || 'Car'} [${v.plate || 'No Plate'}]`).join(', ');
         const driversSummary = fleetDrivers.map(d => `${d.name || 'Driver'} (${d.phone || 'No Phone'})`).join(', ');

@@ -496,3 +496,4 @@ html = html.replace('</body>', `${jsBlock}\n</body>`);
 
 fs.writeFileSync('index.html', html, 'utf8');
 console.log('✅ index.html updated with 7th Service and Choose Your Car Interactive Showcase section!');
+

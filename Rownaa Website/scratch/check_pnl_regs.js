@@ -8,3 +8,4 @@ console.log('pnl-regs at line:', idxPnl);
 if (idxPnl >= 0) {
   console.log(lines.slice(idxPnl, idxPnl + 60).join('\n'));
 }
+

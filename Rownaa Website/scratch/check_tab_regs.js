@@ -8,3 +8,4 @@ console.log('tab-regs at line:', idxRegs);
 if (idxRegs >= 0) {
   console.log(lines.slice(idxRegs, idxRegs + 40).join('\n'));
 }
+

@@ -7,3 +7,4 @@ console.log('index.html total lines:', lines.length);
 const idxServices = lines.findIndex(l => l.includes('id="services"'));
 const idxProcess = lines.findIndex(l => l.includes('id="how-it-works"'));
 console.log('Services at line:', idxServices, 'Process at line:', idxProcess);
+

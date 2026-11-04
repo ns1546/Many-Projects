@@ -8,3 +8,4 @@ lines.forEach((l, i) => {
     console.log(`Line ${i + 1}: ${l.trim().substring(0, 100)}`);
   }
 });
+

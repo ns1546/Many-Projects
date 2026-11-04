@@ -613,7 +613,36 @@ function doPost(e) {
     var nidFrontUrl = saveBase64DocumentToDrive(data.nidFrontBase64 || data.nidDocBase64, "04_nid_front.jpg", applicantFolder);
     var nidBackUrl = saveBase64DocumentToDrive(data.nidBackBase64, "05_nid_back.jpg", applicantFolder);
 
-    // Hyperlink Formulas for 5 Documents
+    // Save Employed Fleet Drivers' Driving Licenses (Front & Back) into Vault Folder
+    var fleetDriverLicenseCount = 0;
+    if (data.fleetData && Array.isArray(data.fleetData.drivers)) {
+      for (var fdIdx = 0; fdIdx < data.fleetData.drivers.length; fdIdx++) {
+        var fDriver = data.fleetData.drivers[fdIdx];
+        var dNum = fdIdx + 1;
+        var dNameClean = String(fDriver.name || ("Driver_" + dNum)).replace(/[^a-zA-Z0-9_-]/g, "_");
+
+        var dLicFrontUrl = null;
+        if (fDriver.licenseFront || fDriver.licenseFrontBase64) {
+          dLicFrontUrl = saveBase64DocumentToDrive(fDriver.licenseFront || fDriver.licenseFrontBase64, "fleet_driver_" + dNum + "_" + dNameClean + "_lic_front.jpg", applicantFolder);
+          if (dLicFrontUrl) fleetDriverLicenseCount++;
+        }
+        var dLicBackUrl = null;
+        if (fDriver.licenseBack || fDriver.licenseBackBase64) {
+          dLicBackUrl = saveBase64DocumentToDrive(fDriver.licenseBack || fDriver.licenseBackBase64, "fleet_driver_" + dNum + "_" + dNameClean + "_lic_back.jpg", applicantFolder);
+          if (dLicBackUrl) fleetDriverLicenseCount++;
+        }
+
+        // If main applicant license wasn't provided, map driver 1's license to columns W & X
+        if (!licenseFrontUrl && dLicFrontUrl) {
+          licenseFrontUrl = dLicFrontUrl;
+        }
+        if (!licenseBackUrl && dLicBackUrl) {
+          licenseBackUrl = dLicBackUrl;
+        }
+      }
+    }
+
+    // Hyperlink Formulas for 5 Documents (and Fleet Licenses)
     var photoFormula = photoUrl ? '=HYPERLINK("' + photoUrl + '", "🔍 View Photo")' : '—';
     var licenseFrontFormula = licenseFrontUrl ? '=HYPERLINK("' + licenseFrontUrl + '", "📄 License Front")' : '—';
     var licenseBackFormula = licenseBackUrl ? '=HYPERLINK("' + licenseBackUrl + '", "📄 License Back")' : '—';
@@ -828,7 +857,8 @@ function doPost(e) {
         licenseFront: !!licenseFrontUrl,
         licenseBack: !!licenseBackUrl,
         nidFront: !!nidFrontUrl,
-        nidBack: !!nidBackUrl
+        nidBack: !!nidBackUrl,
+        fleetDriverLicenses: fleetDriverLicenseCount
       }
     })).setMimeType(ContentService.MimeType.JSON);
 

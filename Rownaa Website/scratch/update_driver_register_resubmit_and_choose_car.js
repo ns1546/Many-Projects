@@ -314,3 +314,4 @@ html = html.replace(payloadTarget, payloadReplacement);
 
 fs.writeFileSync('driver-register.html', html, 'utf8');
 console.log('✅ driver-register.html updated with Resubmission / Correction Tracker and Choose Your Car service!');
+
