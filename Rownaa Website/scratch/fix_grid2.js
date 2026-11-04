@@ -15,3 +15,4 @@ files.forEach(file => {
   fs.writeFileSync(file, content, 'utf8');
   console.log('Fixed grid-2 in:', file);
 });
+
