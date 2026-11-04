@@ -45,11 +45,11 @@ function onOpen() {
 
   var ui = SpreadsheetApp.getUi();
   ui.createMenu("⚡ Rownaa Operations")
+    .addItem("🔄 Rebuild & Setup Entire System", "safeRebuildAndSetup")
+    .addSeparator()
     .addItem("💬 Open WhatsApp for Selected Driver", "openWhatsAppForSelectedDriver")
     .addItem("📋 Copy Chauffeur Details Summary", "copyChauffeurSummary")
     .addItem("🔍 Check Duplicate & Resubmission Audit Log", "checkDuplicateAuditLog")
-    .addSeparator()
-    .addItem("🔄 Initialize & Safe Rebuild System", "safeRebuildAndSetup")
     .addItem("💾 Backup Spreadsheet to Google Drive Now", "manualBackupToDrive")
     .addItem("📥 Download Offline Backup (.xlsx Excel)", "downloadBackupExcel")
     .addItem("📂 Open Daily Backups Folder in Drive", "openBackupFolder")
@@ -69,7 +69,7 @@ function openWhatsAppForSelectedDriver() {
   var sheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
   
   if (!sheet) {
-    SpreadsheetApp.getUi().alert("Chauffeur Registry sheet not found. Please run 'Initialize & Safe Rebuild System' first.");
+    SpreadsheetApp.getUi().alert("Chauffeur Registry sheet not found. Please run 'Rebuild & Setup Entire System' first.");
     return;
   }
 
@@ -139,7 +139,7 @@ function checkDuplicateAuditLog() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
   if (!sheet) {
-    SpreadsheetApp.getUi().alert("Chauffeur Registry sheet not found. Please run 'Initialize & Safe Rebuild System' first.");
+    SpreadsheetApp.getUi().alert("Chauffeur Registry sheet not found. Please run 'Rebuild & Setup Entire System' first.");
     return;
   }
 
@@ -281,13 +281,22 @@ function formatAsPlainText(val) {
  * 4. Cleans up default empty 'Sheet1' if present.
  * 5. Displays confirmation dialog.
  */
+function rebuildEntireSystem() {
+  safeRebuildAndSetup();
+}
+
 function safeRebuildAndSetup() {
-  var ui = SpreadsheetApp.getUi();
-  var resp = ui.alert(
-    "🔄 Initialize & Safe Rebuild",
-    "This will verify all 36 Dual-License columns, dark luxury styling, plain-text formats, and the Operations KPI Dashboard.\n\n✅ 100% SAFE: Existing driver applicant records will NOT be deleted or cleared.\n\nProceed?",
-    ui.ButtonSet.YES_NO
-  );
+  var ui = null;
+  try { ui = SpreadsheetApp.getUi(); } catch (e) {}
+
+  if (ui) {
+    var resp = ui.alert(
+      "🔄 Rebuild & Setup Entire System",
+      "This will configure and verify all 36 Dual-License columns (Driver License + Car Blue Book License), dark luxury styling, plain-text formats, and the Operations KPI Dashboard.\n\n🛡️ 100% SAFE GUARANTEE:\n1. An automatic full timestamped backup is saved to Google Drive first.\n2. Existing chauffeur applicant rows will NEVER be deleted or cleared.\n\nDo you want to proceed?",
+      ui.ButtonSet.YES_NO
+    );
+    if (resp !== ui.Button.YES) return;
+  }
   if (resp !== ui.Button.YES) {
     return;
   }

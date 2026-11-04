@@ -123,6 +123,8 @@ async function runAllTests() {
   assert('google_sheet_webhook.gs JavaScript syntax 100% valid', vmValid);
   assert('google_sheet_webhook.gs has checkDuplicateAuditLog menu item', gsCode.includes('checkDuplicateAuditLog'));
   assert('google_sheet_webhook.gs has safeRebuildAndSetup non-destructive setup', gsCode.includes('safeRebuildAndSetup'));
+  assert('google_sheet_webhook.gs has 🔄 Rebuild & Setup Entire System in menu', gsCode.includes('🔄 Rebuild & Setup Entire System'));
+  assert('google_sheet_webhook.gs has rebuildEntireSystem alias', gsCode.includes('function rebuildEntireSystem()'));
   assert('google_sheet_webhook.gs has copyChauffeurSummary dossier copy', gsCode.includes('copyChauffeurSummary'));
   assert('google_sheet_webhook.gs has 36 Dual-License columns defined', gsCode.includes('Car License / Reg Plate No.'));
 

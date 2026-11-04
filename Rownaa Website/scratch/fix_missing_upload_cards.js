@@ -64,3 +64,4 @@ fs.copyFileSync('driver-register.html', 'netlify-driver-portal/index.html');
 fs.copyFileSync('driver-register.html', 'Rownaa-Frontend-Netlify/driver-register.html');
 fs.copyFileSync('index.html', 'Rownaa-Frontend-Netlify/index.html');
 console.log('Synchronized to Netlify bundles');
+
