@@ -465,7 +465,7 @@
     /* TILES (AVAILABILITY & ROLE) */
     .tiles-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 12px;
     }
     .tile-opt {
@@ -507,6 +507,85 @@
       font-size: 0.74rem;
       color: var(--text-secondary);
       line-height: 1.35;
+    }
+
+    /* FLEET & MULTI-VEHICLE / DRIVER CARDS */
+    .fleet-count-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(212, 255, 0, 0.08);
+      border: 1px solid rgba(212, 255, 0, 0.25);
+      border-radius: 20px;
+      padding: 3px 10px;
+    }
+    .fleet-cards-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .fleet-item-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 14px;
+      transition: border-color 0.2s var(--ease);
+    }
+    .fleet-item-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    .fleet-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .fleet-item-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-remove-fleet-item {
+      background: rgba(255, 77, 79, 0.08);
+      color: var(--danger);
+      border: 1px solid rgba(255, 77, 79, 0.25);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 0.72rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .btn-remove-fleet-item:hover {
+      background: rgba(255, 77, 79, 0.2);
+    }
+    .btn-add-fleet-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(212, 255, 0, 0.08);
+      color: var(--accent);
+      border: 1px dashed rgba(212, 255, 0, 0.35);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-add-fleet-item:hover {
+      background: rgba(212, 255, 0, 0.15);
+      border-color: var(--accent);
     }
 
     /* SERVICES SELECTION GRID */
@@ -2238,6 +2317,11 @@
                   <div class="tile-title"><i class="ph-fill ph-car-profile"></i> <span id="role-opt-2-title">Owner-Driver</span></div>
                   <div class="tile-desc" id="role-opt-2-desc">I own a personal vehicle (Sedan/SUV/HiAce) and will drive it myself for Rownaa.</div>
                 </label>
+                <label class="tile-opt" onclick="selectRoleTile(this, 'rental_fleet_operator')">
+                  <input type="radio" name="driver_role" value="rental_fleet_operator"/>
+                  <div class="tile-title"><i class="ph-fill ph-buildings"></i> <span id="role-opt-4-title">Rental Car & Fleet Service</span></div>
+                  <div class="tile-desc" id="role-opt-4-desc">Agency or owner with multiple vehicles and employed chauffeurs.</div>
+                </label>
                 <label class="tile-opt" onclick="selectRoleTile(this, 'part_time_freelance')">
                   <input type="radio" name="driver_role" value="part_time_freelance"/>
                   <div class="tile-title"><i class="ph-fill ph-briefcase"></i> <span id="role-opt-3-title">On-Demand Standby</span></div>
@@ -2304,40 +2388,160 @@
               </div>
             </div>
 
-            <!-- Payout Information -->
-            <div style="font-family:var(--font-display); font-size:1rem; font-weight:700; color:#fff; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
-              <i class="ph-fill ph-wallet" style="color:var(--accent);"></i> <span id="lbl-payout-heading">Payout & Expense Reimbursement</span>
-            </div>
-
-            <div class="grid-2">
-              <div class="f-group">
-                <label class="f-label" for="drv-payout-method">
-                  <span id="lbl-payout-method">Payout Mobile Wallet Method <span class="req">*</span></span>
-                </label>
-                <div class="f-input-wrap">
-                  <i class="ph ph-credit-card prefix-icon"></i>
-                  <select id="drv-payout-method" class="f-control" required onchange="handleDynamicPayoutSelect(this.value)">
-                    <option value="bKash Personal" selected>bKash Personal</option>
-                    <option value="bKash Merchant">bKash Merchant / Agent</option>
-                    <option value="Nagad Personal">Nagad Personal</option>
-                    <option value="Rocket">Rocket Personal</option>
-                    <option value="Upay MFS">Upay Wallet</option>
-                    <option value="Cellfin (IBBL)">Cellfin (IBBL)</option>
-                    <option value="Bank Transfer">Commercial Bank Account</option>
-                    <option value="__custom__">➕ + Other Wallet / Payment Option...</option>
-                  </select>
+            <!-- Conditional Rental Car & Fleet Service Section -->
+            <div id="rental-fleet-master-section" style="display:none; background:rgba(255,255,255,0.02); border:1px solid rgba(212,255,0,0.25); border-radius:14px; padding:18px; margin-bottom:18px;">
+              <!-- Section Title & Badge -->
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:8px;">
+                <div style="font-family:var(--font-display); font-size:1.02rem; font-weight:700; color:var(--accent); display:flex; align-items:center; gap:8px;">
+                  <i class="ph-fill ph-buildings"></i> <span id="lbl-fleet-agency-title">Rental Car Fleet & Driver Operations</span>
                 </div>
-                <div id="wrap-custom-payout" class="custom-dynamic-box" style="display:none;">
-                  <input type="text" id="drv-payout-custom" class="f-control no-prefix" placeholder="Enter custom wallet name or bank (e.g. Tap, SureCash, City Bank)..."/>
+                <div style="display:flex; gap:8px;">
+                  <span class="fleet-count-badge" id="badge-cars-count"><i class="ph-bold ph-car"></i> <span id="cars-count-num">1</span> Vehicle(s)</span>
+                  <span class="fleet-count-badge" id="badge-drivers-count"><i class="ph-bold ph-users"></i> <span id="drivers-count-num">1</span> Driver(s)</span>
                 </div>
               </div>
+              <p style="font-size:0.76rem; color:var(--text-secondary); margin-bottom:16px;" id="lbl-fleet-agency-desc">
+                Register your rental agency fleet vehicles and list your employed chauffeurs for centralized dispatch, verified bookings, and consolidated payout management.
+              </p>
+
+              <!-- SUB-SECTION A: FLEET VEHICLES LIST -->
+              <div style="margin-bottom:20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+                  <div style="font-size:0.88rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:6px;">
+                    <i class="ph-bold ph-car" style="color:var(--accent);"></i>
+                    <span id="lbl-fleet-cars-heading">1. Registered Fleet Vehicles</span>
+                  </div>
+                  <button type="button" class="btn-add-fleet-item" onclick="addFleetVehicleCard()">
+                    <i class="ph-bold ph-plus-circle"></i> <span id="lbl-btn-add-car">+ Add Another Vehicle</span>
+                  </button>
+                </div>
+                
+                <div id="fleet-vehicles-list" class="fleet-cards-stack">
+                  <!-- Dynamic Vehicle Cards Rendered Here -->
+                </div>
+              </div>
+
+              <!-- SUB-SECTION B: EMPLOYED DRIVERS LIST -->
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+                  <div style="font-size:0.88rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:6px;">
+                    <i class="ph-bold ph-identification-badge" style="color:var(--accent);"></i>
+                    <span id="lbl-fleet-drivers-heading">2. Employed Chauffeurs / Assigned Drivers</span>
+                  </div>
+                  <button type="button" class="btn-add-fleet-item" onclick="addFleetDriverCard()">
+                    <i class="ph-bold ph-plus-circle"></i> <span id="lbl-btn-add-driver">+ Add Another Driver</span>
+                  </button>
+                </div>
+
+                <div id="fleet-drivers-list" class="fleet-cards-stack">
+                  <!-- Dynamic Driver Cards Rendered Here -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Payout Information -->
+            <div style="font-family:var(--font-display); font-size:1rem; font-weight:700; color:#fff; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+              <i class="ph-fill ph-wallet" style="color:var(--accent);"></i> <span id="lbl-payout-heading">Payout Channel & Banking Details</span>
+            </div>
+
+            <div class="f-group" style="margin-bottom:14px;">
+              <label class="f-label" for="drv-payout-method">
+                <span id="lbl-payout-method">Select Payout Channel <span class="req">*</span></span>
+              </label>
+              <div class="f-input-wrap">
+                <i class="ph ph-credit-card prefix-icon"></i>
+                <select id="drv-payout-method" class="f-control" required onchange="handleDynamicPayoutSelect(this.value)">
+                  <optgroup label="Mobile Financial Services (MFS)">
+                    <option value="bKash Personal" selected>bKash Personal Wallet</option>
+                    <option value="bKash Merchant">bKash Merchant / Agent Wallet</option>
+                    <option value="Nagad Personal">Nagad Personal Wallet</option>
+                    <option value="Rocket">Rocket Personal Wallet</option>
+                    <option value="Upay MFS">Upay Mobile Wallet</option>
+                    <option value="Cellfin (IBBL)">Cellfin Digital Wallet</option>
+                  </optgroup>
+                  <optgroup label="Direct Commercial Bank Account Transfer">
+                    <option value="Bank Transfer">Commercial Bank Account Transfer</option>
+                  </optgroup>
+                  <option value="__custom__">➕ + Other Custom Payout Method...</option>
+                </select>
+              </div>
+              <div id="wrap-custom-payout" class="custom-dynamic-box" style="display:none;">
+                <input type="text" id="drv-payout-custom" class="f-control no-prefix" placeholder="Enter custom wallet name or financial service..."/>
+              </div>
+            </div>
+
+            <!-- A: Mobile Financial Service Container (bKash/Nagad/Rocket/Upay) -->
+            <div id="payout-mfs-container">
               <div class="f-group">
                 <label class="f-label" for="drv-payout-number">
-                  <span id="lbl-payout-num">Wallet / Account Number <span class="req">*</span></span>
+                  <span id="lbl-payout-num">Mobile Wallet Number <span class="req">*</span></span>
                 </label>
                 <div class="f-input-wrap">
-                  <i class="ph ph-hash prefix-icon"></i>
-                  <input type="text" id="drv-payout-number" class="f-control" required placeholder="e.g. 017XXXXXXXX / Account No."/>
+                  <i class="ph ph-phone prefix-icon"></i>
+                  <input type="tel" id="drv-payout-number" class="f-control" required placeholder="e.g. 017XXXXXXXX / 018XXXXXXXX"/>
+                </div>
+                <div style="font-size:0.72rem; color:var(--text-tertiary); margin-top:4px;">
+                  Trips earnings, tips, and allowances will be credited directly to this verified mobile wallet.
+                </div>
+              </div>
+            </div>
+
+            <!-- B: Comprehensive Commercial Bank Account Container -->
+            <div id="payout-bank-container" style="display:none; background:rgba(255,255,255,0.02); border:1px solid rgba(212,255,0,0.2); border-radius:12px; padding:16px; margin-bottom:16px;">
+              <div style="font-size:0.86rem; font-weight:700; color:var(--accent); margin-bottom:12px; display:flex; align-items:center; gap:6px;">
+                <i class="ph-fill ph-bank"></i> <span>Complete Bank Account Specifications</span>
+              </div>
+              <div class="grid-2">
+                <div class="f-group">
+                  <label class="f-label" for="bank-name">Bank Name <span class="req">*</span></label>
+                  <select id="bank-name" class="f-control no-prefix" onchange="handleDynamicBankSelect(this.value)">
+                    <option value="Dutch-Bangla Bank Limited (DBBL)">Dutch-Bangla Bank Limited (DBBL)</option>
+                    <option value="The City Bank Limited">The City Bank Limited</option>
+                    <option value="BRAC Bank PLC">BRAC Bank PLC</option>
+                    <option value="Islami Bank Bangladesh Limited (IBBL)">Islami Bank Bangladesh Limited (IBBL)</option>
+                    <option value="Eastern Bank Limited (EBL)">Eastern Bank Limited (EBL)</option>
+                    <option value="United Commercial Bank (UCB)">United Commercial Bank (UCB)</option>
+                    <option value="Standard Chartered Bangladesh">Standard Chartered Bangladesh</option>
+                    <option value="Prime Bank Limited">Prime Bank Limited</option>
+                    <option value="Mutual Trust Bank (MTB)">Mutual Trust Bank (MTB)</option>
+                    <option value="Pubali Bank Limited">Pubali Bank Limited</option>
+                    <option value="Sonali Bank PLC">Sonali Bank PLC</option>
+                    <option value="Bank Asia Limited">Bank Asia Limited</option>
+                    <option value="Dhaka Bank Limited">Dhaka Bank Limited</option>
+                    <option value="Trust Bank Limited">Trust Bank Limited</option>
+                    <option value="__custom__">➕ + Other Bank...</option>
+                  </select>
+                  <div id="wrap-custom-bank" class="custom-dynamic-box" style="display:none;">
+                    <input type="text" id="bank-name-custom" class="f-control no-prefix" placeholder="Enter bank name..."/>
+                  </div>
+                </div>
+                <div class="f-group">
+                  <label class="f-label" for="bank-branch">Branch Name & District <span class="req">*</span></label>
+                  <input type="text" id="bank-branch" class="f-control no-prefix" placeholder="e.g. Gulshan-2 Branch, Dhaka"/>
+                </div>
+              </div>
+              <div class="grid-2">
+                <div class="f-group">
+                  <label class="f-label" for="bank-account-name">Account Holder Name <span class="req">*</span></label>
+                  <input type="text" id="bank-account-name" class="f-control no-prefix" placeholder="Exact name as in bank records"/>
+                </div>
+                <div class="f-group">
+                  <label class="f-label" for="bank-account-number">Bank Account Number <span class="req">*</span></label>
+                  <input type="text" id="bank-account-number" class="f-control no-prefix" placeholder="e.g. 120.101.00987654"/>
+                </div>
+              </div>
+              <div class="grid-2">
+                <div class="f-group">
+                  <label class="f-label" for="bank-routing-number">Branch Routing Number (9 Digits)</label>
+                  <input type="text" id="bank-routing-number" class="f-control no-prefix" placeholder="e.g. 090272312 (Optional / Recommended)"/>
+                </div>
+                <div class="f-group">
+                  <label class="f-label" for="bank-account-type">Account Type</label>
+                  <select id="bank-account-type" class="f-control no-prefix">
+                    <option value="Savings Account">Savings Account (সঞ্চয়ী হিসাব)</option>
+                    <option value="Current Account">Current Account (চলতি হিসাব)</option>
+                    <option value="Corporate / Fleet Account">Corporate / Fleet Account (ব্যবসায়িক হিসাব)</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -3021,14 +3225,22 @@
         },
         step4: {
           title: '4. Chauffeur Role, Payout Wallet & Fleet Info',
-          desc: 'Specify your employment mode and provide your mobile wallet for instant payments and trip allowances.',
+          desc: 'Specify your employment mode, register multiple fleet vehicles or chauffeurs, and configure payout preferences.',
           lblRole: 'Select Your Driving Status',
           role1Title: 'Fleet Chauffeur',
           role1Desc: 'Professional chauffeur looking to be assigned to a Rownaa Fleet Partner\'s vehicle.',
           role2Title: 'Owner-Driver',
           role2Desc: 'I own a personal vehicle (Sedan/SUV/HiAce) and will drive it myself for Rownaa.',
+          role4Title: 'Rental Car & Fleet Service',
+          role4Desc: 'Rental agency or fleet owner with multiple registered vehicles and employed drivers.',
           role3Title: 'On-Demand Standby',
           role3Desc: 'Available for airport emergency dispatch, tour replacement, and VIP standbys.',
+          fleetAgencyTitle: 'Rental Car Fleet & Driver Operations',
+          fleetAgencyDesc: 'Register your rental agency fleet vehicles and list your employed chauffeurs for centralized dispatch, verified bookings, and consolidated payout management.',
+          fleetCarsHeading: '1. Registered Fleet Vehicles',
+          fleetDriversHeading: '2. Employed Chauffeurs / Assigned Drivers',
+          btnAddCar: '+ Add Another Vehicle',
+          btnAddDriver: '+ Add Another Driver',
           vehicleTitle: 'Your Vehicle Profile',
           vehicleDesc: 'Since you are registering as an Owner-Driver, enter your car\'s model and registration details as per BRTA documents.',
           lblCarModel: 'Car Model & Make',
@@ -3113,14 +3325,22 @@
         },
         step4: {
           title: '৪. কাজের ভূমিকা, পেমেন্ট ওয়ালেট ও গাড়ির তথ্য',
-          desc: 'নিজের গাড়ি চালাবেন নাকি কোম্পানির গাড়ি চালাবেন তা নির্ধারণ করুন এবং পেমেন্ট নম্বর দিন।',
+          desc: 'কাজের ভূমিকা নির্ধারণ করুন, একাধিক গাড়ি ও ড্রাইভারের তথ্য যুক্ত করুন এবং পেমেন্ট বিবরণ প্রদান করুন।',
           lblRole: 'আপনার কাজের ধরন নির্বাচন করুন',
           role1Title: 'ফ্লিট শফার (কোম্পানির গাড়ি)',
           role1Desc: 'রওনার নিবন্ধিত ফ্লিট পার্টনারের গাড়ি ড্রাইভ করতে ইচ্ছুক পেশাদার ড্রাইভার।',
           role2Title: 'ওনার-ড্রাইভার (নিজের গাড়ি)',
           role2Desc: 'আমার নিজস্ব ব্যক্তিগত গাড়ি রয়েছে (সেডান/এসইউভি) এবং আমি নিজেই ড্রাইভ করব।',
+          role4Title: 'রেন্ট-এ-কার ও ফ্লিট সার্ভিস',
+          role4Desc: 'একাধিক গাড়ি ও শফার সম্বলিত রেন্ট-এ-কার ব্যবসা বা ফ্লিট সেবা প্রতিষ্ঠান।',
           role3Title: 'অন-ডিমান্ড স্ট্যান্ডবাই',
           role3Desc: 'জরুরি এয়ারপোর্ট ট্রান্সফার ও ট্যুর রিপ্লেসমেন্ট ড্রাইভার হিসেবে কাজ।',
+          fleetAgencyTitle: 'রেন্ট-এ-কার ফ্লিট ও ড্রাইভার পরিচালনা',
+          fleetAgencyDesc: 'আপনার রেন্ট-এ-কার সার্ভিসের আওতাধীন একাধিক গাড়ি ও চালকদের তালিকা প্রদান করুন।',
+          fleetCarsHeading: '১. নিবন্ধিত ফ্লিটের গাড়িসমূহ',
+          fleetDriversHeading: '২. নিয়োজিত শফার / অ্যাসাইনকৃত ড্রাইভারবৃন্দ',
+          btnAddCar: '+ আরও গাড়ি যোগ করুন',
+          btnAddDriver: '+ আরও ড্রাইভার যোগ করুন',
           vehicleTitle: 'আপনার গাড়ির বিবরণ (Vehicle Profile)',
           vehicleDesc: 'যেহেতু আপনি ওনার-ড্রাইভার হিসেবে নিবন্ধন করছেন, গাড়ির বিআরটিএ রেজিস্ট্রেশন তথ্য দিন।',
           lblCarModel: 'গাড়ির ব্র্যান্ড ও মডেল',
@@ -3235,6 +3455,14 @@
       const r2d = document.getElementById('role-opt-2-desc'); if (r2d) r2d.textContent = s4.role2Desc;
       const r3t = document.getElementById('role-opt-3-title'); if (r3t) r3t.textContent = s4.role3Title;
       const r3d = document.getElementById('role-opt-3-desc'); if (r3d) r3d.textContent = s4.role3Desc;
+      const r4t = document.getElementById('role-opt-4-title'); if (r4t && s4.role4Title) r4t.textContent = s4.role4Title;
+      const r4d = document.getElementById('role-opt-4-desc'); if (r4d && s4.role4Desc) r4d.textContent = s4.role4Desc;
+      const fTitle = document.getElementById('lbl-fleet-agency-title'); if (fTitle && s4.fleetAgencyTitle) fTitle.textContent = s4.fleetAgencyTitle;
+      const fDesc = document.getElementById('lbl-fleet-agency-desc'); if (fDesc && s4.fleetAgencyDesc) fDesc.textContent = s4.fleetAgencyDesc;
+      const fCarsHead = document.getElementById('lbl-fleet-cars-heading'); if (fCarsHead && s4.fleetCarsHeading) fCarsHead.textContent = s4.fleetCarsHeading;
+      const fDrvsHead = document.getElementById('lbl-fleet-drivers-heading'); if (fDrvsHead && s4.fleetDriversHeading) fDrvsHead.textContent = s4.fleetDriversHeading;
+      const fAddCar = document.getElementById('lbl-btn-add-car'); if (fAddCar && s4.btnAddCar) fAddCar.textContent = s4.btnAddCar;
+      const fAddDrv = document.getElementById('lbl-btn-add-driver'); if (fAddDrv && s4.btnAddDriver) fAddDrv.textContent = s4.btnAddDriver;
       const lvt = document.getElementById('lbl-vehicle-title'); if (lvt) lvt.textContent = s4.vehicleTitle;
       const lvd = document.getElementById('lbl-vehicle-desc'); if (lvd) lvd.textContent = s4.vehicleDesc;
       const lcm = document.getElementById('lbl-car-model'); if (lcm) lcm.textContent = s4.lblCarModel;
@@ -3371,11 +3599,235 @@
       if (hidden) hidden.value = val;
     }
 
+    // =========================================================
+    // DYNAMIC RENTAL CAR FLEET & MULTIPLE DRIVERS ENGINE
+    // =========================================================
+    let fleetVehicles = [
+      {
+        id: 1,
+        model: 'Toyota Noah (7-Seater)',
+        plate: 'Dhaka Metro Cha 53-1092',
+        seats: '7 Seats',
+        fuel: 'Octane + CNG',
+        year: '2021',
+        fitness: '2027-06-30'
+      }
+    ];
+
+    let fleetDrivers = [
+      {
+        id: 1,
+        name: 'Md. Kamal Hossain',
+        phone: '01712000001',
+        nid: '1989269458000123',
+        license: 'DK0892341A',
+        vehicleIndex: 0
+      }
+    ];
+
+    function updateFleetCounters() {
+      const cNum = document.getElementById('cars-count-num');
+      const dNum = document.getElementById('drivers-count-num');
+      if (cNum) cNum.textContent = fleetVehicles.length;
+      if (dNum) dNum.textContent = fleetDrivers.length;
+    }
+
+    function renderFleetVehicles() {
+      const container = document.getElementById('fleet-vehicles-list');
+      if (!container) return;
+      updateFleetCounters();
+
+      container.innerHTML = fleetVehicles.map((v, idx) => `
+        <div class="fleet-item-card" data-idx="${idx}">
+          <div class="fleet-item-header">
+            <div class="fleet-item-title">
+              <i class="ph-bold ph-car" style="color:var(--accent);"></i>
+              <span>${currentLang === 'bn' ? 'গাড়ি' : 'Vehicle'} #${idx + 1}: ${v.model || (currentLang === 'bn' ? 'নতুন গাড়ি' : 'New Vehicle')} ${v.plate ? '[' + v.plate + ']' : ''}</span>
+            </div>
+            ${fleetVehicles.length > 1 ? `
+              <button type="button" class="btn-remove-fleet-item" onclick="removeFleetVehicleCard(${idx})">
+                <i class="ph-bold ph-trash"></i> ${currentLang === 'bn' ? 'মুছুন' : 'Remove'}
+              </button>
+            ` : ''}
+          </div>
+          <div class="grid-3" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:10px;">
+            <div class="f-group">
+              <label class="f-label" style="font-size:0.75rem;">${currentLang === 'bn' ? 'গাড়ির মডেল ও ব্র্যান্ড' : 'Vehicle Make & Model'} <span class="req">*</span></label>
+              <input type="text" class="f-control no-prefix" value="${v.model || ''}" placeholder="e.g. Toyota HiAce / Noah / Axio" oninput="updateVehicleField(${idx}, 'model', this.value)" required/>
+            </div>
+            <div class="f-group">
+              <label class="f-label" style="font-size:0.75rem;">${currentLang === 'bn' ? 'রেজিস্ট্রেশন নম্বর প্লেট' : 'Registration Plate'} <span class="req">*</span></label>
+              <input type="text" class="f-control no-prefix" value="${v.plate || ''}" placeholder="e.g. Dhaka Metro Cha 53-1092" oninput="updateVehicleField(${idx}, 'plate', this.value)" required/>
+            </div>
+            <div class="f-group">
+              <label class="f-label" style="font-size:0.75rem;">${currentLang === 'bn' ? 'আসন সংখ্যা' : 'Seating Capacity'}</label>
+              <select class="f-control no-prefix" onchange="updateVehicleField(${idx}, 'seats', this.value)">
+                <option value="4 Seats" ${v.seats === '4 Seats' ? 'selected' : ''}>4 Seats (Sedan / Premium)</option>
+                <option value="7 Seats" ${v.seats === '7 Seats' ? 'selected' : ''}>7 Seats (MPV / Microbus)</option>
+                <option value="10-14 Seats" ${v.seats === '10-14 Seats' ? 'selected' : ''}>10-14 Seats (HiAce / Grand Cabin)</option>
+                <option value="28-36 Seats" ${v.seats === '28-36 Seats' ? 'selected' : ''}>28-36 Seats (Coaster / Mini Bus)</option>
+              </select>
+            </div>
+            <div class="f-group">
+              <label class="f-label" style="font-size:0.75rem;">${currentLang === 'bn' ? 'ফুয়েল / পাওয়ারট্রেন' : 'Fuel / Powertrain'}</label>
+              <select class="f-control no-prefix" onchange="updateVehicleField(${idx}, 'fuel', this.value)">
+                <option value="Octane + CNG" ${v.fuel === 'Octane + CNG' ? 'selected' : ''}>Octane + CNG</option>
+                <option value="Octane Only" ${v.fuel === 'Octane Only' ? 'selected' : ''}>Octane Only</option>
+                <option value="Diesel" ${v.fuel === 'Diesel' ? 'selected' : ''}>Diesel</option>
+                <option value="Hybrid (Petrol/Electric)" ${v.fuel === 'Hybrid (Petrol/Electric)' ? 'selected' : ''}>Hybrid (Petrol/Electric)</option>
+                <option value="Electric (EV)" ${v.fuel === 'Electric (EV)' ? 'selected' : ''}>Electric (EV)</option>
+              </select>
+            </div>
+            <div class="f-group">
+              <label class="f-label" style="font-size:0.75rem;">${currentLang === 'bn' ? 'উৎপাদনের বছর' : 'Year of Manufacture'}</label>
+              <input type="number" class="f-control no-prefix" value="${v.year || ''}" placeholder="e.g. 2021" min="2010" max="2026" oninput="updateVehicleField(${idx}, 'year', this.value)"/>
+            </div>
+            <div class="f-group">
+              <label class="f-label" style="font-size:0.75rem;">${currentLang === 'bn' ? 'ফিটনেস মেয়াদ' : 'Fitness Expiry'}</label>
+              <input type="date" class="f-control no-prefix" value="${v.fitness || ''}" oninput="updateVehicleField(${idx}, 'fitness', this.value)"/>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      renderFleetDrivers();
+    }
+
+    function addFleetVehicleCard() {
+      fleetVehicles.push({
+        id: Date.now(),
+        model: '',
+        plate: '',
+        seats: '7 Seats',
+        fuel: 'Octane + CNG',
+        year: '2022',
+        fitness: '2027-12-31'
+      });
+      renderFleetVehicles();
+    }
+
+    function removeFleetVehicleCard(index) {
+      if (fleetVehicles.length <= 1) {
+        alert(currentLang === 'bn' ? 'কমপক্ষে একটি গাড়ির তথ্য থাকতে হবে।' : 'At least one vehicle must remain registered.');
+        return;
+      }
+      fleetVehicles.splice(index, 1);
+      renderFleetVehicles();
+    }
+
+    function updateVehicleField(index, field, value) {
+      if (fleetVehicles[index]) {
+        fleetVehicles[index][field] = value;
+        if (field === 'model' || field === 'plate') {
+          updateDriverAssignedVehicleOptions();
+        }
+      }
+    }
+
+    function renderFleetDrivers() {
+      const container = document.getElementById('fleet-drivers-list');
+      if (!container) return;
+      updateFleetCounters();
+
+      container.innerHTML = fleetDrivers.map((d, idx) => `
+        <div class="fleet-item-card" data-idx="${idx}">
+          <div class="fleet-item-header">
+            <div class="fleet-item-title">
+              <i class="ph-bold ph-identification-badge" style="color:var(--accent);"></i>
+              <span>${currentLang === 'bn' ? 'ড্রাইভার' : 'Driver'} #${idx + 1}: ${d.name || (currentLang === 'bn' ? 'নতুন শফার' : 'New Chauffeur')} ${d.phone ? '(' + d.phone + ')' : ''}</span>
+            </div>
+            ${fleetDrivers.length > 1 ? `
+              <button type="button" class="btn-remove-fleet-item" onclick="removeFleetDriverCard(${idx})">
+                <i class="ph-bold ph-trash"></i> ${currentLang === 'bn' ? 'মুছুন' : 'Remove'}
+              </button>
+            ` : ''}
+          </div>
+          <div class="grid-3" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:10px;">
+            <div class="f-group">
+              <label class="f-label" style="font-size:0.75rem;">${currentLang === 'bn' ? 'ড্রাইভারের পূর্ণ নাম' : 'Driver Full Name'} <span class="req">*</span></label>
+              <input type="text" class="f-control no-prefix" value="${d.name || ''}" placeholder="e.g. Md. Kamal Hossain" oninput="updateDriverField(${idx}, 'name', this.value)" required/>
+            </div>
+            <div class="f-group">
+              <label class="f-label" style="font-size:0.75rem;">${currentLang === 'bn' ? 'মোবাইল / হোয়াটসঅ্যাপ' : 'Mobile / WhatsApp'} <span class="req">*</span></label>
+              <input type="tel" class="f-control no-prefix" value="${d.phone || ''}" placeholder="e.g. 01712000000" oninput="updateDriverField(${idx}, 'phone', this.value)" required/>
+            </div>
+            <div class="f-group">
+              <label class="f-label" style="font-size:0.75rem;">${currentLang === 'bn' ? 'জাতীয় পরিচয়পত্র (NID)' : 'NID Smart Card'} <span class="req">*</span></label>
+              <input type="text" class="f-control no-prefix" value="${d.nid || ''}" placeholder="10 / 17 digit NID" oninput="updateDriverField(${idx}, 'nid', this.value)" required/>
+            </div>
+            <div class="f-group">
+              <label class="f-label" style="font-size:0.75rem;">${currentLang === 'bn' ? 'বিআরটিএ লাইসেন্স নম্বর' : 'BRTA License No'} <span class="req">*</span></label>
+              <input type="text" class="f-control no-prefix" value="${d.license || ''}" placeholder="e.g. DK0892341A" oninput="updateDriverField(${idx}, 'license', this.value)" required/>
+            </div>
+            <div class="f-group" style="grid-column:span 2;">
+              <label class="f-label" style="font-size:0.75rem;">${currentLang === 'bn' ? 'নির্ধারিত গাড়ি (Assigned Car)' : 'Assigned Fleet Vehicle'}</label>
+              <select class="f-control no-prefix driver-vehicle-select" onchange="updateDriverField(${idx}, 'vehicleIndex', this.value)">
+                ${fleetVehicles.map((v, vIdx) => `
+                  <option value="${vIdx}" ${d.vehicleIndex == vIdx ? 'selected' : ''}>
+                    ${currentLang === 'bn' ? 'গাড়ি' : 'Car'} #${vIdx + 1}: ${v.model || (currentLang === 'bn' ? 'গাড়ি ' + (vIdx + 1) : 'Vehicle ' + (vIdx + 1))} ${v.plate ? '[' + v.plate + ']' : ''}
+                  </option>
+                `).join('')}
+                <option value="-1" ${d.vehicleIndex == -1 ? 'selected' : ''}>🔄 ${currentLang === 'bn' ? 'ঘূর্ণায়মান পুল / স্ট্যান্ডবাই' : 'Rotating / Standby Pool'}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateDriverAssignedVehicleOptions() {
+      document.querySelectorAll('.driver-vehicle-select').forEach((sel, dIdx) => {
+        const curVal = fleetDrivers[dIdx]?.vehicleIndex ?? 0;
+        sel.innerHTML = fleetVehicles.map((v, vIdx) => `
+          <option value="${vIdx}" ${curVal == vIdx ? 'selected' : ''}>
+            ${currentLang === 'bn' ? 'গাড়ি' : 'Car'} #${vIdx + 1}: ${v.model || (currentLang === 'bn' ? 'গাড়ি ' + (vIdx + 1) : 'Vehicle ' + (vIdx + 1))} ${v.plate ? '[' + v.plate + ']' : ''}
+          </option>
+        `).join('') + `<option value="-1" ${curVal == -1 ? 'selected' : ''}>🔄 ${currentLang === 'bn' ? 'ঘূর্ণায়মান পুল / স্ট্যান্ডবাই' : 'Rotating / Standby Pool'}</option>`;
+      });
+    }
+
+    function addFleetDriverCard() {
+      fleetDrivers.push({
+        id: Date.now(),
+        name: '',
+        phone: '',
+        nid: '',
+        license: '',
+        vehicleIndex: 0
+      });
+      renderFleetDrivers();
+    }
+
+    function removeFleetDriverCard(index) {
+      if (fleetDrivers.length <= 1) {
+        alert(currentLang === 'bn' ? 'কমপক্ষে একজন ড্রাইভারের তথ্য থাকতে হবে।' : 'At least one driver must remain registered.');
+        return;
+      }
+      fleetDrivers.splice(index, 1);
+      renderFleetDrivers();
+    }
+
+    function updateDriverField(index, field, value) {
+      if (fleetDrivers[index]) {
+        fleetDrivers[index][field] = value;
+      }
+    }
+
     function selectRoleTile(tileEl, val) {
       selectTile(tileEl, 'drv-role-val', val);
-      const vehicleSec = document.getElementById('owner-vehicle-section');
-      if (vehicleSec) {
-        vehicleSec.style.display = (val === 'car_owner_driver') ? 'block' : 'none';
+      const ownerSec = document.getElementById('owner-vehicle-section');
+      const fleetSec = document.getElementById('rental-fleet-master-section');
+      if (ownerSec) {
+        ownerSec.style.display = (val === 'car_owner_driver') ? 'block' : 'none';
+      }
+      if (fleetSec) {
+        fleetSec.style.display = (val === 'rental_fleet_operator') ? 'block' : 'none';
+        if (val === 'rental_fleet_operator') {
+          if (fleetVehicles.length === 0) addFleetVehicleCard();
+          else renderFleetVehicles();
+          if (fleetDrivers.length === 0) addFleetDriverCard();
+          else renderFleetDrivers();
+        }
       }
     }
 
@@ -3412,7 +3864,37 @@
       if (wrap) wrap.style.display = (val === '__custom__') ? 'block' : 'none';
     }
     function handleDynamicPayoutSelect(val) {
-      const wrap = document.getElementById('wrap-custom-payout');
+      const customWrap = document.getElementById('wrap-custom-payout');
+      if (customWrap) customWrap.style.display = (val === '__custom__') ? 'block' : 'none';
+
+      const mfsContainer = document.getElementById('payout-mfs-container');
+      const bankContainer = document.getElementById('payout-bank-container');
+      const mfsInput = document.getElementById('drv-payout-number');
+      const isBypass = !!(driverSettings && driverSettings.bypassMandatory);
+
+      if (val === 'Bank Transfer') {
+        if (mfsContainer) mfsContainer.style.display = 'none';
+        if (bankContainer) bankContainer.style.display = 'block';
+        if (mfsInput) mfsInput.required = false;
+
+        ['bank-name', 'bank-branch', 'bank-account-name', 'bank-account-number'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.required = !isBypass;
+        });
+      } else {
+        if (mfsContainer) mfsContainer.style.display = 'block';
+        if (bankContainer) bankContainer.style.display = 'none';
+        if (mfsInput) mfsInput.required = !isBypass;
+
+        ['bank-name', 'bank-branch', 'bank-account-name', 'bank-account-number'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.required = false;
+        });
+      }
+    }
+
+    function handleDynamicBankSelect(val) {
+      const wrap = document.getElementById('wrap-custom-bank');
       if (wrap) wrap.style.display = (val === '__custom__') ? 'block' : 'none';
     }
 
@@ -3493,11 +3975,23 @@
       const roleMap = {
         'seeking_fleet_car': currentLang === 'bn' ? 'ফ্লিট শফার' : 'Fleet Chauffeur',
         'car_owner_driver': currentLang === 'bn' ? 'ওনার-ড্রাইভার' : 'Owner-Driver',
+        'rental_fleet_operator': currentLang === 'bn' ? `রেন্ট-এ-কার ফ্লিট (${fleetVehicles.length} গাড়ি, ${fleetDrivers.length} ড্রাইভার)` : `Rental Fleet (${fleetVehicles.length} Cars, ${fleetDrivers.length} Drivers)`,
         'part_time_freelance': currentLang === 'bn' ? 'অন-ডিমান্ড স্ট্যান্ডবাই' : 'On-Demand Standby'
       };
       const city = resolveFieldValue('drv-city', 'drv-city-custom');
       const payoutMethod = resolveFieldValue('drv-payout-method', 'drv-payout-custom');
-      const payoutNum = document.getElementById('drv-payout-number').value || '—';
+      
+      let payoutDisplay = '—';
+      if (payoutMethod === 'Bank Transfer') {
+        const bankNameFinal = resolveFieldValue('bank-name', 'bank-name-custom');
+        const branch = document.getElementById('bank-branch')?.value || '';
+        const accName = document.getElementById('bank-account-name')?.value || '';
+        const accNum = document.getElementById('bank-account-number')?.value || '';
+        payoutDisplay = `${bankNameFinal || 'Bank'} (${branch || 'Branch'}) - A/C: ${accNum || '—'} [${accName || '—'}]`;
+      } else {
+        const payoutNum = document.getElementById('drv-payout-number')?.value || '—';
+        payoutDisplay = `${payoutMethod} (${payoutNum})`;
+      }
 
       const svcs = [];
       document.querySelectorAll('input[name="services"]:checked').forEach(cb => svcs.push(cb.value));
@@ -3516,7 +4010,7 @@
       document.getElementById('sum-license').textContent = `${licVal} (Exp: ${licExp})`;
       document.getElementById('sum-role-area').textContent = `${roleMap[role] || role} · ${city}`;
       document.getElementById('sum-services').textContent = svcs.length > 0 ? svcs.join(', ') : 'None';
-      document.getElementById('sum-payout').textContent = `${payoutMethod} (${payoutNum})`;
+      document.getElementById('sum-payout').textContent = payoutDisplay;
       const docSummaryEl = document.getElementById('sum-docs');
       if (docSummaryEl) {
         docSummaryEl.textContent = docsArr.length > 0 ? docsArr.join(', ') : (currentLang === 'bn' ? 'কোনোটি নয়' : 'None uploaded');
@@ -3631,6 +4125,67 @@
       const rawPhone = document.getElementById('drv-phone').value.trim();
       const rawNid = document.getElementById('drv-nid').value.trim();
 
+      // Prepare Vehicle Profile & Fleet Data
+      const selectedRole = document.getElementById('drv-role-val').value || 'seeking_fleet_car';
+      let vehicleProfileDesc = 'N/A (Fleet Chauffeur)';
+      let fleetPayload = null;
+      let ownerCarPayload = null;
+
+      if (selectedRole === 'rental_fleet_operator') {
+        fleetPayload = {
+          totalCars: fleetVehicles.length,
+          totalDrivers: fleetDrivers.length,
+          vehicles: fleetVehicles,
+          drivers: fleetDrivers
+        };
+        const carsSummary = fleetVehicles.map((v, i) => `${i + 1}. ${v.model || 'Car'} [${v.plate || 'No Plate'}]`).join(', ');
+        const driversSummary = fleetDrivers.map(d => `${d.name || 'Driver'} (${d.phone || 'No Phone'})`).join(', ');
+        vehicleProfileDesc = `Rental Fleet (${fleetVehicles.length} Cars, ${fleetDrivers.length} Drivers): ${carsSummary} | Drivers: ${driversSummary}`;
+        
+        // Backward-compatible fallback for Version 8 webhooks:
+        ownerCarPayload = {
+          model: `Rental Fleet (${fleetVehicles.length} Cars, ${fleetDrivers.length} Drivers)`,
+          plateNumber: fleetVehicles.map(v => v.plate).filter(Boolean).join(', ') || 'Multi-Car Fleet'
+        };
+      } else if (selectedRole === 'car_owner_driver') {
+        ownerCarPayload = {
+          model: carModelFinal || 'Toyota Premio',
+          plateNumber: document.getElementById('drv-car-plate').value.trim() || 'Dhaka Metro GA',
+          seats: carSeatsFinal || '4 Seats',
+          year: document.getElementById('drv-car-year').value || '2019',
+          fitnessExpiry: document.getElementById('drv-car-fitness').value || '2027-01-01'
+        };
+        vehicleProfileDesc = `${ownerCarPayload.model} [${ownerCarPayload.plateNumber}] (${ownerCarPayload.seats}, ${ownerCarPayload.year})`;
+      }
+
+      // Prepare Payout Channel & Bank Details
+      let bankDetailsPayload = null;
+      let finalPayoutString = '';
+      let payoutNumberFinal = '';
+
+      if (payoutMethodFinal === 'Bank Transfer') {
+        const bankNameFinal = resolveFieldValue('bank-name', 'bank-name-custom') || 'Commercial Bank';
+        const bankBranchFinal = document.getElementById('bank-branch')?.value.trim() || 'Principal Branch';
+        const bankAccountNameFinal = document.getElementById('bank-account-name')?.value.trim() || rawName;
+        const bankAccountNumberFinal = document.getElementById('bank-account-number')?.value.trim() || 'N/A';
+        const bankRoutingFinal = document.getElementById('bank-routing-number')?.value.trim() || '';
+        const bankAccountTypeFinal = document.getElementById('bank-account-type')?.value || 'Savings Account';
+
+        bankDetailsPayload = {
+          bankName: bankNameFinal,
+          branch: bankBranchFinal,
+          accountName: bankAccountNameFinal,
+          accountNumber: bankAccountNumberFinal,
+          routingNumber: bankRoutingFinal,
+          accountType: bankAccountTypeFinal
+        };
+        payoutNumberFinal = bankAccountNumberFinal;
+        finalPayoutString = `Bank: ${bankNameFinal} (${bankBranchFinal}) - A/C: ${bankAccountNumberFinal} [${bankAccountTypeFinal} - ${bankAccountNameFinal}]${bankRoutingFinal ? ' Routing: ' + bankRoutingFinal : ''}`;
+      } else {
+        payoutNumberFinal = document.getElementById('drv-payout-number')?.value.trim() || rawPhone;
+        finalPayoutString = `${payoutMethodFinal || 'bKash'} - ${payoutNumberFinal}`;
+      }
+
       const appId = 'DRV-DAC-' + Math.floor(1000 + Math.random() * 9000);
       const submissionTimestamp = new Date().toISOString();
 
@@ -3657,18 +4212,16 @@
         highwayExp: document.getElementById('drv-highway-exp').value || 'Highways & Night Expert',
         services: selectedServices.length > 0 ? selectedServices : ['Airport Transfer', 'Corporate Transport'],
         availability: document.getElementById('drv-avail-val').value || 'full_time',
-        role: document.getElementById('drv-role-val').value || 'seeking_fleet_car',
-        driverRole: document.getElementById('drv-role-val').value || 'seeking_fleet_car',
-        ownerCar: (document.getElementById('drv-role-val').value === 'car_owner_driver') ? {
-          model: carModelFinal || 'Toyota Premio',
-          plateNumber: document.getElementById('drv-car-plate').value.trim() || 'Dhaka Metro GA',
-          seats: carSeatsFinal || '4 Seats',
-          year: document.getElementById('drv-car-year').value || '2019',
-          fitnessExpiry: document.getElementById('drv-car-fitness').value || '2027-01-01'
-        } : null,
-        payoutMethod: payoutMethodFinal || 'bKash Personal',
-        payoutNumber: document.getElementById('drv-payout-number').value.trim() || rawPhone,
-        payoutWallet: `${payoutMethodFinal || 'bKash'} - ${document.getElementById('drv-payout-number').value.trim() || rawPhone}`,
+        role: selectedRole,
+        driverRole: selectedRole,
+        ownerCar: ownerCarPayload,
+        carModel: (selectedRole === 'rental_fleet_operator') ? vehicleProfileDesc : (carModelFinal || null),
+        vehicleProfile: vehicleProfileDesc,
+        fleetData: fleetPayload,
+        payoutMethod: (payoutMethodFinal === 'Bank Transfer') ? 'Bank Transfer' : (payoutMethodFinal || 'bKash Personal'),
+        payoutNumber: payoutNumberFinal,
+        payoutWallet: finalPayoutString,
+        bankDetails: bankDetailsPayload,
         status: 'Pending Verification',
         photoBase64: photoBase64,
         licenseFrontBase64: licFrontBase64,

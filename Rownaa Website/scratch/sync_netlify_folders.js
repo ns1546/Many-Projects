@@ -1,10 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 
-const destDir = path.join(__dirname, '..', 'Rownaa-Frontend-Netlify');
 const rootDir = path.join(__dirname, '..');
+const destDir = path.join(rootDir, 'Rownaa-Frontend-Netlify');
+const portalDir = path.join(rootDir, 'netlify-driver-portal');
 
 if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
+if (!fs.existsSync(portalDir)) fs.mkdirSync(portalDir, { recursive: true });
 
 const htmlFiles = [
   'index.html',
@@ -26,7 +28,7 @@ htmlFiles.forEach(f => {
   const src = path.join(rootDir, f);
   if (fs.existsSync(src)) {
     fs.copyFileSync(src, path.join(destDir, f));
-    console.log('Copied HTML:', f);
+    console.log('Copied HTML to Rownaa-Frontend-Netlify:', f);
   }
 });
 
@@ -50,6 +52,12 @@ copyFolderSync(path.join(rootDir, 'shared'), path.join(destDir, 'shared'));
 copyFolderSync(path.join(rootDir, 'css'), path.join(destDir, 'css'));
 copyFolderSync(path.join(rootDir, 'js'), path.join(destDir, 'js'));
 
+// Sync Driver Portal Standalone Folder
+fs.copyFileSync(path.join(rootDir, 'driver-register.html'), path.join(portalDir, 'index.html'));
+fs.copyFileSync(path.join(rootDir, 'google_sheet_webhook.gs'), path.join(portalDir, 'google_sheet_webhook.gs'));
+console.log('Copied driver-register.html to netlify-driver-portal/index.html');
+console.log('Copied google_sheet_webhook.gs to netlify-driver-portal/google_sheet_webhook.gs');
+
 // Write _redirects & netlify.toml into Rownaa-Frontend-Netlify
 fs.writeFileSync(path.join(destDir, '_redirects'), '/*  /index.html  200\n');
 
@@ -71,5 +79,4 @@ fs.writeFileSync(path.join(destDir, 'netlify.toml'), netlifyToml);
 fs.writeFileSync(path.join(rootDir, 'netlify.toml'), netlifyToml);
 fs.writeFileSync(path.join(rootDir, '_redirects'), '/*  /index.html  200\n');
 
-console.log('✅ Rownaa-Frontend-Netlify and Root Netlify configuration successfully synchronized!');
-
+console.log('✅ Rownaa-Frontend-Netlify and netlify-driver-portal successfully synchronized!');

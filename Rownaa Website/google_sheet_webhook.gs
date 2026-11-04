@@ -638,7 +638,14 @@ function doPost(e) {
     }
 
     var vehicleStr = "";
-    if (data.ownerCar) {
+    if (data.vehicleProfile) {
+      vehicleStr = String(data.vehicleProfile);
+    } else if (data.fleetData) {
+      var fd = data.fleetData;
+      var vList = Array.isArray(fd.vehicles) ? fd.vehicles.map(function(v, i) { return (i + 1) + ". " + (v.model || "Vehicle") + " [" + (v.plate || "No Plate") + "]"; }).join(", ") : "";
+      var dList = Array.isArray(fd.drivers) ? fd.drivers.map(function(d) { return d.name + " (" + d.phone + ")"; }).join(", ") : "";
+      vehicleStr = "Rental Fleet (" + (fd.totalCars || 0) + " Cars, " + (fd.totalDrivers || 0) + " Drivers): " + vList + (dList ? " | Drivers: " + dList : "");
+    } else if (data.ownerCar) {
       vehicleStr = (typeof data.ownerCar === 'object') ?
         (data.ownerCar.model || "") + " [" + (data.ownerCar.plateNumber || "") + "]" :
         String(data.ownerCar);
@@ -646,7 +653,15 @@ function doPost(e) {
       vehicleStr = data.carModel ? String(data.carModel) : "N/A (Fleet Chauffeur)";
     }
 
-    var payoutStr = data.payoutWallet || (data.payoutMethod ? (data.payoutMethod + " - " + (data.payoutNumber || "")) : "");
+    var payoutStr = "";
+    if (data.payoutWallet) {
+      payoutStr = String(data.payoutWallet);
+    } else if (data.bankDetails) {
+      var bd = data.bankDetails;
+      payoutStr = "Bank: " + (bd.bankName || "") + " (" + (bd.branch || "") + ") - A/C: " + (bd.accountNumber || "") + " [" + (bd.accountType || "") + " - " + (bd.accountName || "") + "]" + (bd.routingNumber ? " Routing: " + bd.routingNumber : "");
+    } else {
+      payoutStr = data.payoutMethod ? (data.payoutMethod + " - " + (data.payoutNumber || "")) : "";
+    }
     var servicesStr = Array.isArray(data.services) ? data.services.join(", ") : (data.services || "");
     var nextRowIdx = sheet.getLastRow() + 1;
 
