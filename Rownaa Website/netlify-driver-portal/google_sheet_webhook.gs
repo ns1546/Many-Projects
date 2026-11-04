@@ -67,6 +67,10 @@ function onOpen() {
 function openWhatsAppForSelectedDriver() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
+  if (!sheet || sheet.getLastColumn() < 36 || sheet.getRange(1, 23).getValue() !== "Verification Status") {
+    autoAlignAndRepairSheet(false);
+    sheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
+  }
   
   if (!sheet) {
     SpreadsheetApp.getUi().alert("Chauffeur Registry sheet not found. Please run 'Rebuild & Setup Entire System' first.");
@@ -292,13 +296,10 @@ function safeRebuildAndSetup() {
   if (ui) {
     var resp = ui.alert(
       "🔄 Rebuild & Setup Entire System",
-      "This will configure and verify all 36 Dual-License columns (Driver License + Car Blue Book License), dark luxury styling, plain-text formats, and the Operations KPI Dashboard.\n\n🛡️ 100% SAFE GUARANTEE:\n1. An automatic full timestamped backup is saved to Google Drive first.\n2. Existing chauffeur applicant rows will NEVER be deleted or cleared.\n\nDo you want to proceed?",
+      "This will automatically realign all 36 columns, migrate any legacy driver records into the Dual-License layout, rebuild the Operations KPI Dashboard, and heal all mismatched data.\n\n🛡️ 100% SAFE GUARANTEE:\n1. An automatic full timestamped backup is saved to Google Drive first.\n2. Existing chauffeur applicant rows will NEVER be deleted or cleared.\n\nDo you want to proceed?",
       ui.ButtonSet.YES_NO
     );
     if (resp !== ui.Button.YES) return;
-  }
-  if (resp !== ui.Button.YES) {
-    return;
   }
 
   try {
@@ -307,171 +308,13 @@ function safeRebuildAndSetup() {
     Logger.log("Backup note: " + bErr.toString());
   }
 
-  setupSheet();
-
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var defaultSheet = ss.getSheetByName("Sheet1");
-  if (defaultSheet && ss.getSheets().length > 1) {
-    if (defaultSheet.getLastRow() === 0 && defaultSheet.getLastColumn() === 0) {
-      try {
-        ss.deleteSheet(defaultSheet);
-      } catch (dErr) {}
-    }
-  }
-
-  ui.alert("System Ready", "✅ Rownaa Executive Chauffeur Platform has been initialized and synchronized successfully with all 36 columns and KPI Dashboard intact!", ui.ButtonSet.OK);
+  autoAlignAndRepairSheet(true);
 }
 
-/**
- * Master Setup Function: Builds the 36-column Dual-License Registry, formatting, formulas, and Dashboard.
- */
 function setupSheet() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  
-  // 1. SETUP CHAUFFEUR REGISTRY TAB (Strict Safe Bootstrap)
-  var sheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
-  if (!sheet) {
-    var sheet1 = ss.getSheetByName("Sheet1");
-    if (sheet1 && sheet1.getLastRow() === 0 && sheet1.getLastColumn() === 0) {
-      sheet1.setName(SHEET_REGISTRY_NAME);
-      sheet = sheet1;
-    } else {
-      sheet = ss.insertSheet(SHEET_REGISTRY_NAME, 0);
-    }
-  }
-
-  var headers = [
-    "Timestamp",                       // Col A (1)
-    "Application ID",                  // Col B (2)
-    "Full Name",                       // Col C (3)
-    "Phone (WhatsApp)",                // Col D (4)
-    "💬 1-Click WhatsApp",              // Col E (5)
-    "NID Number",                      // Col F (6)
-    "Base Area / District",            // Col G (7)
-    "Emergency Contact",               // Col H (8)
-    "Driver License No. (BRTA)",       // Col I (9)  - Dedicated Driver's License
-    "Driver License Class",            // Col J (10) - Professional Light/Heavy
-    "Driver License Expiry",           // Col K (11) - Expiry Date
-    "Driver License Status",           // Col L (12) - Formula Expiry Alert
-    "Car License / Reg Plate No.",     // Col M (13) - Dedicated Car License Plate
-    "Car Model & Make",                // Col N (14) - Dedicated Vehicle Model
-    "Car Fitness & Tax Expiry",        // Col O (15) - Vehicle Fitness Expiry
-    "Experience",                      // Col P (16)
-    "Languages",                       // Col Q (17)
-    "Services Selected",               // Col R (18)
-    "Availability",                    // Col S (19)
-    "Role Type",                       // Col T (20) - Chauffeur vs Rental Fleet Owner
-    "Full Vehicle & Fleet Details",    // Col U (21) - Comprehensive fleet/car manifest
-    "Payout Wallet & Bank Account",    // Col V (22) - bKash / Nagad / Bank Details
-    "Verification Status",             // Col W (23) - Dropdown (Pending, Approved, etc)
-    "Doc Completeness",                // Col X (24) - Formula Completeness Check
-    "Photo Document",                  // Col Y (25) - Chauffeur Portrait Headshot
-    "Driver License (Front)",          // Col Z (26) - Driver Lic Front
-    "Driver License (Back)",           // Col AA (27) - Driver Lic Back
-    "Car License / Blue Book (Front)", // Col AB (28) - Car Reg / Blue Book Front
-    "Car License / Blue Book (Back)",  // Col AC (29) - Car Reg / Blue Book Back
-    "Car Fitness / Tax Token Doc",     // Col AD (30) - Tax Token / Fitness Doc
-    "NID (Front)",                     // Col AE (31) - Smart NID Front
-    "NID (Back)",                      // Col AF (32) - Smart NID Back
-    "Admin Tracker & Audit",           // Col AG (33) - Duplicate & Resubmission Iteration
-    "Resubmission Notes & Reasons",    // Col AH (34) - Applicant correction notes
-    "Verified By (Operator)",          // Col AI (35) - Auto Operator onEdit
-    "Verification Time"                // Col AJ (36) - Auto Operator timestamp
-  ];
-
-  // Set Headers
-  sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-
-  // Style Header (Rownaa Dark Luxury FAANG Aesthetic)
-  var headerRange = sheet.getRange(1, 1, 1, headers.length);
-  headerRange.setBackground("#0d0d10");
-  headerRange.setFontColor("#d4ff00");
-  headerRange.setFontWeight("bold");
-  headerRange.setFontSize(10);
-  headerRange.setFontFamily("Roboto");
-  headerRange.setHorizontalAlignment("center");
-  headerRange.setVerticalAlignment("middle");
-  headerRange.setWrap(false);
-  sheet.setRowHeight(1, 44);
-  sheet.setFrozenRows(1);
-  sheet.setFrozenColumns(4); // Freeze Timestamp, ID, Name, Phone
-
-  // Format Numeric/Phone/Plate Columns as Plain Text (@)
-  sheet.getRange("B:B").setNumberFormat("@"); // Application ID
-  sheet.getRange("D:D").setNumberFormat("@"); // Phone
-  sheet.getRange("F:F").setNumberFormat("@"); // NID
-  sheet.getRange("I:I").setNumberFormat("@"); // Driver License No
-  sheet.getRange("M:M").setNumberFormat("@"); // Car License Plate No
-  sheet.getRange("V:V").setNumberFormat("@"); // Payout Account
-
-  // Clear data validations from non-status columns
-  sheet.getRange(2, 1, 1000, 22).clearDataValidations();
-  sheet.getRange(2, 24, 1000, 13).clearDataValidations();
-
-  // Set Status Dropdown Validation in Column W (Column 23)
-  var statusOptions = [
-    "Pending Verification",
-    "Under Review",
-    "Contacted & Scheduled",
-    "Approved & Verified",
-    "Rejected"
-  ];
-  var statusRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(statusOptions, true)
-    .setAllowInvalid(true)
-    .build();
-  sheet.getRange(2, 23, 1000, 1).setDataValidation(statusRule);
-
-  // Set Column Widths for Optimal Ergonomics (36 Columns)
-  var colWidths = [
-    145, // A: Timestamp
-    125, // B: ID
-    170, // C: Name
-    135, // D: Phone
-    165, // E: WhatsApp Action Button
-    145, // F: NID
-    145, // G: District
-    165, // H: Emergency
-    140, // I: Driver License No
-    125, // J: Driver License Class
-    120, // K: Driver License Expiry
-    130, // L: Driver License Status
-    155, // M: Car License Plate No
-    150, // N: Car Model & Make
-    130, // O: Car Fitness & Tax Expiry
-    100, // P: Experience
-    120, // Q: Languages
-    190, // R: Services Selected
-    110, // S: Availability
-    135, // T: Role Type
-    180, // U: Vehicle & Fleet Details
-    165, // V: Payout Wallet & Bank
-    165, // W: Verification Status
-    140, // X: Doc Completeness
-    125, // Y: Photo
-    130, // Z: Driver Lic Front
-    130, // AA: Driver Lic Back
-    135, // AB: Car Lic Front
-    135, // AC: Car Lic Back
-    130, // AD: Fitness / Tax Doc
-    125, // AE: NID Front
-    125, // AF: NID Back
-    240, // AG: Admin Tracker & Audit
-    220, // AH: Resubmission Notes
-    140, // AI: Operator
-    140  // AJ: Verified Time
-  ];
-  for (var i = 0; i < colWidths.length; i++) {
-    sheet.setColumnWidth(i + 1, colWidths[i]);
-  }
-
-  // 2. SETUP EXECUTIVE KPI DASHBOARD TAB
-  setupDashboardSheet(ss);
+  return autoAlignAndRepairSheet(false);
 }
 
-/**
- * Builds the Executive Operations KPI Dashboard with live formulas and sparklines.
- */
 function setupDashboardSheet(ss) {
   var dash = ss.getSheetByName(SHEET_DASHBOARD_NAME);
   if (!dash) {
@@ -581,77 +424,9 @@ function setupDashboardSheet(ss) {
  * Self-healing repair for legacy column shifts and formulas.
  */
 function repairExistingErrors() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  setupDashboardSheet(ss);
-
-  var sheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
-  if (!sheet) return;
-
-  var lastRow = sheet.getLastRow();
-  if (lastRow < 2) return;
-
-  var maxCols = Math.max(sheet.getLastColumn(), 36);
-  var dataRange = sheet.getRange(2, 1, lastRow - 1, maxCols);
-  var values = dataRange.getValues();
-  var formulas = dataRange.getFormulas();
-
-  var needUpdate = false;
-
-  for (var r = 0; r < values.length; r++) {
-    var phoneVal = values[r][3]; // Col D: Phone
-    var colEVal = String(values[r][4] || "").trim(); // Col E
-    var colEFormula = formulas[r][4] || "";
-
-    // Repair Phone in Col D
-    var dFormula = formulas[r][3] || "";
-    if (phoneVal === "#ERROR!" || (typeof phoneVal === 'string' && phoneVal.indexOf("ERROR") !== -1) || dFormula.startsWith("=+")) {
-      var fixed = dFormula.replace(/^=+\\+?/, "+");
-      values[r][3] = "'" + (fixed.length > 5 ? fixed : "+880 1711 000000");
-      needUpdate = true;
-    } else if (typeof phoneVal === 'number') {
-      var numStr = String(phoneVal);
-      if (numStr.length === 10 && numStr.startsWith("1")) {
-        values[r][3] = "'0" + numStr;
-        needUpdate = true;
-      }
-    }
-
-    // Inject WhatsApp Button into Col E
-    var cleanPhone = String(values[r][3]).replace(/[^0-9]/g, "");
-    if (cleanPhone.startsWith("0")) {
-      cleanPhone = "880" + cleanPhone.substring(1);
-    } else if (!cleanPhone.startsWith("880") && cleanPhone.length === 10) {
-      cleanPhone = "880" + cleanPhone;
-    }
-
-    var applicantName = values[r][2] || "Chauffeur";
-    if (cleanPhone.length >= 10 && !colEFormula.includes("HYPERLINK")) {
-      var waLink = "https://wa.me/" + cleanPhone + "?text=" + encodeURIComponent("Hello " + applicantName + ", this is Rownaa Executive Fleet Operations.");
-      formulas[r][4] = '=HYPERLINK("' + waLink + '", "🟢 Chat on WhatsApp")';
-      values[r][4] = "";
-      needUpdate = true;
-    }
-  }
-
-  if (needUpdate) {
-    dataRange.setValues(values);
-    dataRange.setFormulas(formulas);
-  }
-
-  // Refresh status dropdown on Column W (Col 23)
-  var statusOptions = ["Pending Verification", "Under Review", "Contacted & Scheduled", "Approved & Verified", "Rejected"];
-  var statusRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(statusOptions, true)
-    .setAllowInvalid(true)
-    .build();
-  sheet.getRange(2, 23, Math.max(lastRow, 500), 1).setDataValidation(statusRule);
+  return autoAlignAndRepairSheet(true);
 }
 
-/**
- * Triggered automatically when an operator edits a cell.
- * When Column W (Verification Status) changes, auto-records operator email and timestamp in Cols AI & AJ.
- * NEVER overwrites Admin Tracker or Resubmission Notes!
- */
 function onEdit(e) {
   if (!e || !e.range) return;
   var sheet = e.range.getSheet();
@@ -1108,7 +883,17 @@ function doGet(e) {
     })).setMimeType(ContentService.MimeType.JSON);
   }
 
-  if (action === "repair" || action === "fix") {
+  if (action === "repair" || action === "fix" || action === "realign" || action === "align" || action === "clean") {
+    var stats = autoAlignAndRepairSheet(false);
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "success",
+      message: "Rownaa Operations Self-Healing completed: 36 columns realigned, ghost rows cleaned, and KPI Dashboard synchronized!",
+      stats: stats,
+      timestamp: new Date().toISOString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  if (false && action === "old_repair") {
     repairExistingErrors();
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
@@ -1139,6 +924,9 @@ function doGet(e) {
     var list = [];
     for (var i = 1; i < rows.length; i++) {
       var r = rows[i];
+      // Skip empty ghost rows
+      if (!r[0] && !r[1] && !r[2] && !r[3]) continue;
+
       list.push({
         timestamp: r[0],
         id: r[1],
@@ -1147,6 +935,15 @@ function doGet(e) {
         nid: String(r[5]).replace(/^'/, ""),
         city: r[6],
         emergency: r[7],
+        // Flat fields for backward compatibility
+        licenseNumber: String(r[8]).replace(/^'/, ""),
+        licenseClass: r[9],
+        licenseExpiry: r[10],
+        licenseStatus: r[11],
+        carLicensePlate: String(r[12]).replace(/^'/, ""),
+        carModel: r[13],
+        carFitnessExpiry: r[14],
+        // Nested dual-license objects
         driverLicense: {
           number: String(r[8]).replace(/^'/, ""),
           class: r[9],
