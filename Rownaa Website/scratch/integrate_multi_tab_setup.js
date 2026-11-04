@@ -242,3 +242,4 @@ content = content.replace(
 fs.writeFileSync('google_sheet_webhook.gs', content, 'utf8');
 fs.writeFileSync('netlify-driver-portal/google_sheet_webhook.gs', content, 'utf8');
 console.log('Multi-tab database setup added to webhook scripts.');
+
