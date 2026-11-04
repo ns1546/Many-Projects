@@ -269,3 +269,4 @@ html = html.replace(targetLicFallback, repLicFallback);
 
 fs.writeFileSync('driver-register.html', html, 'utf8');
 console.log('✅ driver-register.html successfully updated with Fleet Drivers Driving License Front & Back upload options!');
+

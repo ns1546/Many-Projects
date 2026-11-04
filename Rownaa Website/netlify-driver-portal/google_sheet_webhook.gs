@@ -46,6 +46,8 @@ function onOpen() {
   ui.createMenu("⚡ Rownaa Operations")
     .addItem("💬 Open WhatsApp for Selected Driver", "openWhatsAppForSelectedDriver")
     .addSeparator()
+    .addItem("🔄 Initialize & Safe Rebuild System", "safeRebuildAndSetup")
+    .addSeparator()
     .addItem("💾 Backup Spreadsheet to Google Drive Now", "manualBackupToDrive")
     .addItem("📥 Download Offline Backup (.xlsx Excel)", "downloadBackupExcel")
     .addItem("📁 Open Daily Backups Folder in Drive", "openBackupFolder")
@@ -144,13 +146,60 @@ function formatAsPlainText(val) {
 /**
  * Master Setup Function: Builds the 28-column Registry, formatting, formulas, and Dashboard.
  */
+/**
+ * Safe Rebuild & Setup System:
+ * 1. Reassures operator that existing applicant rows are 100% preserved.
+ * 2. Automatically creates a timestamped Google Drive backup before running.
+ * 3. Runs setupSheet() to ensure all 30 column headers, dark luxury styling,
+ *    frozen columns, validations, and KPI Dashboard formulas are perfectly applied.
+ * 4. Cleans up default empty 'Sheet1' if present.
+ * 5. Displays confirmation dialog.
+ */
+function safeRebuildAndSetup() {
+  var ui = SpreadsheetApp.getUi();
+  var resp = ui.alert(
+    "🔄 Initialize & Safe Rebuild",
+    "This will verify all 30 column headers, dark luxury styling, plain-text formats, and the Operations KPI Dashboard.\n\n✅ 100% SAFE: Existing driver applicant records will NOT be deleted or cleared.\n\nProceed?",
+    ui.ButtonSet.YES_NO
+  );
+  if (resp !== ui.Button.YES) {
+    return;
+  }
+
+  try {
+    createDailyBackup();
+  } catch (bErr) {
+    Logger.log("Backup note: " + bErr.toString());
+  }
+
+  setupSheet();
+
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var defaultSheet = ss.getSheetByName("Sheet1");
+  if (defaultSheet && ss.getSheets().length > 1) {
+    if (defaultSheet.getLastRow() === 0 && defaultSheet.getLastColumn() === 0) {
+      try {
+        ss.deleteSheet(defaultSheet);
+      } catch (dErr) {}
+    }
+  }
+
+  ui.alert("System Ready", "✅ Rownaa Executive Chauffeur Platform has been initialized and synchronized successfully with all 30 columns and KPI Dashboard intact!", ui.ButtonSet.OK);
+}
+
 function setupSheet() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   
   // 1. SETUP CHAUFFEUR REGISTRY TAB (Strict Safe Bootstrap)
   var sheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
   if (!sheet) {
-    sheet = ss.insertSheet(SHEET_REGISTRY_NAME, 0);
+    var sheet1 = ss.getSheetByName("Sheet1");
+    if (sheet1 && sheet1.getLastRow() === 0 && sheet1.getLastColumn() === 0) {
+      sheet1.setName(SHEET_REGISTRY_NAME);
+      sheet = sheet1;
+    } else {
+      sheet = ss.insertSheet(SHEET_REGISTRY_NAME, 0);
+    }
   }
 
   // First run self-healing repair so existing rows align with new headers
@@ -879,6 +928,22 @@ function doPost(e) {
 function doGet(e) {
   var action = (e && e.parameter && e.parameter.action) ? e.parameter.action : "health";
   var ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  if (action === "setup" || action === "rebuild") {
+    setupSheet();
+    var ssClean = SpreadsheetApp.getActiveSpreadsheet();
+    var defaultSheet = ssClean.getSheetByName("Sheet1");
+    if (defaultSheet && ssClean.getSheets().length > 1) {
+      if (defaultSheet.getLastRow() === 0 && defaultSheet.getLastColumn() === 0) {
+        try { ssClean.deleteSheet(defaultSheet); } catch (dErr) {}
+      }
+    }
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "success",
+      message: "Full enterprise sheet initialized safely: 30 columns, dark luxury styling, duplicate tracker, and KPI Dashboard ready!",
+      timestamp: new Date().toISOString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
 
   if (action === "repair" || action === "fix") {
     repairExistingErrors();
