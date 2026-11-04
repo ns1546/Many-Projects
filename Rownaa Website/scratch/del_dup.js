@@ -6,3 +6,4 @@ lines.splice(175, 4);
 
 fs.writeFileSync('scratch/build_clean_2tab_webhook.js', lines.join('\n'), 'utf8');
 console.log('Removed duplicate lines');
+
