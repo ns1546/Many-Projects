@@ -8,9 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PlusCircle, PlayCircle, BookOpen, Trash2, FileText, ChevronDown, ChevronUp, Edit, Upload, Link as LinkIcon, Loader2, Check } from "lucide-react";
 import { toast } from "sonner";
+import SecureVideoPlayer from "@/components/SecureVideoPlayer";
+import Link from "next/link";
 
 export default function CourseEditor({ course }: { course: any }) {
   const router = useRouter();
+  const [modules, setModules] = useState<any[]>(course.modules || []);
   
   const [newModule, setNewModule] = useState({ title: "", description: "" });
   const [addingModule, setAddingModule] = useState(false);
@@ -46,6 +49,7 @@ export default function CourseEditor({ course }: { course: any }) {
     accessType: course.accessType || "Lifetime"
   });
   const [isUpdatingCourse, setIsUpdatingCourse] = useState(false);
+  const [previewVideoLesson, setPreviewVideoLesson] = useState<{ id?: string; title: string; videoUrl: string } | null>(null);
 
   const handleThumbnailUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -113,8 +117,11 @@ export default function CourseEditor({ course }: { course: any }) {
         body: JSON.stringify(newModule)
       });
       if (res.ok) {
+        const created = await res.json();
+        setModules((prev) => [...prev, { ...created, lessons: [] }]);
         setNewModule({ title: "", description: "" });
         setAddingModule(false);
+        toast.success("মডিউল তৈরি হয়েছে");
         router.refresh();
       } else {
         const errData = await res.json();
@@ -139,8 +146,11 @@ export default function CourseEditor({ course }: { course: any }) {
         body: JSON.stringify(newLesson)
       });
       if (res.ok) {
+        const created = await res.json();
+        setModules((prev) => prev.map((m) => m.id === moduleId ? { ...m, lessons: [...(m.lessons || []), created] } : m));
         setNewLesson({ title: "", description: "", videoUrl: "", duration: "", resources: "" });
         setActiveModuleId(null);
+        toast.success("লেসন যুক্ত হয়েছে");
         router.refresh();
       } else {
         const errData = await res.json();
@@ -159,7 +169,11 @@ export default function CourseEditor({ course }: { course: any }) {
     setIsDeleting(true);
     try {
       const res = await fetch(`/api/admin/courses/${course.id}/modules/${moduleId}`, { method: "DELETE" });
-      if (res.ok) router.refresh();
+      if (res.ok) {
+        setModules((prev) => prev.filter((m) => m.id !== moduleId));
+        toast.success("মডিউল ডিলিট হয়েছে");
+        router.refresh();
+      }
       else alert("মডিউল ডিলিট করতে সমস্যা হয়েছে।");
     } catch (err) {
       console.error(err);
@@ -173,7 +187,11 @@ export default function CourseEditor({ course }: { course: any }) {
     setIsDeleting(true);
     try {
       const res = await fetch(`/api/admin/courses/${course.id}/modules/${moduleId}/lessons/${lessonId}`, { method: "DELETE" });
-      if (res.ok) router.refresh();
+      if (res.ok) {
+        setModules((prev) => prev.map((m) => m.id === moduleId ? { ...m, lessons: (m.lessons || []).filter((l: any) => l.id !== lessonId) } : m));
+        toast.success("লেসন ডিলিট হয়েছে");
+        router.refresh();
+      }
       else alert("লেসন ডিলিট করতে সমস্যা হয়েছে।");
     } catch (err) {
       console.error(err);
@@ -193,7 +211,9 @@ export default function CourseEditor({ course }: { course: any }) {
         body: JSON.stringify(editModuleData)
       });
       if (res.ok) {
+        setModules((prev) => prev.map((m) => m.id === moduleId ? { ...m, title: editModuleData.title, description: editModuleData.description } : m));
         setEditingModuleId(null);
+        toast.success("মডিউল আপডেট হয়েছে");
         router.refresh();
       } else {
         const errData = await res.json();
@@ -218,7 +238,13 @@ export default function CourseEditor({ course }: { course: any }) {
         body: JSON.stringify(editLessonData)
       });
       if (res.ok) {
+        const updated = await res.json();
+        setModules((prev) => prev.map((m) => m.id === moduleId ? {
+          ...m,
+          lessons: (m.lessons || []).map((l: any) => l.id === lessonId ? { ...l, ...editLessonData, ...updated } : l)
+        } : m));
         setEditingLessonId(null);
+        toast.success("লেসন আপডেট হয়েছে");
         router.refresh();
       } else {
         const errData = await res.json();
@@ -454,7 +480,15 @@ export default function CourseEditor({ course }: { course: any }) {
           </CardContent>
         </Card>
       ) : (
-        <div className="flex justify-end mb-4">
+        <div className="flex items-center justify-end gap-3 mb-4 flex-wrap">
+          <Link
+            href={modules?.[0]?.lessons?.[0]?.id ? `/learn/${course.id}/${modules[0].lessons[0].id}` : `/courses/${course.slug}`}
+            target="_blank"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-surface border border-border text-foreground hover:text-primary text-xs font-bold transition-colors shadow-xs"
+          >
+            <PlayCircle size={15} className="text-primary" />
+            <span>ছাত্রদের ভিউতে দেখুন (Student View)</span>
+          </Link>
           <Button 
             onClick={() => setIsEditingCourse(true)}
             variant="outline"
@@ -467,7 +501,7 @@ export default function CourseEditor({ course }: { course: any }) {
       )}
 
       <div className="space-y-6">
-        {course.modules.map((module: any, idx: number) => (
+        {modules.map((module: any, idx: number) => (
           <Card key={module.id} className="border-border bg-surface shadow-sm">
             <CardContent className="p-6">
               <div className="flex justify-between items-start mb-6">
@@ -675,7 +709,7 @@ export default function CourseEditor({ course }: { course: any }) {
                               <div className="flex justify-between items-start w-full">
                                 <div>
                                   <div className="text-sm font-black text-accent">{lIdx + 1}. {lesson.title}</div>
-                                  <div className="flex items-center gap-3 mt-1.5">
+                                  <div className="flex items-center gap-2 sm:gap-3 mt-1.5 flex-wrap">
                                     {lesson.duration && (
                                       <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-muted/60 text-foreground/60 border border-border">
                                         {lesson.duration}
@@ -685,6 +719,18 @@ export default function CourseEditor({ course }: { course: any }) {
                                       <span className="flex items-center gap-1 text-xs font-bold text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">
                                         <FileText size={10} /> PDF/Resource
                                       </span>
+                                    )}
+                                    {/* Video Preview Button for Admin (SN 20) */}
+                                    {lesson.videoUrl && lesson.videoUrl.trim() !== "" && lesson.videoUrl.trim() !== "#" && (
+                                      <button
+                                        type="button"
+                                        onClick={() => setPreviewVideoLesson({ id: lesson.id, title: lesson.title, videoUrl: lesson.videoUrl })}
+                                        className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary/10 hover:bg-primary/20 px-2.5 py-0.5 rounded-full border border-primary/30 transition-colors shadow-xs"
+                                        title="অ্যাডমিন প্যানেল থেকে এই ভিডিওটি দেখুন"
+                                      >
+                                        <PlayCircle size={12} className="stroke-[2.5]" />
+                                        <span>ভিডিও দেখুন</span>
+                                      </button>
                                     )}
                                   </div>
                                 </div>
@@ -735,7 +781,7 @@ export default function CourseEditor({ course }: { course: any }) {
           </Card>
         ))}
 
-        {course.modules.length === 0 && !addingModule && (
+        {modules.length === 0 && !addingModule && (
           <div className="text-center py-12 bg-surface border border-border rounded-2xl shadow-sm">
             <BookOpen size={40} className="mx-auto mb-4 text-foreground/20" />
             <h4 className="text-xl font-extrabold mb-2 text-accent">কোনো মডিউল নেই</h4>
@@ -787,6 +833,49 @@ export default function CourseEditor({ course }: { course: any }) {
           </Button>
         )}
       </div>
+
+      {/* ── Admin Video Preview Modal (SN 20) ── */}
+      {previewVideoLesson && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+          onClick={() => setPreviewVideoLesson(null)}
+        >
+          <div 
+            className="relative w-full max-w-4xl bg-[#141A0B] border border-[#2A3319] rounded-2xl overflow-hidden shadow-2xl flex flex-col text-[#F8F4EC]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-4 sm:p-5 border-b border-[#2A3319] bg-[#1A220F] flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-primary/15 text-primary flex items-center justify-center">
+                  <PlayCircle size={20} />
+                </div>
+                <div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-primary block">এডমিন ভিডিও প্রিভিউ (SN 20)</span>
+                  <h3 className="font-extrabold text-sm sm:text-base text-[#F8F4EC] truncate max-w-md">
+                    {previewVideoLesson.title}
+                  </h3>
+                </div>
+              </div>
+              <button 
+                onClick={() => setPreviewVideoLesson(null)}
+                className="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center font-bold text-sm transition-colors cursor-pointer"
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="p-2 sm:p-4 bg-black aspect-video relative flex items-center justify-center">
+              <SecureVideoPlayer 
+                url={previewVideoLesson.videoUrl}
+                lessonId={previewVideoLesson.id || "admin-preview"}
+                title={previewVideoLesson.title}
+                email="admin@evorisemedia.com"
+                poster={course.thumbnail}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

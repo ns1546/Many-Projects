@@ -31,7 +31,7 @@ export default function PrivacyPage() {
     {
       title: "আপনার অধিকার",
       content:
-        "আপনি যেকোনো সময় আপনার ব্যক্তিগত তথ্য দেখতে, আপডেট করতে বা মুছে ফেলার অনুরোধ করতে পারেন। এই বিষয়ে support@evorisemedia.com এ যোগাযোগ করুন।",
+        "আপনি যেকোনো সময় আপনার ব্যক্তিগত তথ্য দেখতে, আপডেট করতে বা মুছে ফেলার অনুরোধ করতে পারেন। এই বিষয়ে helloevorisesolutions@gmail.com এ যোগাযোগ করুন।",
     },
     {
       title: "নীতিমালার পরিবর্তন",
@@ -102,8 +102,8 @@ export default function PrivacyPage() {
             <div className="p-8 md:p-10 bg-surface border-t border-border">
               <p className="text-xs text-foreground/80 font-medium leading-relaxed">
                 এই নীতিমালা সম্পর্কে কোনো প্রশ্ন থাকলে{" "}
-                <a href="mailto:support@evorisemedia.com" className="text-primary font-bold hover:underline">
-                  support@evorisemedia.com
+                <a href="mailto:helloevorisesolutions@gmail.com" className="text-primary font-bold hover:underline">
+                  helloevorisesolutions@gmail.com
                 </a>{" "}
                 এ যোগাযোগ করুন।
               </p>

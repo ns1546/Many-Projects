@@ -11,6 +11,7 @@ import ClientInit from "@/components/ClientInit";
 import MetaPixel from "@/components/providers/MetaPixel";
 import GoogleAnalytics from "@/components/providers/GoogleAnalytics";
 import { Toaster } from "sonner";
+import NavigationProgressBar from "@/components/shared/NavigationProgressBar";
 import "./globals.css";
 import "./mobile.css";
 
@@ -76,6 +77,9 @@ export default async function RootLayout({
         suppressHydrationWarning
       >
         <AuthProvider>
+          <Suspense fallback={null}>
+            <NavigationProgressBar />
+          </Suspense>
           <ClientInit />
           <Suspense fallback={null}>
             <MetaPixel fbPixelId={fbPixelId} />
@@ -87,7 +91,7 @@ export default async function RootLayout({
           <main className="grow">{children}</main>
           <Footer />
           <MobileBottomNav />
-          <WhatsAppSupportButton phoneNumber={settings?.whatsappNumber || "01754220135"} />
+          <WhatsAppSupportButton phoneNumber={settings?.whatsappNumber || "01607084155"} />
           <Toaster richColors theme="dark" />
         </AuthProvider>
       </body>

@@ -111,8 +111,8 @@ export default function TermsPage() {
             <div className="p-8 md:p-10 bg-surface border-t border-border">
               <p className="text-xs text-foreground/80 font-medium leading-relaxed">
                 এই শর্তাবলী সম্পর্কে প্রশ্ন থাকলে{" "}
-                <a href="mailto:support@evorisemedia.com" className="text-primary font-bold hover:underline">
-                  support@evorisemedia.com
+                <a href="mailto:helloevorisesolutions@gmail.com" className="text-primary font-bold hover:underline">
+                  helloevorisesolutions@gmail.com
                 </a>{" "}
                 এ যোগাযোগ করুন।
               </p>

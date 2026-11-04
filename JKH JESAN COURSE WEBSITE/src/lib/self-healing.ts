@@ -96,7 +96,7 @@ export async function autoHealSystemState() {
           bkashNumber: "01700000000",
           nagadNumber: "01700000000",
           rocketNumber: "01700000000",
-          whatsappNumber: "01754220135",
+          whatsappNumber: "01607084155",
           supportEmail: "support@evorisemedia.com",
           noticeText: "আমাদের সকল কোর্সে বিশেষ ছাড় চলছে!",
         },

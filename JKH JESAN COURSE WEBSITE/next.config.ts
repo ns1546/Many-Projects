@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     NEXTAUTH_URL_INTERNAL: process.env.NEXTAUTH_URL_INTERNAL || "http://localhost:3000",
     VERCEL_URL: process.env.VERCEL_URL || "localhost:3000",
   },
+  turbopack: {},
   webpack: (config, { isServer, webpack }) => {
     if (!isServer) {
       config.resolve.fallback = {
@@ -35,6 +36,10 @@ const nextConfig: NextConfig = {
 
   // ── Experimental optimizations ─────────────────────────────────────────
   experimental: {
+    staleTimes: {
+      dynamic: 30,
+      static: 300,
+    },
     optimizePackageImports: [
       "@tabler/icons-react",
       "lucide-react",

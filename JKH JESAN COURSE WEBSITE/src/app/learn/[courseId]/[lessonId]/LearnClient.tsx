@@ -2,42 +2,94 @@
 
 import Link from "next/link";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-import { PlayCircle, CheckCircle2, Menu, X, ArrowLeft, ChevronLeft, ChevronRight, FileText, Play } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { 
+  PlayCircle, CheckCircle2, Menu, X, ArrowLeft, ChevronLeft, ChevronRight, 
+  FileText, Play, Lock, Sparkles, ShoppingBag, ExternalLink, ShieldCheck
+} from "lucide-react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import SecureVideoPlayer from "@/components/SecureVideoPlayer";
+import { Logo } from "@/components/shared/Logo";
+import { toast } from "sonner";
+
+interface LearnClientProps {
+  course: any;
+  currentLesson: any;
+  nextLesson: any;
+  prevLesson: any;
+  completedLessonIds: string[];
+  progressPercentage: number;
+  totalLessons: number;
+  userEmail: string;
+  isEnrolled?: boolean;
+  isLocked?: boolean;
+  isFreeLesson?: boolean;
+}
 
 export default function LearnClient({
   course,
-  currentLesson,
-  nextLesson,
-  prevLesson,
+  currentLesson: initialLesson,
+  nextLesson: initialNext,
+  prevLesson: initialPrev,
   completedLessonIds,
-  progressPercentage,
+  progressPercentage: initialProgressPercentage,
   totalLessons,
-  userEmail
-}: {
-  course: any,
-  currentLesson: any,
-  nextLesson: any,
-  prevLesson: any,
-  completedLessonIds: string[],
-  progressPercentage: number,
-  totalLessons: number,
-  userEmail: string
-}) {
+  userEmail,
+  isEnrolled = true,
+  isLocked: initialIsLocked = false,
+  isFreeLesson: initialIsFree = false,
+}: LearnClientProps) {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   
-  const initialModuleIndex = course.modules.findIndex((m: any) => 
-    m.lessons.some((l: any) => l.id === currentLesson.id)
+  // ── Instant Client-Side Lesson Switching (0ms latency) ──
+  const [activeLesson, setActiveLesson] = useState<any>(initialLesson);
+
+  // Flatten all lessons across modules for instant sequential calculation
+  const allLessons = useMemo(() => {
+    return course.modules.flatMap((m: any) => m.lessons || []);
+  }, [course.modules]);
+
+  const activeIndex = useMemo(() => {
+    return allLessons.findIndex((l: any) => l.id === activeLesson.id);
+  }, [allLessons, activeLesson.id]);
+
+  const currentNextLesson = activeIndex !== -1 && activeIndex < allLessons.length - 1 ? allLessons[activeIndex + 1] : null;
+  const currentPrevLesson = activeIndex > 0 ? allLessons[activeIndex - 1] : null;
+
+  // Active module detection
+  const currentModule = useMemo(() => {
+    return course.modules.find((m: any) => 
+      m.lessons.some((l: any) => l.id === activeLesson.id)
+    ) || null;
+  }, [course.modules, activeLesson.id]);
+
+  const activeModuleIndex = useMemo(() => {
+    return course.modules.findIndex((m: any) => 
+      m.lessons.some((l: any) => l.id === activeLesson.id)
+    );
+  }, [course.modules, activeLesson.id]);
+
+  const [openModule, setOpenModule] = useState<string | undefined>(
+    activeModuleIndex !== -1 ? `item-${activeModuleIndex}` : "item-0"
   );
-  
-  const [openModule, setOpenModule] = useState<string | undefined>(initialModuleIndex !== -1 ? `item-${initialModuleIndex}` : "item-0");
-  const videoRef = useRef<HTMLVideoElement>(null);
-  
-  const [isCompleted, setIsCompleted] = useState(completedLessonIds.includes(currentLesson.id));
+
+  // Video switching animation state
+  const [isSwitchingVideo, setIsSwitchingVideo] = useState(false);
+
+  // Lesson free & locked calculation
+  const isActiveLessonFree = (activeIndex === 0) || !!activeLesson.isFree;
+  const isVideoLocked = !isEnrolled && !isActiveLessonFree;
+
+  // Track completed lessons locally for instant tick feedback
+  const [completedIds, setCompletedIds] = useState<string[]>(completedLessonIds);
+  const isCompleted = completedIds.includes(activeLesson.id);
   const [isMarking, setIsMarking] = useState(false);
+
+  // Calculate dynamic progress
+  const progressPercentage = totalLessons > 0 
+    ? Math.round((completedIds.length / totalLessons) * 100) 
+    : initialProgressPercentage;
 
   useEffect(() => {
     const handleContextMenu = (e: MouseEvent) => e.preventDefault();
@@ -45,18 +97,39 @@ export default function LearnClient({
     return () => document.removeEventListener("contextmenu", handleContextMenu);
   }, []);
 
+  // Instant switch handler
+  const handleSelectLesson = (lesson: any, locked: boolean) => {
+    if (locked) {
+      toast.error("এই ক্লাসটি দেখতে অনুগ্রহ করে কোর্সে এনরোল করুন।", {
+        action: {
+          label: "এনরোল করুন",
+          onClick: () => router.push(`/checkout/${course.id}`)
+        }
+      });
+      return;
+    }
+    setIsSwitchingVideo(true);
+    setActiveLesson(lesson);
+    setTimeout(() => setIsSwitchingVideo(false), 350);
+    const modIdx = course.modules.findIndex((m: any) => m.lessons.some((l: any) => l.id === lesson.id));
+    if (modIdx !== -1) {
+      setOpenModule(`item-${modIdx}`);
+    }
+    window.history.pushState(null, "", `/learn/${course.id}/${lesson.id}`);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const markComplete = async () => {
-    if (isCompleted) return;
+    if (isCompleted || !isEnrolled) return;
     setIsMarking(true);
     try {
       const res = await fetch("/api/progress", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lessonId: currentLesson.id })
+        body: JSON.stringify({ lessonId: activeLesson.id })
       });
       if (res.ok) {
-        setIsCompleted(true);
-        router.refresh();
+        setCompletedIds(prev => [...prev, activeLesson.id]);
       }
     } catch (err) {
       console.error(err);
@@ -66,226 +139,469 @@ export default function LearnClient({
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background text-foreground overflow-hidden selection:bg-primary/20 font-sans">
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-primary/20">
       
-      {/* Top Navbar */}
-      <header className="h-16 bg-surface/5 backdrop-blur-md border-b border-border flex items-center justify-between px-6 shrink-0 z-20 shadow-sm relative">
-        <div className="flex items-center gap-6">
-          <Link href="/dashboard" className="flex items-center text-foreground/80 hover:text-foreground transition-colors text-sm font-bold group">
-            <div className="w-8 h-8 rounded-full bg-surface flex items-center justify-center mr-3 group-hover:bg-surface/10 transition-colors border border-border">
-              <ArrowLeft size={16} />
-            </div>
-            <span className="hidden sm:inline">ড্যাশবোর্ডে ফিরে যান</span>
+      {/* ── Top App Bar (Matching Reference Screenshot SN 17) ── */}
+      <header className="h-16 bg-surface/90 backdrop-blur-md border-b border-border sticky top-0 z-40 px-4 sm:px-6 flex items-center justify-between shadow-xs">
+        <div className="flex items-center gap-4 sm:gap-6 min-w-0">
+          <Link href="/" aria-label="EvoRise Media Home" className="shrink-0 flex items-center">
+            <Logo size="sm" />
           </Link>
-          <div className="h-6 w-px bg-surface/10 hidden sm:block"></div>
-          <h1 className="font-extrabold text-sm md:text-base text-foreground tracking-tight hidden md:block truncate max-w-md">
-            {course.title}
-          </h1>
-        </div>
-        
-        <div className="flex items-center gap-2 sm:gap-4">
 
-          <button 
-            onClick={markComplete}
-            disabled={isCompleted || isMarking}
-            className={`flex items-center text-xs sm:text-sm font-bold px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all border shadow-sm
-              ${isCompleted 
-                ? 'bg-primary/20 text-primary border-primary/30 shadow-[0_0_15px_rgba(200,144,10,0.25)]' 
-                : 'bg-surface/5 text-foreground/80 border-border hover:bg-surface/10 hover:text-foreground'
+          <div className="h-5 w-px bg-border hidden sm:block" />
+
+          <Link 
+            href={`/courses/${course.slug}`}
+            className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-foreground/70 hover:text-primary transition-colors shrink-0"
+          >
+            <ArrowLeft size={16} />
+            <span className="hidden md:inline">কোর্স বিস্তারিত</span>
+          </Link>
+
+          <div className="h-5 w-px bg-border hidden md:block" />
+
+          <div className="min-w-0 hidden md:block">
+            <p className="text-xs font-semibold text-foreground/60 line-clamp-1">
+              কোর্স: <span className="text-foreground font-bold">{course.title}</span>
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          {/* Free Badge for Preview Visitors */}
+          {!isEnrolled && (
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1 text-[11px] font-black px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                <Sparkles size={12} className="stroke-[2.5]" />
+                ফ্রি প্রিভিউ
+              </span>
+              <Link
+                href={`/checkout/${course.id}`}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary hover:brightness-110 text-black font-black text-xs shadow-sm transition-all"
+              >
+                <ShoppingBag size={13} className="stroke-[2.5]" />
+                <span>এনরোল করুন</span>
+              </Link>
+            </div>
+          )}
+
+          {/* Mark Complete Checkbox / Button */}
+          {isEnrolled && (
+            <button
+              onClick={markComplete}
+              disabled={isCompleted || isMarking}
+              className={`inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all ${
+                isCompleted 
+                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30' 
+                  : 'bg-primary hover:brightness-110 text-black shadow-sm font-black'
               }`}
-          >
-            <CheckCircle2 size={15} className={`mr-1.5 sm:mr-2 ${isCompleted ? 'text-primary' : 'text-foreground/80'}`} /> 
-            <span>{isMarking ? "..." : isCompleted ? "সম্পন্ন" : "সম্পন্ন করুন"}</span>
-          </button>
+            >
+              <CheckCircle2 size={15} />
+              <span>{isCompleted ? "সম্পন্ন হয়েছে" : "সম্পন্ন চিহ্নিত করুন"}</span>
+            </button>
+          )}
+
+          {/* Mobile Playlist Drawer Toggle */}
           <button 
-            className="md:hidden p-2 text-foreground/80 hover:text-foreground bg-surface/5 border border-border rounded-lg"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
+            onClick={() => setSidebarOpen(true)}
+            className="lg:hidden p-2 rounded-xl bg-surface border border-border text-foreground hover:bg-surface-raised transition-colors flex items-center gap-1.5"
+            aria-label="Toggle Playlist"
           >
-            {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
+            <Menu size={18} />
+            <span className="text-xs font-bold sm:inline hidden">প্লেলিস্ট</span>
           </button>
         </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden relative">
-        
-        {/* Main Content Area (Theater Mode) */}
-        <main className="flex-1 overflow-y-auto bg-background custom-scrollbar relative">
-          <div className="w-full max-w-6xl mx-auto px-2 sm:px-4 md:px-6 py-2 md:py-6 relative z-10 flex flex-col">
-            {/* Video Player Container */}
-            <div className="w-full aspect-video bg-black rounded-xl md:rounded-2xl overflow-hidden border border-border shadow-2xl relative select-none shrink-0">
-              {currentLesson.videoUrl && currentLesson.videoUrl.trim() !== "#" && currentLesson.videoUrl.trim() !== "" ? (
+      {/* ── Main Classroom Body (Split View) ── */}
+      <main className="flex-1 w-full max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-6 lg:py-8">
+        <div className="grid grid-cols-12 gap-6 lg:gap-8 items-start">
+          
+          {/* ════════ Left: Video Player & Lecture Theater Area ════════ */}
+          <div className="col-span-12 lg:col-span-8 flex flex-col">
+
+            {/* Lecture Title Above Player (Exact Reference from Screenshot SN 17) */}
+            <div className="mb-3 sm:mb-4">
+              <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                {currentModule && (
+                  <span className="text-[11px] sm:text-xs font-bold text-primary px-2.5 py-0.5 rounded-md bg-primary/10 border border-primary/20">
+                    {currentModule.title}
+                  </span>
+                )}
+                {isActiveLessonFree && (
+                  <span className="text-[11px] sm:text-xs font-bold text-emerald-600 dark:text-emerald-400 px-2.5 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/20">
+                    ফ্রি ক্লাস
+                  </span>
+                )}
+              </div>
+              <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-extrabold text-foreground tracking-tight leading-snug">
+                {activeLesson.title}
+              </h1>
+            </div>
+
+            {/* Video Player Box */}
+            <div className="w-full aspect-video bg-black rounded-2xl overflow-hidden border border-border shadow-xl relative select-none">
+              {/* Switching Video Loading Animation */}
+              {isSwitchingVideo && (
+                <div className="absolute inset-0 bg-black/85 backdrop-blur-xs flex flex-col items-center justify-center z-30 select-none animate-fadeIn">
+                  <div className="flex items-center gap-1.5 h-7 mb-2.5">
+                    <span className="w-1.5 bg-primary rounded-full animate-[soundWave_0.8s_ease-in-out_infinite] h-3" />
+                    <span className="w-1.5 bg-primary rounded-full animate-[soundWave_1s_ease-in-out_infinite_0.2s] h-5" />
+                    <span className="w-1.5 bg-primary rounded-full animate-[soundWave_0.7s_ease-in-out_infinite_0.4s] h-7" />
+                    <span className="w-1.5 bg-primary rounded-full animate-[soundWave_1.1s_ease-in-out_infinite_0.1s] h-4" />
+                    <span className="w-1.5 bg-primary rounded-full animate-[soundWave_0.9s_ease-in-out_infinite_0.3s] h-6" />
+                  </div>
+                  <p className="text-xs font-bold text-white tracking-wide">ভিডিও লোড হচ্ছে...</p>
+                </div>
+              )}
+              {isVideoLocked ? (
+                /* Locked State for Non-Enrolled User on Paid Lesson */
+                <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-radial from-surface to-background relative overflow-hidden">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-primary/10 border border-primary/30 flex items-center justify-center mb-5 text-primary shadow-lg shadow-primary/20">
+                    <Lock size={32} className="stroke-[2.2]" />
+                  </div>
+                  <h3 className="text-lg sm:text-2xl font-black text-foreground mb-2">
+                    এই ক্লাসটি লক করা আছে
+                  </h3>
+                  <p className="text-xs sm:text-sm text-foreground/70 max-w-md leading-relaxed mb-6 font-medium">
+                    সম্পূর্ণ কোর্স এবং এই প্রিমিয়াম লেকচারটি দেখতে এখনই এনরোল করুন। আপনি পাবেন আজীবন অ্যাক্সেস ও ইন্সট্রাক্টর সাপোর্ট।
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link
+                      href={`/checkout/${course.id}`}
+                      className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary hover:brightness-110 text-black font-black text-sm shadow-lg shadow-primary/30 active:scale-95 transition-all"
+                    >
+                      <ShoppingBag size={16} className="stroke-[2.5]" />
+                      <span>কোর্স কিনুন (৳{course.price})</span>
+                    </Link>
+                    {currentPrevLesson && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const pIdx = activeIndex - 1;
+                          const isPrevFree = pIdx === 0 || !!currentPrevLesson.isFree;
+                          handleSelectLesson(currentPrevLesson, !isEnrolled && !isPrevFree);
+                        }}
+                        className="inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl bg-surface border border-border hover:bg-surface-raised text-foreground font-bold text-sm transition-colors cursor-pointer"
+                      >
+                        <ArrowLeft size={15} />
+                        <span>আগের ক্লাসে ফিরুন</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ) : activeLesson.videoUrl && activeLesson.videoUrl.trim() !== "#" && activeLesson.videoUrl.trim() !== "" ? (
+                /* Active Video Player */
                 <SecureVideoPlayer 
-                  url={currentLesson.videoUrl}
-                  lessonId={currentLesson.id}
-                  title={currentLesson.title}
+                  key={activeLesson.id}
+                  url={activeLesson.videoUrl}
+                  lessonId={activeLesson.id}
+                  title={activeLesson.title}
                   poster={course.thumbnail} 
                   email={userEmail} 
                   onEnded={markComplete} 
                 />
               ) : (
-                <div className="w-full h-full text-foreground/80 flex flex-col items-center justify-center py-16 bg-[#0E1208]/80 rounded-xl md:rounded-2xl border border-[#2A3319]">
-                  <div className="w-16 h-16 rounded-full bg-[#1A220F] border border-[#C8900A]/40 flex items-center justify-center mb-4 text-[#C8900A] shadow-[0_0_25px_rgba(200,144,10,0.2)]">
-                    <Play size={28} className="ml-1 fill-[#C8900A]/20 text-[#C8900A]" />
+                /* Placeholder when Video URL is empty */
+                <div className="w-full h-full text-foreground/80 flex flex-col items-center justify-center py-16 bg-surface/50 rounded-2xl border border-border">
+                  <div className="w-16 h-16 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center mb-4 text-primary shadow-md">
+                    <Play size={28} className="ml-1 fill-primary/20 text-primary" />
                   </div>
                   <p className="font-extrabold tracking-wide text-foreground text-sm sm:text-base">ভিডিও লিংক শীঘ্রই যুক্ত করা হবে</p>
                   <p className="text-xs text-foreground/60 mt-1 max-w-sm text-center px-4">এই লেসনের রেকর্ডেড ক্লাস ভিডিও খুব শীঘ্রই আপলোড করা হবে।</p>
                 </div>
               )}
             </div>
-            
-            <div className="p-6 md:p-8 lg:p-10 w-full pb-24">
-              <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-                <div>
-                  <div className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-bold text-primary uppercase tracking-widest mb-4">
-                    বর্তমান ক্লাস
-                  </div>
-                  <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">{currentLesson.title}</h2>
-                </div>
-                
-                <div className="flex items-center gap-3 shrink-0 mt-4 md:mt-0">
-                  {prevLesson && (
-                    <Link href={`/learn/${course.id}/${prevLesson.id}`} className="flex items-center justify-center w-12 h-12 bg-surface/5 border border-border rounded-xl hover:bg-surface/10 transition-all shadow-sm group">
-                      <ChevronLeft size={20} className="text-foreground/80 group-hover:text-foreground transition-colors" />
-                    </Link>
-                  )}
-                  {nextLesson ? (
-                    <Link href={`/learn/${course.id}/${nextLesson.id}`} className="flex items-center h-12 bg-primary hover:bg-primary-dark text-primary-foreground font-bold px-6 rounded-xl transition-all shadow-[0_0_15px_rgba(200,144,10,0.35)] hover:shadow-[0_0_20px_rgba(200,144,10,0.5)]">
-                      পরবর্তী ক্লাস
-                      <ChevronRight size={18} className="ml-2" />
-                    </Link>
-                  ) : (
-                    <Link href="/dashboard" className="flex items-center h-12 bg-primary hover:bg-primary-dark text-primary-foreground font-bold px-6 rounded-xl transition-all shadow-[0_0_15px_rgba(200,144,10,0.35)] hover:shadow-[0_0_20px_rgba(200,144,10,0.5)]">
-                      কোর্স শেষ করুন
-                      <CheckCircle2 size={18} className="ml-2" />
-                    </Link>
-                  )}
-                </div>
-              </div>
-              
-              <div className="prose prose-invert max-w-none text-foreground/80 font-medium leading-relaxed bg-surface/5 p-8 rounded-2xl border border-border backdrop-blur-md shadow-xl">
-                <p className="text-base md:text-lg">
-                  {currentLesson.description || "এই লেসনের বিস্তারিত বিবরণ এখনো যুক্ত করা হয়নি।"}
-                </p>
-                
-                {currentLesson.resources && (
-                  <>
-                    <h3 className="text-lg font-bold mt-10 mb-5 text-foreground flex items-center">
-                      <FileText size={20} className="mr-2 text-primary" />
-                      ডাউনলোডযোগ্য রিসোর্স
-                    </h3>
-                    <div className="flex flex-wrap gap-4">
-                      <a href={currentLesson.resources} target="_blank" rel="noopener noreferrer" className="flex items-center px-5 py-3 bg-surface/5 border border-border rounded-xl hover:bg-surface/10 transition-all text-sm font-bold text-foreground shadow-sm hover:shadow-md group">
-                        রিসোর্স ফাইল ডাউনলোড করুন
-                      </a>
-                    </div>
-                  </>
+
+            {/* Bottom Controls / Navigation */}
+            <div className="mt-4 sm:mt-6 flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-surface border border-border shadow-xs">
+              <div className="flex items-center gap-2">
+                {currentPrevLesson && (
+                  <button 
+                    type="button"
+                    onClick={() => {
+                      const pIdx = activeIndex - 1;
+                      const isPrevFree = pIdx === 0 || !!currentPrevLesson.isFree;
+                      handleSelectLesson(currentPrevLesson, !isEnrolled && !isPrevFree);
+                    }}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-surface-raised hover:bg-surface border border-border text-foreground font-bold text-xs sm:text-sm transition-all cursor-pointer"
+                  >
+                    <ChevronLeft size={16} />
+                    <span>আগের ক্লাস</span>
+                  </button>
+                )}
+                {currentNextLesson && (
+                  <button 
+                    type="button"
+                    onClick={() => {
+                      const nIdx = activeIndex + 1;
+                      const isNextFree = nIdx === 0 || !!currentNextLesson.isFree;
+                      handleSelectLesson(currentNextLesson, !isEnrolled && !isNextFree);
+                    }}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary hover:brightness-110 text-black font-black text-xs sm:text-sm shadow-sm transition-all cursor-pointer"
+                  >
+                    <span>পরবর্তী ক্লাস</span>
+                    <ChevronRight size={16} />
+                  </button>
                 )}
               </div>
+
+              {activeLesson.resources && (
+                <a 
+                  href={activeLesson.resources} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/30 text-xs sm:text-sm font-bold transition-all ml-auto"
+                >
+                  <FileText size={15} />
+                  <span>রিসোর্স ডাউনলোড</span>
+                  <ExternalLink size={12} className="opacity-70" />
+                </a>
+              )}
+            </div>
+
+            {/* Lesson Details / Description */}
+            <div className="mt-6 p-6 sm:p-8 rounded-2xl bg-surface border border-border shadow-xs space-y-4">
+              <h3 className="font-extrabold text-base sm:text-lg text-foreground flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-primary" />
+                <span>ক্লাসের বিস্তারিত বিবরণ</span>
+              </h3>
+              <p className="text-sm sm:text-base leading-relaxed text-foreground/80 font-medium whitespace-pre-line">
+                {activeLesson.description || "এই লেসনে শেখানো বিষয়সমূহ মনোযোগ দিয়ে সম্পূর্ণ ভিডিওটি দেখুন এবং নির্দেশিকা অনুযায়ী প্র্যাকটিস করুন।"}
+              </p>
+
+              {!isEnrolled && (
+                <div className="pt-4 border-t border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-primary/5 p-4 rounded-xl border-dashed">
+                  <div>
+                    <p className="font-black text-sm text-foreground">সম্পূর্ণ কোর্সটি ভালো লেগেছে?</p>
+                    <p className="text-xs text-foreground/70">একবার এনরোল করুন এবং পান আনলিমিটেড লাইফটাইম অ্যাক্সেস।</p>
+                  </div>
+                  <Link
+                    href={`/checkout/${course.id}`}
+                    className="px-5 py-2.5 rounded-xl bg-primary hover:brightness-110 text-black font-black text-xs sm:text-sm shadow-md transition-all shrink-0"
+                  >
+                    এখনই এনরোল করুন
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
-        </main>
 
-        {/* Curriculum Sidebar */}
-        <aside className={`
-          fixed md:static top-0 right-0 h-full w-full max-w-[85vw] sm:w-80 lg:w-96 bg-surface border-l border-border
-          transform transition-transform duration-300 z-30 overflow-y-auto flex flex-col custom-scrollbar shadow-2xl md:shadow-none
-          ${sidebarOpen ? "translate-x-0" : "translate-x-full md:translate-x-0"}
-        `}>
-          <div className="p-6 border-b border-border bg-surface/90 sticky top-0 z-10 backdrop-blur-xl">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-extrabold text-lg text-foreground">কোর্স কারিকুলাম</h3>
-              <button className="md:hidden text-foreground/80 hover:text-foreground" onClick={() => setSidebarOpen(false)}>
-                <X size={20} />
+          {/* ════════ Right: Playlist Curriculum (Reference SN 17) ════════ */}
+          <aside className="col-span-12 lg:col-span-4 lg:sticky lg:top-20 space-y-4">
+            
+            {/* Playlist Container Card */}
+            <div className="bg-surface rounded-2xl border border-border shadow-lg overflow-hidden flex flex-col">
+              
+              {/* Header: 'আর্কাইভ প্লেলিস্ট' + Total count badge (From SN 17 image) */}
+              <div className="p-4 sm:p-5 border-b border-border bg-surface-raised flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-4 rounded-full bg-red-500 shrink-0" />
+                  <h2 className="font-black text-base text-foreground tracking-tight">
+                    আর্কাইভ প্লেলিস্ট
+                  </h2>
+                </div>
+                <span className="px-3 py-1 rounded-full text-xs font-bold bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20">
+                  মোট {totalLessons} ক্লাস
+                </span>
+              </div>
+
+              {/* Course Progress Bar (for enrolled students) */}
+              {isEnrolled && (
+                <div className="px-5 py-3 border-b border-border/80 bg-background/50">
+                  <div className="flex items-center justify-between text-xs font-bold text-foreground/70 mb-1.5">
+                    <span>কোর্স প্রগ্রেস</span>
+                    <span>{progressPercentage}% ({completedIds.length}/{totalLessons})</span>
+                  </div>
+                  <div className="w-full bg-border rounded-full h-1.5 overflow-hidden">
+                    <div 
+                      className="bg-primary h-full rounded-full transition-all duration-500" 
+                      style={{ width: `${progressPercentage}%` }} 
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Module Accordion List */}
+              <Accordion 
+                type="single" 
+                collapsible 
+                value={openModule} 
+                onValueChange={setOpenModule} 
+                className="w-full max-h-[calc(100vh-14rem)] overflow-y-auto custom-scrollbar"
+              >
+                {course.modules.map((module: any, i: number) => {
+                  const moduleLessonCount = module.lessons?.length || 0;
+                  
+                  return (
+                    <AccordionItem 
+                      key={module.id} 
+                      value={`item-${i}`} 
+                      className="border-b border-border last:border-b-0"
+                    >
+                      <AccordionTrigger className="px-4 sm:px-5 py-3.5 hover:bg-surface-raised/70 transition-colors text-left group">
+                        <div className="flex items-center justify-between w-full pr-2">
+                          <div className="flex flex-col items-start gap-0.5 min-w-0 pr-2">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-primary">
+                              মডিউল {i + 1}
+                            </span>
+                            <span className="font-black text-xs sm:text-sm text-foreground line-clamp-1 leading-snug">
+                              {module.title}
+                            </span>
+                          </div>
+                          <span className="text-[11px] font-bold text-foreground/60 shrink-0 px-2 py-0.5 rounded-md bg-surface border border-border">
+                            {moduleLessonCount} ক্লাস
+                          </span>
+                        </div>
+                      </AccordionTrigger>
+
+                      <AccordionContent className="p-0 border-t border-border/60 bg-background/40">
+                        <div className="divide-y divide-border/40">
+                          {module.lessons.map((lesson: any, lIdx: number) => {
+                            const isCurrent = activeLesson.id === lesson.id;
+                            const isDone = completedIds.includes(lesson.id);
+                            const isLessonFree = (i === 0 && lIdx === 0) || !!lesson.isFree;
+                            const isLessonLocked = !isEnrolled && !isLessonFree;
+
+                            return (
+                              <button 
+                                key={lesson.id}
+                                type="button"
+                                onClick={() => handleSelectLesson(lesson, isLessonLocked)}
+                                className={`
+                                  w-full text-left flex items-center gap-3 px-4 sm:px-5 py-3 transition-all relative group cursor-pointer
+                                  ${isCurrent 
+                                    ? 'bg-red-500/10 border-l-4 border-red-500' 
+                                    : 'hover:bg-surface-raised border-l-4 border-transparent'}
+                                `}
+                              >
+                                {/* Left Status Icon */}
+                                <div className="shrink-0">
+                                  {isCurrent ? (
+                                    <div className="w-7 h-7 rounded-full bg-red-500 text-white flex items-center justify-center shadow-sm">
+                                      <Play size={13} fill="currentColor" className="ml-0.5" />
+                                    </div>
+                                  ) : isDone ? (
+                                    <div className="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center border border-emerald-500/30">
+                                      <CheckCircle2 size={15} />
+                                    </div>
+                                  ) : isLessonLocked ? (
+                                    <div className="w-7 h-7 rounded-full bg-surface border border-border text-foreground/40 flex items-center justify-center">
+                                      <Lock size={13} />
+                                    </div>
+                                  ) : (
+                                    <div className="w-7 h-7 rounded-full bg-red-500/10 text-red-500 border border-red-500/20 flex items-center justify-center group-hover:scale-105 transition-transform">
+                                      <PlayCircle size={15} />
+                                    </div>
+                                  )}
+                                </div>
+
+                                {/* Lesson Title & Duration */}
+                                <div className="min-w-0 flex-1">
+                                  <p className={`text-xs sm:text-sm line-clamp-2 leading-snug ${
+                                    isCurrent ? 'font-black text-red-600 dark:text-red-400' : 'font-bold text-foreground/90 group-hover:text-primary transition-colors'
+                                  }`}>
+                                    {lesson.title}
+                                  </p>
+                                  <div className="flex items-center gap-2 mt-1">
+                                    {lesson.duration && (
+                                      <span className="text-[10px] font-mono font-semibold text-foreground/60">
+                                        {lesson.duration}
+                                      </span>
+                                    )}
+                                    {isLessonFree && !isEnrolled && (
+                                      <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 px-1.5 py-0.2 rounded bg-emerald-500/15">
+                                        ফ্রি
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+
+                                {/* Right Badge: 'চলছে' for active, chevron for others */}
+                                <div className="shrink-0">
+                                  {isCurrent ? (
+                                    <span className="inline-flex items-center gap-1 text-[11px] font-black px-2 py-0.5 rounded-md bg-emerald-600 text-white shadow-xs animate-pulse">
+                                      <span className="w-1.5 h-1.5 rounded-full bg-white inline-block animate-ping" />
+                                      চলছে
+                                    </span>
+                                  ) : (
+                                    <ChevronRight size={14} className="text-foreground/40 group-hover:text-foreground/70 group-hover:translate-x-0.5 transition-all" />
+                                  )}
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  );
+                })}
+              </Accordion>
+            </div>
+          </aside>
+        </div>
+      </main>
+
+      {/* ── Mobile Drawer Backdrop & Drawer ── */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        >
+          <div 
+            className="absolute top-0 right-0 h-full w-85 max-w-[90vw] bg-surface border-l border-border flex flex-col shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-4 border-b border-border flex items-center justify-between bg-surface-raised">
+              <h3 className="font-black text-sm text-foreground">আর্কাইভ প্লেলিস্ট</h3>
+              <button 
+                onClick={() => setSidebarOpen(false)}
+                className="p-1.5 rounded-lg text-foreground/60 hover:text-foreground"
+              >
+                <X size={18} />
               </button>
             </div>
-            
-            <div className="bg-surface/5 p-4 rounded-xl border border-border">
-              <div className="text-xs font-bold text-foreground/80 flex items-center justify-between mb-3">
-                <span>{progressPercentage}% সম্পন্ন</span>
-                <span>{completedLessonIds.length} / {totalLessons}</span>
-              </div>
-              <div className="w-full bg-surface/10 rounded-full h-2 overflow-hidden">
-                <div className="bg-linear-h-2 rounded-full transition-all duration-1000 ease-out relative" style={{ width: `${progressPercentage}%` }}>
-                  <div className="absolute inset-0 bg-surface/20 w-full h-full animate-[shimmer_2s_infinite]"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <Accordion type="single" collapsible value={openModule} onValueChange={setOpenModule} className="w-full grow pb-6">
-            {course.modules.map((module: any, i: number) => (
-              <AccordionItem key={module.id} value={`item-${i}`} className="border-0 border-b border-border rounded-none bg-transparent">
-                <AccordionTrigger 
-                  className="font-bold text-sm hover:bg-surface/5 px-6 py-5 data-[state=open]:bg-surface/5 transition-colors"
-                >
-                  <div className="flex flex-col items-start gap-1.5 text-left">
-                    <span className="text-[10px] font-bold text-primary tracking-widest uppercase">মডিউল {i + 1}</span>
-                    <span className="text-left leading-snug text-[15px] font-extrabold text-foreground">{module.title}</span>
+            <div className="flex-1 overflow-y-auto">
+              {course.modules.map((m: any, mIdx: number) => (
+                <div key={m.id} className="border-b border-border/80">
+                  <div className="px-4 py-2.5 bg-background/50 font-bold text-xs text-primary">
+                    মডিউল {mIdx + 1}: {m.title}
                   </div>
-                </AccordionTrigger>
-                <AccordionContent className="bg-background/30 px-0 py-0 border-0">
-                  <div className="flex flex-col">
-                    {module.lessons.map((lesson: any) => {
-                      const isCurrent = currentLesson.id === lesson.id;
-                      const isDone = completedLessonIds.includes(lesson.id);
-                      
+                  <div className="divide-y divide-border/40">
+                    {m.lessons.map((l: any, lIdx: number) => {
+                      const isCurrent = l.id === activeLesson.id;
+                      const isLessonFree = (mIdx === 0 && lIdx === 0) || !!l.isFree;
+                      const isLocked = !isEnrolled && !isLessonFree;
                       return (
-                        <Link 
-                          href={`/learn/${course.id}/${lesson.id}`}
-                          key={lesson.id} 
-                          className={`
-                            flex items-center gap-4 p-4 pl-6 border-l-2 cursor-pointer hover:bg-surface/5 transition-colors relative
-                            ${isCurrent ? 'border-primary bg-primary/5' : 'border-transparent'}
-                          `}
+                        <button
+                          key={l.id}
+                          type="button"
+                          onClick={() => {
+                            handleSelectLesson(l, isLocked);
+                            setSidebarOpen(false);
+                          }}
+                          className={`w-full text-left flex items-center justify-between p-3.5 text-xs font-bold cursor-pointer ${
+                            isCurrent ? 'bg-red-500/10 text-red-500' : 'text-foreground/80 hover:bg-surface-raised'
+                          }`}
                         >
-                          {isDone ? (
-                            <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0 border border-primary/30">
-                              <CheckCircle2 size={14} className="text-primary" />
-                            </div>
-                          ) : (
-                            <div className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 ${isCurrent ? 'border-primary/50 bg-primary/10' : 'border-border bg-surface/5'}`}>
-                              <Play size={10} className={isCurrent ? 'text-primary ml-0.5' : 'text-foreground/80 ml-0.5'} fill="currentColor" />
-                            </div>
-                          )}
-                          
-                          <div className="flex flex-col pr-2">
-                            <span className={`text-sm line-clamp-2 leading-snug ${isCurrent ? 'font-extrabold text-foreground' : 'text-foreground/80 font-bold'}`}>
-                              {lesson.title}
+                          <span className="line-clamp-2 mr-2">{l.title}</span>
+                          {isCurrent ? (
+                            <span className="text-[10px] px-2 py-0.5 bg-emerald-600 text-white rounded font-bold shrink-0">
+                              চলছে
                             </span>
-                            {lesson.duration && (
-                              <span className="text-[11px] text-foreground/80 mt-1.5 font-mono bg-surface/10 w-fit px-2 py-0.5 rounded-md font-bold">{lesson.duration}</span>
-                            )}
-                          </div>
-                        </Link>
+                          ) : (
+                            <ChevronRight size={14} className="text-foreground/40 shrink-0" />
+                          )}
+                        </button>
                       );
                     })}
                   </div>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </aside>
-
-        {/* Mobile Sidebar Overlay */}
-        {sidebarOpen && (
-          <div 
-            className="absolute inset-0 bg-background/20 backdrop-blur-sm z-20 md:hidden"
-            onClick={() => setSidebarOpen(false)}
-          ></div>
-        )}
-      </div>
-      
-      <style dangerouslySetInnerHTML={{__html: `
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
-        
-        @keyframes shimmer {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-      `}} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

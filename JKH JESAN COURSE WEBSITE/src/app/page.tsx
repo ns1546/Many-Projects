@@ -8,6 +8,9 @@ import {
 import { prisma as db } from "@/lib/prisma";
 import { getCachedHomepageData } from "@/lib/cache";
 import HeroBannerSlider from "@/components/HeroBannerSlider";
+import AnimatedStatsCounter from "@/components/home/AnimatedStatsCounter";
+import TestimonialsSlider from "@/components/home/TestimonialsSlider";
+import HomeFAQ from "@/components/home/HomeFAQ";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -20,34 +23,10 @@ export const metadata: Metadata = {
   }
 };
 
-const testimonials = [
-  {
-    name: "রাফি আহমেদ",
-    role: "Independent Artist",
-    text: "ভোকাল মিক্সিং মডিউলটা আমার সবচেয়ে বেশি কাজে লেগেছে। এই কোর্সের EQ টেকনিকগুলো ব্যবহার করে এখন একদম রেডিও-স্ট্যান্ডার্ড সাউন্ড পাচ্ছি।",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rafi&backgroundColor=e8d5b7",
-    rating: 5,
-  },
-  {
-    name: "সুমাইয়া বেগম",
-    role: "Music Producer",
-    text: "Ableton Live-এর ওয়ার্কফ্লো নিয়ে আমার অনেক কনফিউশন ছিল। এই কোর্সে এত গোছানোভাবে প্রতিটি টুলের ব্যবহার দেখানো হয়েছে।",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sumaiya&backgroundColor=c5ddb5",
-    rating: 5,
-  },
-  {
-    name: "তানভীর হাসান",
-    role: "Sound Designer",
-    text: "মাস্টারিং চেইনের যে সিক্রেটগুলো ভাই শেয়ার করেছেন, সেগুলো সত্যিই প্রিমিয়াম। কোর্সটা শেষ করে আমার ২টা ট্র্যাক অলরেডি রিলিজ করেছি।",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Tanvir&backgroundColor=b7d0e8",
-    rating: 5,
-  },
-];
-
 const whyItems = [
   { Icon: IconTargetArrow, title: "বিশেষজ্ঞ ইন্সট্রাক্টর",   desc: "ইন্ডাস্ট্রি প্রফেশনালদের কাছ থেকে শিখুন।" },
   { Icon: IconDeviceLaptop, title: "যেকোনো ডিভাইসে",         desc: "মোবাইল, ট্যাবলেট বা পিসি — যেকোনো সময়।" },
-  { Icon: IconAward,        title: "স্বীকৃত সার্টিফিকেট",     desc: "কোর্স শেষে অফিসিয়াল সার্টিফিকেট পান।" },
+  { Icon: IconHeadphones,   title: "রিয়েল প্রজেক্ট ফাইলস",     desc: "প্রফেশনাল কমার্শিয়াল ট্র্যাক ও মাল্টিট্র্যাক স্টেম।" },
   { Icon: IconUsers,        title: "কমিউনিটি সাপোর্ট",        desc: "সমমনা শিক্ষার্থীদের সাথে এগিয়ে যান।" },
   { Icon: IconBolt,         title: "লাইফটাইম অ্যাক্সেস",      desc: "একবার কিনুন, চিরকাল অ্যাক্সেস পান।" },
   { Icon: IconShieldCheck,  title: "১০০% প্র্যাকটিক্যাল শিক্ষা",   desc: "বাস্তব মিউজিক প্রজেক্ট ভিত্তিক কোর্স।" },
@@ -57,7 +36,6 @@ const instructorFeatures = [
   { Icon: IconHeadphones, title: "প্রফেশনাল DAW শিক্ষা",  desc: "FL Studio ও Ableton Live-এ শূন্য থেকে দক্ষতা" },
   { Icon: IconAdjustments,    title: "মিক্সিং ও মাস্টারিং",  desc: "রেডিও-রেডি সাউন্ডের প্রফেশনাল টেকনিক" },
   { Icon: IconMicrophone, title: "ভোকাল প্রোডাকশন",      desc: "রেকর্ডিং থেকে ফাইনাল প্রসেসিং পর্যন্ত" },
-  { Icon: IconAward,      title: "ভেরিফাইড সার্টিফিকেট", desc: "প্রতিটি কোর্স শেষে অফিসিয়াল সনদ" },
 ];
 
 export const revalidate = 60;
@@ -67,9 +45,9 @@ export const revalidate = 60;
    ══════════════════════════════════════════════════════════════ */
 export default async function Home() {
   let stats = {
-    students: 500,
-    courses: 10,
-    lessons: 100,
+    students: 150,
+    courses: 3,
+    lessons: 45,
     rating: 4.9
   };
   let courses: any[] = [];
@@ -107,29 +85,34 @@ export default async function Home() {
       {/* ════════════════════════════════════════════════════
           COURSES — Card grid
           ════════════════════════════════════════════════════ */}
-      <section className="section-lg" style={{ background: "var(--cream-200)" }}>
+      <section id="courses" className="section-lg scroll-mt-20" style={{ background: "var(--cream-200)" }}>
         <div className="container-max">
 
-          {/* Section header — NO eyebrow (eyebrow was on hero) */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+          {/* Section header */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-6 sm:mb-10 lg:mb-14">
             <div>
               <h2 style={{ color: "var(--ink-900)" }}>
                 জনপ্রিয় <span style={{ color: "var(--primary)" }}>কোর্সসমূহ</span>
               </h2>
-              <p className="mt-3 text-base" style={{ color: "var(--foreground-muted)", maxWidth: "44ch" }}>
+              <p className="mt-2 sm:mt-3 text-xs sm:text-base font-medium" style={{ color: "var(--foreground-muted)", maxWidth: "44ch" }}>
                 প্রফেশনাল ইন্সট্রাক্টরের হাতে-কলমে শিক্ষায় সংগীতে দক্ষতা অর্জন করুন।
               </p>
             </div>
-            <Link href="/courses"
-              className="inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:text-primary-dark transition-colors shrink-0 group">
+            <Link href="/courses" className="btn-outline self-start md:self-auto text-xs sm:text-sm py-2 px-3.5 sm:py-2.5 sm:px-4">
               সব কোর্স দেখুন
-              <IconArrowUpRight size={16} strokeWidth={2} className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              <IconArrowUpRight size={15} strokeWidth={2} />
             </Link>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Course cards grid — Pro, compact responsive sizing for all phones & tablets */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {courses.length > 0 ? courses.map((course: any) => {
-              const lessonCount = course.modules?.reduce((a: number, m: any) => a + (m.lessons?.length || 0), 0) || 0;
+              const totalLessons = course.modules?.reduce((acc: number, m: any) => acc + (m.lessons?.length || 0), 0) || 0;
+              const hasDiscount = course.discountPrice && course.discountPrice < course.price;
+              const discountPercent = hasDiscount
+                ? Math.round(((course.price - course.discountPrice) / course.price) * 100)
+                : 0;
+
               return (
                 <div key={course.id} className="card group flex flex-col hover:shadow-xl hover:border-primary/60 transition-all duration-300 relative">
                   <Link href={`/courses/${course.slug}#purchase`} className="absolute inset-0 z-0" aria-label={course.title} />
@@ -137,93 +120,109 @@ export default async function Home() {
                   {/* Thumbnail */}
                   <Link
                     href={`/courses/${course.slug}#purchase`}
-                    className="relative aspect-video overflow-hidden block"
-                    style={{ borderRadius: "1.25rem 1.25rem 0 0" }}
+                    className="relative aspect-video overflow-hidden block bg-zinc-950"
+                    style={{ borderRadius: "1rem 1rem 0 0" }}
                     title="কোর্স প্রিভিউ ও পারচেজ করুন"
                   >
+                    {/* Ambient backdrop */}
+                    <div
+                      className="absolute inset-0 bg-cover bg-center blur-md opacity-40 scale-110"
+                      style={{
+                        backgroundImage: `url(${course.thumbnail || "/images/vocal-processing-course.jpg"})`
+                      }}
+                    />
+
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={course.thumbnail || "/images/vocal-processing-course.jpg"}
                       alt={course.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="w-full h-full object-contain relative z-10 transition-transform duration-500 group-hover:scale-105"
                     />
-                    {/* Warm overlay */}
-                    <div className="absolute inset-0 opacity-20"
-                      style={{ background: "linear-gradient(135deg, var(--ink-900) 0%, transparent 60%)" }} />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-20 pointer-events-none" />
 
-                    {/* Tag */}
-                    <div className="absolute top-3 left-3">
-                      <span className="badge badge-gold text-[10px]">মিউজিক</span>
+                    {/* Level badge */}
+                    <div className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 z-30 pointer-events-none">
+                      <span className="badge badge-accent text-[10px] sm:text-xs py-0.5 px-2">
+                        {course.level === "BEGINNER" ? "বিগিনার" : course.level === "INTERMEDIATE" ? "মিডিয়াম" : "অ্যাডভান্সড"}
+                      </span>
                     </div>
 
-                    {/* Rating */}
-                    <div className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold"
-                      style={{ background: "rgba(242, 237, 228, 0.92)", backdropFilter: "blur(12px)", color: "var(--ink-900)", border: "1px solid var(--border)" }}>
-                      <IconStar size={10} fill="#C8900A" style={{ color: "#C8900A" }} />
-                      {course.rating || "4.9"}
-                    </div>
-
-                    {/* Play button hover */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                      <div className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
-                        style={{ background: "var(--primary)", boxShadow: "var(--shadow-gold)" }}>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
-                          style={{ color: "var(--primary-foreground)", marginLeft: "2px" }}>
-                          <polygon points="5,3 19,12 5,21" />
-                        </svg>
+                    {/* Discount badge */}
+                    {hasDiscount && (
+                      <div className="absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 z-30 pointer-events-none">
+                        <span className="badge bg-red-600 text-white font-bold text-[10px] sm:text-xs py-0.5 px-2 shadow-sm">
+                          {discountPercent}% ছাড়
+                        </span>
                       </div>
-                    </div>
+                    )}
                   </Link>
 
-                  {/* Content */}
-                  <div className="p-5 flex flex-col grow" style={{ background: "var(--surface-raised)" }}>
-                    <Link href={`/courses/${course.slug}`}>
-                      <h3 className="font-bold text-base leading-snug mb-2 hover:text-primary transition-colors duration-200 line-clamp-2"
-                        style={{ color: "var(--ink-900)" }}>
-                        {course.title}
-                      </h3>
-                    </Link>
-                    <p className="text-sm leading-relaxed line-clamp-2 mb-5"
-                      style={{ color: "var(--foreground-muted)" }}>
-                      {course.description || "প্রফেশনাল মিউজিক প্রোডাকশনের সম্পূর্ণ গাইড।"}
+                  {/* Body — Tight padding on mobile */}
+                  <div className="p-3.5 sm:p-5 lg:p-6 flex flex-col grow">
+                    {/* Meta strip */}
+                    <div className="flex items-center gap-2 sm:gap-3 text-[11px] sm:text-xs mb-2 sm:mb-2.5" style={{ color: "var(--foreground-muted)" }}>
+                      <span className="flex items-center gap-1">
+                        <IconBook size={12} strokeWidth={2} /> {totalLessons} লেসন
+                      </span>
+                      {course.duration && (
+                        <>
+                          <span>•</span>
+                          <span>{course.duration}</span>
+                        </>
+                      )}
+                      <span>•</span>
+                      <span className="flex items-center gap-1 font-semibold text-primary truncate">
+                        <IconHeadphones size={12} strokeWidth={2} /> প্রজেক্ট ফাইলস
+                      </span>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="font-bold text-sm sm:text-base lg:text-lg mb-1 sm:mb-1.5 group-hover:text-primary transition-colors line-clamp-2"
+                      style={{ color: "var(--ink-900)" }}>
+                      {course.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="text-xs sm:text-sm mb-3 sm:mb-4 grow line-clamp-2" style={{ color: "var(--foreground-muted)" }}>
+                      {course.description}
                     </p>
 
-                    <div className="mt-auto">
-                      <div className="flex items-center gap-4 text-xs font-semibold mb-4 pb-4"
-                        style={{ color: "var(--foreground-muted)", borderBottom: "1px solid var(--border)" }}>
-                        <span className="flex items-center gap-1.5">
-                          <IconBook size={11} strokeWidth={2} /> {lessonCount} লেসন
-                        </span>
-                        <span className="flex items-center gap-1.5">
-                          <IconBolt size={11} strokeWidth={2} /> লাইফটাইম
-                        </span>
-                        <span className="flex items-center gap-1.5">
-                          <IconAward size={11} strokeWidth={2} /> সার্টিফিকেট
-                        </span>
+                    {/* Instructor */}
+                    <div className="flex items-center gap-2 pb-2.5 mb-2.5 sm:pb-3.5 sm:mb-3.5 border-b border-border">
+                      <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-primary/20 flex items-center justify-center text-[11px] sm:text-xs font-bold text-primary">
+                        {(course.instructor?.name || "J")[0]}
                       </div>
-                      <div className="flex items-center justify-between gap-2 pt-1">
-                        <div>
-                          <span className="text-[11px] block font-bold leading-none mb-1" style={{ color: "var(--foreground-muted)" }}>কোর্স ফি</span>
-                          <span className="text-xl font-black" style={{ color: "var(--ink-900)", letterSpacing: "-0.04em" }}>৳{course.price}</span>
-                        </div>
-                        <div className="flex items-center gap-2 relative z-10">
-                          <Link
-                            href={`/courses/${course.slug}`}
-                            className="text-xs font-bold px-3 py-2 rounded-xl transition-all duration-200 hover:bg-surface hover:text-foreground"
-                            style={{ background: "var(--surface)", color: "var(--foreground-muted)", border: "1px solid var(--border)" }}
-                          >
-                            বিস্তারিত
-                          </Link>
-                          <Link
-                            href={`/checkout/${course.id}`}
-                            className="btn-primary text-xs font-black px-4 py-2 rounded-xl flex items-center gap-1.5 shadow-sm hover:scale-[1.02] active:scale-95 transition-all"
-                            style={{ background: "var(--primary)", color: "var(--ink-900)" }}
-                          >
-                            <span>এখনই কিনুন</span>
-                            <IconArrowUpRight size={13} strokeWidth={2.5} />
-                          </Link>
-                        </div>
+                      <span className="text-xs font-medium" style={{ color: "var(--foreground-muted)" }}>
+                        {course.instructor?.name || "JKH Jesan"}
+                      </span>
+                    </div>
+
+                    {/* Footer: Price + Button */}
+                    <div className="flex items-center justify-between mt-auto">
+                      <div>
+                        {hasDiscount ? (
+                          <div className="flex items-baseline gap-1.5">
+                            <span className="text-lg sm:text-xl font-black text-primary">
+                              ৳{course.discountPrice?.toLocaleString()}
+                            </span>
+                            <span className="text-[11px] sm:text-xs line-through" style={{ color: "var(--foreground-muted)" }}>
+                              ৳{course.price?.toLocaleString()}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-lg sm:text-xl font-black text-primary">
+                            ৳{course.price?.toLocaleString()}
+                          </span>
+                        )}
                       </div>
+                      <Link
+                        href={`/courses/${course.slug}#purchase`}
+                        className="btn-primary text-xs py-1.5 px-3 sm:py-2 sm:px-3.5 relative z-10"
+                        title="কোর্স এনরোল ও পেমেন্ট করুন"
+                      >
+                        এনরোল করুন
+                        <IconArrowUpRight size={13} strokeWidth={2.5} />
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -243,9 +242,9 @@ export default async function Home() {
       </section>
 
       {/* ════════════════════════════════════════════════════
-          HERO — Asymmetric editorial split
+          HERO — Asymmetric editorial split (Top-aligned, pro layout)
           ════════════════════════════════════════════════════ */}
-      <section className="relative flex items-center overflow-hidden py-6 sm:py-12 lg:py-20"
+      <section className="relative overflow-hidden pt-6 pb-10 sm:pt-10 sm:pb-14 lg:pt-12 lg:pb-16 border-b border-border"
         style={{ background: "var(--cream-100)" }}>
 
         {/* Warm ambient background */}
@@ -260,39 +259,50 @@ export default async function Home() {
         </div>
 
         <div className="container-max relative z-10 w-full">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-0 items-center lg:min-h-[calc(100dvh-6rem)]">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
 
-            {/* Left: Editorial text block */}
-            <div className="py-4 sm:py-10 lg:py-24 lg:pr-16 flex flex-col justify-center">
+            {/* Left: Editorial text block (Top-aligned cleanly) */}
+            <div className="flex flex-col justify-start lg:pr-10 pt-1 sm:pt-2">
 
               {/* Eyebrow */}
-              <div className="eyebrow mb-4 sm:mb-6">Music Production Academy</div>
+              <div className="eyebrow mb-3 sm:mb-4">Music Production Academy</div>
 
               {/* Main headline */}
-              <h1 className="mb-4 sm:mb-6"
-                style={{ fontSize: "clamp(1.9rem, 5.5vw, 4.2rem)", fontWeight: 900, letterSpacing: "-0.038em", lineHeight: 1.1, color: "var(--ink-900)" }}>
+              <h1 className="mb-4 sm:mb-5"
+                style={{ fontSize: "clamp(1.75rem, 4.2vw, 3rem)", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1.15, color: "var(--ink-900)" }}>
                 সংগীতকে<br />
                 <span style={{ color: "var(--primary)" }}>পেশায়</span> পরিণত করুন
               </h1>
 
-              <p className="mb-6 sm:mb-10 text-sm sm:text-base leading-relaxed sm:leading-[1.85]" style={{ color: "var(--foreground-muted)", maxWidth: "38ch" }}>
-                EvoRise Media-তে আমাদের চিফ মেন্টর JKH Jesan-এর সাথে মিক্সিং, মাস্টারিং এবং সাউন্ড ডিজাইন শিখুন একদম শূন্য থেকে।
-              </p>
+              {/* Human-written, detailed professional copy */}
+              <div className="space-y-3 mb-6 sm:mb-8 max-w-xl">
+                <p className="text-sm sm:text-base leading-relaxed text-foreground/85 font-medium">
+                  শুধুমাত্র বিচ্ছিন্ন ইউটিউব ভিডিও দেখে প্রফেশনাল মিউজিক প্রোডাকশন আয়ত্ত করা সম্ভব নয়। EvoRise Media-তে আমাদের চিফ মেন্টর <strong>JKH Jesan</strong>-এর বাস্তব কমার্শিয়াল স্টুডিও অভিজ্ঞতার আলোকে শিখুন পূর্ণাঙ্গ অডিও সিগন্যাল চেইন, প্রিসিশন ভোকাল টিউনিং, অ্যানালগ স্যাচুরেশন এবং রেডিও-রেডি মাস্টারিং।
+                </p>
+                <p className="text-xs sm:text-sm leading-relaxed text-foreground/70 font-normal">
+                  বেডরুম থেকে আন্তর্জাতিক ডিজিটাল প্ল্যাটফর্ম—প্রতিটি গানে কীভাবে স্পটিফাই ও অ্যাপল মিউজিকের -14 LUFS ইন্ডাস্ট্রি স্ট্যান্ডার্ড ও ট্রু-পিক হেডরুম বজায় রেখে বাণিজ্যিক লাউডনেস তৈরি করবেন, তা শিখুন সম্পূর্ণ প্র্যাকটিক্যাল বাংলা কারিকুলামে।
+                </p>
+              </div>
 
-              {/* CTAs */}
-              <div className="flex flex-row gap-2.5 sm:gap-3 mb-6 sm:mb-12">
-                <Link href="/courses" className="btn-primary flex-1 sm:flex-none justify-center text-xs sm:text-sm py-2.5 sm:py-3.5 px-4 sm:px-6">
+              {/* CTAs with dedicated 'বিস্তারিত জানুন' button */}
+              <div className="flex flex-row gap-2.5 sm:gap-3 mb-6 sm:mb-8">
+                <a href="#courses" className="btn-primary flex-1 sm:flex-none justify-center text-xs sm:text-sm py-2.5 sm:py-3.5 px-4 sm:px-6 cursor-pointer">
                   কোর্স দেখুন
                   <span className="w-5 sm:w-6 h-5 sm:h-6 rounded-full bg-primary-foreground/20 flex items-center justify-center">
                     <IconArrowUpRight size={12} strokeWidth={2.5} />
                   </span>
-                </Link>
-                <Link href="/about" className="btn-outline flex-1 sm:flex-none justify-center text-xs sm:text-sm py-2.5 sm:py-3.5 px-4 sm:px-6">
-                  আরও জানুন
+                </a>
+                <Link 
+                  href="/about" 
+                  className="btn-outline flex-1 sm:flex-none justify-center items-center gap-1.5 text-xs sm:text-sm py-2.5 sm:py-3.5 px-4 sm:px-6 group transition-all"
+                  title="একাডেমির পূর্ণাঙ্গ বিবরণ ও রোডম্যাপ দেখুন"
+                >
+                  <span>বিস্তারিত জানুন</span>
+                  <IconArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Link>
               </div>
 
-              {/* Trust pills */}
+              {/* Trust pills — Practical skills, NO certificate */}
               <div className="flex flex-wrap gap-2 sm:gap-2.5">
                 {[
                   "প্র্যাকটিক্যাল প্রজেক্টস",
@@ -300,9 +310,9 @@ export default async function Home() {
                   "বাংলায় শিখুন",
                 ].map((t) => (
                   <span key={t}
-                    className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-semibold px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full"
-                    style={{ background: "var(--cream-300)", border: "1px solid var(--border-strong)", color: "var(--foreground-muted)" }}>
-                    <IconCircleCheck size={11} strokeWidth={2} className="text-primary" />
+                    className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold whitespace-nowrap px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full shadow-xs"
+                    style={{ background: "var(--cream-300)", border: "1px solid var(--border-strong)", color: "var(--ink-900)" }}>
+                    <IconCircleCheck size={14} strokeWidth={2.5} className="text-primary shrink-0" />
                     {t}
                   </span>
                 ))}
@@ -351,34 +361,13 @@ export default async function Home() {
       </section>
 
       {/* ════════════════════════════════════════════════════
-          STATS STRIP — warm ink background
+          STATS STRIP — warm ink background with animated counter (SN 11)
           ════════════════════════════════════════════════════ */}
       <div style={{ background: "var(--ink-900)", position: "relative", overflow: "hidden" }}>
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: "radial-gradient(ellipse 60% 80% at 50% 50%, rgba(200, 144, 10, 0.08) 0%, transparent 70%)" }} />
-        <div className="container-max relative z-10 py-10 sm:py-14">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-8 md:divide-x"
-            style={{ borderColor: "rgba(242, 237, 228, 0.08)" }}>
-            {[
-              { value: `${stats.students}+`, label: "সক্রিয় শিক্ষার্থী",  Icon: IconUsers },
-              { value: `${stats.lessons}+`,  label: "প্রিমিয়াম লেসন",      Icon: IconBook },
-              { value: "৪.৯/৫",             label: "গড় রেটিং",             Icon: IconStar },
-              { value: "লাইফটাইম",           label: "অ্যাক্সেস",             Icon: IconBolt },
-            ].map(({ value, label, Icon }, i) => (
-              <div key={i} className="flex items-center gap-3 sm:gap-4 p-3 sm:p-0 rounded-xl sm:rounded-none bg-white/[0.03] sm:bg-transparent border border-white/[0.06] sm:border-0 pl-3 md:pl-8 first:pl-0">
-                <div className="w-10 sm:w-11 h-10 sm:h-11 rounded-xl flex items-center justify-center shrink-0"
-                  style={{ background: "rgba(200, 144, 10, 0.12)", border: "1px solid rgba(200, 144, 10, 0.20)" }}>
-                  <Icon size={18} strokeWidth={1.75} className="text-primary" />
-                </div>
-                <div className="min-w-0">
-                  <p className="font-black text-lg sm:text-xl leading-none mb-1 truncate"
-                    style={{ color: "var(--cream-100)", letterSpacing: "-0.04em" }}>{value}</p>
-                  <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider truncate"
-                    style={{ color: "rgba(242, 237, 228, 0.55)" }}>{label}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="container-max relative z-10 py-6 sm:py-10 lg:py-14">
+          <AnimatedStatsCounter stats={stats} />
         </div>
       </div>
 
@@ -393,10 +382,10 @@ export default async function Home() {
             <div className="relative order-2 lg:order-1">
 
               {/* Decorative offset frame */}
-              <div className="absolute -inset-3 rounded-3xl pointer-events-none"
+              <div className="hidden sm:block absolute -inset-3 rounded-3xl pointer-events-none"
                 style={{ background: "var(--cream-300)", border: "1px solid var(--border)" }} />
 
-              <div className="relative rounded-2xl overflow-hidden"
+              <div className="relative rounded-2xl overflow-hidden instructor-image-frame"
                 style={{ aspectRatio: "4/5", maxWidth: "420px", margin: "0 auto", boxShadow: "var(--shadow-xl)" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -408,53 +397,53 @@ export default async function Home() {
                   style={{ background: "linear-gradient(to top, rgba(26, 31, 15, 0.85) 0%, rgba(26, 31, 15, 0.2) 45%, transparent 65%)" }} />
 
                 {/* Overlay badge */}
-                <div className="absolute bottom-5 left-5 right-5">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-3"
+                <div className="absolute bottom-4 left-4 right-4 sm:bottom-5 sm:left-5 sm:right-5">
+                  <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full mb-2 sm:mb-3"
                     style={{ background: "var(--primary)", boxShadow: "var(--shadow-gold)" }}>
-                    <IconAward size={12} strokeWidth={2} style={{ color: "var(--primary-foreground)" }} />
-                    <span className="text-xs font-bold" style={{ color: "var(--primary-foreground)" }}>চিফ মেন্টর · EvoRise Media</span>
+                    <IconHeadphones size={11} strokeWidth={2} style={{ color: "var(--primary-foreground)" }} />
+                    <span className="text-[11px] sm:text-xs font-bold" style={{ color: "var(--primary-foreground)" }}>চিফ মেন্টর · EvoRise Media</span>
                   </div>
-                  <h3 className="text-2xl font-black mb-1" style={{ color: "var(--cream-100)", letterSpacing: "-0.03em" }}>JKH Jesan</h3>
-                  <p className="text-xs font-medium" style={{ color: "rgba(242, 237, 228, 0.75)" }}>Lead Music Producer & Head Instructor</p>
+                  <h3 className="text-xl sm:text-2xl font-black mb-0.5 sm:mb-1" style={{ color: "var(--cream-100)", letterSpacing: "-0.03em" }}>JKH Jesan</h3>
+                  <p className="text-[11px] sm:text-xs font-medium" style={{ color: "rgba(242, 237, 228, 0.75)" }}>Lead Music Producer & Head Instructor</p>
                 </div>
               </div>
             </div>
 
             {/* Text column */}
-            <div className="order-1 lg:order-2 space-y-8">
+            <div className="order-1 lg:order-2 space-y-4 sm:space-y-6 lg:space-y-8">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.18em] mb-3 text-primary">
-                  EvoRise Media লিড মেন্টর
+                <p className="text-xs font-bold uppercase tracking-wider mb-2 sm:mb-3 text-primary">
+                  EVORISE MEDIA LEAD MENTOR
                 </p>
                 <h2 style={{ color: "var(--ink-900)" }}>
                   EvoRise Media-র<br />
                   <span style={{ color: "var(--primary)" }}>চিফ মিউজিক ইন্সট্রাক্টর</span>
                 </h2>
-                <p className="mt-5 text-base leading-[1.85]" style={{ color: "var(--foreground-muted)" }}>
-                  EvoRise Media-র সবচেয়ে অভিজ্ঞ ও বিশ্বস্ত প্রশিক্ষক JKH Jesan — যিনি সাধারণ কোনো টিউটর নন, বরং অডিও ইন্ডাস্ট্রির একজন রিয়েল-ওয়ার্ল্ড মিউজিক প্রডিউসার ও সাউন্ড ইঞ্জিনিয়ার। শত শত সফল শিক্ষার্থীকে তিনি FL Studio ও Ableton Live-এ কমার্শিয়াল-গ্রেড মিউজিক মেকিং শিখিয়েছেন।
+                <p className="mt-2.5 sm:mt-5 text-xs sm:text-base leading-relaxed" style={{ color: "var(--foreground-muted)" }}>
+                  EvoRise Media-র সবচেয়ে অভিজ্ঞ ও বিশ্বস্ত প্রশিক্ষক JKH Jesan — যিনি সাধারণ কোনো টিউটর নন, বরং অডিও ইন্ডাস্ট্রির একজন রিয়েল-ওয়ার্ল্ড মিউজিক প্রডিউসার ও সাউন্ড ইঞ্জিনিয়ার। শতাধিক সফল শিক্ষার্থীকে তিনি FL Studio ও Ableton Live-এ কমার্শিয়াল-গ্রেড মিউজিক মেকিং শিখিয়েছেন।
                 </p>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5 sm:space-y-3">
                 {instructorFeatures.map((f, i) => (
                   <div key={i}
-                    className="flex items-start gap-4 p-4 rounded-2xl transition-all duration-300 cursor-default group hover:border-[rgba(200,144,10,0.30)] hover:shadow-sm"
+                    className="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 cursor-default group hover:border-[rgba(200,144,10,0.30)] hover:shadow-sm"
                     style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300"
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center shrink-0 transition-all duration-300"
                       style={{ background: "var(--gold-100)", border: "1px solid var(--gold-200)" }}>
-                      <f.Icon size={18} strokeWidth={1.75} className="text-primary" />
+                      <f.Icon size={16} strokeWidth={1.75} className="text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-sm mb-0.5" style={{ color: "var(--ink-900)" }}>{f.title}</h3>
-                      <p className="text-xs leading-relaxed" style={{ color: "var(--foreground-muted)" }}>{f.desc}</p>
+                      <h3 className="font-bold text-xs sm:text-sm mb-0.5" style={{ color: "var(--ink-900)" }}>{f.title}</h3>
+                      <p className="text-[11px] sm:text-xs leading-relaxed" style={{ color: "var(--foreground-muted)" }}>{f.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <Link href="/about" className="btn-outline inline-flex">
+              <Link href="/about" className="btn-outline inline-flex text-xs sm:text-sm py-2 px-3.5 sm:py-2.5 sm:px-4">
                 আরও বিস্তারিত জানুন
-                <IconArrowUpRight size={16} strokeWidth={2} />
+                <IconArrowUpRight size={15} strokeWidth={2} />
               </Link>
             </div>
           </div>
@@ -469,28 +458,28 @@ export default async function Home() {
 
           <div className="grid lg:grid-cols-12 gap-5">
             {/* Full-width header cell */}
-            <div className="lg:col-span-5 feature-card flex flex-col justify-between"
+            <div className="lg:col-span-5 feature-card flex flex-col justify-center items-center text-center p-5 sm:p-8 lg:p-10"
               style={{ background: "var(--ink-900)" }}>
-              <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-8"
+              <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6"
                 style={{ background: "rgba(200, 144, 10, 0.15)", border: "1px solid rgba(200, 144, 10, 0.25)" }}>
                 <IconTargetArrow size={22} strokeWidth={1.75} className="text-primary" />
               </div>
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.18em] mb-4" style={{ color: "rgba(200, 144, 10, 0.70)" }}>
+              <div className="flex flex-col items-center text-center">
+                <p className="text-xs font-bold uppercase tracking-wider mb-3 text-primary">
                   কেন আমাদের বেছে নেবেন
                 </p>
-                <h2 className="text-3xl font-black leading-tight mb-4"
+                <h2 className="text-2xl sm:text-3xl font-black leading-tight mb-4"
                   style={{ color: "var(--cream-100)", letterSpacing: "-0.03em" }}>
                   একটি প্ল্যাটফর্ম,<br />
                   <span style={{ color: "var(--gold)" }}>অসীম সম্ভাবনা</span>
                 </h2>
-                <p className="text-sm leading-relaxed" style={{ color: "rgba(242, 237, 228, 0.55)" }}>
-                  শুধু কোর্স নয় — একটি সম্পূর্ণ লার্নিং ইকোসিস্টেম।
+                <p className="text-sm leading-relaxed max-w-sm" style={{ color: "rgba(242, 237, 228, 0.65)" }}>
+                  শুধু কোর্স নয় — একটি সম্পূর্ণ প্র্যাকটিক্যাল লার্নিং ইকোসিস্টেম।
                 </p>
               </div>
             </div>
 
-            {/* 2-column grid of feature cards — right side (2 cols on mobile for balanced density) */}
+            {/* 2-column grid of feature cards — right side */}
             <div className="lg:col-span-7 grid grid-cols-2 gap-3 sm:gap-5">
               {whyItems.map((item, i) => (
                 <div key={i} className="feature-card flex flex-col justify-between">
@@ -510,94 +499,64 @@ export default async function Home() {
       </section>
 
       {/* ════════════════════════════════════════════════════
-          TESTIMONIALS — Cards on warm background
+          TESTIMONIALS — Clean White Background & Auto-advancing reviews
           ════════════════════════════════════════════════════ */}
-      <section className="section-lg" style={{ background: "var(--cream-100)" }}>
+      <section className="py-8 sm:py-14 lg:py-20 bg-white dark:bg-background border-t border-border overflow-hidden">
         <div className="container-max">
 
-          <div className="text-center mb-14">
+          <div className="text-center mb-6 sm:mb-10 lg:mb-12">
             <h2 style={{ color: "var(--ink-900)" }}>
               শিক্ষার্থীরা <span style={{ color: "var(--primary)" }}>যা বলছেন</span>
             </h2>
-            <p className="mt-4 text-base" style={{ color: "var(--foreground-muted)" }}>
-              হাজারো শিক্ষার্থীর অভিজ্ঞতা
+            <p className="mt-2 text-xs sm:text-base font-medium" style={{ color: "var(--foreground-muted)" }}>
+              বাস্তব অভিজ্ঞতা • হোম স্টুডিও থেকে প্রফেশনাল মিউজিক রিলিজ
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((t, i) => (
-              <div key={i} className="feature-card flex flex-col">
-
-                {/* Quote icon */}
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-5"
-                  style={{ background: "var(--gold-100)", border: "1px solid var(--gold-200)" }}>
-                  <IconQuote size={16} strokeWidth={1.75} className="text-primary" />
-                </div>
-
-                {/* Stars */}
-                <div className="flex gap-1 mb-4">
-                  {[...Array(t.rating)].map((_, si) => (
-                    <IconStar key={si} size={13} fill="#C8900A" style={{ color: "#C8900A" }} />
-                  ))}
-                </div>
-
-                <p className="text-sm leading-[1.9] mb-6 grow"
-                  style={{ color: "var(--foreground-muted)" }}>
-                  &ldquo;{t.text}&rdquo;
-                </p>
-
-                <div className="flex items-center gap-3 pt-4"
-                  style={{ borderTop: "1px solid var(--border)" }}>
-                  <div className="w-10 h-10 rounded-full overflow-hidden shrink-0"
-                    style={{ border: "2px solid var(--border-strong)" }}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
-                  </div>
-                  <div>
-                    <p className="font-bold text-sm" style={{ color: "var(--ink-900)" }}>{t.name}</p>
-                    <p className="text-xs font-medium" style={{ color: "var(--foreground-muted)" }}>{t.role}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <TestimonialsSlider />
         </div>
       </section>
 
       {/* ════════════════════════════════════════════════════
-          FINAL CTA — Ink on cream with gold accent
+          FAQ — Highly Professional Music Production Accordion
           ════════════════════════════════════════════════════ */}
-      <section className="section-xl" style={{ background: "var(--cream-200)" }}>
+      <HomeFAQ />
+
+      {/* ════════════════════════════════════════════════════
+          FINAL CTA — Compact, Clean White Background
+          ════════════════════════════════════════════════════ */}
+      <section className="py-8 sm:py-12 lg:py-16 bg-white dark:bg-background border-t border-border">
         <div className="container-max">
-          <div className="text-center max-w-3xl mx-auto">
+          <div className="text-center max-w-2xl mx-auto">
 
-            <div className="eyebrow mb-6" style={{ justifyContent: "center" }}>আজই শুরু করুন</div>
+            <div className="inline-block text-xs font-bold uppercase tracking-wider text-primary mb-3">
+              আজই শুরু করুন
+            </div>
 
-            <h2 className="mb-6"
-              style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.5rem)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.1, color: "var(--ink-900)" }}>
-              আপনার মিউজিক জার্নি<br />
-              <span style={{ color: "var(--primary)" }}>শুরু হোক আজই</span>
+            <h2 className="mb-3.5 text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight"
+              style={{ color: "var(--ink-900)", letterSpacing: "-0.03em" }}>
+              আপনার মিউজিক জার্নি <span style={{ color: "var(--primary)" }}>শুরু হোক আজই</span>
             </h2>
 
-            <p className="text-base leading-[1.85] mb-10"
-              style={{ color: "var(--foreground-muted)", maxWidth: "44ch", margin: "0 auto 2.5rem" }}>
-              হাজারো শিক্ষার্থীর সাথে যোগ দিন এবং আপনার সংগীতের স্বপ্নকে বাস্তবে রূপ দিন।
+            <p className="text-sm sm:text-base leading-relaxed mb-6 font-medium"
+              style={{ color: "var(--foreground-muted)" }}>
+              ১৫০+ শিক্ষার্থীর সাথে যোগ দিন এবং আপনার সংগীতের স্বপ্নকে বাস্তবে রূপ দিন।
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <Link href="/register" className="btn-primary text-base">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center mb-5">
+              <Link href="/register" className="btn-primary text-xs sm:text-sm py-3 px-6">
                 ফ্রি একাউন্ট তৈরি করুন
-                <span className="w-6 h-6 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-                  <IconArrowUpRight size={13} strokeWidth={2.5} />
+                <span className="w-5 h-5 rounded-full bg-primary-foreground/20 flex items-center justify-center">
+                  <IconArrowUpRight size={12} strokeWidth={2.5} />
                 </span>
               </Link>
-              <Link href="/courses" className="btn-outline text-base">
+              <Link href="/courses" className="btn-outline text-xs sm:text-sm py-3 px-6">
                 কোর্স দেখুন
               </Link>
             </div>
 
-            <p className="text-xs font-medium" style={{ color: "var(--foreground-muted)" }}>
-              কোনো ক্রেডিট কার্ড প্রয়োজন নেই · লাইফটাইম অ্যাক্সেস ও সাপোর্ট
+            <p className="text-xs font-medium text-foreground/50">
+              কোনো ক্রেডিট কার্ড প্রয়োজন নেই · লাইফটাইম অ্যাক্সেস ও মেন্টর সাপোর্ট
             </p>
           </div>
         </div>

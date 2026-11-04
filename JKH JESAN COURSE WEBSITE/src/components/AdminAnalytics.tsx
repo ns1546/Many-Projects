@@ -28,17 +28,17 @@ export default function AdminAnalytics({ data }: { data: any[] }) {
               <stop offset="95%" stopColor="#C8900A" stopOpacity={0}/>
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(200,144,10,0.15)" vertical={false} />
           <XAxis 
             dataKey="name" 
-            stroke="rgba(255,255,255,0.5)" 
-            tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 12 }} 
+            stroke="rgba(248,244,236,0.30)" 
+            tick={{ fill: 'rgba(248,244,236,0.75)', fontSize: 12, fontWeight: 'bold' }} 
             axisLine={false} 
             tickLine={false} 
           />
           <YAxis 
-            stroke="rgba(255,255,255,0.5)" 
-            tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 12 }} 
+            stroke="rgba(248,244,236,0.30)" 
+            tick={{ fill: 'rgba(248,244,236,0.75)', fontSize: 12, fontWeight: 'bold' }} 
             axisLine={false} 
             tickLine={false} 
             tickFormatter={(value) => `৳${value}`}

@@ -9,7 +9,7 @@ interface WhatsAppSupportButtonProps {
 }
 
 export function WhatsAppSupportButton({
-  phoneNumber = "01754220135",
+  phoneNumber = "01607084155",
   defaultMessage = "Hello EvoRise Media, I need support regarding your courses.",
 }: WhatsAppSupportButtonProps) {
   const pathname = usePathname();
@@ -19,7 +19,7 @@ export function WhatsAppSupportButton({
     return null;
   }
 
-  const cleanNumber = (phoneNumber || "01754220135").replace(/[^0-9]/g, "").replace(/^88/, "");
+  const cleanNumber = (phoneNumber || "01607084155").replace(/[^0-9]/g, "").replace(/^88/, "");
   const whatsappUrl = `https://wa.me/88${cleanNumber}?text=${encodeURIComponent(defaultMessage)}`;
 
   return (

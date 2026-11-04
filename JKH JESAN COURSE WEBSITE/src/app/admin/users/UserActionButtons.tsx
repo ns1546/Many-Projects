@@ -29,6 +29,8 @@ export default function UserActionButtons({
   enrolledCourseIds?: string[];
 }) {
   const router = useRouter();
+  const [role, setRole] = useState(currentRole);
+  const [enrolledIds, setEnrolledIds] = useState<string[]>(enrolledCourseIds);
   const [roleLoading, setRoleLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [enrollLoading, setEnrollLoading] = useState(false);
@@ -36,10 +38,10 @@ export default function UserActionButtons({
   const [showEnrollModal, setShowEnrollModal] = useState(false);
   const [selectedCourseId, setSelectedCourseId] = useState<string>("");
 
-  const availableCourses = allCourses.filter((c) => !enrolledCourseIds.includes(c.id));
+  const availableCourses = allCourses.filter((c) => !enrolledIds.includes(c.id));
 
   const toggleRole = async () => {
-    const newRole = currentRole === "ADMIN" ? "STUDENT" : "ADMIN";
+    const newRole = role === "ADMIN" ? "STUDENT" : "ADMIN";
     setConfirm(null);
     setRoleLoading(true);
     try {
@@ -50,6 +52,7 @@ export default function UserActionButtons({
       });
       if (res.ok) {
         toast.success(`ভূমিকা পরিবর্তিত হয়েছে: ${newRole}`);
+        setRole(newRole);
         router.refresh();
       } else {
         toast.error("ইউজারের ভূমিকা আপডেট করতে ব্যর্থ হয়েছে।");
@@ -101,6 +104,7 @@ export default function UserActionButtons({
       if (res.ok) {
         toast.success(data.message || "কোর্সে সফলভাবে এনরোল করা হয়েছে!");
         setShowEnrollModal(false);
+        setEnrolledIds((prev) => [...prev, selectedCourseId]);
         setSelectedCourseId("");
         router.refresh();
       } else {
@@ -160,7 +164,7 @@ export default function UserActionButtons({
           variant="outline"
           size="sm"
           className={`h-8 text-xs font-bold border-border ${
-            currentRole === "ADMIN"
+            role === "ADMIN"
               ? "text-orange-400 hover:text-orange-300 hover:bg-orange-500/10"
               : "text-purple-400 hover:text-purple-300 hover:bg-purple-500/10"
           }`}
@@ -169,12 +173,12 @@ export default function UserActionButtons({
         >
           {roleLoading ? (
             <Loader2 size={14} className="mr-1 animate-spin" />
-          ) : currentRole === "ADMIN" ? (
+          ) : role === "ADMIN" ? (
             <ShieldAlert size={14} className="mr-1" />
           ) : (
             <ShieldCheck size={14} className="mr-1" />
           )}
-          {currentRole === "ADMIN" ? "Demote" : "Make Admin"}
+          {role === "ADMIN" ? "Demote" : "Make Admin"}
         </Button>
 
         {/* Delete */}

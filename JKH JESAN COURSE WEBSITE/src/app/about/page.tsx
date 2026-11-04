@@ -1,249 +1,372 @@
-import Link from "next/link";
-import {
-  Award, BookOpen, Globe, Headphones, Mic,
-  Music, Play, Star, Target, TrendingUp, Users, ArrowRight
-} from "lucide-react";
-
-export const metadata = {
-  title: "EvoRise Media সম্পর্কে | ক্রিয়েটিভ লার্নিং ও মিউজিক একাডেমি",
-  description:
-    "EvoRise Media সম্পর্কে জানুন — যেখানে চিফ মিউজিক মেন্টর JKH Jesan-এর নেতৃত্বে তৈরি হচ্ছে আগামীর মিউজিক প্রডিউসার ও সাউন্ড ইঞ্জিনিয়াররা।",
-};
-
-const timeline = [
-  { year: "২০১৮", event: "প্রফেশনাল মিউজিক প্রোডাকশন শুরু এবং প্রথম প্রফেশনাল স্টুডিও সেটআপ।" },
-  { year: "২০১৯", event: "দেশীয় ও আন্তর্জাতিক শিল্পীদের সাথে কাজ এবং ৩০+ কমার্শিয়াল ট্র্যাক মিক্স ও মাস্টার।" },
-  { year: "২০২০", event: "আন্তর্জাতিক সাউন্ড ডিজাইন প্রজেক্টে বিশেষজ্ঞতা অর্জন।" },
-  { year: "২০২১", event: "EvoRise Media একাডেমি প্রতিষ্ঠা। JKH Jesan চিফ মিউজিক মেন্টর হিসেবে দায়িত্ব গ্রহণ।" },
-  { year: "২০২৩", event: "৫০০+ শিক্ষার্থী সফলভাবে প্রশিক্ষণ সম্পন্ন করেন। একাডেমি সম্পূর্ণ ডিজিটাল প্ল্যাটফর্মে রূপান্তর।" },
-  { year: "২০২৫", event: "বাংলাদেশের শীর্ষস্থানীয় ক্রিয়েটিভ মিডিয়া প্ল্যাটফর্ম হিসেবে স্বীকৃতি ও একাধিক প্রিমিয়াম কোর্স।" },
-];
-
-const skills = [
-  { label: "FL Studio",  pct: 98 },
-  { label: "Ableton Live", pct: 92 },
-  { label: "Pro Tools", pct: 85 },
-  { label: "Mixing",    pct: 97 },
-  { label: "Mastering", pct: 94 },
-  { label: "Sound Design", pct: 90 },
-];
-
-const awards = [
-  { icon: Award,    text: "বাংলাদেশ মিউজিক প্রোডাকশন অ্যাওয়ার্ড ২০২২" },
-  { icon: Star,     text: "বেস্ট অনলাইন ইন্সট্রাক্টর — ৪.৯/৫ রেটিং" },
-  { icon: Users,    text: "৫০০+ সফল শিক্ষার্থী" },
-  { icon: BookOpen, text: "১০+ প্রিমিয়াম কোর্স প্রকাশিত" },
-];
-
-export default function AboutPage() {
-  return (
-    <div className="min-h-screen bg-background">
-
-      {/* ══════════════════════════════════════════════════════
-          HERO — Dark header
-          ══════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden pt-28 pb-20 bg-background">
-        <div className="absolute inset-0">
-          <div className="absolute top-0 right-0 w-96 h-96 opacity-15 bg-primary blur-3xl rounded-full" />
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 text-center">
-          <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/25 px-4 py-2 rounded-full text-xs font-bold text-primary mb-6 shadow-xs">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            আমাদের সম্পর্কে
-          </div>
-          <h1 className="text-foreground mb-5" style={{ letterSpacing: "-0.03em" }}>
-            EvoRise Media <span className="text-primary">Academy</span>
-          </h1>
-          <p className="text-foreground/80 text-lg max-w-2xl mx-auto leading-relaxed">
-            বাংলাদেশের শীর্ষস্থানীয় ক্রিয়েটিভ মিডিয়া ও মিউজিক একাডেমি। আমাদের লিড মেন্টর JKH Jesan-এর নির্দেশনায় এখানে তৈরি হয় আন্তর্জাতিক মানের মিউজিক ও সাউন্ড ক্রাফট।
-          </p>
-
-          {/* Sister concern official badge */}
-          <div className="mt-8 inline-flex items-center gap-2.5 px-5 py-2.5 rounded-2xl bg-surface/80 border border-primary/30 backdrop-blur-md shadow-md">
-            <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
-            <span className="text-xs sm:text-sm font-semibold text-foreground/90">
-              EvoRise Media হলো{" "}
-              <a
-                href="https://www.facebook.com/EvoRiseSolutions/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary font-bold hover:underline inline-flex items-center gap-1"
-              >
-                EvoRise Solutions
-                <ArrowRight size={13} className="-rotate-45" />
-              </a>
-              -এর একটি আধুনিক ক্রিয়েটিভ মিডিয়া ও একাডেমি প্রতিষ্ঠান।
-            </span>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════
-          MISSION & STORY
-          ══════════════════════════════════════════════════════ */}
-      <section className="py-24 bg-surface relative border-t border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-
-            {/* Instructor card */}
-            <div className="relative">
-              <div className="relative aspect-4/5 max-w-sm mx-auto rounded-2xl overflow-hidden shadow-2xl border border-border">
-                {/* Instructor photo — Replace URL with your actual professional studio portrait */}
-                <div className="h-full bg-cover bg-center bg-background"
-                  style={{ backgroundImage: "url('/images/mentor-jjesan-accordion.jpg')" }}>
-                  <div className="absolute inset-0 bg-background/60" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <div className="inline-flex items-center gap-2 bg-primary text-foreground px-3 py-1.5 rounded-full text-xs font-bold mb-3 shadow-lg">
-                      <Award size={12} /> চিফ মেন্টর · EvoRise Media
-                    </div>
-                    <h3 className="font-black text-2xl text-foreground">JKH Jesan</h3>
-                    <p className="text-foreground/80 text-sm font-medium mt-1">Lead Music Production Instructor & Sound Designer</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Decorative background */}
-              <div className="absolute -inset-4 -z-10 rounded-3xl bg-surface/5 border border-border backdrop-blur-3xl" />
-            </div>
-
-            {/* Text */}
-            <div className="space-y-7">
-              <div>
-                <div className="eyebrow border-border! text-foreground/80! bg-surface/5!">আমাদের মিশন ও ইন্সট্রাক্টর</div>
-                <h2 className="text-foreground tracking-tight leading-tight mb-4">
-                  দক্ষতার বিকাশ,{" "}
-                  <span className="text-primary">আন্তর্জাতিক মানের ক্রিয়েটিভিটি</span>
-                </h2>
-                <p className="text-foreground/80 leading-relaxed mb-4 text-base">
-                  EvoRise Media-র লক্ষ্য হলো বাংলাদেশের প্রতিটি সৃজনশীল তরুণকে বিশ্বমানের অডিও ও মিডিয়া স্কিলে পারদর্শী করে তোলা। আর এই লক্ষ্যের কেন্দ্রবিন্দুতে রয়েছেন আমাদের চিফ মেন্টর JKH Jesan।
-                </p>
-                <p className="text-foreground/80 leading-relaxed text-base">
-                  তিনি সাধারণ কোনো থিওরিটিক্যাল টিউটর নন—তিনি ইন্ডাস্ট্রির রিয়েল-ওয়ার্ল্ড এক্সপেরিয়েন্স সমৃদ্ধ একজন মিউজিক প্রডিউসার। FL Studio থেকে শুরু করে রেডিও-রেডি মাস্টারিং পর্যন্ত, প্রতিটি সিক্রেট টেকনিক তিনি শিক্ষার্থীদের সাথে নিখুঁতভাবে শেয়ার করেন।
-                </p>
-              </div>
-
-              {/* Specializations Grid instead of Progress Bars */}
-              <div className="pt-4 border-t border-border">
-                <h3 className="font-bold text-foreground text-base mb-4">মূল স্পেশালাইজেশন</h3>
-                <div className="flex flex-wrap gap-2">
-                  {skills.map((skill) => (
-                    <span key={skill.label} className="bg-surface/5 text-foreground/80 px-4 py-2 rounded-xl text-sm font-semibold border border-border hover:border-primary/40 transition-colors">
-                      {skill.label}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════
-          TIMELINE
-          ══════════════════════════════════════════════════════ */}
-      <section className="py-24 bg-surface border-y border-border relative">
-        <div className="absolute inset-0 bg-size-[40px_40px] pointer-events-none" />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="text-center mb-14">
-            <div className="eyebrow border-border! text-foreground/80! bg-surface/5!" style={{ display: "inline-flex" }}>আমাদের যাত্রা</div>
-            <h2 className="text-foreground tracking-tight mt-1">সাফল্যের টাইমলাইন</h2>
-          </div>
-
-          <div className="relative">
-            {/* Vertical line */}
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-background hidden md:block" />
-
-            <div className="space-y-8">
-              {timeline.map((item, i) => (
-                <div key={i} className="flex gap-6 items-start">
-                  {/* Year bubble */}
-                  <div className="relative shrink-0 hidden md:block">
-                    <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex flex-col items-center justify-center font-black text-xs shadow-lg border-4 border-white/20 relative z-10">
-                      {item.year}
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex-1 bg-surface/5 border border-border backdrop-blur-sm rounded-xl p-5 shadow-lg hover:border-primary/40 transition-colors duration-300">
-                    <span className="md:hidden inline-block text-xs font-black text-primary-foreground mb-2 bg-primary px-2.5 py-1 rounded-full border border-border shadow-[0_0_10px_rgba(200,144,10,0.35)]">
-                      {item.year}
-                    </span>
-                    <p className="text-foreground/80 leading-relaxed text-sm">{item.event}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════
-          ACHIEVEMENTS
-          ══════════════════════════════════════════════════════ */}
-      <section className="py-24 bg-background relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="text-center mb-14">
-            <div className="eyebrow border-border! text-foreground/80! bg-surface/5!" style={{ display: "inline-flex" }}>অর্জনসমূহ</div>
-            <h2 className="text-foreground tracking-tight mt-1">
-              যা আমাদের আলাদা করে
-            </h2>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {awards.map((item, i) => (
-              <div key={i} className="p-6 bg-surface/5 border border-border rounded-2xl hover:bg-surface/10 hover:border-primary/40 transition-all duration-300 group text-center">
-                <div className="w-12 h-12 rounded-xl bg-surface/10 border border-border flex items-center justify-center mx-auto mb-4 group-hover:bg-primary transition-colors duration-300">
-                  <item.icon size={22} className="text-primary group-hover:text-foreground transition-colors" />
-                </div>
-                <p className="font-semibold text-sm text-foreground/80 leading-relaxed">{item.text}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Stats row */}
-          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-8 pt-12 border-t border-border">
-            {[
-              { value: "৫০০+", label: "সফল শিক্ষার্থী" },
-              { value: "৫",    label: "বছরের অভিজ্ঞতা" },
-              { value: "১০০+", label: "প্রজেক্ট" },
-              { value: "৫.০",  label: "গড় রেটিং" },
-            ].map((s, i) => (
-              <div key={i} className="text-center">
-                <div className="text-4xl font-black text-foreground mb-1" style={{ letterSpacing: "-0.04em" }}>
-                  {s.value}
-                </div>
-                <p className="text-sm text-foreground/80 font-semibold">{s.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════
-          CTA
-          ══════════════════════════════════════════════════════ */}
-      <section className="py-20 relative overflow-hidden bg-background">
-        <div className="absolute top-0 right-0 w-96 h-96 opacity-10 bg-primary rounded-full blur-3xl" />
-        <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="text-3xl font-black text-foreground mb-4 tracking-tight">
-            আজই আমাদের সাথে যোগ দিন
-          </h2>
-          <p className="text-foreground/80 text-base mb-8 leading-relaxed">
-            ৫০০+ শিক্ষার্থীর সফল যাত্রায় অংশীদার হন এবং আপনার মিউজিক ক্যারিয়ার গড়ে তুলুন।
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/courses" className="btn-primary text-sm px-8 py-4">
-              কোর্স দেখুন <ArrowRight size={16} />
-            </Link>
-            <Link href="/contact" className="btn-ghost-white text-sm px-8 py-4">
-              যোগাযোগ করুন
-            </Link>
-          </div>
-        </div>
-      </section>
-
-    </div>
-  );
-}
+import Link from "next/link";
+import {
+  Award, BookOpen, Globe, Headphones, Mic2,
+  Music2, Play, Star, Target, TrendingUp, Users, 
+  ArrowRight, CheckCircle2, Sliders, ShieldCheck, 
+  Sparkles, Layers, Volume2, Cpu, Radio, Zap
+} from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "একাডেমি ওভারভিউ ও বিস্তারিত কারিকুলাম | EvoRise Media",
+  description:
+    "EvoRise Media Music Production Academy-র পূর্ণাঙ্গ কারিকুলাম, অডিও সিগন্যাল চেইন, চিফ মেন্টর JKH Jesan-এর প্রোডাকশন দর্শন এবং হোম স্টুডিও থেকে কমার্শিয়াল রিলিজের বিস্তারিত রোডম্যাপ।",
+};
+
+export default function AboutPage() {
+  return (
+    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/20">
+
+      {/* ══════════════════════════════════════════════════════
+          HERO — Editorial Academy Header
+          ══════════════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden pt-28 pb-16 sm:pb-24 border-b border-border bg-surface/50">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 right-1/4 w-96 h-96 opacity-15 bg-primary blur-3xl rounded-full" />
+          <div className="absolute bottom-0 left-10 w-72 h-72 opacity-10 bg-amber-500 blur-3xl rounded-full" />
+        </div>
+
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
+          
+          <div className="inline-flex items-center gap-2 bg-primary/15 border border-primary/25 px-4 py-1.5 rounded-full text-xs font-bold text-primary mb-6 shadow-xs">
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <span>EvoRise Media Music Academy • অফিশিয়াল ওভারভিউ</span>
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-foreground mb-6 tracking-tight leading-[1.15]">
+            সংগীত সৃষ্টি থেকে <span className="text-primary">আন্তর্জাতিক রিলিজ</span>:<br />
+            পূর্ণাঙ্গ অডিও ইঞ্জিনিয়ারিং গাইডলাইন
+          </h1>
+
+          <p className="text-base sm:text-lg text-foreground/80 max-w-3xl mx-auto leading-relaxed font-medium mb-8">
+            হোম স্টুডিও হোক বা কমার্শিয়াল সেটআপ—অডিও সিগন্যাল ফ্লো, প্রিসিশন ভোকাল প্রসেসিং, অ্যানালগ স্যাচুরেশন এবং রেডিও-রেডি মাস্টারিংয়ের প্রতিটি আধুনিক টেকনিক শিখুন বাংলা ভাষায় সরাসরি চিফ মেন্টর <strong>JKH Jesan</strong>-এর বাস্তব তত্ত্বাবধানে।
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-3.5">
+            <Link href="/courses" className="btn-primary text-xs sm:text-sm py-3.5 px-7">
+              <span>সব কোর্স ব্রাউজ করুন</span>
+              <ArrowRight size={15} />
+            </Link>
+            <a href="#curriculum" className="btn-outline text-xs sm:text-sm py-3.5 px-7">
+              কারিকুলাম রোডম্যাপ দেখুন
+            </a>
+          </div>
+
+          {/* Sister concern official badge */}
+          <div className="mt-10 inline-flex items-center gap-2.5 px-4 py-2 rounded-xl bg-background border border-border shadow-xs">
+            <span className="w-2 h-2 rounded-full bg-primary" />
+            <span className="text-xs font-semibold text-foreground/80">
+              EvoRise Media হলো{" "}
+              <a
+                href="https://www.facebook.com/EvoRiseSolutions/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary font-bold hover:underline"
+              >
+                EvoRise Solutions
+              </a>
+              -এর একটি অনুমোদিত ক্রিয়েটিভ একাডেমি প্ল্যাটফর্ম
+            </span>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════
+          THE PROBLEM & WHY EVORISE MEDIA IS DIFFERENT
+          ══════════════════════════════════════════════════════ */}
+      <section className="py-16 sm:py-24 bg-background border-b border-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            
+            <div className="lg:col-span-6 space-y-5">
+              <div className="inline-block text-xs font-bold uppercase tracking-wider text-primary">
+                আমাদের উদ্দেশ্য ও দর্শন
+              </div>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-foreground tracking-tight leading-snug">
+                ইউটিউব টিউটোরিয়াল যেখানে শেষ হয়,<br />
+                <span className="text-primary">আমাদের একাডেমি সেখান থেকেই শুরু করে</span>
+              </h2>
+              <p className="text-sm sm:text-base leading-relaxed text-foreground/80 font-medium">
+                ইন্টারনেটে হাজার হাজার ভিডিও আছে যা আপনাকে প্লাগইনের নব ঘোরানো শেখায়, কিন্তু <strong>“কেন ঘোরাবেন”</strong> এবং <strong>“কানের মাধ্যমে কীভাবে সঠিক ফ্রিকোয়েন্সি অনুভব করবেন”</strong> তা শেখায় না। ফলস্বরূপ বেশিরভাগ নতুন প্রডিউসারের গান ফাঁপা, মাডি (muddy), অথবা অতিরিক্ত তীক্ষ্ণ (harsh) শোনায়।
+              </p>
+              <p className="text-sm sm:text-base leading-relaxed text-foreground/80 font-medium">
+                EvoRise Media-তে আমরা কোনো মুখস্থ প্রিসেট শেখাই না। আমরা শেখাই মিউজিকের ভেতরের সাইকোঅ্যাকোস্টিক সায়েন্স—কীভাবে গেইন স্টেজিং ঠিক রাখবেন, ড্রামস ও ভোকালকে একই স্পেসের মধ্যে আঠা (glue) দিয়ে বসাবেন, এবং কম দামি হেডফোন দিয়েও বিশ্বমানের ব্যালেন্সড মিক্স তৈরি করবেন।
+              </p>
+            </div>
+
+            <div className="lg:col-span-6 grid sm:grid-cols-2 gap-4">
+              {[
+                {
+                  icon: Layers,
+                  title: "সিগন্যাল চেইন সায়েন্স",
+                  desc: "গেটিং, প্রি-ইকিউ, কম্প্রেশন, স্যাচুরেশন ও স্পেশাল এফেক্টসের নিখুঁত সিকোয়েন্স যা ট্র্যাককে জীবন্ত করে।"
+                },
+                {
+                  icon: Mic2,
+                  title: "ভোকাল আলকেমি",
+                  desc: "মেলোডাইন ও অটোটিউন ব্যবহার করে রোবটিক ভাব ছাড়া একদম ন্যাচারাল পিচ কারেকশন ও হারমোনি ক্রিয়েশন।"
+                },
+                {
+                  icon: Volume2,
+                  title: "লো-এন্ড পাঞ্চ",
+                  desc: "808 সাব-বেস এবং কিক ড্রামের ফেজ অ্যালাইনমেন্ট ও সাইডচেইন—ছোট ফোনেও যা পরিষ্কার বাজে।"
+                },
+                {
+                  icon: Radio,
+                  title: "-14 LUFS মাস্টারিং",
+                  desc: "স্পটিফাই, ইউটিউব ও রেডিওর জন্য ডাইনামিক রেঞ্জ ঠিক রেখে সর্বোচ্চ লাউডনেস ও ট্রু-পিক হেডরুম।"
+                }
+              ].map((card, i) => (
+                <div key={i} className="p-5 rounded-2xl bg-surface border border-border hover:border-primary/40 transition-all shadow-xs">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-3 text-primary">
+                    <card.icon size={20} />
+                  </div>
+                  <h3 className="font-extrabold text-sm text-foreground mb-1.5">{card.title}</h3>
+                  <p className="text-xs text-foreground/70 leading-relaxed font-medium">{card.desc}</p>
+                </div>
+              ))}
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════
+          MEET CHIEF MENTOR JKH JESAN
+          ══════════════════════════════════════════════════════ */}
+      <section className="py-16 sm:py-24 bg-surface border-b border-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            
+            {/* Left: Mentor Portrait with Glass Card */}
+            <div className="lg:col-span-5 relative">
+              <div className="aspect-4/5 rounded-3xl overflow-hidden border border-border shadow-2xl relative bg-zinc-950">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src="/images/mentor-jjesan-accordion.jpg" 
+                  alt="JKH Jesan — Chief Music Mentor"
+                  className="w-full h-full object-cover object-center"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black bg-primary text-black mb-2 shadow-sm">
+                    <Award size={13} />
+                    চিফ মিউজিক মেন্টর
+                  </span>
+                  <h3 className="text-2xl font-black text-white">JKH Jesan</h3>
+                  <p className="text-xs text-white/80 font-medium">Lead Sound Designer & Music Producer</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Mentor Biography & Philosophy */}
+            <div className="lg:col-span-7 space-y-5">
+              <div className="inline-block text-xs font-bold uppercase tracking-wider text-primary">
+                ইন্সট্রাক্টর পরিচিতি
+              </div>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-foreground tracking-tight leading-snug">
+                বাস্তব ইন্ডাস্ট্রির ১০+ বছরের অভিজ্ঞতা,<br />
+                <span className="text-primary">এখন আপনার হাতের মুঠোয়</span>
+              </h2>
+              <p className="text-sm sm:text-base leading-relaxed text-foreground/80 font-medium">
+                JKH Jesan বাংলাদেশের অডিও প্রোডাকশন ও কমার্শিয়াল সাউন্ড ডিজাইনে এক সুপরিচিত নাম। অসংখ্য জনপ্রিয় ট্র্যাক, ওয়েব ড্রামা, বিজ্ঞাপন ও স্বাধীন শিল্পীদের গানের মিক্সিং-মাস্টারিংয়ে তিনি কাজ করেছেন অত্যন্ত সাফল্যের সাথে।
+              </p>
+              <p className="text-sm sm:text-base leading-relaxed text-foreground/80 font-medium">
+                তার মূল বিশেষত্ব হলো জটিল অডিও কনসেপ্টগুলোকে (যেমন—কম্প্রেশন কার্ভ, মিড-সাইড প্রসেসিং, ট্রানজিয়েন্ট শেপিং ও ফেজ রিলেশনশিপ) একদম সহজ বাংলা ভাষায় ভিজ্যুয়াল ও অডিও উদাহরণের মাধ্যমে বুঝিয়ে দেওয়া।
+              </p>
+
+              <div className="grid sm:grid-cols-3 gap-3 pt-3">
+                <div className="p-3.5 rounded-xl bg-background border border-border">
+                  <p className="text-lg font-black text-primary">১০+ বছর</p>
+                  <p className="text-[11px] font-semibold text-foreground/70">ইন্ডাস্ট্রি অভিজ্ঞতা</p>
+                </div>
+                <div className="p-3.5 rounded-xl bg-background border border-border">
+                  <p className="text-lg font-black text-primary">৫০০+ শিক্ষার্থী</p>
+                  <p className="text-[11px] font-semibold text-foreground/70">সরাসরি প্রশিক্ষিত</p>
+                </div>
+                <div className="p-3.5 rounded-xl bg-background border border-border">
+                  <p className="text-lg font-black text-primary">১০০% লাইফটাইম</p>
+                  <p className="text-[11px] font-semibold text-foreground/70">কমিউনিটি সাপোর্ট</p>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Link 
+                  href="/contact" 
+                  className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-primary hover:underline"
+                >
+                  <span>ইন্সট্রাক্টরের সাথে সরাসরি যোগাযোগের তথ্য দেখুন</span>
+                  <ArrowRight size={14} />
+                </Link>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════
+          5-PILLAR CURRICULUM ROADMAP (Detailed Blueprint)
+          ══════════════════════════════════════════════════════ */}
+      <section id="curriculum" className="py-16 sm:py-24 bg-background border-b border-border scroll-mt-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <div className="inline-block text-xs font-bold uppercase tracking-wider text-primary mb-2">
+              প্রোডাকশন রোডম্যাপ
+            </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-foreground tracking-tight">
+              একাডেমির ৫-স্তরের প্রফেশনাল ব্লুপ্রিন্ট
+            </h2>
+            <p className="mt-3 text-sm sm:text-base text-foreground/75 font-medium">
+              যে ধাপে ধাপে একজন সাধারণ লার্নার পরিণত হন পূর্ণাঙ্গ কমার্শিয়াল অডিও প্রডিউসারে
+            </p>
+          </div>
+
+          <div className="space-y-6">
+            {[
+              {
+                step: "০১",
+                title: "ফাউন্ডেশন ও ইন-দ্য-বক্স অ্যারেঞ্জমেন্ট",
+                tools: "FL Studio 21 • Logic Pro • Ableton Live",
+                details: "ডিজিটাল অডিও ওয়ার্কস্টেশনের কোর আর্কিটেকচার, বিট গ্রুভ কোয়ান্টাইজেশন, টেম্পো ম্যাপিং, কর্ড প্রোগ্রেশন এবং ট্রানজিশন বিল্ডআপ।"
+              },
+              {
+                step: "০২",
+                title: "অ্যাডভান্সড ভোকাল কম্প্রেশন ও সার্জিক্যাল টিউনিং",
+                tools: "Celemony Melodyne • Antares Auto-Tune • FabFilter Pro-Q 3",
+                details: "ভোকাল কম্পিং, ন্যাচারাল পিচ সেন্টারিং, ফরম্যান্ট টিউনিং, ডি-এসার দিয়ে হার্শনেস দূর করা, এবং 1176 ও LA-2A স্টাইল ডুয়াল-কম্প্রেশন স্ট্যাকিং।"
+              },
+              {
+                step: "০৩",
+                title: "লো-এন্ড পাওয়ার ও ড্রাম বাস গ্লু",
+                tools: "Sidechain Ducking • Dynamic EQ • Transient Shaper",
+                details: "808 সাব-বেস এবং কিক ড্রামের ফ্রিকোয়েন্সি স্পেস তৈরি, ক্লিপিং বনাম স্যাচুরেশন, এবং ড্রাম কিটের প্যারালাল কম্প্রেশন।"
+              },
+              {
+                step: "০৪",
+                title: "থ্রি-ডি স্পেস, স্টেরিও ওয়াইডেনিং ও ডেপথ",
+                tools: "Valhalla VintageVerb • Soundtoys Echoboy • Mid-Side EQ",
+                details: "রিভার্ব বাস রাউটিং, ডিলে থ্রোস, হাস ইফেক্ট এবং ফেজ ক্যান্সেলেশন ছাড়া কীভাবে পুরো মিক্সকে ওয়াইড ও সিনেমাটিক বানাতে হয়।"
+              },
+              {
+                step: "০৫",
+                title: "কমার্শিয়াল ফাইনাল মাস্টারিং ও ডিস্ট্রিবিউশন",
+                tools: "FabFilter Pro-L 2 • iZotope Ozone • Youlean Loudness Meter",
+                details: "-14 LUFS Spotify ও Apple Music স্ট্যান্ডার্ড মাস্টারিং, ট্রু-পিক হেডরুম -1.0 dBTP সিলিং, ডিথারিং এবং মেটাডেটা ফরম্যাটিং।"
+              }
+            ].map((p, i) => (
+              <div 
+                key={i} 
+                className="p-6 sm:p-8 rounded-2xl bg-surface border border-border hover:border-primary/50 transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xs"
+              >
+                <div className="flex items-start gap-5">
+                  <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 text-primary font-black text-xl flex items-center justify-center shrink-0">
+                    {p.step}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <h3 className="text-base sm:text-lg font-black text-foreground">{p.title}</h3>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-primary/15 text-primary">
+                        {p.tools}
+                      </span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-foreground/75 leading-relaxed font-medium">
+                      {p.details}
+                    </p>
+                  </div>
+                </div>
+                <Link 
+                  href="/courses" 
+                  className="shrink-0 px-4 py-2 rounded-xl bg-background border border-border text-xs font-bold text-foreground hover:bg-primary hover:text-black hover:border-primary transition-all self-end md:self-auto"
+                >
+                  কোর্স মডিউল দেখুন
+                </Link>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════
+          GEAR & HARDWARE RECOMMENDATIONS FOR HOME STUDIOS
+          ══════════════════════════════════════════════════════ */}
+      <section className="py-16 sm:py-24 bg-surface border-b border-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight">
+              হোম স্টুডিও রিকমেন্ডেড গিয়ার
+            </h2>
+            <p className="mt-2 text-xs sm:text-sm text-foreground/75 font-medium">
+              দামি স্টুডিও ছাড়া ঘরে বসেই কম বাজেটে প্রফেশনাল সেটআপ গড়ার বাস্তবিক তালিকা
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-6">
+            <div className="p-6 rounded-2xl bg-background border border-border space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+                <Headphones size={20} />
+              </div>
+              <h3 className="font-extrabold text-base text-foreground">মনিটরিং হেডফোন</h3>
+              <p className="text-xs text-foreground/70 leading-relaxed font-medium">
+                অ্যাকোস্টিক ট্রিটমেন্টহীন রুমে স্পিকারের চেয়ে ফ্ল্যাট রেসপন্স হেডফোন বেশি নিরাপদ। Audio-Technica ATH-M50x অথবা Beyerdynamic DT 990 Pro সেরা চয়েস।
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-background border border-border space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center">
+                <Cpu size={20} />
+              </div>
+              <h3 className="font-extrabold text-base text-foreground">অডিও ইন্টারফেস</h3>
+              <p className="text-xs text-foreground/70 leading-relaxed font-medium">
+                স্বচ্ছ প্রিম্প এবং লো-লেটেন্সি ড্রাইভারের জন্য Focusrite Scarlett 2i2, Audient iD14, অথবা Universal Audio Volt 276 দিয়ে শুরু করতে পারেন।
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-background border border-border space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+                <Mic2 size={20} />
+              </div>
+              <h3 className="font-extrabold text-base text-foreground">ভোকাল মাইক্রোফোন</h3>
+              <p className="text-xs text-foreground/70 leading-relaxed font-medium">
+                ঘরোয়া রুমে ব্যাকগ্রাউন্ড নয়েজ এড়াতে Shure SM58 / SM7B ডায়নামিক মাইক্রোফোন, অথবা শান্ত পরিবেশে Rode NT1-A কন্ডেন্সার মাইক্রোফোন আদর্শ।
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════
+          BOTTOM CTA
+          ══════════════════════════════════════════════════════ */}
+      <section className="py-14 sm:py-20 bg-background text-center">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-foreground mb-4 tracking-tight">
+            আপনার মিউজিক প্রোডাকশন ক্যারিয়ার শুরু করুন আজই
+          </h2>
+          <p className="text-sm sm:text-base text-foreground/75 mb-8 leading-relaxed font-medium max-w-xl mx-auto">
+            ১৫০+ শিক্ষার্থীর সাথে যোগ দিন এবং আপনার ক্রিয়েটিভিটিকে দিন আন্তর্জাতিক প্রফেশনাল সাউন্ড।
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3.5 justify-center">
+            <Link href="/courses" className="btn-primary text-xs sm:text-sm py-3.5 px-8">
+              <span>কোর্স কারিকুলাম ও এনরোলমেন্ট</span>
+              <ArrowRight size={15} />
+            </Link>
+            <Link href="/contact" className="btn-outline text-xs sm:text-sm py-3.5 px-8">
+              সরাসরি যোগাযোগ করুন
+            </Link>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  );
+}

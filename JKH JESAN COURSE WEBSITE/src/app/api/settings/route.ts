@@ -13,8 +13,8 @@ export async function GET() {
         bkashNumber: "01700000000",
         nagadNumber: "01700000000",
         rocketNumber: null,
-        whatsappNumber: "01754220135",
-        supportEmail: "support@evorisemedia.com",
+        whatsappNumber: "01607084155",
+        supportEmail: "helloevorisesolutions@gmail.com",
         noticeText: null,
       }
     );
@@ -27,8 +27,8 @@ export async function GET() {
       facebookPixelId: null,
       bkashNumber: "01700000000",
       nagadNumber: "01700000000",
-      whatsappNumber: "01754220135",
-      supportEmail: "support@evorisemedia.com",
+      whatsappNumber: "01607084155",
+      supportEmail: "helloevorisesolutions@gmail.com",
     });
   }
 }

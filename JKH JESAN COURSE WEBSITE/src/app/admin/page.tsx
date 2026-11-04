@@ -105,7 +105,7 @@ export default async function AdminDashboard() {
       {/* Stats */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {stats.map((stat) => (
-          <div key={stat.label} className="bg-surface/5 border border-border backdrop-blur-md rounded-xl p-5 shadow-xl">
+          <div key={stat.label} className="bg-[#141A0B] border border-[#2A3319] rounded-2xl p-5 shadow-xl">
             <div className="flex items-start justify-between mb-4">
               <div className={`w-11 h-11 rounded-xl bg-surface/5 border border-border text-foreground flex items-center justify-center`}>
                 <stat.icon size={22} className={stat.color.includes('text-primary') ? 'text-primary' : stat.color.includes('blue') ? 'text-blue-400' : stat.color.includes('amber') ? 'text-amber-400' : 'text-purple-400'} />
@@ -123,7 +123,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Analytics Chart */}
-      <div className="bg-surface/5 border border-border backdrop-blur-md rounded-xl p-6 shadow-xl">
+      <div className="bg-[#141A0B] border border-[#2A3319] rounded-2xl p-6 shadow-xl">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
             <BarChart3 className="text-primary" size={24} />
@@ -139,8 +139,8 @@ export default async function AdminDashboard() {
       <div className="grid lg:grid-cols-2 gap-6">
 
         {/* Pending Orders */}
-        <div className="bg-surface/5 border border-border backdrop-blur-md rounded-xl overflow-hidden shadow-xl">
-          <div className="px-6 py-4 border-b border-border bg-surface flex items-center justify-between">
+        <div className="bg-[#141A0B] border border-[#2A3319] rounded-2xl overflow-hidden shadow-xl">
+          <div className="px-6 py-4 border-b border-[#2A3319] bg-[#1A220F] flex items-center justify-between">
             <h3 className="font-bold text-foreground text-base">অপেক্ষমাণ অর্ডার</h3>
             <Link href="/admin/orders" className="text-xs font-bold text-primary flex items-center gap-1 hover:text-primary-dark transition-colors">
               সব দেখুন <ArrowRight size={13} />
@@ -167,8 +167,8 @@ export default async function AdminDashboard() {
         </div>
 
         {/* Recent Completed */}
-        <div className="bg-surface/5 border border-border backdrop-blur-md rounded-xl overflow-hidden shadow-xl">
-          <div className="px-6 py-4 border-b border-border bg-surface flex items-center justify-between">
+        <div className="bg-[#141A0B] border border-[#2A3319] rounded-2xl overflow-hidden shadow-xl">
+          <div className="px-6 py-4 border-b border-[#2A3319] bg-[#1A220F] flex items-center justify-between">
             <h3 className="font-bold text-foreground text-base">সাম্প্রতিক লেনদেন</h3>
             <Link href="/admin/orders" className="text-xs font-bold text-primary flex items-center gap-1 hover:text-primary-dark transition-colors">
               সব দেখুন <ArrowRight size={13} />

@@ -30,7 +30,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   ];
 
   return (
-    <div className="min-h-screen bg-background flex flex-col md:flex-row">
+    <div className="min-h-screen bg-[#0E1208] text-[#F8F4EC] flex flex-col md:flex-row dark">
 
       {/* ── Sidebar ──────────────────────────────────────────── */}
       <aside className="w-full md:w-64 lg:w-72 flex flex-col shrink-0 border-r border-[#2A3319] bg-[#12160A] text-[#F8F4EC]">
@@ -78,7 +78,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       </aside>
 
       {/* ── Main content ─────────────────────────────────────── */}
-      <main className="flex-1 min-h-screen overflow-y-auto bg-background">
+      <main className="flex-1 min-h-screen overflow-y-auto bg-[#0E1208] text-[#F8F4EC]">
         <div className="p-6 md:p-8 max-w-7xl">
           {children}
         </div>
