@@ -21,3 +21,4 @@ function updateFile(filePath) {
 updateFile('driver-register.html');
 updateFile('netlify-driver-portal/index.html');
 updateFile('Rownaa-Frontend-Netlify/driver-register.html');
+

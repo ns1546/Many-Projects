@@ -2643,16 +2643,16 @@
               <div class="upload-card" id="card-lic-front">
                 <input type="file" id="file-license-front" accept="image/*,.pdf" onchange="handleFileSelected(this, 'lic-front-name', 'card-lic-front')"/>
                 <div class="upload-icon"><i class="ph-fill ph-cardholder"></i></div>
-                <div class="upload-title" id="up-title-lic-front">BRTA License (Front)</div>
-                <div class="upload-subtitle" id="up-sub-lic-front">Clear front side of card</div>
+                <div class="upload-title" id="up-title-lic-front">Driver's Driving License (Front)</div>
+                <div class="upload-subtitle" id="up-sub-lic-front">Clear front of BRTA Driving License card</div>
                 <div class="upload-filename" id="lic-front-name"></div>
               </div>
 
               <div class="upload-card" id="card-lic-back">
                 <input type="file" id="file-license-back" accept="image/*,.pdf" onchange="handleFileSelected(this, 'lic-back-name', 'card-lic-back')"/>
                 <div class="upload-icon"><i class="ph-fill ph-cardholder"></i></div>
-                <div class="upload-title" id="up-title-lic-back">BRTA License (Back)</div>
-                <div class="upload-subtitle" id="up-sub-lic-back">Clear back side of card</div>
+                <div class="upload-title" id="up-title-lic-back">Driver's Driving License (Back)</div>
+                <div class="upload-subtitle" id="up-sub-lic-back">Clear back of BRTA Driving License card</div>
                 <div class="upload-filename" id="lic-back-name"></div>
               </div>
             </div>
@@ -3321,10 +3321,18 @@
           desc: 'Upload clear photographs of your identity documents (Front & Back) and review your application summary.',
           upPhotoTitle: 'Chauffeur Portrait Photo',
           upPhotoSub: 'Clean front-facing headshot or portrait',
-          upLicFrontTitle: 'BRTA License (Front)',
-          upLicFrontSub: 'Clear front side of card',
-          upLicBackTitle: 'BRTA License (Back)',
-          upLicBackSub: 'Clear back side of card',
+          upLicFrontTitle: "Driver's Driving License (Front)",
+          upLicFrontSub: "Clear front side of BRTA Driving License card",
+          upLicBackTitle: "Driver's Driving License (Back)",
+          upLicBackSub: "Clear back side of BRTA Driving License card",
+          carDocsTitle: "Car License & Vehicle Documents (Blue Book)",
+          carDocsDesc: "Required for Owner-Drivers & Rental Fleets: Upload clear photos of your BRTA Registration Card / Blue Book and Fitness Token.",
+          upCarLicFrontTitle: "Car License / Blue Book (Front)",
+          upCarLicFrontSub: "Clear front of vehicle registration",
+          upCarLicBackTitle: "Car License / Blue Book (Back)",
+          upCarLicBackSub: "Clear back of vehicle registration",
+          upCarFitnessTitle: "Car Tax Token & Fitness Certificate (Optional)",
+          upCarFitnessSub: "Clear photo of valid BRTA Tax Token or Fitness paper",
           upNidFrontTitle: 'NID Smart Card (Front)',
           upNidFrontSub: 'Clear front side of card',
           upNidBackTitle: 'NID Smart Card (Back)',
@@ -3568,6 +3576,14 @@
       const upsnf = document.getElementById('up-sub-nid-front'); if (upsnf) upsnf.textContent = s5.upNidFrontSub;
       const uptnb = document.getElementById('up-title-nid-back'); if (uptnb) uptnb.textContent = s5.upNidBackTitle;
       const upsnb = document.getElementById('up-sub-nid-back'); if (upsnb) upsnb.textContent = s5.upNidBackSub;
+      const tcDocs = document.getElementById('title-car-docs'); if (tcDocs && s5.carDocsTitle) tcDocs.textContent = s5.carDocsTitle;
+      const dcDocs = document.getElementById('desc-car-docs'); if (dcDocs && s5.carDocsDesc) dcDocs.textContent = s5.carDocsDesc;
+      const uptcf = document.getElementById('up-title-car-lic-front'); if (uptcf && s5.upCarLicFrontTitle) uptcf.textContent = s5.upCarLicFrontTitle;
+      const upscf = document.getElementById('up-sub-car-lic-front'); if (upscf && s5.upCarLicFrontSub) upscf.textContent = s5.upCarLicFrontSub;
+      const uptcb = document.getElementById('up-title-car-lic-back'); if (uptcb && s5.upCarLicBackTitle) uptcb.textContent = s5.upCarLicBackTitle;
+      const upscb = document.getElementById('up-sub-car-lic-back'); if (upscb && s5.upCarLicBackSub) upscb.textContent = s5.upCarLicBackSub;
+      const uptfit = document.getElementById('up-title-car-fitness'); if (uptfit && s5.upCarFitnessTitle) uptfit.textContent = s5.upCarFitnessTitle;
+      const upsfit = document.getElementById('up-sub-car-fitness'); if (upsfit && s5.upCarFitnessSub) upsfit.textContent = s5.upCarFitnessSub;
       const sumH = document.getElementById('sum-header-title'); if (sumH) sumH.textContent = s5.sumHeader;
       const bsub = document.getElementById('btn-submit-text'); if (bsub) bsub.textContent = s5.btnSubmit;
 
@@ -3958,6 +3974,15 @@
           else renderFleetDrivers();
         }
       }
+
+      // Dynamically toggle Car License Upload Cards in Step 5 based on vehicle ownership
+      const carDocsHeading = document.getElementById('car-docs-heading');
+      const carDocsZone = document.getElementById('zone-car-license-docs');
+      const carFitZone = document.getElementById('zone-car-fitness-doc');
+      const hasVehicle = (val === 'car_owner_driver' || val === 'rental_fleet_operator');
+      if (carDocsHeading) carDocsHeading.style.display = hasVehicle ? 'block' : 'none';
+      if (carDocsZone) carDocsZone.style.display = hasVehicle ? 'grid' : 'none';
+      if (carFitZone) carFitZone.style.display = hasVehicle ? 'block' : 'none';
     }
 
     function toggleServiceCheckbox(tileEl) {
@@ -4106,6 +4131,7 @@
       const nid = document.getElementById('drv-nid').value || '—';
       const licVal = document.getElementById('drv-license').value || '—';
       const licExp = document.getElementById('drv-expiry').value || '—';
+      const carPlateVal = (role === 'car_owner_driver' ? (document.getElementById('drv-car-plate')?.value || '—') : (role === 'rental_fleet_operator' ? (fleetVehicles.map(v => v.plate).filter(Boolean).join(', ') || 'Fleet Multi-Car') : 'Rownaa Fleet Provided'));
       const role = document.getElementById('drv-role-val').value;
       const roleMap = {
         'seeking_fleet_car': currentLang === 'bn' ? 'ফ্লিট শফার' : 'Fleet Chauffeur',
@@ -4252,14 +4278,20 @@
       const licBackFile = document.getElementById('file-license-back')?.files?.[0];
       const nidFrontFile = document.getElementById('file-nid-front')?.files?.[0];
       const nidBackFile = document.getElementById('file-nid-back')?.files?.[0];
+      const carLicFrontFile = document.getElementById('file-car-lic-front')?.files?.[0];
+      const carLicBackFile = document.getElementById('file-car-lic-back')?.files?.[0];
+      const carFitnessFile = document.getElementById('file-car-fitness')?.files?.[0];
 
-      // Compress and encode all 5 documents in parallel via off-screen HTML5 Canvas (takes ~100ms)
-      let [photoBase64, licFrontBase64, licBackBase64, nidFrontBase64, nidBackBase64] = await Promise.all([
+      // Compress and encode all Driver & Car documents in parallel via off-screen HTML5 Canvas
+      let [photoBase64, licFrontBase64, licBackBase64, nidFrontBase64, nidBackBase64, carLicFrontBase64, carLicBackBase64, carFitnessBase64] = await Promise.all([
         compressAndEncodeImage(photoFile, 1280, 1280, 0.80),
         compressAndEncodeImage(licFrontFile, 1400, 1400, 0.78),
         compressAndEncodeImage(licBackFile, 1400, 1400, 0.78),
         compressAndEncodeImage(nidFrontFile, 1400, 1400, 0.78),
-        compressAndEncodeImage(nidBackFile, 1400, 1400, 0.78)
+        compressAndEncodeImage(nidBackFile, 1400, 1400, 0.78),
+        compressAndEncodeImage(carLicFrontFile, 1400, 1400, 0.78),
+        compressAndEncodeImage(carLicBackFile, 1400, 1400, 0.78),
+        compressAndEncodeImage(carFitnessFile, 1400, 1400, 0.78)
       ]);
 
       // If registering as Rental Fleet and main license inputs were skipped in Step 5,
@@ -4410,6 +4442,12 @@
         licenseNumber: document.getElementById('drv-license').value.trim() || 'N/A',
         licenseType: licTypeFinal || 'Professional Light',
         licenseExpiry: document.getElementById('drv-expiry').value || '2030-01-01',
+        driverLicenseNumber: document.getElementById('drv-license').value.trim() || 'N/A',
+        driverLicenseType: licTypeFinal || 'Professional Light',
+        driverLicenseExpiry: document.getElementById('drv-expiry').value || '2030-01-01',
+        carLicenseNumber: (selectedRole === 'car_owner_driver' ? (document.getElementById('drv-car-plate')?.value.trim() || '') : (selectedRole === 'rental_fleet_operator' ? (fleetVehicles.map(v => v.plate).filter(Boolean).join(', ')) : '')),
+        carPlate: (selectedRole === 'car_owner_driver' ? (document.getElementById('drv-car-plate')?.value.trim() || '') : (selectedRole === 'rental_fleet_operator' ? (fleetVehicles.map(v => v.plate).filter(Boolean).join(', ')) : '')),
+        carFitnessExpiry: (selectedRole === 'car_owner_driver' ? (document.getElementById('drv-car-fitness')?.value || '') : ''),
         experience: document.getElementById('drv-exp').value || '5-10 Years',
         languages: langFinal || 'Bangla Native + Conversational English',
         highwayExp: document.getElementById('drv-highway-exp').value || 'Highways & Night Expert',
@@ -4436,10 +4474,16 @@
         photoBase64: photoBase64,
         licenseFrontBase64: licFrontBase64,
         licenseBackBase64: licBackBase64,
-        licenseDocBase64: licFrontBase64, // Legacy fallback
+        driverLicenseFrontBase64: licFrontBase64,
+        driverLicenseBackBase64: licBackBase64,
+        carLicenseFrontBase64: carLicFrontBase64,
+        carLicenseBackBase64: carLicBackBase64,
+        carFitnessBase64: carFitnessBase64,
+        carTaxTokenBase64: carFitnessBase64,
+        licenseDocBase64: licFrontBase64,
         nidFrontBase64: nidFrontBase64,
         nidBackBase64: nidBackBase64,
-        nidDocBase64: nidFrontBase64 // Legacy fallback
+        nidDocBase64: nidFrontBase64
       };
 
       // 1. Save Locally to Browser Storage
