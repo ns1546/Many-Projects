@@ -90,3 +90,4 @@ fileContent = fileContent.replace(/function installDailyBackupTrigger\(\) \{[\s\
 
 fs.writeFileSync('scratch/build_clean_2tab_webhook.js', fileContent, 'utf8');
 console.log('Updated scratch/build_clean_2tab_webhook.js successfully');
+
