@@ -520,3 +520,4 @@ files.forEach(file => {
   fs.writeFileSync(file, content, 'utf8');
   console.log('Successfully installed 52-column sub-column architecture into:', file);
 });
+
