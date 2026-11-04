@@ -25,22 +25,34 @@
 
 // Global Configuration
 var FOLDER_NAME = "Rownaa Chauffeur Documents";
+var BACKUP_FOLDER_NAME = "Rownaa Operations Daily Backups";
 var SHEET_REGISTRY_NAME = "Chauffeur Registry";
 var SHEET_DASHBOARD_NAME = "Operations KPI Dashboard";
 var MAX_PAYLOAD_BYTES = 10 * 1024 * 1024; // 10MB security ceiling
 
 /**
  * Custom UI Menu added to Google Sheets top toolbar upon opening.
+ * Note: Destructive 'Rebuild & Setup' option removed permanently to safeguard data integrity.
  */
 function onOpen() {
+  // Automatically ensure the daily automated backup trigger is active
+  try {
+    installDailyBackupTrigger();
+  } catch (e) {
+    Logger.log("Backup trigger check note: " + e.toString());
+  }
+
   var ui = SpreadsheetApp.getUi();
   ui.createMenu("⚡ Rownaa Operations")
     .addItem("💬 Open WhatsApp for Selected Driver", "openWhatsAppForSelectedDriver")
     .addSeparator()
-    .addItem("🔄 Rebuild & Setup Entire System", "setupSheet")
-    .addItem("🧹 Repair Column Alignment & WhatsApp Buttons", "repairExistingErrors")
+    .addItem("💾 Backup Spreadsheet to Google Drive Now", "manualBackupToDrive")
+    .addItem("📥 Download Offline Backup (.xlsx Excel)", "downloadBackupExcel")
+    .addItem("📁 Open Daily Backups Folder in Drive", "openBackupFolder")
+    .addSeparator()
+    .addItem("🧹 Realign Columns & Clean Formulas (Safe)", "repairExistingErrors")
     .addItem("🎛️ Refresh Operations Dashboard", "refreshDashboard")
-    .addItem("📁 Open Document Vault in Google Drive", "openDriveFolder")
+    .addItem("🗂️ Open Chauffeur Document Vault", "openDriveFolder")
     .addToUi();
 }
 
@@ -135,11 +147,10 @@ function formatAsPlainText(val) {
 function setupSheet() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   
-  // 1. SETUP CHAUFFEUR REGISTRY TAB
+  // 1. SETUP CHAUFFEUR REGISTRY TAB (Strict Safe Bootstrap)
   var sheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
   if (!sheet) {
-    sheet = ss.getActiveSheet();
-    sheet.setName(SHEET_REGISTRY_NAME);
+    sheet = ss.insertSheet(SHEET_REGISTRY_NAME, 0);
   }
 
   // First run self-healing repair so existing rows align with new headers
@@ -737,12 +748,12 @@ function doGet(e) {
     })).setMimeType(ContentService.MimeType.JSON);
   }
 
-  if (action === "setup" || action === "rebuild") {
-    setupSheet();
+  if (action === "backup") {
+    var backupRes = createDailyBackup();
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
-      message: "Full enterprise sheet rebuilt, dashboard reset, and data validations initialized!",
-      timestamp: new Date().toISOString()
+      message: "Automated daily backup created and saved to Google Drive successfully!",
+      backup: backupRes
     })).setMimeType(ContentService.MimeType.JSON);
   }
 
@@ -826,4 +837,183 @@ function openDriveFolder() {
     .setWidth(300)
     .setHeight(80);
   SpreadsheetApp.getUi().showModalDialog(html, "Opening Google Drive");
+}
+
+/**
+ * ============================================================================
+ * AUTOMATED DAILY BACKUP ENGINE & OFFLINE EXCEL EXPORT (EVERY 1 DAY)
+ * ============================================================================
+ */
+
+/**
+ * Gets or creates the dedicated Google Drive folder for automated daily backups.
+ */
+function getBackupFolder() {
+  var folders = DriveApp.getFoldersByName(BACKUP_FOLDER_NAME);
+  if (folders.hasNext()) {
+    return folders.next();
+  }
+  var newFolder = DriveApp.createFolder(BACKUP_FOLDER_NAME);
+  newFolder.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  return newFolder;
+}
+
+/**
+ * Automated Daily Backup Core:
+ * 1. Creates a timestamped clone of the entire Google Spreadsheet in Google Drive.
+ * 2. Exports and saves a native Microsoft Excel (.xlsx) file in Google Drive.
+ * 3. Rotates backups (preserves 30 days of daily snapshots).
+ */
+function createDailyBackup() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var backupFolder = getBackupFolder();
+  var timeZone = Session.getScriptTimeZone() || "GMT+6";
+  var dateStamp = Utilities.formatDate(new Date(), timeZone, "yyyy-MM-dd_HH-mm");
+  var friendlyDate = Utilities.formatDate(new Date(), timeZone, "dd MMM yyyy, hh:mm a");
+
+  var ssFile = DriveApp.getFileById(ss.getId());
+
+  // 1. Create Google Spreadsheet Clone in Drive
+  var backupSheetName = "Rownaa_Operations_Backup_" + dateStamp;
+  var backupSheetCopy = ssFile.makeCopy(backupSheetName, backupFolder);
+  var sheetBackupUrl = backupSheetCopy.getUrl();
+
+  // 2. Export & Save Microsoft Excel (.xlsx) Copy in Drive
+  var excelFileUrl = "";
+  try {
+    var exportUrl = "https://docs.google.com/spreadsheets/d/" + ss.getId() + "/export?format=xlsx";
+    var response = UrlFetchApp.fetch(exportUrl, {
+      headers: { Authorization: "Bearer " + ScriptApp.getOAuthToken() },
+      muteHttpExceptions: true
+    });
+    if (response.getResponseCode() === 200) {
+      var excelBlob = response.getBlob().setName(backupSheetName + ".xlsx");
+      var excelFile = backupFolder.createFile(excelBlob);
+      excelFileUrl = excelFile.getUrl();
+    }
+  } catch (err) {
+    Logger.log("Excel export note: " + err.toString());
+  }
+
+  // 3. Optional Auto-Pruning: Keep up to 30 most recent daily backups
+  try {
+    pruneOldBackups(backupFolder, 30);
+  } catch (pErr) {
+    Logger.log("Pruning note: " + pErr.toString());
+  }
+
+  Logger.log("Daily backup created successfully at " + friendlyDate);
+  return {
+    status: "success",
+    timestamp: dateStamp,
+    sheetBackupUrl: sheetBackupUrl,
+    excelBackupUrl: excelFileUrl
+  };
+}
+
+/**
+ * Prunes backups older than the maxRetentionCount to keep Google Drive storage clean.
+ */
+function pruneOldBackups(folder, maxRetention) {
+  var files = folder.getFiles();
+  var fileList = [];
+  while (files.hasNext()) {
+    var f = files.next();
+    fileList.push({ file: f, date: f.getDateCreated().getTime() });
+  }
+  if (fileList.length > maxRetention * 2) { // 2 files per backup (Sheet + XLSX)
+    fileList.sort(function(a, b) { return a.date - b.date; }); // Oldest first
+    var toRemove = fileList.length - (maxRetention * 2);
+    for (var i = 0; i < toRemove; i++) {
+      fileList[i].file.setTrashed(true);
+    }
+  }
+}
+
+/**
+ * Ensures the daily automated time-driven trigger is installed in Apps Script.
+ * Runs once every 24 hours (daily at 2:00 AM).
+ */
+function installDailyBackupTrigger() {
+  var triggers = ScriptApp.getProjectTriggers();
+  for (var i = 0; i < triggers.length; i++) {
+    if (triggers[i].getHandlerFunction() === "createDailyBackup") {
+      return; // Already installed, do not duplicate
+    }
+  }
+  ScriptApp.newTrigger("createDailyBackup")
+    .timeBased()
+    .everyDays(1)
+    .atHour(2) // 2:00 AM local time
+    .create();
+  Logger.log("Daily backup trigger successfully registered (runs daily at 2 AM).");
+}
+
+/**
+ * 1-Click Manual Backup: Creates an instant backup and displays confirmation modal.
+ */
+function manualBackupToDrive() {
+  var res = createDailyBackup();
+  var folder = getBackupFolder();
+  var html = HtmlService.createHtmlOutput(
+    '<!DOCTYPE html><html><head><meta charset="utf-8">' +
+    '<style>' +
+    'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0c0c0f; color: #fff; padding: 22px; text-align: center; }' +
+    '.icon { font-size: 36px; margin-bottom: 8px; }' +
+    '.btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }' +
+    '.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #d4ff00; color: #000; font-weight: 800; font-size: 13px; padding: 12px 18px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 15px rgba(212,255,0,0.3); }' +
+    '.btn-secondary { background: #1c1c22; color: #fff; border: 1px solid #333; box-shadow: none; }' +
+    '.info { font-size: 11px; color: #a0a0ab; margin-top: 14px; line-height: 1.4; }' +
+    '</style></head><body>' +
+    '<div class="icon">💾</div>' +
+    '<h3 style="margin:0 0 6px 0; font-size:16px;">Spreadsheet Backup Created!</h3>' +
+    '<p style="margin:0; font-size:12px; color:#aaa;">Complete snapshot saved to Google Drive (Google Sheet + Excel .xlsx)</p>' +
+    '<div class="btn-group">' +
+    '<a href="' + res.sheetBackupUrl + '" target="_blank" class="btn">📄 Open Google Sheet Backup</a>' +
+    '<a href="' + folder.getUrl() + '" target="_blank" class="btn btn-secondary">📁 Open Backups Folder in Drive</a>' +
+    '</div>' +
+    '<div class="info">⚡ Automated Daily Backup is active. Google Apps Script runs this automatically every 24 hours at 2:00 AM.</div>' +
+    '</body></html>'
+  ).setWidth(380).setHeight(280);
+  SpreadsheetApp.getUi().showModalDialog(html, "Manual Backup Complete");
+}
+
+/**
+ * 1-Click Offline Excel Export & Direct Download:
+ * Opens the direct download URL in a new tab so the Excel file downloads to your PC.
+ */
+function downloadBackupExcel() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var exportUrl = "https://docs.google.com/spreadsheets/d/" + ss.getId() + "/export?format=xlsx";
+  var html = HtmlService.createHtmlOutput(
+    '<!DOCTYPE html><html><head><meta charset="utf-8">' +
+    '<style>' +
+    'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0c0c0f; color: #fff; padding: 25px; text-align: center; }' +
+    '.icon { font-size: 36px; margin-bottom: 8px; }' +
+    '.dl-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #d4ff00; color: #000; font-weight: 800; font-size: 14px; padding: 13px 22px; border-radius: 8px; text-decoration: none; margin-top: 14px; box-shadow: 0 4px 15px rgba(212,255,0,0.3); }' +
+    '.info { font-size: 11px; color: #a0a0ab; margin-top: 12px; line-height: 1.4; }' +
+    '</style></head><body>' +
+    '<div class="icon">📥</div>' +
+    '<h3 style="margin:0 0 6px 0; font-size:16px;">Download Offline Sheet Backup</h3>' +
+    '<p style="margin:0; font-size:12px; color:#aaa;">Exporting complete Chauffeur Registry & KPI Dashboard to Microsoft Excel (.xlsx)</p>' +
+    '<a href="' + exportUrl + '" target="_blank" class="dl-btn">💾 Click to Download .xlsx</a>' +
+    '<div class="info">Download starting automatically in a new tab... If blocked by your browser, click the yellow button above.</div>' +
+    '<script>' +
+    'window.open("' + exportUrl + '", "_blank");' +
+    'setTimeout(function(){ google.script.host.close(); }, 5000);' +
+    '</script></body></html>'
+  ).setWidth(380).setHeight(250);
+  SpreadsheetApp.getUi().showModalDialog(html, "Downloading Excel Backup");
+}
+
+/**
+ * Opens the dedicated Google Drive Backups folder in a new browser tab.
+ */
+function openBackupFolder() {
+  var folder = getBackupFolder();
+  var url = folder.getUrl();
+  var html = HtmlService.createHtmlOutput('<html><script>window.open("' + url + '", "_blank");google.script.host.close();</script><body>Opening Daily Backups Folder...</body></html>')
+    .setWidth(300)
+    .setHeight(80);
+  SpreadsheetApp.getUi().showModalDialog(html, "Opening Daily Backups");
 }
