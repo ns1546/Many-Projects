@@ -23,3 +23,4 @@ function fetchGet(urlStr) {
 }
 
 fetchGet(url);
+

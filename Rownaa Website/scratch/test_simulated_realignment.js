@@ -186,3 +186,4 @@ if (result.length === 2 &&
   console.error('\n❌ FAILURE IN REALIGNMENT SIMULATION!');
   process.exit(1);
 }
+

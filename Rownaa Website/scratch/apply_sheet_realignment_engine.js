@@ -393,3 +393,4 @@ function updateWebhookGs(filePath) {
 
 updateWebhookGs('google_sheet_webhook.gs');
 updateWebhookGs('netlify-driver-portal/google_sheet_webhook.gs');
+
