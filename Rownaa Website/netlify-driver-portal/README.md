@@ -40,4 +40,4 @@ If submissions show a 401 error:
    - **Who has access:** MUST be set to **Anyone** (so drivers can submit their application without signing into a Google account)
 6. Click **Deploy** and copy the **Web app URL**.
 7. The portal is already pre-configured with your latest Web App URL:
-   `https://script.google.com/macros/s/AKfycbwuaHLdJ1sQe9RI5m1ioU2CsbSTLTvM34udGNIObnlRgs3c_Q3XmhyJs3JbExjqDlkuuQ/exec`
+   `https://script.google.com/macros/s/AKfycby8srbyj_WYsOeL3v8vX3yqmeHTNRHjuEH2nR8YI6sTxTN5DaV3LDQdT2VxVI5bGyJDlQ/exec`
