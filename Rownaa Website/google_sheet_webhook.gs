@@ -27,13 +27,13 @@
  */
 
 // Global Configuration
-var FOLDER_NAME = "Rownaa Chauffeur Documents";
-var BACKUP_FOLDER_NAME = "Rownaa Operations Daily Backups";
-var SHEET_REGISTRY_NAME = "Chauffeur Registry";
-var SHEET_FLEET_SERVICES_NAME = "Rental Fleet Services";
-var SHEET_VEHICLES_VAULT_NAME = "Fleet Vehicle Vault";
-var SHEET_FLEET_DRIVERS_NAME = "Fleet Driver Roster";
-var SHEET_DASHBOARD_NAME = "Operations KPI Dashboard";
+var FOLDER_NAME = "Rownaa Driver Documents";
+var BACKUP_FOLDER_NAME = "Rownaa Daily Backups";
+var SHEET_REGISTRY_NAME = "All Registrations"; // (Main Sheet with All Drivers & Cars)
+var SHEET_FLEET_SERVICES_NAME = "Rental Companies";
+var SHEET_VEHICLES_VAULT_NAME = "Cars List";
+var SHEET_FLEET_DRIVERS_NAME = "Drivers List";
+var SHEET_DASHBOARD_NAME = "Dashboard";
 var MAX_PAYLOAD_BYTES = 10 * 1024 * 1024; // 10MB security ceiling
 
 /**
@@ -47,19 +47,19 @@ function onOpen() {
   }
 
   var ui = SpreadsheetApp.getUi();
-  ui.createMenu("⚡ Rownaa Operations")
-    .addItem("🔄 Rebuild & Setup Entire System", "safeRebuildAndSetup")
+  ui.createMenu("⚡ Rownaa Driver & Car Manager")
+    .addItem("🔄 Setup & Align All Sheets (Safe)", "safeRebuildAndSetup")
     .addSeparator()
     .addItem("💬 Open WhatsApp for Selected Driver", "openWhatsAppForSelectedDriver")
-    .addItem("📋 Copy Chauffeur Details Summary", "copyChauffeurSummary")
-    .addItem("🔍 Check Duplicate & Resubmission Audit Log", "checkDuplicateAuditLog")
+    .addItem("📋 Copy Driver Details Summary", "copyChauffeurSummary")
+    .addItem("🔍 Check Duplicate & Repeat Applications", "checkDuplicateAuditLog")
     .addItem("💾 Backup Spreadsheet to Google Drive Now", "manualBackupToDrive")
     .addItem("📥 Download Offline Backup (.xlsx Excel)", "downloadBackupExcel")
     .addItem("📂 Open Daily Backups Folder in Drive", "openBackupFolder")
     .addSeparator()
-    .addItem("🧹 Realign Columns & Clean Formulas (Safe)", "repairExistingErrors")
-    .addItem("🎛️ Refresh Operations Dashboard", "refreshDashboard")
-    .addItem("🗂️ Open Chauffeur Document Vault", "openDriveFolder")
+    .addItem("🧹 Fix & Align Sheet Columns (Safe)", "repairExistingErrors")
+    .addItem("🎛️ Refresh Dashboard", "refreshDashboard")
+    .addItem("🗂️ Open Documents Folder in Drive", "openDriveFolder")
     .addToUi();
 }
 
@@ -145,6 +145,13 @@ function openWhatsAppForSelectedDriver() {
 function checkDuplicateAuditLog() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
+  if (!sheet) {
+    var legacyReg = ss.getSheetByName("Chauffeur Registry");
+    if (legacyReg) {
+      legacyReg.setName(SHEET_REGISTRY_NAME);
+      sheet = legacyReg;
+    }
+  }
   if (!sheet) {
     SpreadsheetApp.getUi().alert("Chauffeur Registry sheet not found. Please run 'Rebuild & Setup Entire System' first.");
     return;
@@ -1272,16 +1279,16 @@ function doPost(e) {
     var auditFgColor = "#137333";
 
     if (isDriverCorrection) {
-      auditTrackerStr = "🔄 RESUBMISSION [Iteration #" + submissionIteration + "]" + 
+      auditTrackerStr = "🔄 Repeat / Correction [Iteration #" + submissionIteration + "]" + 
         (prevAppIdGiven ? " (Correcting #" + prevAppIdGiven + ")" : (duplicateMatches.length > 0 ? " (Matches Prev #" + duplicateMatches[0].appId + ")" : ""));
       auditBgColor = "#fff8e1"; // warm amber
       auditFgColor = "#b78103";
     } else if (duplicateMatches.length > 0) {
-      auditTrackerStr = "⚠️ DUPLICATE SUBMISSION [Iteration #" + submissionIteration + "] (Matches Row " + duplicateMatches[0].row + " #" + duplicateMatches[0].appId + " on " + duplicateMatches[0].matchedOn + ")";
+      auditTrackerStr = "⚠️ Repeat Application [Iteration #" + submissionIteration + "] (Matches Row " + duplicateMatches[0].row + " #" + duplicateMatches[0].appId + " on " + duplicateMatches[0].matchedOn + ")";
       auditBgColor = "#fde8e8"; // soft red
       auditFgColor = "#c53030";
     } else {
-      auditTrackerStr = "✅ UNIQUE (First-Time Applicant)";
+      auditTrackerStr = "✅ First-Time Application";
       auditBgColor = "#e6f4ea";
       auditFgColor = "#137333";
     }

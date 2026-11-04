@@ -247,3 +247,4 @@ targetFiles.forEach(file => {
   fs.writeFileSync(file, content, 'utf8');
   console.log('Successfully updated fleet & document capabilities in:', file);
 });
+
