@@ -21,3 +21,4 @@ try {
 } catch (e) {
   console.log('Still error:', e);
 }
+

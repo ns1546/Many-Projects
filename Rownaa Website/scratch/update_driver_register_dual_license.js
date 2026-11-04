@@ -181,3 +181,4 @@ console.log('Updated applicationPayload with dual license schema');
 // Write back
 fs.writeFileSync('driver-register.html', html, 'utf8');
 console.log('Successfully saved driver-register.html');
+

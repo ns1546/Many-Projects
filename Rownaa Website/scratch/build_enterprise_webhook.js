@@ -1295,3 +1295,4 @@ function openBackupFolder() {
 fs.writeFileSync('google_sheet_webhook.gs', code, 'utf8');
 fs.writeFileSync('netlify-driver-portal/google_sheet_webhook.gs', code, 'utf8');
 console.log('google_sheet_webhook.gs successfully updated with Dual-License Architecture (36 Columns)!');
+

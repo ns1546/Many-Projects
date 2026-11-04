@@ -71,3 +71,4 @@ html = html.replace(oldPopulateSummaryLic, newPopulateSummaryLic);
 
 fs.writeFileSync('driver-register.html', html, 'utf8');
 console.log('Successfully patched I18N and language bindings for dual licenses in driver-register.html');
+

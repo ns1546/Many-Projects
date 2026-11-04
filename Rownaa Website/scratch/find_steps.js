@@ -12,3 +12,4 @@ while ((m = regex.exec(content)) !== null) {
   const pos = content.indexOf(s);
   console.log(s, 'found at:', pos, content.slice(pos - 20, pos + 40));
 });
+

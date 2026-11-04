@@ -7,3 +7,4 @@ while ((m = regex.exec(content)) !== null) {
   console.log('Match at pos:', m.index, m[0].slice(0, 100));
   console.log(content.slice(m.index - 200, m.index + 800));
 }
+

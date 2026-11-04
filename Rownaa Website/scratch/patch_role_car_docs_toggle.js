@@ -56,3 +56,4 @@ html = html.replace('id="zone-car-fitness-doc" style="margin-top:12px;">', 'id="
 
 fs.writeFileSync('driver-register.html', html, 'utf8');
 console.log('Successfully wired dynamic Car License document visibility based on chauffeur role!');
+

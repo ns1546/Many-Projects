@@ -6,3 +6,4 @@ let m;
 while ((m = regex.exec(content)) !== null) {
   console.log(m[0], 'around pos:', m.index);
 }
+
