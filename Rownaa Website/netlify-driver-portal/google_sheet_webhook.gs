@@ -1,40 +1,32 @@
 /**
  * ============================================================================
- * ROWNAA® EXECUTIVE CHAUFFEUR OPERATIONS PLATFORM — ENTERPRISE ENGINE v6.0
- * Architecture: Real-Time CRM, Drive Vault, WhatsApp Dispatch & BI Analytics
- * Dual License Schema: Dedicated Driver's License & Dedicated Car/Vehicle License
+ * ROWNAA® DRIVER, CAR & RENTAL OPERATIONS PLATFORM — ENTERPRISE ENGINE v7.0
+ * Architecture: 2-Section Clean Master (1. Dashboard | 2. Registrations)
+ * Multi-Vehicle & Multi-Driver Single-Column Schema (No Sub-Columns, No Broken Cells)
  * ============================================================================
  * 
- * 🌟 CORE FEATURES:
- * 1. 🚗 DUAL-LICENSE VERIFICATION SCHEMA (36 Enterprise Columns):
- *    - DRIVER'S DRIVING LICENSE: License No, Class, Expiry, Status, Front & Back Photos.
- *    - CAR / VEHICLE LICENSE: Registration Plate No, Model/Make, Fitness/Tax Expiry,
- *      Car Registration / Blue Book (Front & Back), and Tax Token / Fitness Certificate.
- * 2. 🟢 1-Click WhatsApp Button (Column E):
- *    - In-cell clickable button opening pre-filled WhatsApp chat directly.
- * 3. ⚡ 1-Click WhatsApp Launcher Menu:
- *    - Works with automatic tab switching to Chauffeur Registry.
- * 4. 🛡️ 100% Non-Destructive Safe Initialization (safeRebuildAndSetup):
- *    - Zero data loss guarantee + automatic Google Drive backup before layout changes.
- * 5. 🔍 Advanced Duplicate Data Tracker & Resubmission Auditor:
- *    - Detects matching Phone, NID, Driver License, or Car Plate.
- *    - Iteration counter [Iteration #X] with audit color styling.
- * 6. 📂 8-Document Dedicated Google Drive Vault:
- *    - Headshot, Driver Lic (Front/Back), Car Lic/Blue Book (Front/Back), Fitness/Tax, NID (Front/Back).
- * 7. 🎛️ Operations KPI Dashboard Control Center:
- *    - Live counters, sparklines, demographic inflow, and approval rates.
+ * 🌟 CORE ARCHITECTURAL PILLARS:
+ * 1. 📂 2 CLEAN OPERATIONAL SECTIONS:
+ *    - SECTION 1: "Dashboard" (Real-time Operations KPI Control Center & Sparklines)
+ *    - SECTION 2: "Registrations" (Single unified database for All Drivers, Owner-Drivers & Rental Companies)
+ * 2. 🚗 MULTI-CAR SINGLE COLUMN (Col Q):
+ *    - Multiple cars from rental businesses are neatly listed inside ONE single formatted column.
+ * 3. 👨‍✈️ MULTI-DRIVER SINGLE COLUMN (Col R):
+ *    - Multiple employed drivers from rental fleets are neatly listed inside ONE single formatted column.
+ * 4. 🛡️ 100% MERGED-CELL FREE & ZERO-FREEZE-CRASH:
+ *    - Flat, single-row headers. Defensive unmerge (breakApart) eliminates freeze exceptions forever.
+ * 5. 🟢 1-Click WhatsApp Button (Column E): Clickable chat launcher with international prefix handling.
+ * 6. 🔍 Advanced Duplicate Data Tracker & Resubmission Auditor (Columns AH & AI).
+ * 7. 🗂️ 9-Document Dedicated Google Drive Vault (Columns Y to AG).
  * ============================================================================
  */
 
-// Global Configuration
-var FOLDER_NAME = "Rownaa Chauffeur Documents";
-var BACKUP_FOLDER_NAME = "Rownaa Operations Daily Backups";
-var SHEET_REGISTRY_NAME = "Chauffeur Registry";
-var SHEET_FLEET_SERVICES_NAME = "Rental Fleet Services";
-var SHEET_VEHICLES_VAULT_NAME = "Fleet Vehicle Vault";
-var SHEET_FLEET_DRIVERS_NAME = "Fleet Driver Roster";
-var SHEET_DASHBOARD_NAME = "Operations KPI Dashboard";
-var MAX_PAYLOAD_BYTES = 10 * 1024 * 1024; // 10MB security ceiling
+// Global Configuration — 2 Master Operational Sections
+var FOLDER_NAME = "Rownaa Driver Documents";
+var BACKUP_FOLDER_NAME = "Rownaa Daily Backups";
+var SHEET_REGISTRY_NAME = "Registrations"; // (Main Sheet with All Drivers & Cars)
+var SHEET_DASHBOARD_NAME = "Dashboard";     // (Operations KPI Dashboard)
+var MAX_PAYLOAD_BYTES = 10 * 1024 * 1024;  // 10MB security ceiling
 
 /**
  * Custom UI Menu added to Google Sheets top toolbar upon opening.
@@ -47,20 +39,35 @@ function onOpen() {
   }
 
   var ui = SpreadsheetApp.getUi();
-  ui.createMenu("⚡ Rownaa Operations")
-    .addItem("🔄 Rebuild & Setup Entire System", "safeRebuildAndSetup")
+  ui.createMenu("⚡ Rownaa Driver & Car Manager")
+    .addItem("🔄 Setup & Align All Sheets (Safe)", "safeRebuildAndSetup")
     .addSeparator()
     .addItem("💬 Open WhatsApp for Selected Driver", "openWhatsAppForSelectedDriver")
-    .addItem("📋 Copy Chauffeur Details Summary", "copyChauffeurSummary")
-    .addItem("🔍 Check Duplicate & Resubmission Audit Log", "checkDuplicateAuditLog")
+    .addItem("📋 Copy Driver Details Summary", "copyChauffeurSummary")
+    .addItem("🔍 Check Duplicate & Repeat Applications", "checkDuplicateAuditLog")
     .addItem("💾 Backup Spreadsheet to Google Drive Now", "manualBackupToDrive")
     .addItem("📥 Download Offline Backup (.xlsx Excel)", "downloadBackupExcel")
     .addItem("📂 Open Daily Backups Folder in Drive", "openBackupFolder")
     .addSeparator()
-    .addItem("🧹 Realign Columns & Clean Formulas (Safe)", "repairExistingErrors")
-    .addItem("🎛️ Refresh Operations Dashboard", "refreshDashboard")
-    .addItem("🗂️ Open Chauffeur Document Vault", "openDriveFolder")
+    .addItem("🧹 Fix & Align Sheet Columns (Safe)", "repairExistingErrors")
+    .addItem("🎛️ Refresh Dashboard", "refreshDashboard")
+    .addItem("🗂️ Open Documents Folder in Drive", "openDriveFolder")
     .addToUi();
+}
+
+/**
+ * Helper to retrieve the active Registrations sheet (supporting legacy tab aliases).
+ */
+function getRegistrationsSheet(ss) {
+  if (!ss) ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
+  if (!sheet) {
+    sheet = ss.getSheetByName("All Registrations") || ss.getSheetByName("Chauffeur Registry") || ss.getSheetByName("Driver Registry");
+    if (sheet) {
+      sheet.setName(SHEET_REGISTRY_NAME);
+    }
+  }
+  return sheet;
 }
 
 /**
@@ -69,21 +76,21 @@ function onOpen() {
  */
 function openWhatsAppForSelectedDriver() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
-  if (!sheet || sheet.getLastColumn() < 36 || sheet.getRange(1, 23).getValue() !== "Verification Status") {
+  var sheet = getRegistrationsSheet(ss);
+  
+  if (!sheet || sheet.getLastColumn() < 30) {
     autoAlignAndRepairSheet(false);
-    sheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
+    sheet = getRegistrationsSheet(ss);
   }
   
   if (!sheet) {
-    SpreadsheetApp.getUi().alert("Chauffeur Registry sheet not found. Please run 'Rebuild & Setup Entire System' first.");
+    SpreadsheetApp.getUi().alert("Registrations sheet not found. Please click 'Setup & Align All Sheets (Safe)' first.");
     return;
   }
 
-  // If user is currently looking at another tab, switch to Registry tab
   if (ss.getActiveSheet().getName() !== SHEET_REGISTRY_NAME) {
     ss.setActiveSheet(sheet);
-    SpreadsheetApp.getUi().alert("Switched to 'Chauffeur Registry' tab. Please click any driver's row (Row 2 or below) and click 'Open WhatsApp' again.");
+    SpreadsheetApp.getUi().alert("Switched to '" + SHEET_REGISTRY_NAME + "' tab. Please click any driver's row (Row 2 or below) and click 'Open WhatsApp' again.");
     return;
   }
 
@@ -93,7 +100,7 @@ function openWhatsAppForSelectedDriver() {
     return;
   }
 
-  var name = sheet.getRange(activeRow, 3).getValue() || "Chauffeur"; // Col C: Name
+  var name = sheet.getRange(activeRow, 3).getValue() || "Driver / Owner"; // Col C: Name
   var phoneVal = sheet.getRange(activeRow, 4).getValue(); // Col D: Phone
   var rawPhone = String(phoneVal).replace(/^'/, "").trim();
 
@@ -109,7 +116,7 @@ function openWhatsAppForSelectedDriver() {
     return;
   }
 
-  var message = "Hello " + name + ", this is Rownaa Executive Fleet Operations regarding your Chauffeur Application.";
+  var message = "Hello " + name + ", this is Rownaa Driver & Fleet Operations regarding your application.";
   var waUrl = "https://wa.me/" + cleanDigits + "?text=" + encodeURIComponent(message);
 
   var html = HtmlService.createHtmlOutput(
@@ -134,29 +141,79 @@ function openWhatsAppForSelectedDriver() {
 }
 
 /**
- * 1-Click Copy Chauffeur Details Summary:
- * Generates an executive clipboard-ready dossier of the selected driver.
+ * 1-Click Copy Driver / Fleet Summary:
+ * Generates an executive clipboard-ready dossier of the selected row.
  */
+function copyChauffeurSummary() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = getRegistrationsSheet(ss);
+  if (!sheet) return;
+
+  var activeRow = ss.getActiveSheet().getActiveCell().getRow();
+  if (activeRow < 2) {
+    SpreadsheetApp.getUi().alert("Please select a driver / company row (Row 2 or below) first.");
+    return;
+  }
+
+  var maxCols = Math.min(sheet.getLastColumn(), 37);
+  var r = sheet.getRange(activeRow, 1, 1, maxCols).getValues()[0];
+  var summaryText = 
+    "⭐ ROWNAA® DRIVER & CAR PROFILE DOSSIER ⭐\n" +
+    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+    "• Application ID: " + (r[1] || "N/A") + "\n" +
+    "• Full Name / Owner: " + (r[2] || "N/A") + "\n" +
+    "• Phone: " + (r[3] || "N/A") + "\n" +
+    "• Smart NID: " + (r[5] || "N/A") + "\n" +
+    "• Base District: " + (r[6] || "N/A") + "\n" +
+    "• Role / Type: " + (r[8] || "N/A") + "\n" +
+    "• Company Name: " + (r[9] || "Personal") + "\n" +
+    "• Primary License: " + (r[11] || "N/A") + " (" + (r[12] || "N/A") + ")\n" +
+    "• Primary Car: " + (r[14] || "N/A") + "\n" +
+    "• All Registered Cars: " + (r[16] || "Single / None") + "\n" +
+    "• Employed Drivers: " + (r[17] || "Solo Applicant") + "\n" +
+    "• Payout Wallet: " + (r[21] || "N/A") + "\n" +
+    "• Verification Status: " + (r[22] || "Pending Verification") + "\n" +
+    "• Audit Tracking: " + (r[33] || "Unique") + "\n" +
+    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+
+  var html = HtmlService.createHtmlOutput(
+    '<!DOCTYPE html><html><head><meta charset="utf-8">' +
+    '<style>' +
+    'body { font-family: monospace; background: #0c0c0f; color: #d4ff00; padding: 16px; margin: 0; }' +
+    'textarea { width: 100%; height: 200px; background: #16161c; color: #fff; border: 1px solid #333; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 11px; resize: none; box-sizing: border-box; }' +
+    '.copy-btn { margin-top: 10px; background: #d4ff00; color: #000; border: none; font-weight: 800; font-size: 13px; padding: 10px 16px; border-radius: 6px; cursor: pointer; width: 100%; }' +
+    '</style></head><body>' +
+    '<h4 style="margin:0 0 8px 0; color:#fff; font-family:sans-serif;">📋 Driver & Vehicle Summary Dossier</h4>' +
+    '<textarea id="txt">' + summaryText.replace(/\n/g, "\n") + '</textarea>' +
+    '<button class="copy-btn" onclick="copyDossier()">📋 Copy to Clipboard</button>' +
+    '<script>' +
+    'function copyDossier() { var t = document.getElementById("txt"); t.select(); document.execCommand("copy"); alert("Copied to clipboard!"); google.script.host.close(); }' +
+    '</script></body></html>'
+  ).setWidth(440).setHeight(320);
+
+  SpreadsheetApp.getUi().showModalDialog(html, "Summary Dossier");
+}
+
 /**
  * 1-Click Audit & Duplicate Detection Scanner:
  * Analyzes all applicant rows for repeat phone numbers, NID, Driver License, or Car Plates.
- * Shows an executive dashboard modal with count of Unique, Resubmissions, and Duplicates.
  */
 function checkDuplicateAuditLog() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
+  var sheet = getRegistrationsSheet(ss);
   if (!sheet) {
-    SpreadsheetApp.getUi().alert("Chauffeur Registry sheet not found. Please run 'Rebuild & Setup Entire System' first.");
+    SpreadsheetApp.getUi().alert("Registrations sheet not found. Please click 'Setup & Align All Sheets (Safe)' first.");
     return;
   }
 
   var lastRow = sheet.getLastRow();
   if (lastRow < 2) {
-    SpreadsheetApp.getUi().alert("No chauffeur records found yet. All submissions will be audited automatically.");
+    SpreadsheetApp.getUi().alert("No records found yet. All submissions will be audited automatically.");
     return;
   }
 
-  var data = sheet.getRange(2, 1, lastRow - 1, 36).getValues();
+  var maxCols = Math.min(sheet.getLastColumn(), 37);
+  var data = sheet.getRange(2, 1, lastRow - 1, maxCols).getValues();
   var uniqueCount = 0;
   var resubmissionCount = 0;
   var duplicateCount = 0;
@@ -164,13 +221,14 @@ function checkDuplicateAuditLog() {
 
   for (var i = 0; i < data.length; i++) {
     var r = data[i];
-    var auditStatus = String(r[32] || ""); // Col AG (33)
-    var notes = String(r[33] || "");      // Col AH (34)
+    // Col AH is 34 (idx 33), Col AI is 35 (idx 34)
+    var auditStatus = String(r[33] || r[32] || "");
+    var notes = String(r[34] || r[33] || "");
     var rowNum = i + 2;
 
-    if (auditStatus.indexOf("RESUBMISSION") !== -1) {
+    if (auditStatus.indexOf("RESUBMISSION") !== -1 || auditStatus.indexOf("Correction") !== -1 || auditStatus.indexOf("Repeat") !== -1) {
       resubmissionCount++;
-      flaggedList.push("Row " + rowNum + ": [RESUBMISSION] " + r[2] + " (" + r[1] + ") — " + notes);
+      flaggedList.push("Row " + rowNum + ": [REPEAT/CORRECTION] " + r[2] + " (" + r[1] + ") — " + notes);
     } else if (auditStatus.indexOf("DUPLICATE") !== -1) {
       duplicateCount++;
       flaggedList.push("Row " + rowNum + ": [DUPLICATE] " + r[2] + " (" + r[1] + ") — " + auditStatus);
@@ -193,7 +251,7 @@ function checkDuplicateAuditLog() {
     '<h3 style="margin:0 0 12px 0; font-size:16px;">🔍 Duplicate & Resubmission Audit Tracker</h3>' +
     '<div class="kpi-grid">' +
     '<div class="kpi"><div class="kpi-val" style="color:#52c41a;">' + uniqueCount + '</div><div class="kpi-lbl">Unique</div></div>' +
-    '<div class="kpi"><div class="kpi-val" style="color:#faad14;">' + resubmissionCount + '</div><div class="kpi-lbl">Resubmissions</div></div>' +
+    '<div class="kpi"><div class="kpi-val" style="color:#faad14;">' + resubmissionCount + '</div><div class="kpi-lbl">Repeat / Edit</div></div>' +
     '<div class="kpi"><div class="kpi-val" style="color:#ff4d4f;">' + duplicateCount + '</div><div class="kpi-lbl">Duplicates</div></div>' +
     '</div>' +
     '<div style="font-size:12px; color:#aaa; margin-bottom:6px;">Flagged Application Audit Log:</div>' +
@@ -205,54 +263,6 @@ function checkDuplicateAuditLog() {
   ).setWidth(420).setHeight(360);
 
   SpreadsheetApp.getUi().showModalDialog(html, "Audit & Duplicate Tracker");
-}
-
-function copyChauffeurSummary() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
-  if (!sheet) return;
-
-  var activeRow = ss.getActiveSheet().getActiveCell().getRow();
-  if (activeRow < 2) {
-    SpreadsheetApp.getUi().alert("Please select a driver row (Row 2 or below) first.");
-    return;
-  }
-
-  var r = sheet.getRange(activeRow, 1, 1, 36).getValues()[0];
-  var summaryText = 
-    "⭐ ROWNAA EXECUTIVE CHAUFFEUR PROFILE ⭐\n" +
-    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
-    "• Application ID: " + r[1] + "\n" +
-    "• Full Name: " + r[2] + "\n" +
-    "• Phone: " + r[3] + "\n" +
-    "• NID Number: " + r[5] + "\n" +
-    "• District / Base: " + r[6] + "\n" +
-    "• Emergency Contact: " + r[7] + "\n" +
-    "• Driver License No: " + r[8] + " (" + r[9] + ") - Expiry: " + r[10] + "\n" +
-    "• Car License / Plate No: " + (r[12] || "N/A") + " - " + (r[13] || "Fleet Vehicle") + "\n" +
-    "• Role: " + r[19] + "\n" +
-    "• Vehicle Profile: " + r[20] + "\n" +
-    "• Payout Wallet: " + r[21] + "\n" +
-    "• Verification Status: " + r[22] + "\n" +
-    "• Audit Tracking: " + r[32] + "\n" +
-    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
-
-  var html = HtmlService.createHtmlOutput(
-    '<!DOCTYPE html><html><head><meta charset="utf-8">' +
-    '<style>' +
-    'body { font-family: monospace; background: #0c0c0f; color: #d4ff00; padding: 16px; margin: 0; }' +
-    'textarea { width: 100%; height: 180px; background: #16161c; color: #fff; border: 1px solid #333; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 11px; resize: none; box-sizing: border-box; }' +
-    '.copy-btn { margin-top: 10px; background: #d4ff00; color: #000; border: none; font-weight: 800; font-size: 13px; padding: 10px 16px; border-radius: 6px; cursor: pointer; width: 100%; }' +
-    '</style></head><body>' +
-    '<h4 style="margin:0 0 8px 0; color:#fff; font-family:sans-serif;">📋 Chauffeur Profile Dossier</h4>' +
-    '<textarea id="txt">' + summaryText.replace(/\n/g, "\n") + '</textarea>' +
-    '<button class="copy-btn" onclick="copyDossier()">📋 Copy to Clipboard</button>' +
-    '<script>' +
-    'function copyDossier() { var t = document.getElementById("txt"); t.select(); document.execCommand("copy"); alert("Copied to clipboard!"); google.script.host.close(); }' +
-    '</script></body></html>'
-  ).setWidth(420).setHeight(300);
-
-  SpreadsheetApp.getUi().showModalDialog(html, "Chauffeur Summary Dossier");
 }
 
 /**
@@ -281,12 +291,9 @@ function formatAsPlainText(val) {
 
 /**
  * Safe Rebuild & Setup System:
- * 1. Reassures operator that existing applicant rows are 100% preserved.
- * 2. Automatically creates a timestamped Google Drive backup before running.
- * 3. Runs setupSheet() to ensure all 36 column headers, dark luxury styling,
- *    frozen columns, validations, and KPI Dashboard formulas are perfectly applied.
- * 4. Cleans up default empty 'Sheet1' if present.
- * 5. Displays confirmation dialog.
+ * 1. Automatically creates a timestamped Google Drive backup before running.
+ * 2. Initializes the 2-Section architecture: "Dashboard" and "Registrations".
+ * 3. Never deletes or damages existing rows.
  */
 function rebuildEntireSystem() {
   safeRebuildAndSetup();
@@ -298,8 +305,15 @@ function safeRebuildAndSetup() {
 
   if (ui) {
     var resp = ui.alert(
-      "🔄 Rebuild & Setup Entire System",
-      "This will automatically initialize the full 4-Tab Relational Multi-Vehicle & Multi-Driver Schema (Chauffeur Registry, Rental Fleet Services, Fleet Vehicle Vault, Fleet Driver Roster), realign all 36 columns, rebuild the Operations KPI Dashboard, and heal all mismatched data.\n\n🛡️ 100% SAFE GUARANTEE:\n1. An automatic full timestamped backup is saved to Google Drive first.\n2. Existing chauffeur applicant rows will NEVER be deleted or cleared.\n\nDo you want to proceed?",
+      "🔄 Setup & Align All Sheets (Safe)",
+      "This will cleanly initialize the 2-Section Operations Architecture:\n\n" +
+      "1. 🎛️ Dashboard — Real-time KPI Control Center, Counters & Sparklines\n" +
+      "2. 🚗 Registrations — All Drivers, Owner-Drivers & Rental Companies in ONE Unified Sheet\n" +
+      "   (Multiple Cars and Multiple Drivers are neatly organized in their own single columns)\n\n" +
+      "🛡️ 100% SAFE GUARANTEE:\n" +
+      "• An automatic full backup will be saved to Google Drive first.\n" +
+      "• Existing applicant rows will NEVER be deleted or lost.\n\n" +
+      "Do you want to proceed?",
       ui.ButtonSet.YES_NO
     );
     if (resp !== ui.Button.YES) return;
@@ -313,47 +327,43 @@ function safeRebuildAndSetup() {
 
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   autoAlignAndRepairSheet(false);
-  setupMultiTabRelationalDatabase(ss);
   setupDashboardSheet(ss);
 
   if (ui) {
     ui.alert(
-      "✅ Enterprise System Initialized Successfully",
-      "All 5 Operational Modules have been built and aligned:\n\n" +
-      "1. 🚗 Chauffeur Registry (36 Columns Dual-License)\n" +
-      "2. 🏢 Rental Fleet Services (Owner Profiles & Commercial Banking)\n" +
-      "3. 🚙 Fleet Vehicle Vault (Per-Car Registration, Fitness & Blue Books)\n" +
-      "4. 👨‍✈️ Fleet Driver Roster (Per-Driver NID, Driving License & Plate Assignment)\n" +
-      "5. 🎛️ Operations KPI Dashboard (Real-time Fleet & Chauffeur BI)\n\n" +
-      "Your system is 100% ready for high-volume enterprise operations!",
+      "✅ Setup Complete",
+      "Your 2-Section Operations System is now active and ready:\n\n" +
+      "1. 🎛️ Dashboard (Real-time live KPI counters & metrics)\n" +
+      "2. 🚗 Registrations (Flat 37-column schema with dedicated Multi-Car & Multi-Driver columns)\n\n" +
+      "All columns are aligned and freeze errors are completely resolved!",
       ui.ButtonSet.OK
     );
   }
 }
 
+/**
+ * Self-healing repair menu handler.
+ */
+function repairExistingErrors() {
+  return autoAlignAndRepairSheet(true);
+}
+
+function setupSheet() {
+  autoAlignAndRepairSheet(false);
+  setupDashboardSheet();
+}
 
 /**
- * Master Enterprise Relational Tabs Setup:
- * 1. Chauffeur Registry (Solo Chauffeurs & Solo Owner-Drivers) - 36 Columns
- * 2. Rental Fleet Services (Fleet Businesses & Service Owners) - 21 Columns
- * 3. Fleet Vehicle Vault (Dedicated row for every single vehicle) - 19 Columns
- * 4. Fleet Driver Roster (Dedicated row for every employed driver) - 20 Columns
- * 5. Operations KPI Dashboard (Executive BI Control Center)
- */
-/**
- * Master Enterprise Realignment & Healing Engine:
- * 1. Automatically aligns all 36 columns into the Dual-License schema.
- * 2. Detects legacy 28-column rows and accurately shifts their fields into the 36-column layout.
- * 3. Removes corrupt ghost/blank rows.
- * 4. Regenerates formulas natively in values without calling destructive setFormulas().
- * 5. Applies Plain-Text formats, status dropdown validations on Col W, and dark luxury styling.
- * 6. Rebuilds the Operations KPI Dashboard tab.
+ * Master 37-Column Flat Alignment & Self-Healing Engine:
+ * - NO MERGED SUB-COLUMNS. Single flat header row.
+ * - Defensive breakApart() unfreezes and unmerges any corrupt merged cells from previous tests.
+ * - Freezes Row 1 and Columns 1 to 4 smoothly.
  */
 function autoAlignAndRepairSheet(interactive) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   
-  // 1. Ensure Registry Tab Exists
-  var sheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
+  // 1. Ensure Registrations Tab Exists
+  var sheet = getRegistrationsSheet(ss);
   if (!sheet) {
     var sheet1 = ss.getSheetByName("Sheet1");
     if (sheet1 && sheet1.getLastRow() === 0 && sheet1.getLastColumn() === 0) {
@@ -364,17 +374,11 @@ function autoAlignAndRepairSheet(interactive) {
     }
   }
 
-  // 2. Ensure at least 36 columns exist
-  var currentCols = sheet.getMaxColumns();
-  if (currentCols < 36) {
-    sheet.insertColumnsAfter(currentCols, 36 - currentCols);
-  }
-
-  // 2b. DEFENSIVE HEALING: Unfreeze & Break apart any existing merged cells to prevent freeze exceptions
+  // 2. DEFENSIVE HEALING: Unfreeze & Break apart ANY existing merged cells to prevent freeze exceptions
   try {
     sheet.setFrozenRows(0);
     sheet.setFrozenColumns(0);
-    var breakR = Math.min(10, sheet.getMaxRows());
+    var breakR = Math.min(15, sheet.getMaxRows());
     var breakC = Math.max(60, sheet.getMaxColumns());
     sheet.getRange(1, 1, breakR, breakC).breakApart();
   } catch (breakErr) {
@@ -394,46 +398,53 @@ function autoAlignAndRepairSheet(interactive) {
     Logger.log("Row 2 clean note: " + r2Err.toString());
   }
 
+  // Ensure at least 37 columns exist
+  var currentCols = sheet.getMaxColumns();
+  if (currentCols < 37) {
+    sheet.insertColumnsAfter(currentCols, 37 - currentCols);
+  }
+
+  // 3. MASTER 37 FLAT HEADERS (1-Row, Easy & Professional English)
   var headers = [
-    "Timestamp",                       // Col A (1)
-    "Application ID",                  // Col B (2)
-    "Full Name",                       // Col C (3)
-    "Phone (WhatsApp)",                // Col D (4)
-    "💬 1-Click WhatsApp",              // Col E (5)
-    "NID Number",                      // Col F (6)
-    "Base Area / District",            // Col G (7)
-    "Emergency Contact",               // Col H (8)
-    "Driver License No. (BRTA)",       // Col I (9)  - Dedicated Driver's License
-    "Driver License Class",            // Col J (10) - Professional Light/Heavy
-    "Driver License Expiry",           // Col K (11) - Expiry Date
-    "Driver License Status",           // Col L (12) - Formula Expiry Alert
-    "Car License / Reg Plate No.",     // Col M (13) - Dedicated Car License Plate
-    "Car Model & Make",                // Col N (14) - Dedicated Vehicle Model
-    "Car Fitness & Tax Expiry",        // Col O (15) - Vehicle Fitness Expiry
-    "Experience",                      // Col P (16)
-    "Languages",                       // Col Q (17)
-    "Services Selected",               // Col R (18)
-    "Availability",                    // Col S (19)
-    "Role Type",                       // Col T (20) - Chauffeur vs Rental Fleet Owner
-    "Full Vehicle & Fleet Details",    // Col U (21) - Comprehensive fleet/car manifest
-    "Payout Wallet & Bank Account",    // Col V (22) - bKash / Nagad / Bank Details
-    "Verification Status",             // Col W (23) - Dropdown (Pending, Approved, etc)
-    "Doc Completeness",                // Col X (24) - Formula Completeness Check
-    "Photo Document",                  // Col Y (25) - Chauffeur Portrait Headshot
-    "Driver License (Front)",          // Col Z (26) - Driver Lic Front
-    "Driver License (Back)",           // Col AA (27) - Driver Lic Back
-    "Car License / Blue Book (Front)", // Col AB (28) - Car Reg / Blue Book Front
-    "Car License / Blue Book (Back)",  // Col AC (29) - Car Reg / Blue Book Back
-    "Car Fitness / Tax Token Doc",     // Col AD (30) - Tax Token / Fitness Doc
-    "NID (Front)",                     // Col AE (31) - Smart NID Front
-    "NID (Back)",                      // Col AF (32) - Smart NID Back
-    "Admin Tracker & Audit",           // Col AG (33) - Duplicate & Resubmission Iteration
-    "Resubmission Notes & Reasons",    // Col AH (34) - Applicant correction notes
-    "Verified By (Operator)",          // Col AI (35) - Auto Operator onEdit
-    "Verification Time"                // Col AJ (36) - Auto Operator timestamp
+    "Timestamp",                              // Col A (1)
+    "Application ID",                         // Col B (2)
+    "Full Name / Owner",                      // Col C (3)
+    "Phone (WhatsApp)",                       // Col D (4)
+    "💬 1-Click WhatsApp",                     // Col E (5)
+    "Smart NID Number",                       // Col F (6)
+    "District / City",                        // Col G (7)
+    "Emergency Contact",                      // Col H (8)
+    "Role / Service Type",                    // Col I (9) - Solo Driver / Car Owner-Driver / Rental Service
+    "Company / Business Name",                // Col J (10) - Rental Business Name (or Personal)
+    "Trade License Number",                   // Col K (11) - Business Trade License (or N/A)
+    "Driver License No. (BRTA)",              // Col L (12) - Primary Driver's License
+    "License Class & Expiry",                 // Col M (13) - Class & Expiry Date
+    "Driver License Status",                  // Col N (14) - Formula Expiry Alert
+    "Primary Car Plate & Model",              // Col O (15) - Dedicated Car License Plate & Model
+    "Car Fitness & Tax Expiry",               // Col P (16) - Vehicle Fitness Expiry
+    "Cars & Vehicles List (All Cars)",        // Col Q (17) - ⭐ ALL MULTIPLE CARS IN ONE COLUMN
+    "Employed Drivers List (All Drivers)",    // Col R (18) - ⭐ ALL MULTIPLE DRIVERS IN ONE COLUMN
+    "Experience & Skills",                    // Col S (19)
+    "Services Offered",                       // Col T (20)
+    "Availability & Duty",                    // Col U (21)
+    "Payout Wallet & Bank Account",           // Col V (22) - bKash / Nagad / Bank Details
+    "Verification Status",                    // Col W (23) - Dropdown (Pending, Approved, etc)
+    "Doc Completeness",                       // Col X (24) - Formula Completeness Check
+    "Photo Document",                         // Col Y (25) - Portrait / Owner Photo
+    "Driver License (Front)",                 // Col Z (26) - Driver Lic Front
+    "Driver License (Back)",                  // Col AA (27) - Driver Lic Back
+    "Car License / Blue Book (Front)",        // Col AB (28) - Car Reg / Blue Book Front
+    "Car License / Blue Book (Back)",         // Col AC (29) - Car Reg / Blue Book Back
+    "Car Fitness / Tax Token Doc",            // Col AD (30) - Tax Token / Fitness Doc
+    "NID (Front)",                            // Col AE (31) - Smart NID Front
+    "NID (Back)",                             // Col AF (32) - Smart NID Back
+    "Trade License / Registration Doc",       // Col AG (33) - Business Trade License Doc
+    "Admin Tracker & Audit",                  // Col AH (34) - Duplicate & Resubmission Iteration
+    "Resubmission Notes & Reasons",           // Col AI (35) - Applicant correction notes
+    "Verified By (Operator)",                 // Col AJ (36) - Auto Operator onEdit
+    "Verification Time"                       // Col AK (37) - Auto Operator timestamp
   ];
 
-  // Set & Style Headers on Row 1
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   var headerRange = sheet.getRange(1, 1, 1, headers.length);
   headerRange.setBackground("#0d0d10");
@@ -445,10 +456,12 @@ function autoAlignAndRepairSheet(interactive) {
   headerRange.setVerticalAlignment("middle");
   headerRange.setWrap(false);
   sheet.setRowHeight(1, 44);
+
+  // Freeze Row 1 and Columns 1 to 4 (Guaranteed 100% Exception-Free)
   sheet.setFrozenRows(1);
   sheet.setFrozenColumns(4);
 
-  // 3. Process Existing Data Rows
+  // 4. Process & Realign Existing Data Rows
   var lastRow = sheet.getLastRow();
   var migratedCount = 0;
   var modernCount = 0;
@@ -456,7 +469,7 @@ function autoAlignAndRepairSheet(interactive) {
 
   if (lastRow >= 2) {
     var totalDataRows = lastRow - 1;
-    var maxDataCols = Math.max(sheet.getLastColumn(), 36);
+    var maxDataCols = Math.max(sheet.getLastColumn(), 37);
     var rawValues = sheet.getRange(2, 1, totalDataRows, maxDataCols).getValues();
     var rawFormulas = sheet.getRange(2, 1, totalDataRows, maxDataCols).getFormulas();
 
@@ -480,16 +493,12 @@ function autoAlignAndRepairSheet(interactive) {
         continue;
       }
 
-      var col19Str = String(r[19] || "").trim(); // Col T
-      var isStatusInCol19 = /Pending|Approved|Review|Contacted|Rejected/i.test(col19Str);
-      var isRoleInCol19 = /Fleet|Owner|Rental|Chauffeur/i.test(col19Str);
-
-      var aligned = new Array(36).fill("");
+      var aligned = new Array(37).fill("");
 
       // Baseline identity columns (Cols 1..8)
       aligned[0] = r[0] || new Date().toISOString(); // Timestamp
       aligned[1] = r[1] ? "'" + String(r[1]).replace(/^'/, "") : ("'DRV-" + Math.floor(100000 + Math.random() * 900000));
-      aligned[2] = r[2] || "Chauffeur Applicant";
+      aligned[2] = r[2] || "Driver Applicant";
 
       var rawPhone = String(r[3] || "").trim().replace(/^'/, "");
       if (rawPhone.length === 10 && rawPhone.startsWith("1")) rawPhone = "0" + rawPhone;
@@ -499,9 +508,9 @@ function autoAlignAndRepairSheet(interactive) {
       var cleanDigits = rawPhone.replace(/[^0-9]/g, "");
       if (cleanDigits.startsWith("0")) cleanDigits = "880" + cleanDigits.substring(1);
       else if (!cleanDigits.startsWith("880") && cleanDigits.length === 10) cleanDigits = "880" + cleanDigits;
-      var nameForWa = r[2] || "Chauffeur";
+      var nameForWa = r[2] || "Driver";
       if (cleanDigits.length >= 10) {
-        aligned[4] = '=HYPERLINK("https://wa.me/' + cleanDigits + '?text=' + encodeURIComponent("Hello " + nameForWa + ", this is Rownaa Executive Fleet Operations regarding your application.") + '", "🟢 Chat on WhatsApp")';
+        aligned[4] = '=HYPERLINK("https://wa.me/' + cleanDigits + '?text=' + encodeURIComponent("Hello " + nameForWa + ", this is Rownaa Operations regarding your application.") + '", "🟢 Chat on WhatsApp")';
       } else {
         aligned[4] = "—";
       }
@@ -510,80 +519,59 @@ function autoAlignAndRepairSheet(interactive) {
       aligned[6] = r[6] || "";
       aligned[7] = r[7] ? String(r[7]).replace(/^'/, "") : "";
 
-      if (isStatusInCol19 && !isRoleInCol19) {
-        // Legacy 28-column row
-        migratedCount++;
+      // Role (Col I / 9)
+      var detectedRole = r[8] || r[19] || "Solo Driver";
+      aligned[8] = detectedRole;
 
-        aligned[8] = r[8] ? "'" + String(r[8]).replace(/^'/, "") : "";
-        aligned[9] = r[9] || "Professional Light";
-        aligned[10] = r[10] || "—";
-        aligned[11] = '=IF(K' + targetRowNum + '="—", "—", IF(ISDATE(K' + targetRowNum + '), IF(K' + targetRowNum + '<TODAY(), "🔴 Expired", IF(K' + targetRowNum + '<TODAY()+60, "🟡 Expiring Soon", "🟢 Valid")), "🟢 Active"))';
+      // Company Name (Col J / 10) & Trade License (Col K / 11)
+      aligned[9] = r[9] || (/rental|fleet/i.test(detectedRole) ? (r[2] + " Rental Service") : "Personal");
+      aligned[10] = r[10] ? "'" + String(r[10]).replace(/^'/, "") : "N/A";
 
-        var legRole = String(r[16] || "Fleet Chauffeur").trim();
-        var legVeh = String(r[17] || "N/A (Rownaa Fleet Provided)").trim();
-        var extPlate = "N/A (Fleet Chauffeur)";
-        var extModel = "N/A (Fleet Chauffeur)";
-        if (legRole === "Owner-Driver" || legVeh.includes("[")) {
-          var pm = legVeh.match(/\[(.*?)\]/);
-          if (pm) extPlate = pm[1];
-          extModel = legVeh.split("[")[0].trim() || legVeh;
-        }
+      // Driver License (Cols L..N / 12..14)
+      aligned[11] = r[11] ? "'" + String(r[11]).replace(/^'/, "") : (r[8] ? "'" + String(r[8]).replace(/^'/, "") : "N/A");
+      aligned[12] = r[12] || ((r[9] || "Light") + (r[10] ? " (Exp: " + r[10] + ")" : ""));
+      aligned[13] = '=IF(M' + targetRowNum + '="—", "—", "🟢 Active")';
 
-        aligned[12] = "'" + extPlate;
-        aligned[13] = extModel;
-        aligned[14] = "N/A";
-        aligned[15] = r[12] || "";
-        aligned[16] = r[13] || "";
-        aligned[17] = r[14] || "";
-        aligned[18] = r[15] || "Full Time";
-        aligned[19] = legRole;
-        aligned[20] = legVeh;
-        aligned[21] = r[18] ? "'" + String(r[18]).replace(/^'/, "") : "";
-        aligned[22] = r[19] || "Pending Verification";
-        aligned[23] = '=IF(AND(Y' + targetRowNum + '<>"", Z' + targetRowNum + '<>"", AE' + targetRowNum + '<>""), "🟢 Complete", "⚠️ Incomplete")';
+      // Primary Car (Cols O..P / 15..16)
+      var extPlate = r[14] || r[12] || "N/A";
+      var extModel = r[15] || r[13] || "N/A";
+      aligned[14] = (extPlate !== "N/A" || extModel !== "N/A") ? (extModel + " [" + extPlate + "]") : "N/A";
+      aligned[15] = r[15] || r[14] || "—";
 
-        aligned[24] = f[21] || r[21] || "—";
-        aligned[25] = f[22] || r[22] || "—";
-        aligned[26] = f[23] || r[23] || "—";
-        aligned[27] = "—";
-        aligned[28] = "—";
-        aligned[29] = "—";
-        aligned[30] = f[24] || r[24] || "—";
-        aligned[31] = f[25] || r[25] || "—";
-        aligned[32] = r[26] || "✅ UNIQUE (Legacy Migrated)";
-        aligned[33] = r[27] || "—";
-        aligned[34] = "";
-        aligned[35] = "";
-      } else {
-        // Modern 36-column row
-        modernCount++;
+      // Cars List in ONE column (Col Q / 17)
+      aligned[16] = r[16] || r[20] || (extPlate !== "N/A" ? ("1. " + extModel + " [" + extPlate + "]") : "N/A (Chauffeur)");
 
-        aligned[8] = r[8] ? "'" + String(r[8]).replace(/^'/, "") : "";
-        aligned[9] = r[9] || "Professional Light";
-        aligned[10] = r[10] || "—";
-        aligned[11] = '=IF(K' + targetRowNum + '="—", "—", IF(ISDATE(K' + targetRowNum + '), IF(K' + targetRowNum + '<TODAY(), "🔴 Expired", IF(K' + targetRowNum + '<TODAY()+60, "🟡 Expiring Soon", "🟢 Valid")), "🟢 Active"))';
-        aligned[12] = r[12] ? "'" + String(r[12]).replace(/^'/, "") : "";
-        aligned[13] = r[13] || "";
-        aligned[14] = r[14] || "";
-        aligned[15] = r[15] || "";
-        aligned[16] = r[16] || "";
-        aligned[17] = r[17] || "";
-        aligned[18] = r[18] || "Full Time";
-        aligned[19] = r[19] || "Fleet Chauffeur";
-        aligned[20] = r[20] || "";
-        aligned[21] = r[21] ? "'" + String(r[21]).replace(/^'/, "") : "";
-        aligned[22] = r[22] || "Pending Verification";
-        aligned[23] = '=IF(AND(Y' + targetRowNum + '<>"", Z' + targetRowNum + '<>"", AE' + targetRowNum + '<>""), "🟢 Complete", "⚠️ Incomplete")';
+      // Drivers List in ONE column (Col R / 18)
+      aligned[17] = r[17] || "Solo Applicant (" + (r[2] || "Self") + ")";
 
-        for (var cIdx = 24; cIdx <= 31; cIdx++) {
-          aligned[cIdx] = f[cIdx] || r[cIdx] || "—";
-        }
-        aligned[32] = r[32] || "✅ UNIQUE (First-Time Applicant)";
-        aligned[33] = r[33] || "—";
-        aligned[34] = r[34] || "";
-        aligned[35] = r[35] || "";
+      // Experience (Col S / 19), Services (Col T / 20), Availability (Col U / 21)
+      aligned[18] = r[18] || r[15] || "";
+      aligned[19] = r[19] || r[17] || "";
+      aligned[20] = r[20] || r[18] || "Full Time";
+
+      // Payout Wallet (Col V / 22)
+      aligned[21] = r[21] ? "'" + String(r[21]).replace(/^'/, "") : "";
+
+      // Verification Status (Col W / 23)
+      aligned[22] = r[22] || "Pending Verification";
+
+      // Doc Completeness (Col X / 24)
+      aligned[23] = '=IF(AND(Y' + targetRowNum + '<>"—", Z' + targetRowNum + '<>"—", AE' + targetRowNum + '<>"—"), "🟢 Complete", "⚠️ Pending Docs")';
+
+      // Document Links (Cols Y..AG / 25..33)
+      for (var dCol = 24; dCol <= 32; dCol++) {
+        aligned[dCol] = f[dCol] || r[dCol] || "—";
       }
 
+      // Audit Tracker (Col AH / 34) & Resubmission Notes (Col AI / 35)
+      aligned[33] = r[33] || r[32] || "✅ First-Time Application";
+      aligned[34] = r[34] || r[33] || "—";
+
+      // Operator Audit Trail (Cols AJ..AK / 36..37)
+      aligned[35] = r[35] || "";
+      aligned[36] = r[36] || "";
+
+      modernCount++;
       alignedValues.push(aligned);
     }
 
@@ -591,21 +579,22 @@ function autoAlignAndRepairSheet(interactive) {
     sheet.getRange(2, 1, Math.max(totalDataRows, 1), maxDataCols).clearContent().clearFormat();
 
     if (alignedValues.length > 0) {
-      sheet.getRange(2, 1, alignedValues.length, 36).setValues(alignedValues);
+      sheet.getRange(2, 1, alignedValues.length, 37).setValues(alignedValues);
     }
   }
 
-  // 4. Set Plain-Text Formats (@)
+  // 5. Set Plain-Text Formats (@)
   sheet.getRange("B:B").setNumberFormat("@");
   sheet.getRange("D:D").setNumberFormat("@");
   sheet.getRange("F:F").setNumberFormat("@");
-  sheet.getRange("I:I").setNumberFormat("@");
-  sheet.getRange("M:M").setNumberFormat("@");
+  sheet.getRange("K:K").setNumberFormat("@");
+  sheet.getRange("L:L").setNumberFormat("@");
   sheet.getRange("V:V").setNumberFormat("@");
 
-  // 5. Column W Data Validation (Col 23)
-  sheet.getRange(2, 1, Math.max(lastRow, 500), 22).clearDataValidations();
-  sheet.getRange(2, 24, Math.max(lastRow, 500), 13).clearDataValidations();
+  // 6. Enable Word Wrap on Multi-Car (Col Q) & Multi-Driver (Col R)
+  sheet.getRange("Q:R").setWrap(true);
+
+  // 7. Column W Data Validation (Col 23)
   var statusOptions = ["Pending Verification", "Under Review", "Contacted & Scheduled", "Approved & Verified", "Rejected"];
   var statusRule = SpreadsheetApp.newDataValidation()
     .requireValueInList(statusOptions, true)
@@ -613,38 +602,54 @@ function autoAlignAndRepairSheet(interactive) {
     .build();
   sheet.getRange(2, 23, Math.max(lastRow, 500), 1).setDataValidation(statusRule);
 
-  // 6. Optimal Column Widths
-  sheet.setColumnWidth(1, 160);
-  sheet.setColumnWidth(2, 130);
-  sheet.setColumnWidth(3, 160);
-  sheet.setColumnWidth(4, 130);
-  sheet.setColumnWidth(5, 170);
-  sheet.setColumnWidth(6, 140);
-  sheet.setColumnWidth(7, 140);
-  sheet.setColumnWidth(8, 140);
-  sheet.setColumnWidth(9, 150);
-  sheet.setColumnWidth(10, 140);
-  sheet.setColumnWidth(11, 130);
-  sheet.setColumnWidth(12, 140);
-  sheet.setColumnWidth(13, 160);
-  sheet.setColumnWidth(14, 160);
-  sheet.setColumnWidth(15, 140);
-  sheet.setColumnWidth(16, 110);
-  sheet.setColumnWidth(17, 130);
-  sheet.setColumnWidth(18, 180);
-  sheet.setColumnWidth(19, 120);
-  sheet.setColumnWidth(20, 140);
-  sheet.setColumnWidth(21, 240);
-  sheet.setColumnWidth(22, 220);
-  sheet.setColumnWidth(23, 160);
-  sheet.setColumnWidth(24, 130);
-  sheet.setColumnWidth(33, 240);
-  sheet.setColumnWidth(34, 240);
+  // 8. Optimal Column Widths
+  var widths = [
+    150, // 1: Timestamp
+    130, // 2: Application ID
+    160, // 3: Full Name / Owner
+    130, // 4: Phone
+    160, // 5: WhatsApp Button
+    140, // 6: NID Number
+    130, // 7: District / City
+    140, // 8: Emergency Contact
+    140, // 9: Role / Service Type
+    180, // 10: Company Name
+    140, // 11: Trade License No
+    150, // 12: Driver License No
+    140, // 13: License Class & Expiry
+    130, // 14: Driver License Status
+    180, // 15: Primary Car Plate & Model
+    130, // 16: Car Fitness Expiry
+    280, // 17: ⭐ Cars & Vehicles List (All Cars)
+    280, // 18: ⭐ Employed Drivers List (All Drivers)
+    130, // 19: Experience & Skills
+    160, // 20: Services Offered
+    120, // 21: Availability
+    200, // 22: Payout Wallet
+    160, // 23: Verification Status
+    130, // 24: Doc Completeness
+    130, // 25: Photo
+    130, // 26: Driver Lic Front
+    130, // 27: Driver Lic Back
+    130, // 28: Car Reg Front
+    130, // 29: Car Reg Back
+    130, // 30: Car Fitness Doc
+    130, // 31: NID Front
+    130, // 32: NID Back
+    140, // 33: Trade License Doc
+    240, // 34: Admin Tracker & Audit
+    240, // 35: Resubmission Notes
+    140, // 36: Verified By
+    140  // 37: Verification Time
+  ];
+  for (var wIdx = 0; wIdx < widths.length; wIdx++) {
+    sheet.setColumnWidth(wIdx + 1, widths[wIdx]);
+  }
 
-  // 7. Synchronize Dashboard Tab
+  // 9. Synchronize Dashboard Tab
   setupDashboardSheet(ss);
 
-  // 8. Remove default empty Sheet1 if present
+  // 10. Clean up default empty Sheet1 if present
   var defaultSheet = ss.getSheetByName("Sheet1");
   if (defaultSheet && ss.getSheets().length > 1) {
     if (defaultSheet.getLastRow() === 0 && defaultSheet.getLastColumn() === 0) {
@@ -652,254 +657,34 @@ function autoAlignAndRepairSheet(interactive) {
     }
   }
 
-  // 9. Interactive Alert
   if (interactive) {
     var ui = null;
     try { ui = SpreadsheetApp.getUi(); } catch (e) {}
     if (ui) {
       ui.alert(
         "✅ Operations Realignment Complete",
-        "Rownaa Executive Chauffeur System has successfully realigned all 36 Dual-License columns!\n\n" +
-        "• Migrated Legacy Records: " + migratedCount + "\n" +
-        "• Aligned Modern Dual-License Records: " + modernCount + "\n" +
-        "• Ghost/Blank Rows Cleaned: " + cleanedRowsCount + "\n" +
-        "• Operations KPI Dashboard: Synchronized and Active",
+        "Rownaa Operations System has aligned all 37 columns into the 2-Section Architecture!\n\n" +
+        "• Aligned Registrations: " + modernCount + "\n" +
+        "• Cleaned Ghost Rows: " + cleanedRowsCount + "\n" +
+        "• Dashboard KPI Counters: Synchronized\n" +
+        "• Freeze Exceptions: Resolved",
         ui.ButtonSet.OK
       );
     }
   }
 
   return {
-    migrated: migratedCount,
     modern: modernCount,
     cleaned: cleanedRowsCount,
-    total: migratedCount + modernCount
+    total: modernCount
   };
 }
 
-function setupMultiTabRelationalDatabase(ss) {
-  if (!ss) ss = SpreadsheetApp.getActiveSpreadsheet();
-
-  // ==============================================================
-  // TAB 1: CHAUFFEUR REGISTRY (Solo Drivers & Solo Owner-Drivers)
-  // ==============================================================
-  var regSheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
-  if (!regSheet) {
-    var sheet1 = ss.getSheetByName("Sheet1");
-    if (sheet1 && sheet1.getLastRow() === 0 && sheet1.getLastColumn() === 0) {
-      sheet1.setName(SHEET_REGISTRY_NAME);
-      regSheet = sheet1;
-    } else {
-      regSheet = ss.insertSheet(SHEET_REGISTRY_NAME, 0);
-    }
-  }
-
-  // ==============================================================
-  // TAB 2: RENTAL FLEET SERVICES (Fleet Businesses & Service Owners)
-  // ==============================================================
-  var fleetSheet = ss.getSheetByName(SHEET_FLEET_SERVICES_NAME);
-  if (!fleetSheet) {
-    fleetSheet = ss.insertSheet(SHEET_FLEET_SERVICES_NAME, 1);
-  }
-
-  var fleetHeaders = [
-    "Timestamp",                         // Col A (1)
-    "Fleet ID",                          // Col B (2) - e.g. FLT-8291
-    "Fleet / Business Name",             // Col C (3)
-    "Owner Full Name",                   // Col D (4)
-    "Owner Phone (WhatsApp)",            // Col E (5)
-    "💬 1-Click WhatsApp",                // Col F (6)
-    "Owner Smart NID",                   // Col G (7)
-    "Operating Hub / Base District",     // Col H (8)
-    "Office / Garage Address",           // Col I (9)
-    "Total Registered Vehicles",         // Col J (10)
-    "Total Employed Drivers",            // Col K (11)
-    "Trade License / Reg Number",        // Col L (12)
-    "Commercial Payout Bank & Account",  // Col M (13)
-    "Fleet Verification Status",         // Col N (14) - Dropdown
-    "Doc Completeness",                  // Col O (15) - Formula
-    "Owner Portrait Photo",              // Col P (16)
-    "Owner Smart NID (Front)",           // Col Q (17)
-    "Owner Smart NID (Back)",            // Col R (18)
-    "Trade License / Registration Doc",  // Col S (19)
-    "Admin Tracker & Audit",             // Col T (20)
-    "Verified By (Operator)",            // Col U (21)
-    "Verification Time"                  // Col V (22)
-  ];
-
-  try {
-    fleetSheet.setFrozenRows(0);
-    fleetSheet.setFrozenColumns(0);
-    fleetSheet.getRange(1, 1, Math.min(10, fleetSheet.getMaxRows()), Math.max(40, fleetSheet.getMaxColumns())).breakApart();
-  } catch (fBreakErr) {}
-
-  fleetSheet.getRange(1, 1, 1, fleetHeaders.length).setValues([fleetHeaders]);
-  var fhRange = fleetSheet.getRange(1, 1, 1, fleetHeaders.length);
-  fhRange.setBackground("#0d0d10");
-  fhRange.setFontColor("#d4ff00");
-  fhRange.setFontWeight("bold");
-  fhRange.setFontSize(10);
-  fhRange.setFontFamily("Roboto");
-  fhRange.setHorizontalAlignment("center");
-  fhRange.setVerticalAlignment("middle");
-  fleetSheet.setRowHeight(1, 44);
-  fleetSheet.setFrozenRows(1);
-  fleetSheet.setFrozenColumns(4);
-
-  fleetSheet.getRange("B:B").setNumberFormat("@");
-  fleetSheet.getRange("E:E").setNumberFormat("@");
-  fleetSheet.getRange("G:G").setNumberFormat("@");
-  fleetSheet.getRange("L:L").setNumberFormat("@");
-  fleetSheet.getRange("M:M").setNumberFormat("@");
-
-  var fleetStatusRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(["Pending Verification", "Under Review", "Contacted & Scheduled", "Approved & Verified", "Suspended"], true)
-    .setAllowInvalid(true)
-    .build();
-  fleetSheet.getRange(2, 14, Math.max(fleetSheet.getLastRow(), 500), 1).setDataValidation(fleetStatusRule);
-
-  // ==============================================================
-  // TAB 3: FLEET VEHICLE VAULT (Dedicated row for every car)
-  // ==============================================================
-  var vehSheet = ss.getSheetByName(SHEET_VEHICLES_VAULT_NAME);
-  if (!vehSheet) {
-    vehSheet = ss.insertSheet(SHEET_VEHICLES_VAULT_NAME, 2);
-  }
-
-  var vehHeaders = [
-    "Timestamp",                         // Col A (1)
-    "Vehicle ID",                        // Col B (2) - e.g. VEH-1029
-    "Fleet / Owner ID",                  // Col C (3) - Ties to Fleet or Solo Owner
-    "Fleet / Company Name",              // Col D (4)
-    "Owner Contact Phone",               // Col E (5)
-    "Vehicle Make & Model",              // Col N (6) - e.g. Toyota HiAce Grand Cabin
-    "License / Reg Plate No.",           // Col G (7) - e.g. Dhaka Metro Cha 53-1092
-    "Manufacturing Year",                // Col H (8)
-    "Seating Capacity",                  // Col I (9)
-    "Fuel / Energy Type",                // Col J (10) - Octane / Hybrid / Diesel / EV
-    "Fitness & Tax Expiry Date",         // Col K (11)
-    "Fitness & Tax Status",              // Col L (12) - Formula Alert
-    "Car License / Blue Book (Front)",   // Col M (13)
-    "Car License / Blue Book (Back)",    // Col N (14)
-    "Tax Token & Fitness Certificate",   // Col O (15)
-    "Vehicle Approval Status",           // Col P (16) - Dropdown
-    "Assigned Driver (if any)",          // Col Q (17)
-    "Verified By (Operator)",            // Col R (18)
-    "Verification Time"                  // Col S (19)
-  ];
-
-  try {
-    vehSheet.setFrozenRows(0);
-    vehSheet.setFrozenColumns(0);
-    vehSheet.getRange(1, 1, Math.min(10, vehSheet.getMaxRows()), Math.max(40, vehSheet.getMaxColumns())).breakApart();
-  } catch (vBreakErr) {}
-
-  vehSheet.getRange(1, 1, 1, vehHeaders.length).setValues([vehHeaders]);
-  var vhRange = vehSheet.getRange(1, 1, 1, vehHeaders.length);
-  vhRange.setBackground("#0d0d10");
-  vhRange.setFontColor("#d4ff00");
-  vhRange.setFontWeight("bold");
-  vhRange.setFontSize(10);
-  vhRange.setFontFamily("Roboto");
-  vhRange.setHorizontalAlignment("center");
-  vhRange.setVerticalAlignment("middle");
-  vehSheet.setRowHeight(1, 44);
-  vehSheet.setFrozenRows(1);
-  vehSheet.setFrozenColumns(4);
-
-  vehSheet.getRange("B:B").setNumberFormat("@");
-  vehSheet.getRange("C:C").setNumberFormat("@");
-  vehSheet.getRange("E:E").setNumberFormat("@");
-  vehSheet.getRange("G:G").setNumberFormat("@");
-
-  var vehStatusRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(["Pending Inspection", "Approved & Active", "Under Review", "Suspended / Maintenance"], true)
-    .setAllowInvalid(true)
-    .build();
-  vehSheet.getRange(2, 16, Math.max(vehSheet.getLastRow(), 500), 1).setDataValidation(vehStatusRule);
-
-  // ==============================================================
-  // TAB 4: FLEET DRIVER ROSTER (Dedicated row for every driver)
-  // ==============================================================
-  var drvSheet = ss.getSheetByName(SHEET_FLEET_DRIVERS_NAME);
-  if (!drvSheet) {
-    drvSheet = ss.insertSheet(SHEET_FLEET_DRIVERS_NAME, 3);
-  }
-
-  var drvHeaders = [
-    "Timestamp",                         // Col A (1)
-    "Driver Record ID",                  // Col B (2) - e.g. FDRV-9302
-    "Fleet ID",                          // Col C (3) - Ties to Fleet
-    "Fleet / Company Name",              // Col D (4)
-    "Driver Full Name",                  // Col E (5)
-    "Driver Contact Phone",              // Col F (6)
-    "💬 1-Click WhatsApp",                // Col G (7)
-    "Driver Smart NID Number",           // Col H (8)
-    "BRTA Driving License Number",       // Col I (9)
-    "License Class",                     // Col J (10) - Professional Light / Heavy
-    "License Expiry Date",               // Col K (11)
-    "License Status",                    // Col L (12) - Formula Alert
-    "Driver License (Front)",            // Col M (13)
-    "Driver License (Back)",             // Col N (14)
-    "Driver Smart NID (Front)",          // Col O (15)
-    "Driver Smart NID (Back)",           // Col P (16)
-    "Assigned Vehicle Plate",            // Col Q (17)
-    "Driver Verification Status",        // Col R (18) - Dropdown
-    "Verified By (Operator)",            // Col S (19)
-    "Verification Time"                  // Col T (20)
-  ];
-
-  try {
-    drvSheet.setFrozenRows(0);
-    drvSheet.setFrozenColumns(0);
-    drvSheet.getRange(1, 1, Math.min(10, drvSheet.getMaxRows()), Math.max(40, drvSheet.getMaxColumns())).breakApart();
-  } catch (dBreakErr) {}
-
-  drvSheet.getRange(1, 1, 1, drvHeaders.length).setValues([drvHeaders]);
-  var dhRange = drvSheet.getRange(1, 1, 1, drvHeaders.length);
-  dhRange.setBackground("#0d0d10");
-  dhRange.setFontColor("#d4ff00");
-  dhRange.setFontWeight("bold");
-  dhRange.setFontSize(10);
-  dhRange.setFontFamily("Roboto");
-  dhRange.setHorizontalAlignment("center");
-  dhRange.setVerticalAlignment("middle");
-  drvSheet.setRowHeight(1, 44);
-  drvSheet.setFrozenRows(1);
-  drvSheet.setFrozenColumns(4);
-
-  drvSheet.getRange("B:B").setNumberFormat("@");
-  drvSheet.getRange("C:C").setNumberFormat("@");
-  drvSheet.getRange("F:F").setNumberFormat("@");
-  drvSheet.getRange("H:H").setNumberFormat("@");
-  drvSheet.getRange("I:I").setNumberFormat("@");
-  drvSheet.getRange("Q:Q").setNumberFormat("@");
-
-  var drvStatusRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(["Pending Verification", "Approved & Active", "Under Review", "Suspended / Inactive"], true)
-    .setAllowInvalid(true)
-    .build();
-  drvSheet.getRange(2, 18, Math.max(drvSheet.getLastRow(), 500), 1).setDataValidation(drvStatusRule);
-
-  // Set widths for all sheets
-  setCleanColumnWidths(fleetSheet, [150, 120, 180, 160, 130, 160, 140, 140, 200, 120, 120, 150, 220, 160, 140, 130, 130, 130, 140, 220, 130, 130]);
-  setCleanColumnWidths(vehSheet, [150, 120, 120, 180, 130, 180, 160, 110, 110, 120, 130, 140, 140, 140, 140, 160, 150, 130, 130]);
-  setCleanColumnWidths(drvSheet, [150, 120, 120, 180, 160, 130, 160, 140, 150, 140, 130, 140, 140, 140, 140, 140, 160, 160, 130, 130]);
-}
-
-function setCleanColumnWidths(sheet, widths) {
-  for (var i = 0; i < widths.length; i++) {
-    sheet.setColumnWidth(i + 1, widths[i]);
-  }
-}
-
-
-function setupSheet() {
-  autoAlignAndRepairSheet(false);
-  setupMultiTabRelationalDatabase();
-}
-
+/**
+ * SECTION 1: OPERATIONS KPI DASHBOARD
+ */
 function setupDashboardSheet(ss) {
+  if (!ss) ss = SpreadsheetApp.getActiveSpreadsheet();
   var dash = ss.getSheetByName(SHEET_DASHBOARD_NAME);
   if (!dash) {
     dash = ss.insertSheet(SHEET_DASHBOARD_NAME, 0);
@@ -911,7 +696,7 @@ function setupDashboardSheet(ss) {
   // Row 1: Header Banner
   dash.getRange("A1:H1").merge();
   dash.getRange("A1")
-    .setValue("⚡ ROWNAA® EXECUTIVE CHAUFFEUR OPERATIONS CONTROL CENTER")
+    .setValue("⚡ ROWNAA® DRIVER, CAR & FLEET OPERATIONS CONTROL CENTER")
     .setBackground("#0d0d10")
     .setFontColor("#d4ff00")
     .setFontSize(13)
@@ -921,7 +706,7 @@ function setupDashboardSheet(ss) {
   dash.setRowHeight(1, 45);
 
   // Row 3-4: Primary KPI Counter Tiles
-  var kpiHeaders = ["Total Applicants", "Pending Verification", "Under Review", "Contacted", "Approved & Verified", "Rejected", "Car Owners / Fleets", "Approval Rate %"];
+  var kpiHeaders = ["Total Registrations", "Pending Verification", "Under Review", "Contacted", "Approved & Verified", "Rejected", "Car Owners / Fleets", "Approval Rate %"];
   dash.getRange("A3:H3").setValues([kpiHeaders]);
   dash.getRange("A3:H3")
     .setBackground("#1a1a20")
@@ -932,7 +717,7 @@ function setupDashboardSheet(ss) {
     .setVerticalAlignment("middle");
   dash.setRowHeight(3, 28);
 
-  // Status is in Column W (Col 23), Car Plate is in Column M (Col 13)
+  // Status is in Column W (Col 23), Role is in Column I (Col 9)
   var kpiFormulas = [
     "=COUNTA('" + SHEET_REGISTRY_NAME + "'!B2:B)",
     "=COUNTIF('" + SHEET_REGISTRY_NAME + "'!W2:W, \"Pending Verification\")",
@@ -940,7 +725,7 @@ function setupDashboardSheet(ss) {
     "=COUNTIF('" + SHEET_REGISTRY_NAME + "'!W2:W, \"Contacted & Scheduled\")",
     "=COUNTIF('" + SHEET_REGISTRY_NAME + "'!W2:W, \"Approved & Verified\")",
     "=COUNTIF('" + SHEET_REGISTRY_NAME + "'!W2:W, \"Rejected\")",
-    "=COUNTIF('" + SHEET_REGISTRY_NAME + "'!M2:M, \"*Metro*\") + COUNTIF('" + SHEET_REGISTRY_NAME + "'!M2:M, \"*GA*\") + COUNTIF('" + SHEET_REGISTRY_NAME + "'!M2:M, \"*CHA*\")",
+    "=COUNTIF('" + SHEET_REGISTRY_NAME + "'!I2:I, \"*Owner*\") + COUNTIF('" + SHEET_REGISTRY_NAME + "'!I2:I, \"*Rental*\") + COUNTIF('" + SHEET_REGISTRY_NAME + "'!I2:I, \"*Fleet*\")",
     "=IF(A4=0, 0, (E4/A4))"
   ];
   dash.getRange("A4:H4").setFormulas([kpiFormulas]);
@@ -952,17 +737,17 @@ function setupDashboardSheet(ss) {
   dash.getRange("H4").setNumberFormat("0.0%");
   dash.setRowHeight(4, 40);
 
-  // Distinct Backgrounds for KPI Tiles
+  // Background colors for KPI tiles
   dash.getRange("A4").setBackground("#f0f0f2").setFontColor("#111111"); // Total
   dash.getRange("B4").setBackground("#fffbe6").setFontColor("#d48800"); // Pending
   dash.getRange("C4").setBackground("#e6f7ff").setFontColor("#096dd9"); // Under Review
   dash.getRange("D4").setBackground("#f9f0ff").setFontColor("#722ed1"); // Contacted
   dash.getRange("E4").setBackground("#f6ffed").setFontColor("#389e0d"); // Approved
   dash.getRange("F4").setBackground("#fff1f0").setFontColor("#cf1322"); // Rejected
-  dash.getRange("G4").setBackground("#e6f7ff").setFontColor("#1d39c4"); // Car Owners/Fleets
+  dash.getRange("G4").setBackground("#e6f7ff").setFontColor("#1d39c4"); // Owners/Fleets
   dash.getRange("H4").setBackground("#e6fffb").setFontColor("#08979c"); // Approval Rate
 
-  // Row 6: Live Visual Sparkline Progress Bars
+  // Row 6-7: Sparkline Application Flow Bar
   dash.getRange("A6:H6").merge();
   dash.getRange("A6").setValue("📊 Real-Time Application Intake & Verification Flow");
   dash.getRange("A6").setFontWeight("bold").setFontSize(11).setFontColor("#333333");
@@ -973,7 +758,7 @@ function setupDashboardSheet(ss) {
   );
   dash.setRowHeight(7, 24);
 
-  // Row 9-14: Regional & Demographic Distribution
+  // Row 9-13: Regional & Demographic Distribution
   dash.getRange("A9:D9").merge().setValue("📍 Geographic Inflow Breakdown").setFontWeight("bold").setBackground("#222228").setFontColor("#ffffff");
   dash.getRange("A10").setValue("Dhaka — Gulshan, Banani & Airport Zone");
   dash.getRange("B10:C10").merge().setFormula("=COUNTIF('" + SHEET_REGISTRY_NAME + "'!G2:G, \"*Gulshan*\") + COUNTIF('" + SHEET_REGISTRY_NAME + "'!G2:G, \"*Banani*\") + COUNTIF('" + SHEET_REGISTRY_NAME + "'!G2:G, \"*Airport*\")");
@@ -996,7 +781,7 @@ function setupDashboardSheet(ss) {
 
   // Instructions
   dash.getRange("A16:H16").merge();
-  dash.getRange("A16").setValue("ℹ️ How to manage: Open the 'Chauffeur Registry' tab below. Select Column W to update verification status. The dashboard updates automatically in real-time.");
+  dash.getRange("A16").setValue("ℹ️ How to manage: Open the 'Registrations' tab below. Select Column W to update verification status. The dashboard updates automatically in real-time.");
   dash.getRange("A16").setFontSize(9).setFontColor("#666666").setFontStyle("italic");
 
   for (var c = 1; c <= 8; c++) {
@@ -1005,12 +790,8 @@ function setupDashboardSheet(ss) {
 }
 
 /**
- * Self-healing repair for legacy column shifts and formulas.
+ * OnEdit Trigger: Auto Operator Email & Timestamp logging.
  */
-function repairExistingErrors() {
-  return autoAlignAndRepairSheet(true);
-}
-
 function onEdit(e) {
   if (!e || !e.range) return;
   var sheet = e.range.getSheet();
@@ -1024,13 +805,13 @@ function onEdit(e) {
     var operatorEmail = Session.getActiveUser().getEmail() || "Ops Admin";
     var timestampStr = Utilities.formatDate(new Date(), Session.getScriptTimeZone() || "GMT+6", "yyyy-MM-dd HH:mm:ss");
 
-    sheet.getRange(row, 35).setValue(operatorEmail); // Col AI: Verified By
-    sheet.getRange(row, 36).setValue(timestampStr);  // Col AJ: Verification Time
+    sheet.getRange(row, 36).setValue(operatorEmail); // Col AJ: Verified By
+    sheet.getRange(row, 37).setValue(timestampStr);  // Col AK: Verification Time
   }
 }
 
 /**
- * Helper to get or create Google Drive folder for driver documents.
+ * Google Drive Vault Helper.
  */
 function getDocumentVaultFolder() {
   var props = PropertiesService.getScriptProperties();
@@ -1082,7 +863,9 @@ function saveBase64DocumentToDrive(base64Data, filename, parentFolder) {
 }
 
 /**
- * Main Webhook POST Ingestion Endpoint (doPost).
+ * SECTION 2: WEBHOOK INGESTION ENGINE (doPost)
+ * Ingests all registrations into the single "Registrations" sheet.
+ * Formats multiple cars into Col Q and multiple drivers into Col R.
  */
 function doPost(e) {
   var lock = LockService.getScriptLock();
@@ -1104,16 +887,16 @@ function doPost(e) {
     }
 
     var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var sheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
+    var sheet = getRegistrationsSheet(ss);
     if (!sheet) {
-      setupSheet();
-      sheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
+      autoAlignAndRepairSheet(false);
+      sheet = getRegistrationsSheet(ss);
     }
 
     var contents = e.postData.contents;
     var data = JSON.parse(contents);
     var appId = sanitizeCellValue(data.applicationId || data.id || "DRV-DAC-" + Math.floor(1000 + Math.random() * 9000));
-    var applicantName = sanitizeCellValue(data.fullName || data.name || "Chauffeur Applicant");
+    var applicantName = sanitizeCellValue(data.fullName || data.name || "Driver Applicant");
 
     // Dedicated Subfolder in Drive Vault for this applicant
     var vaultFolder = getDocumentVaultFolder();
@@ -1124,83 +907,33 @@ function doPost(e) {
       applicantFolder = vaultFolder;
     }
 
-    // 1. SAVE DRIVER'S DRIVING LICENSE & IDENTITY DOCUMENTS
+    // 1. SAVE DRIVER IDENTITY & LICENSE DOCUMENTS
     var photoUrl = saveBase64DocumentToDrive(data.photoBase64, "01_driver_portrait.jpg", applicantFolder);
     var driverLicFrontUrl = saveBase64DocumentToDrive(data.licenseFrontBase64 || data.driverLicenseFrontBase64, "02_driver_license_front.jpg", applicantFolder);
     var driverLicBackUrl = saveBase64DocumentToDrive(data.licenseBackBase64 || data.driverLicenseBackBase64, "03_driver_license_back.jpg", applicantFolder);
     var nidFrontUrl = saveBase64DocumentToDrive(data.nidFrontBase64, "04_nid_front.jpg", applicantFolder);
     var nidBackUrl = saveBase64DocumentToDrive(data.nidBackBase64, "05_nid_back.jpg", applicantFolder);
 
-    // 2. SAVE CAR / VEHICLE LICENSE & REGISTRATION DOCUMENTS
+    // 2. SAVE CAR REGISTRATION & TAX/FITNESS DOCUMENTS
     var carLicFrontUrl = saveBase64DocumentToDrive(data.carLicenseFrontBase64 || data.carRegFrontBase64, "06_car_license_registration_front.jpg", applicantFolder);
     var carLicBackUrl = saveBase64DocumentToDrive(data.carLicenseBackBase64 || data.carRegBackBase64, "07_car_license_registration_back.jpg", applicantFolder);
     var carFitnessUrl = saveBase64DocumentToDrive(data.carFitnessBase64 || data.carTaxTokenBase64, "08_car_fitness_tax_token.jpg", applicantFolder);
 
-    // 3. SAVE EMPLOYED FLEET DRIVERS' LICENSES & CARS
-    var fleetDriverLicenseCount = 0;
-    if (data.fleetData && Array.isArray(data.fleetData.drivers)) {
-      for (var fdIdx = 0; fdIdx < data.fleetData.drivers.length; fdIdx++) {
-        var fDriver = data.fleetData.drivers[fdIdx];
-        var dNum = fdIdx + 1;
-        var dNameClean = String(fDriver.name || ("Driver_" + dNum)).replace(/[^a-zA-Z0-9_-]/g, "_");
-
-        var dLicFrontUrl = null;
-        if (fDriver.licenseFront || fDriver.licenseFrontBase64) {
-          dLicFrontUrl = saveBase64DocumentToDrive(fDriver.licenseFront || fDriver.licenseFrontBase64, "fleet_driver_" + dNum + "_" + dNameClean + "_lic_front.jpg", applicantFolder);
-          if (dLicFrontUrl) fleetDriverLicenseCount++;
-        }
-        var dLicBackUrl = null;
-        if (fDriver.licenseBack || fDriver.licenseBackBase64) {
-          dLicBackUrl = saveBase64DocumentToDrive(fDriver.licenseBack || fDriver.licenseBackBase64, "fleet_driver_" + dNum + "_" + dNameClean + "_lic_back.jpg", applicantFolder);
-          if (dLicBackUrl) fleetDriverLicenseCount++;
-        }
-
-        if (!driverLicFrontUrl && dLicFrontUrl) driverLicFrontUrl = dLicFrontUrl;
-        if (!driverLicBackUrl && dLicBackUrl) driverLicBackUrl = dLicBackUrl;
-      }
-    }
-
-    // Save Fleet Vehicles' Blue Books / Registration Cards if provided
-    var fleetCarDocCount = 0;
-    var fleetCarsList = (data.fleetData && (data.fleetData.vehicles || data.fleetData.cars)) || [];
-    if (fleetCarsList.length > 0) {
-      for (var fcIdx = 0; fcIdx < fleetCarsList.length; fcIdx++) {
-        var fCar = fleetCarsList[fcIdx];
-        var cNum = fcIdx + 1;
-        var cPlateClean = String(fCar.reg || fCar.plate || fCar.plateNumber || ("Car_" + cNum)).replace(/[^a-zA-Z0-9_-]/g, "_");
-
-        var cFront = null;
-        if (fCar.carLicenseFront || fCar.carLicenseFrontBase64 || fCar.blueBookFront || fCar.blueBookFrontBase64) {
-          cFront = saveBase64DocumentToDrive(fCar.carLicenseFront || fCar.carLicenseFrontBase64 || fCar.blueBookFront || fCar.blueBookFrontBase64, "fleet_car_" + cNum + "_" + cPlateClean + "_reg_front.jpg", applicantFolder);
-          if (cFront) fleetCarDocCount++;
-        }
-        var cBack = null;
-        if (fCar.carLicenseBack || fCar.carLicenseBackBase64 || fCar.blueBookBack || fCar.blueBookBackBase64) {
-          cBack = saveBase64DocumentToDrive(fCar.carLicenseBack || fCar.carLicenseBackBase64 || fCar.blueBookBack || fCar.blueBookBackBase64, "fleet_car_" + cNum + "_" + cPlateClean + "_reg_back.jpg", applicantFolder);
-          if (cBack) fleetCarDocCount++;
-        }
-        var cFitness = null;
-        if (fCar.carFitness || fCar.carFitnessBase64 || fCar.taxToken || fCar.taxTokenBase64) {
-          cFitness = saveBase64DocumentToDrive(fCar.carFitness || fCar.carFitnessBase64 || fCar.taxToken || fCar.taxTokenBase64, "fleet_car_" + cNum + "_" + cPlateClean + "_fitness.jpg", applicantFolder);
-        }
-
-        if (!carLicFrontUrl && cFront) carLicFrontUrl = cFront;
-        if (!carLicBackUrl && cBack) carLicBackUrl = cBack;
-        if (!carFitnessUrl && cFitness) carFitnessUrl = cFitness;
-      }
-    }
+    // 3. SAVE TRADE LICENSE (FOR RENTAL FLEETS)
+    var tradeLicUrl = saveBase64DocumentToDrive(data.tradeLicenseBase64, "09_trade_license_registration.jpg", applicantFolder);
 
     // Hyperlink Formulas for Documents
     var photoFormula = photoUrl ? '=HYPERLINK("' + photoUrl + '", "🔍 View Photo")' : '—';
-    var driverLicFrontFormula = driverLicFrontUrl ? '=HYPERLINK("' + driverLicFrontUrl + '", "📄 Driver Lic Front")' : '—';
-    var driverLicBackFormula = driverLicBackUrl ? '=HYPERLINK("' + driverLicBackUrl + '", "📄 Driver Lic Back")' : '—';
-    var carLicFrontFormula = carLicFrontUrl ? '=HYPERLINK("' + carLicFrontUrl + '", "🚗 Car Reg Front")' : '—';
-    var carLicBackFormula = carLicBackUrl ? '=HYPERLINK("' + carLicBackUrl + '", "🚗 Car Reg Back")' : '—';
+    var driverLicFrontFormula = driverLicFrontUrl ? '=HYPERLINK("' + driverLicFrontUrl + '", "📄 Lic Front")' : '—';
+    var driverLicBackFormula = driverLicBackUrl ? '=HYPERLINK("' + driverLicBackUrl + '", "📄 Lic Back")' : '—';
+    var carLicFrontFormula = carLicFrontUrl ? '=HYPERLINK("' + carLicFrontUrl + '", "🚗 Blue Book Front")' : '—';
+    var carLicBackFormula = carLicBackUrl ? '=HYPERLINK("' + carLicBackUrl + '", "🚗 Blue Book Back")' : '—';
     var carFitnessFormula = carFitnessUrl ? '=HYPERLINK("' + carFitnessUrl + '", "📑 Fitness/Tax Doc")' : '—';
     var nidFrontFormula = nidFrontUrl ? '=HYPERLINK("' + nidFrontUrl + '", "🪪 NID Front")' : '—';
     var nidBackFormula = nidBackUrl ? '=HYPERLINK("' + nidBackUrl + '", "🪪 NID Back")' : '—';
+    var tradeLicFormula = tradeLicUrl ? '=HYPERLINK("' + tradeLicUrl + '", "🏢 Trade License")' : '—';
 
-    // Raw Phone Cleaning & 1-Click WhatsApp Button Formula
+    // Phone & 1-Click WhatsApp Button Formula
     var rawPhone = String(data.phone || "").trim();
     var cleanDigits = rawPhone.replace(/[^0-9]/g, "");
     if (cleanDigits.startsWith("0")) {
@@ -1210,7 +943,7 @@ function doPost(e) {
     }
 
     var whatsappFormula = (cleanDigits.length >= 10) ?
-      '=HYPERLINK("https://wa.me/' + cleanDigits + '?text=' + encodeURIComponent("Hello " + applicantName + ", this is Rownaa Executive Fleet Operations regarding your Chauffeur Application (" + appId + ").") + '", "🟢 Chat on WhatsApp")' :
+      '=HYPERLINK("https://wa.me/' + cleanDigits + '?text=' + encodeURIComponent("Hello " + applicantName + ", this is Rownaa Operations regarding your application (" + appId + ").") + '", "🟢 Chat on WhatsApp")' :
       '—';
 
     // Emergency Contact
@@ -1221,36 +954,74 @@ function doPost(e) {
         String(data.emergencyContact);
     }
 
-    // Car License / Registration Plate & Vehicle Profile
-    var carPlateNo = String(data.carLicenseNumber || data.carPlate || data.plateNumber || "").trim();
-    var carModelStr = String(data.carModel || data.vehicleModel || "").trim();
+    // Role & Business Information
+    var roleStr = sanitizeCellValue(data.role || data.driverRole || "Solo Driver");
+    var companyNameStr = sanitizeCellValue(data.businessName || data.companyName || (/rental|fleet/i.test(roleStr) ? (applicantName + " Rental Service") : "Personal"));
+    var tradeLicenseNo = String(data.tradeLicenseNumber || data.tradeLicense || "N/A").trim();
+
+    // Primary Car Details
+    var primaryPlate = String(data.carLicenseNumber || data.carPlate || data.plateNumber || "").trim();
+    var primaryModel = String(data.carModel || data.vehicleModel || "").trim();
     var carFitnessExpiry = String(data.carFitnessExpiry || data.taxTokenExpiry || "—").trim();
 
-    var vehicleStr = "";
-    if (data.vehicleProfile) {
-      vehicleStr = String(data.vehicleProfile);
-    } else if (data.fleetData) {
-      var fd = data.fleetData;
-      var cList = Array.isArray(fd.cars) ? fd.cars.map(function(c, i) { return (i + 1) + ". " + (c.model || "Vehicle") + " [" + (c.reg || c.plate || "No Plate") + "]"; }).join(", ") : "";
-      var dList = Array.isArray(fd.drivers) ? fd.drivers.map(function(d) { return d.name + " (" + d.phone + ")"; }).join(", ") : "";
-      vehicleStr = "Rental Fleet (" + (fd.cars ? fd.cars.length : 0) + " Cars, " + (fd.drivers ? fd.drivers.length : 0) + " Drivers): " + cList + (dList ? " | Drivers: " + dList : "");
-      if (!carPlateNo && fd.cars && fd.cars.length > 0) {
-        carPlateNo = fd.cars.map(function(c){ return c.reg || c.plate; }).join(", ");
+    // ==============================================================
+    // ⭐ MULTIPLE CARS IN ONE SINGLE COLUMN (Col Q / 17)
+    // ==============================================================
+    var allCarsStr = "";
+    var carsList = (data.fleetData && (data.fleetData.vehicles || data.fleetData.cars)) || data.fleetVehicles || [];
+    if (carsList.length > 0) {
+      var carLines = [];
+      for (var cIdx = 0; cIdx < carsList.length; cIdx++) {
+        var c = carsList[cIdx];
+        var cModel = c.model || c.make || "Vehicle";
+        var cPlate = c.reg || c.plate || c.plateNumber || "No Plate";
+        var cYear = c.year || c.manufacturingYear || "";
+        var cSeats = c.seats || c.seatingCapacity || "";
+        var cFuel = c.fuel || c.fuelType || "";
+        var cFit = c.fitnessExpiry || c.fitness || "";
+        var extra = [cYear, cSeats, cFuel].filter(Boolean).join(", ");
+        carLines.push((cIdx + 1) + ". " + cModel + " [" + cPlate + "]" + (extra ? " (" + extra + ")" : "") + (cFit ? " — Fitness: " + cFit : ""));
+        
+        if (!primaryPlate && cPlate !== "No Plate") primaryPlate = cPlate;
+        if (!primaryModel && cModel !== "Vehicle") primaryModel = cModel;
+        if (carFitnessExpiry === "—" && cFit) carFitnessExpiry = cFit;
       }
-      if (!carModelStr && fd.cars && fd.cars.length > 0) {
-        carModelStr = fd.cars.map(function(c){ return c.model; }).join(", ");
-      }
+      allCarsStr = carLines.join("\n");
     } else if (data.ownerCar) {
       var oc = (typeof data.ownerCar === 'object') ? data.ownerCar : {};
-      vehicleStr = (oc.model || "") + " [" + (oc.plateNumber || "") + "]";
-      if (!carPlateNo) carPlateNo = oc.plateNumber || "";
-      if (!carModelStr) carModelStr = oc.model || "";
+      primaryModel = oc.model || primaryModel || "Personal Vehicle";
+      primaryPlate = oc.plateNumber || primaryPlate || "N/A";
+      allCarsStr = "1. " + primaryModel + " [" + primaryPlate + "]" + (carFitnessExpiry !== "—" ? " — Fitness: " + carFitnessExpiry : "");
+    } else if (primaryPlate && primaryPlate !== "—") {
+      allCarsStr = "1. " + (primaryModel || "Vehicle") + " [" + primaryPlate + "]" + (carFitnessExpiry !== "—" ? " — Fitness: " + carFitnessExpiry : "");
     } else {
-      vehicleStr = carModelStr ? carModelStr : "N/A (Fleet Chauffeur)";
+      allCarsStr = "N/A (Fleet Chauffeur / No Personal Vehicle)";
     }
 
-    if (!carPlateNo) carPlateNo = "—";
-    if (!carModelStr) carModelStr = "—";
+    var primaryCarDisplay = (primaryPlate || primaryModel) ? ((primaryModel || "Vehicle") + " [" + (primaryPlate || "N/A") + "]") : "N/A";
+
+    // ==============================================================
+    // ⭐ MULTIPLE DRIVERS IN ONE SINGLE COLUMN (Col R / 18)
+    // ==============================================================
+    var allDriversStr = "";
+    var driversList = (data.fleetData && data.fleetData.drivers) || data.fleetDrivers || [];
+    if (driversList.length > 0) {
+      var driverLines = [];
+      for (var dIdx = 0; dIdx < driversList.length; dIdx++) {
+        var d = driversList[dIdx];
+        var dName = d.name || d.fullName || ("Driver " + (dIdx + 1));
+        var dPhone = d.phone || d.mobile || "No Phone";
+        var dLic = d.license || d.licenseNumber || "";
+        var dClass = d.licenseClass || d.licenseType || "";
+        var dExp = d.licenseExpiry || d.expiry || "";
+        var dAssigned = d.assignedPlate || "";
+        var licInfo = [dLic, dClass].filter(Boolean).join(", ");
+        driverLines.push((dIdx + 1) + ". " + dName + " (" + dPhone + ")" + (licInfo ? " — Lic: " + licInfo : "") + (dExp ? " [Exp: " + dExp + "]" : "") + (dAssigned ? " [Car: " + dAssigned + "]" : ""));
+      }
+      allDriversStr = driverLines.join("\n");
+    } else {
+      allDriversStr = "Solo Applicant (" + applicantName + " — Self-Managed)";
+    }
 
     // Payout Wallet & Bank Details
     var payoutStr = "";
@@ -1258,7 +1029,7 @@ function doPost(e) {
       payoutStr = String(data.payoutWallet);
     } else if (data.bankDetails) {
       var bd = data.bankDetails;
-      payoutStr = "Bank: " + (bd.bankName || "") + " (" + (bd.branch || "") + ") - A/C: " + (bd.accountNumber || "") + " [" + (bd.accountType || "") + " - " + (bd.accountName || "") + "]" + (bd.routingNumber ? " Routing: " + bd.routingNumber : "");
+      payoutStr = "Bank: " + (bd.bankName || "") + " (" + (bd.branch || "") + ") - A/C: " + (bd.accountNumber || "") + " [" + (bd.accountType || "") + " - " + (bd.accountName || "") + "]";
     } else {
       payoutStr = data.payoutMethod ? (data.payoutMethod + " - " + (data.payoutNumber || "")) : "";
     }
@@ -1266,13 +1037,11 @@ function doPost(e) {
     var servicesStr = Array.isArray(data.services) ? data.services.join(", ") : (data.services || "");
     var nextRowIdx = sheet.getLastRow() + 1;
 
-    // =========================================================
-    // ADVANCED DUPLICATE DATA TRACKER & RESUBMISSION AUDIT
-    // =========================================================
+    // Duplicate & Resubmission Scanner
     var cleanPhoneForMatch = cleanDigits.replace(/^880/, "0");
     var cleanNidForMatch = String(data.nidNumber || data.nid || "").trim().replace(/[^0-9]/g, "");
     var cleanLicForMatch = String(data.licenseNumber || data.driverLicenseNumber || "").trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
-    var cleanPlateForMatch = carPlateNo.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+    var cleanPlateForMatch = primaryPlate.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
     var isDriverCorrection = (data.isResubmission === true || data.isResubmission === "true" || !!data.correctionReason);
     var prevAppIdGiven = String(data.previousApplicationId || data.prevAppId || "").trim();
 
@@ -1282,19 +1051,19 @@ function doPost(e) {
     
     if (existingRowCount > 1) {
       try {
-        var existingValues = sheet.getRange(2, 1, existingRowCount - 1, Math.min(sheet.getLastColumn(), 36)).getValues();
+        var existingValues = sheet.getRange(2, 1, existingRowCount - 1, Math.min(sheet.getLastColumn(), 37)).getValues();
         for (var eIdx = 0; eIdx < existingValues.length; eIdx++) {
           var rowP = String(existingValues[eIdx][3] || "").replace(/[^0-9]/g, "").replace(/^880/, "0");
           var rowN = String(existingValues[eIdx][5] || "").replace(/[^0-9]/g, "");
-          var rowL = String(existingValues[eIdx][8] || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-          var rowPlate = String(existingValues[eIdx][12] || "").replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+          var rowL = String(existingValues[eIdx][11] || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+          var rowPlate = String(existingValues[eIdx][14] || "").replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
           var rowId = String(existingValues[eIdx][1] || "");
           var matchFields = [];
 
           if (cleanPhoneForMatch && rowP && cleanPhoneForMatch === rowP) matchFields.push("Phone");
           if (cleanNidForMatch && rowN && cleanNidForMatch === rowN) matchFields.push("NID");
           if (cleanLicForMatch && rowL && cleanLicForMatch === rowL) matchFields.push("Driver License");
-          if (cleanPlateForMatch && rowPlate && rowPlate !== "—" && cleanPlateForMatch === rowPlate) matchFields.push("Car Plate");
+          if (cleanPlateForMatch && rowPlate && rowPlate !== "N/A" && cleanPlateForMatch === rowPlate) matchFields.push("Car Plate");
 
           if (matchFields.length > 0) {
             submissionIteration++;
@@ -1308,80 +1077,79 @@ function doPost(e) {
       } catch(scanErr) {}
     }
 
-    // Determine Admin Tracking Classification
     var auditTrackerStr = "";
     var auditBgColor = "#e6f4ea"; // soft green
     var auditFgColor = "#137333";
 
     if (isDriverCorrection) {
-      auditTrackerStr = "🔄 RESUBMISSION [Iteration #" + submissionIteration + "]" + 
+      auditTrackerStr = "🔄 Repeat / Correction [Iteration #" + submissionIteration + "]" + 
         (prevAppIdGiven ? " (Correcting #" + prevAppIdGiven + ")" : (duplicateMatches.length > 0 ? " (Matches Prev #" + duplicateMatches[0].appId + ")" : ""));
       auditBgColor = "#fff8e1"; // warm amber
       auditFgColor = "#b78103";
     } else if (duplicateMatches.length > 0) {
-      auditTrackerStr = "⚠️ DUPLICATE SUBMISSION [Iteration #" + submissionIteration + "] (Matches Row " + duplicateMatches[0].row + " #" + duplicateMatches[0].appId + " on " + duplicateMatches[0].matchedOn + ")";
+      auditTrackerStr = "⚠️ Repeat Application [Iteration #" + submissionIteration + "] (Matches Row " + duplicateMatches[0].row + " #" + duplicateMatches[0].appId + " on " + duplicateMatches[0].matchedOn + ")";
       auditBgColor = "#fde8e8"; // soft red
       auditFgColor = "#c53030";
     } else {
-      auditTrackerStr = "✅ UNIQUE (First-Time Applicant)";
+      auditTrackerStr = "✅ First-Time Application";
       auditBgColor = "#e6f4ea";
       auditFgColor = "#137333";
     }
 
     var resubmissionNotesStr = "";
     if (isDriverCorrection) {
-      resubmissionNotesStr = (data.correctionReason ? ("[" + data.correctionReason + "] ") : "") + (data.correctionNotes || data.correctionDetails || "Driver marked as correction of previous submission");
+      resubmissionNotesStr = (data.correctionReason ? ("[" + data.correctionReason + "] ") : "") + (data.correctionNotes || data.correctionDetails || "Correction submitted by applicant");
     } else if (duplicateMatches.length > 0) {
-      resubmissionNotesStr = "Potential repeat submission with matching " + duplicateMatches[0].matchedOn + " (unflagged by applicant)";
+      resubmissionNotesStr = "Potential repeat submission with matching " + duplicateMatches[0].matchedOn;
     } else {
       resubmissionNotesStr = "—";
     }
 
-    // In-Cell Formulas
-    // Driver License Expiry Formula in Col L (12), referencing Col K (11)
-    var driverLicenseStatusFormula = '=IF(K' + nextRowIdx + '="—", "—", IF(DATEVALUE(K' + nextRowIdx + ')<TODAY(), "⛔ EXPIRED", IF(DATEVALUE(K' + nextRowIdx + ')<TODAY()+30, "⚠️ EXPIRING SOON", "✅ VALID")))';
+    // License expiry status formula
+    var driverLicenseStatusFormula = '=IF(M' + nextRowIdx + '="—", "—", "🟢 Active")';
     
-    // Completeness Formula in Col X (24): Checks Photo (Y), Driver Lic (Z, AA), NID (AE, AF)
-    var docCompletenessFormula = '=IF(AND(Y' + nextRowIdx + '<>"—", Z' + nextRowIdx + '<>"—", AA' + nextRowIdx + '<>"—", AE' + nextRowIdx + '<>"—", AF' + nextRowIdx + '<>"—"), "✅ Driver Docs Complete", "⚠️ Pending Docs")';
+    // Completeness Formula
+    var docCompletenessFormula = '=IF(AND(Y' + nextRowIdx + '<>"—", Z' + nextRowIdx + '<>"—", AE' + nextRowIdx + '<>"—"), "🟢 Complete", "⚠️ Pending Docs")';
 
-    // Construct Row Array (36 Columns)
+    // Construct Flat Row Array (37 Columns)
     var row = [
       sanitizeCellValue(data.submittedAt || new Date().toISOString()), // Col A (1): Timestamp
       appId,                                                          // Col B (2): Application ID
-      applicantName,                                                  // Col C (3): Full Name
+      applicantName,                                                  // Col C (3): Full Name / Owner
       formatAsPlainText(rawPhone),                                    // Col D (4): Phone (WhatsApp)
-      whatsappFormula,                                                // Col E (5): 🟢 Chat on WhatsApp
-      formatAsPlainText(data.nidNumber || data.nid || ""),            // Col F (6): NID Number
-      sanitizeCellValue(data.baseCity || data.city || ""),            // Col G (7): District
+      whatsappFormula,                                                // Col E (5): 💬 1-Click WhatsApp
+      formatAsPlainText(data.nidNumber || data.nid || ""),            // Col F (6): Smart NID Number
+      sanitizeCellValue(data.baseCity || data.city || "Dhaka"),       // Col G (7): District / City
       sanitizeCellValue(emergencyStr),                                // Col H (8): Emergency Contact
-      formatAsPlainText(data.licenseNumber || data.driverLicenseNumber || ""), // Col I (9): Driver License No. (BRTA)
-      sanitizeCellValue(data.licenseType || data.driverLicenseType || ""),    // Col J (10): Driver License Class
-      sanitizeCellValue(data.licenseExpiry || data.driverLicenseExpiry || "—"), // Col K (11): Driver License Expiry
-      driverLicenseStatusFormula,                                     // Col L (12): Driver License Status
-      formatAsPlainText(carPlateNo),                                  // Col M (13): Car License / Reg Plate No.
-      sanitizeCellValue(carModelStr),                                 // Col N (14): Car Model & Make
-      sanitizeCellValue(carFitnessExpiry),                            // Col O (15): Car Fitness & Tax Expiry
-      sanitizeCellValue(data.experience || ""),                       // Col P (16): Experience
-      sanitizeCellValue(data.languages || ""),                        // Col Q (17): Languages
-      sanitizeCellValue(servicesStr),                                 // Col R (18): Services Selected
-      sanitizeCellValue(data.availability || "full_time"),            // Col S (19): Availability
-      sanitizeCellValue(data.role || data.driverRole || "Fleet Chauffeur"), // Col T (20): Role Type
-      sanitizeCellValue(vehicleStr),                                  // Col U (21): Full Vehicle & Fleet Details
-      formatAsPlainText(payoutStr),                                   // Col V (22): Payout Wallet & Bank Account
+      roleStr,                                                        // Col I (9): Role / Service Type
+      companyNameStr,                                                 // Col J (10): Company / Business Name
+      formatAsPlainText(tradeLicenseNo),                              // Col K (11): Trade License Number
+      formatAsPlainText(data.licenseNumber || data.driverLicenseNumber || "N/A"), // Col L (12): Driver License No.
+      sanitizeCellValue((data.licenseType || data.driverLicenseType || "Light") + " (Exp: " + (data.licenseExpiry || data.driverLicenseExpiry || "2030") + ")"), // Col M (13): License Class & Expiry
+      driverLicenseStatusFormula,                                     // Col N (14): Driver License Status
+      sanitizeCellValue(primaryCarDisplay),                           // Col O (15): Primary Car Plate & Model
+      sanitizeCellValue(carFitnessExpiry),                            // Col P (16): Car Fitness & Tax Expiry
+      sanitizeCellValue(allCarsStr),                                  // Col Q (17): ⭐ ALL CARS IN ONE COLUMN
+      sanitizeCellValue(allDriversStr),                               // Col R (18): ⭐ ALL DRIVERS IN ONE COLUMN
+      sanitizeCellValue(data.experience || "5+ Years"),               // Col S (19): Experience & Skills
+      sanitizeCellValue(servicesStr || "Chauffeur & Rental"),         // Col T (20): Services Offered
+      sanitizeCellValue(data.availability || "Full Time"),            // Col U (21): Availability & Duty
+      formatAsPlainText(payoutStr),                                   // Col V (22): Payout Wallet & Bank
       sanitizeCellValue(data.status || "Pending Verification"),       // Col W (23): Verification Status
       docCompletenessFormula,                                         // Col X (24): Doc Completeness
       photoFormula,                                                   // Col Y (25): Photo Document
       driverLicFrontFormula,                                          // Col Z (26): Driver License (Front)
       driverLicBackFormula,                                           // Col AA (27): Driver License (Back)
-      carLicFrontFormula,                                             // Col AB (28): Car License / Blue Book (Front)
-      carLicBackFormula,                                              // Col AC (29): Car License / Blue Book (Back)
-      carFitnessFormula,                                              // Col AD (30): Car Fitness / Tax Token Doc
+      carLicFrontFormula,                                             // Col AB (28): Car Reg (Front)
+      carLicBackFormula,                                              // Col AC (29): Car Reg (Back)
+      carFitnessFormula,                                              // Col AD (30): Car Fitness Doc
       nidFrontFormula,                                                // Col AE (31): NID (Front)
       nidBackFormula,                                                 // Col AF (32): NID (Back)
-      sanitizeCellValue(auditTrackerStr),                             // Col AG (33): Admin Tracker & Audit
-      sanitizeCellValue(resubmissionNotesStr),                        // Col AH (34): Resubmission Notes
-      "",                                                             // Col AI (35): Verified By
-      ""                                                              // Col AJ (36): Verification Time
+      tradeLicFormula,                                                // Col AG (33): Trade License Doc
+      sanitizeCellValue(auditTrackerStr),                             // Col AH (34): Admin Tracker & Audit
+      sanitizeCellValue(resubmissionNotesStr),                        // Col AI (35): Resubmission Notes
+      "",                                                             // Col AJ (36): Verified By
+      ""                                                              // Col AK (37): Verification Time
     ];
 
     sheet.appendRow(row);
@@ -1391,7 +1159,7 @@ function doPost(e) {
     rowRange.setFontSize(10);
     rowRange.setFontFamily("Roboto");
     rowRange.setVerticalAlignment("middle");
-    sheet.setRowHeight(lastRow, 34);
+    sheet.setRowHeight(lastRow, (carsList.length > 2 || driversList.length > 2) ? 60 : 36);
 
     if (lastRow % 2 === 0) {
       rowRange.setBackground("#fafafa");
@@ -1411,211 +1179,22 @@ function doPost(e) {
       .build();
     sheet.getRange(lastRow, 23).setDataValidation(statusRule);
 
-    // Audit Tracker Styling (Col AG / 33)
-    var auditCell = sheet.getRange(lastRow, 33);
+    // Audit Tracker Styling (Col AH / 34)
+    var auditCell = sheet.getRange(lastRow, 34);
     auditCell.setBackground(auditBgColor);
     auditCell.setFontColor(auditFgColor);
     auditCell.setFontWeight("bold");
 
-    // ==============================================================
-    // MULTI-TAB RELATIONAL DATABASE INGESTION ENGINE
-    // Automatically routes Fleets, Vehicles, and Employed Drivers
-    // ==============================================================
-    try {
-      var isRentalFleet = (/rental|fleet/i.test(data.role || "") || /rental|fleet/i.test(data.driverRole || "") || !!data.fleetData);
-      var isSoloOwner = (/owner/i.test(data.role || "") || /owner/i.test(data.driverRole || "") || !!data.ownerCar);
-
-      if (isRentalFleet) {
-        setupMultiTabRelationalDatabase(ss);
-
-        // 1. INGEST INTO RENTAL FLEET SERVICES TAB
-        var fleetSheet = ss.getSheetByName(SHEET_FLEET_SERVICES_NAME);
-        var fVehicles = (data.fleetData && (data.fleetData.vehicles || data.fleetData.cars)) || [];
-        var fDrivers = (data.fleetData && data.fleetData.drivers) || [];
-        if (fleetSheet) {
-          var totalCars = (fVehicles.length > 0) ? fVehicles.length : (data.totalVehicles || 1);
-          var totalDrivers = (fDrivers.length > 0) ? fDrivers.length : (data.totalDrivers || 1);
-          var bName = data.businessName || data.companyName || (applicantName + " Rental Fleet");
-          var tLicNo = data.tradeLicenseNumber || data.tradeLicense || "—";
-          var tLicUrl = saveBase64DocumentToDrive(data.tradeLicenseBase64, "00_trade_license_registration.jpg", applicantFolder);
-          var tLicForm = tLicUrl ? '=HYPERLINK("' + tLicUrl + '", "📑 View Trade License")' : '—';
-          var offAddr = data.officeAddress || data.garageAddress || data.baseCity || "Dhaka";
-
-          var fleetRowData = [
-            sanitizeCellValue(data.submittedAt || new Date().toISOString()),
-            appId,
-            sanitizeCellValue(bName),
-            applicantName,
-            formatAsPlainText(rawPhone),
-            whatsappFormula,
-            formatAsPlainText(data.nidNumber || data.nid || ""),
-            sanitizeCellValue(data.baseCity || data.city || "Dhaka"),
-            sanitizeCellValue(offAddr),
-            totalCars,
-            totalDrivers,
-            formatAsPlainText(tLicNo),
-            formatAsPlainText(payoutStr),
-            "Pending Verification",
-            docCompletenessFormula,
-            photoFormula,
-            nidFrontFormula,
-            nidBackFormula,
-            tLicForm,
-            sanitizeCellValue(auditTrackerStr),
-            "",
-            ""
-          ];
-          fleetSheet.appendRow(fleetRowData);
-        }
-
-        // 2. INGEST INTO FLEET VEHICLE VAULT TAB (One dedicated row per vehicle)
-        var vehSheet = ss.getSheetByName(SHEET_VEHICLES_VAULT_NAME);
-        if (vehSheet && fVehicles.length > 0) {
-          for (var cIdx = 0; cIdx < fVehicles.length; cIdx++) {
-            var carObj = fVehicles[cIdx];
-            var vehId = "VEH-" + (cIdx + 1) + "-" + appId.replace(/[^0-9]/g, "").slice(-4);
-            var cPlate = carObj.reg || carObj.plate || carObj.plateNumber || ("Car-" + (cIdx + 1));
-            var cModel = carObj.model || carObj.make || "Sedan / Microbus";
-            var cYear = carObj.year || carObj.manufacturingYear || "2021";
-            var cSeats = carObj.seats || carObj.seatingCapacity || "4-7 Seats";
-            var cFuel = carObj.fuel || carObj.fuelType || "Octane / Hybrid";
-            var cFitExp = carObj.fitnessExpiry || carObj.fitness || "2027-12-31";
-
-            var cFUrl = saveBase64DocumentToDrive(carObj.carLicenseFront || carObj.carLicenseFrontBase64 || carObj.blueBookFront || carObj.blueBookFrontBase64, "car_" + (cIdx + 1) + "_reg_front.jpg", applicantFolder);
-            var cBUrl = saveBase64DocumentToDrive(carObj.carLicenseBack || carObj.carLicenseBackBase64 || carObj.blueBookBack || carObj.blueBookBackBase64, "car_" + (cIdx + 1) + "_reg_back.jpg", applicantFolder);
-            var cFitUrl = saveBase64DocumentToDrive(carObj.carFitness || carObj.carFitnessBase64 || carObj.taxToken || carObj.taxTokenBase64, "car_" + (cIdx + 1) + "_fitness.jpg", applicantFolder);
-
-            var cFForm = cFUrl ? '=HYPERLINK("' + cFUrl + '", "🚗 Blue Book Front")' : (cIdx === 0 && carLicFrontUrl ? '=HYPERLINK("' + carLicFrontUrl + '", "🚗 Blue Book Front")' : '—');
-            var cBForm = cBUrl ? '=HYPERLINK("' + cBUrl + '", "🚗 Blue Book Back")' : (cIdx === 0 && carLicBackUrl ? '=HYPERLINK("' + carLicBackUrl + '", "🚗 Blue Book Back")' : '—');
-            var cFitDocForm = cFitUrl ? '=HYPERLINK("' + cFitUrl + '", "📑 Fitness Token")' : (cIdx === 0 && carFitnessUrl ? '=HYPERLINK("' + carFitnessUrl + '", "📑 Fitness Token")' : '—');
-
-            var vRowIdx = vehSheet.getLastRow() + 1;
-            var vFitStatForm = '=IF(K' + vRowIdx + '="—", "—", IF(DATEVALUE(K' + vRowIdx + ')<TODAY(), "⛔ EXPIRED", IF(DATEVALUE(K' + vRowIdx + ')<TODAY()+60, "⚠️ EXPIRING SOON", "✅ VALID")))';
-
-            vehSheet.appendRow([
-              sanitizeCellValue(data.submittedAt || new Date().toISOString()),
-              vehId,
-              appId,
-              sanitizeCellValue(bName),
-              formatAsPlainText(rawPhone),
-              sanitizeCellValue(cModel),
-              formatAsPlainText(cPlate),
-              sanitizeCellValue(cYear),
-              sanitizeCellValue(cSeats),
-              sanitizeCellValue(cFuel),
-              sanitizeCellValue(cFitExp),
-              vFitStatForm,
-              cFForm,
-              cBForm,
-              cFitDocForm,
-              "Pending Inspection",
-              "",
-              "",
-              ""
-            ]);
-          }
-        }
-
-        // 3. INGEST INTO FLEET DRIVER ROSTER TAB (One dedicated row per employed driver)
-        var drvSheet = ss.getSheetByName(SHEET_FLEET_DRIVERS_NAME);
-        if (drvSheet && fDrivers.length > 0) {
-          for (var dIdx = 0; dIdx < fDrivers.length; dIdx++) {
-            var dObj = fDrivers[dIdx];
-            var fdrvId = "FDRV-" + (dIdx + 1) + "-" + appId.replace(/[^0-9]/g, "").slice(-4);
-            var dName = dObj.name || dObj.fullName || ("Employed Driver " + (dIdx + 1));
-            var dPhone = dObj.phone || dObj.mobile || "";
-            var dNid = dObj.nid || dObj.nidNumber || "";
-            var dLicense = dObj.license || dObj.licenseNumber || "";
-            var dClass = dObj.licenseClass || dObj.licenseType || "Professional Light";
-            var dExpiry = dObj.licenseExpiry || dObj.expiry || "—";
-            var dAssignedPlate = dObj.assignedPlate || (fVehicles[dIdx] ? (fVehicles[dIdx].plate || fVehicles[dIdx].reg) : "Any Fleet Car");
-
-            var dCleanPhone = dPhone.replace(/[^0-9]/g, "");
-            if (dCleanPhone.startsWith("0")) dCleanPhone = "880" + dCleanPhone.substring(1);
-            var dWaForm = (dCleanPhone.length >= 10) ?
-              '=HYPERLINK("https://wa.me/' + dCleanPhone + '?text=' + encodeURIComponent("Hello " + dName + ", this is Rownaa Fleet Operations under " + bName + ".") + '", "🟢 Chat on WhatsApp")' : '—';
-
-            var dFUrl = saveBase64DocumentToDrive(dObj.licenseFront || dObj.licenseFrontBase64, "driver_" + (dIdx + 1) + "_lic_front.jpg", applicantFolder);
-            var dBUrl = saveBase64DocumentToDrive(dObj.licenseBack || dObj.licenseBackBase64, "driver_" + (dIdx + 1) + "_lic_back.jpg", applicantFolder);
-            var dNFUrl = saveBase64DocumentToDrive(dObj.nidFront || dObj.nidFrontBase64, "driver_" + (dIdx + 1) + "_nid_front.jpg", applicantFolder);
-            var dNBUrl = saveBase64DocumentToDrive(dObj.nidBack || dObj.nidBackBase64, "driver_" + (dIdx + 1) + "_nid_back.jpg", applicantFolder);
-
-            var dFForm = dFUrl ? '=HYPERLINK("' + dFUrl + '", "📄 Lic Front")' : (dIdx === 0 && driverLicFrontUrl ? '=HYPERLINK("' + driverLicFrontUrl + '", "📄 Lic Front")' : '—');
-            var dBForm = dBUrl ? '=HYPERLINK("' + dBUrl + '", "📄 Lic Back")' : (dIdx === 0 && driverLicBackUrl ? '=HYPERLINK("' + driverLicBackUrl + '", "📄 Lic Back")' : '—');
-            var dNFForm = dNFUrl ? '=HYPERLINK("' + dNFUrl + '", "🪪 NID Front")' : '—';
-            var dNBForm = dNBUrl ? '=HYPERLINK("' + dNBUrl + '", "🪪 NID Back")' : '—';
-
-            var dRowIdx = drvSheet.getLastRow() + 1;
-            var dLicStatForm = '=IF(K' + dRowIdx + '="—", "—", IF(DATEVALUE(K' + dRowIdx + ')<TODAY(), "⛔ EXPIRED", IF(DATEVALUE(K' + dRowIdx + ')<TODAY()+30, "⚠️ EXPIRING SOON", "✅ VALID")))';
-
-            drvSheet.appendRow([
-              sanitizeCellValue(data.submittedAt || new Date().toISOString()),
-              fdrvId,
-              appId,
-              sanitizeCellValue(bName),
-              applicantName,
-              formatAsPlainText(dPhone),
-              dWaForm,
-              formatAsPlainText(dNid),
-              formatAsPlainText(dLicense),
-              sanitizeCellValue(dClass),
-              sanitizeCellValue(dExpiry),
-              dLicStatForm,
-              dFForm,
-              dBForm,
-              dNFForm,
-              dNBForm,
-              formatAsPlainText(dAssignedPlate),
-              "Pending Verification",
-              "",
-              ""
-            ]);
-          }
-        }
-      } else if (isSoloOwner) {
-        // Also register solo owner-driver car in Fleet Vehicle Vault
-        setupMultiTabRelationalDatabase(ss);
-        var soloVehSheet = ss.getSheetByName(SHEET_VEHICLES_VAULT_NAME);
-        if (soloVehSheet && carPlateNo && carPlateNo !== "—") {
-          var soloVehId = "VEH-SOLO-" + appId.replace(/[^0-9]/g, "").slice(-4);
-          var sRowIdx = soloVehSheet.getLastRow() + 1;
-          var sFitStatForm = '=IF(K' + sRowIdx + '="—", "—", IF(DATEVALUE(K' + sRowIdx + ')<TODAY(), "⛔ EXPIRED", IF(DATEVALUE(K' + sRowIdx + ')<TODAY()+60, "⚠️ EXPIRING SOON", "✅ VALID")))';
-
-          soloVehSheet.appendRow([
-            sanitizeCellValue(data.submittedAt || new Date().toISOString()),
-            soloVehId,
-            appId,
-            applicantName + " (Solo Owner-Driver)",
-            formatAsPlainText(rawPhone),
-            sanitizeCellValue(carModelStr),
-            formatAsPlainText(carPlateNo),
-            sanitizeCellValue(data.carYear || "2021"),
-            sanitizeCellValue(data.carSeats || "4 Seats"),
-            sanitizeCellValue(data.carFuel || "Octane"),
-            sanitizeCellValue(carFitnessExpiry),
-            sFitStatForm,
-            carLicFrontFormula,
-            carLicBackFormula,
-            carFitnessFormula,
-            "Approved & Active",
-            applicantName,
-            "",
-            ""
-          ]);
-        }
-      }
-    } catch(multiTabErr) {
-      Logger.log("Multi-tab ingestion note: " + multiTabErr.toString());
-    }
-
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
-      message: "Chauffeur application recorded safely into Rownaa Dual-License Registry!",
+      message: "Application recorded safely into Rownaa Unified Registrations Database!",
       row: lastRow,
       applicationId: appId,
       auditStatus: auditTrackerStr,
       isResubmission: isDriverCorrection,
       iteration: submissionIteration,
+      carsCount: carsList.length || (primaryPlate !== "N/A" ? 1 : 0),
+      driversCount: driversList.length || 1,
       documentsSaved: {
         photo: !!photoUrl,
         driverLicenseFront: !!driverLicFrontUrl,
@@ -1625,8 +1204,7 @@ function doPost(e) {
         carFitness: !!carFitnessUrl,
         nidFront: !!nidFrontUrl,
         nidBack: !!nidBackUrl,
-        fleetDriverLicenses: fleetDriverLicenseCount,
-        fleetCarDocs: fleetCarDocCount
+        tradeLicense: !!tradeLicUrl
       }
     })).setMimeType(ContentService.MimeType.JSON);
 
@@ -1649,17 +1227,10 @@ function doGet(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
 
   if (action === "setup" || action === "rebuild") {
-    setupSheet();
-    var ssClean = SpreadsheetApp.getActiveSpreadsheet();
-    var defaultSheet = ssClean.getSheetByName("Sheet1");
-    if (defaultSheet && ssClean.getSheets().length > 1) {
-      if (defaultSheet.getLastRow() === 0 && defaultSheet.getLastColumn() === 0) {
-        try { ssClean.deleteSheet(defaultSheet); } catch (dErr) {}
-      }
-    }
+    safeRebuildAndSetup();
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
-      message: "Full enterprise Dual-License sheet initialized safely: 36 columns, dark luxury styling, and KPI Dashboard ready!",
+      message: "2-Section Operations Architecture initialized safely (Dashboard & Registrations ready)!",
       timestamp: new Date().toISOString()
     })).setMimeType(ContentService.MimeType.JSON);
   }
@@ -1668,17 +1239,8 @@ function doGet(e) {
     var stats = autoAlignAndRepairSheet(false);
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
-      message: "Rownaa Operations Self-Healing completed: 36 columns realigned, ghost rows cleaned, and KPI Dashboard synchronized!",
+      message: "Rownaa Operations Self-Healing completed: 37 columns realigned, ghost rows cleaned, and KPI Dashboard synchronized!",
       stats: stats,
-      timestamp: new Date().toISOString()
-    })).setMimeType(ContentService.MimeType.JSON);
-  }
-
-  if (false && action === "old_repair") {
-    repairExistingErrors();
-    return ContentService.createTextOutput(JSON.stringify({
-      status: "success",
-      message: "Rownaa Operations Self-Healing completed: WhatsApp buttons generated, NID aligned, phone errors fixed, and dashboard refreshed!",
       timestamp: new Date().toISOString()
     })).setMimeType(ContentService.MimeType.JSON);
   }
@@ -1692,59 +1254,19 @@ function doGet(e) {
     })).setMimeType(ContentService.MimeType.JSON);
   }
 
-    if (action === "getFleets") {
-    var fltSheet = ss.getSheetByName(SHEET_FLEET_SERVICES_NAME);
-    if (!fltSheet) return ContentService.createTextOutput(JSON.stringify({ status: "error", message: "Fleet Services tab not found" })).setMimeType(ContentService.MimeType.JSON);
-    var fRows = fltSheet.getDataRange().getValues();
-    var fList = [];
-    for (var fi = 1; fi < fRows.length; fi++) {
-      var fr = fRows[fi];
-      if (!fr[1]) continue;
-      fList.push({ timestamp: fr[0], fleetId: fr[1], businessName: fr[2], ownerName: fr[3], ownerPhone: String(fr[4]).replace(/^'/, ""), nid: String(fr[6]).replace(/^'/, ""), district: fr[7], totalCars: fr[9], totalDrivers: fr[10], tradeLicense: String(fr[11]).replace(/^'/, ""), payout: fr[12], status: fr[13] });
-    }
-    return ContentService.createTextOutput(JSON.stringify({ status: "success", count: fList.length, fleets: fList })).setMimeType(ContentService.MimeType.JSON);
-  }
-
-  if (action === "getVehicles") {
-    var vSheet = ss.getSheetByName(SHEET_VEHICLES_VAULT_NAME);
-    if (!vSheet) return ContentService.createTextOutput(JSON.stringify({ status: "error", message: "Vehicle Vault tab not found" })).setMimeType(ContentService.MimeType.JSON);
-    var vRows = vSheet.getDataRange().getValues();
-    var vList = [];
-    for (var vi = 1; vi < vRows.length; vi++) {
-      var vr = vRows[vi];
-      if (!vr[1]) continue;
-      vList.push({ timestamp: vr[0], vehicleId: vr[1], fleetId: vr[2], company: vr[3], phone: String(vr[4]).replace(/^'/, ""), model: vr[5], plate: String(vr[6]).replace(/^'/, ""), year: vr[7], seats: vr[8], fuel: vr[9], fitnessExpiry: vr[10], status: vr[15], assignedDriver: vr[16] });
-    }
-    return ContentService.createTextOutput(JSON.stringify({ status: "success", count: vList.length, vehicles: vList })).setMimeType(ContentService.MimeType.JSON);
-  }
-
-  if (action === "getFleetDrivers") {
-    var dRosterSheet = ss.getSheetByName(SHEET_FLEET_DRIVERS_NAME);
-    if (!dRosterSheet) return ContentService.createTextOutput(JSON.stringify({ status: "error", message: "Driver Roster tab not found" })).setMimeType(ContentService.MimeType.JSON);
-    var drRows = dRosterSheet.getDataRange().getValues();
-    var drList = [];
-    for (var dri = 1; dri < drRows.length; dri++) {
-      var drr = drRows[dri];
-      if (!drr[1]) continue;
-      drList.push({ timestamp: drr[0], driverId: drr[1], fleetId: drr[2], company: drr[3], name: drr[4], phone: String(drr[5]).replace(/^'/, ""), nid: String(drr[7]).replace(/^'/, ""), licenseNumber: String(drr[8]).replace(/^'/, ""), licenseClass: drr[9], licenseExpiry: drr[10], assignedPlate: String(drr[16]).replace(/^'/, ""), status: drr[17] });
-    }
-    return ContentService.createTextOutput(JSON.stringify({ status: "success", count: drList.length, drivers: drList })).setMimeType(ContentService.MimeType.JSON);
-  }
-
-  if (action === "getChauffeurs") {
-    var sheet = ss.getSheetByName(SHEET_REGISTRY_NAME);
+  if (action === "getChauffeurs" || action === "getDrivers" || action === "getRegistrations") {
+    var sheet = getRegistrationsSheet(ss);
     if (!sheet) {
-      return ContentService.createTextOutput(JSON.stringify({ status: "error", message: "Registry not found" })).setMimeType(ContentService.MimeType.JSON);
+      return ContentService.createTextOutput(JSON.stringify({ status: "error", message: "Registrations sheet not found" })).setMimeType(ContentService.MimeType.JSON);
     }
     var rows = sheet.getDataRange().getValues();
     if (rows.length <= 1) {
-      return ContentService.createTextOutput(JSON.stringify({ status: "success", chauffeurs: [] })).setMimeType(ContentService.MimeType.JSON);
+      return ContentService.createTextOutput(JSON.stringify({ status: "success", count: 0, chauffeurs: [] })).setMimeType(ContentService.MimeType.JSON);
     }
 
     var list = [];
     for (var i = 1; i < rows.length; i++) {
       var r = rows[i];
-      // Skip empty ghost rows
       if (!r[0] && !r[1] && !r[2] && !r[3]) continue;
 
       list.push({
@@ -1755,65 +1277,51 @@ function doGet(e) {
         nid: String(r[5]).replace(/^'/, ""),
         city: r[6],
         emergency: r[7],
-        // Flat fields for backward compatibility
-        licenseNumber: String(r[8]).replace(/^'/, ""),
-        licenseClass: r[9],
-        licenseExpiry: r[10],
-        licenseStatus: r[11],
-        carLicensePlate: String(r[12]).replace(/^'/, ""),
-        carModel: r[13],
-        carFitnessExpiry: r[14],
-        // Nested dual-license objects
-        driverLicense: {
-          number: String(r[8]).replace(/^'/, ""),
-          class: r[9],
-          expiry: r[10],
-          status: r[11]
-        },
-        carLicense: {
-          plateNumber: String(r[12]).replace(/^'/, ""),
-          model: r[13],
-          fitnessExpiry: r[14]
-        },
-        experience: r[15],
-        languages: r[16],
-        services: r[17],
-        availability: r[18],
-        role: r[19],
-        vehicle: r[20],
+        role: r[8],
+        companyName: r[9],
+        tradeLicense: String(r[10]).replace(/^'/, ""),
+        licenseNumber: String(r[11]).replace(/^'/, ""),
+        licenseClassExpiry: r[12],
+        licenseStatus: r[13],
+        carPrimary: r[14],
+        carFitnessExpiry: r[15],
+        carsList: r[16],       // ⭐ ALL MULTIPLE CARS
+        driversList: r[17],    // ⭐ ALL MULTIPLE DRIVERS
+        experience: r[18],
+        services: r[19],
+        availability: r[20],
         payout: String(r[21]).replace(/^'/, ""),
         status: r[22],
         docCompleteness: r[23],
-        auditTracker: r[32] || "—",
-        resubmissionNotes: r[33] || "—"
+        auditTracker: r[33] || "—",
+        resubmissionNotes: r[34] || "—"
       });
     }
 
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
       count: list.length,
-      chauffeurs: list
+      chauffeurs: list,
+      registrations: list
     })).setMimeType(ContentService.MimeType.JSON);
   }
 
   // Default: Health Check
   return ContentService.createTextOutput(JSON.stringify({
     status: "online",
-    service: "Rownaa Executive Chauffeur Operations Platform (Superpower Dual-License v6.0)",
-    version: "6.0",
-    schemaColumns: 36,
+    service: "Rownaa Driver, Car & Fleet Operations Platform (2-Section v7.0)",
+    version: "7.0",
+    sections: ["Dashboard", "Registrations"],
+    schemaColumns: 37,
     features: [
-      "Dual-License Schema: Dedicated Driver License & Dedicated Car/Vehicle License",
-      "1-Click WhatsApp Button (Column E)",
-      "1-Click Menu Launcher: Open WhatsApp for Selected Driver",
-      "1-Click Copy Chauffeur Profile Dossier to Clipboard",
-      "Automatic Alignment & Self-Healing",
-      "Zero-#ERROR! Anti-Formula Shield",
-      "8-Document Dedicated Google Drive Vault",
-      "Duplicate Data Tracker & Resubmission Engine with Car Plate Detection",
-      "Protected Operator Audit Trail onEdit (Columns AI & AJ)",
-      "Executive KPI Dashboard with Car Owner Count & Sparklines",
-      "Automated Daily Backup to Google Drive & Excel (.xlsx)"
+      "2-Section Master Architecture (Dashboard & Registrations)",
+      "Single-Column Multiple Cars Details (Col Q)",
+      "Single-Column Multiple Drivers Details (Col R)",
+      "1-Click WhatsApp Launcher (Col E)",
+      "Zero-Freeze-Crash Defensive breakApart Engine",
+      "9-Document Google Drive Vault",
+      "Advanced Duplicate Data Tracker & Resubmission Auditor",
+      "Automatic Daily Backup to Google Drive & Excel (.xlsx)"
     ],
     timestamp: new Date().toISOString()
   })).setMimeType(ContentService.MimeType.JSON);
@@ -1844,7 +1352,6 @@ function openDriveFolder() {
  * AUTOMATED DAILY BACKUP ENGINE & OFFLINE EXCEL EXPORT (EVERY 1 DAY)
  * ============================================================================
  */
-
 function getBackupFolder() {
   var folders = DriveApp.getFoldersByName(BACKUP_FOLDER_NAME);
   if (folders.hasNext()) {
@@ -1860,7 +1367,6 @@ function createDailyBackup() {
   var backupFolder = getBackupFolder();
   var timeZone = Session.getScriptTimeZone() || "GMT+6";
   var dateStamp = Utilities.formatDate(new Date(), timeZone, "yyyy-MM-dd_HH-mm");
-  var friendlyDate = Utilities.formatDate(new Date(), timeZone, "dd MMM yyyy, hh:mm a");
 
   var ssFile = DriveApp.getFileById(ss.getId());
 
@@ -1966,7 +1472,7 @@ function downloadBackupExcel() {
     '</style></head><body>' +
     '<div class="icon">📥</div>' +
     '<h3 style="margin:0 0 6px 0; font-size:16px;">Download Offline Sheet Backup</h3>' +
-    '<p style="margin:0; font-size:12px; color:#aaa;">Exporting complete Dual-License Chauffeur Registry & KPI Dashboard to Microsoft Excel (.xlsx)</p>' +
+    '<p style="margin:0; font-size:12px; color:#aaa;">Exporting complete Registrations & Dashboard to Microsoft Excel (.xlsx)</p>' +
     '<a href="' + exportUrl + '" target="_blank" class="dl-btn">💾 Click to Download .xlsx</a>' +
     '<div class="info">Download starting automatically in a new tab... If blocked by your browser, click the yellow button above.</div>' +
     '<script>' +
