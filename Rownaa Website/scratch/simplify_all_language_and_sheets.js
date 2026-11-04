@@ -177,3 +177,4 @@ htmlFiles.forEach(file => {
 });
 
 console.log('\n=== ALL FILES SUCCESSFULLY SIMPLIFIED! ===');
+
