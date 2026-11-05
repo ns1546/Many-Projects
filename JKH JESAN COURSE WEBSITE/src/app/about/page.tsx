@@ -34,7 +34,7 @@ export default function AboutPage() {
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-foreground mb-6 tracking-tight leading-[1.15]">
-            সংগীত সৃষ্টি থেকে <span className="text-primary">আন্তর্জাতিক রিলিজ</span>:<br />
+            সংগীত সৃষ্টি থেকে <span className="text-primary">আন্তর্জাতিক রিলিজ</span>: <br className="hidden sm:inline" />
             পূর্ণাঙ্গ অডিও ইঞ্জিনিয়ারিং গাইডলাইন
           </h1>
 
@@ -85,7 +85,7 @@ export default function AboutPage() {
                 আমাদের উদ্দেশ্য ও দর্শন
               </div>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-foreground tracking-tight leading-snug">
-                ইউটিউব টিউটোরিয়াল যেখানে শেষ হয়,<br />
+                ইউটিউব টিউটোরিয়াল যেখানে শেষ হয়, <br className="hidden sm:inline" />
                 <span className="text-primary">আমাদের একাডেমি সেখান থেকেই শুরু করে</span>
               </h2>
               <p className="text-sm sm:text-base leading-relaxed text-foreground/80 font-medium">
@@ -169,7 +169,7 @@ export default function AboutPage() {
                 ইন্সট্রাক্টর পরিচিতি
               </div>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-foreground tracking-tight leading-snug">
-                বাস্তব ইন্ডাস্ট্রির ১০+ বছরের অভিজ্ঞতা,<br />
+                বাস্তব ইন্ডাস্ট্রির ১০+ বছরের অভিজ্ঞতা, <br className="hidden sm:inline" />
                 <span className="text-primary">এখন আপনার হাতের মুঠোয়</span>
               </h2>
               <p className="text-sm sm:text-base leading-relaxed text-foreground/80 font-medium">
