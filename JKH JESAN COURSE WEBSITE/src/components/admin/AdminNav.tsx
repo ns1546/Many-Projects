@@ -13,7 +13,10 @@ import {
   Image as ImageIcon, 
   Database,
   ShieldAlert,
-  Target
+  Target,
+  BarChart3,
+  TrendingUp,
+  Activity
 } from "lucide-react";
 
 interface NavItem {
@@ -33,6 +36,10 @@ const iconMap: Record<string, React.ComponentType<{ size?: number; className?: s
   Database,
   ShieldAlert,
   Trash2,
+  Target,
+  BarChart3,
+  TrendingUp,
+  Activity,
 };
 
 export default function AdminNav({ items }: { items: NavItem[] }) {

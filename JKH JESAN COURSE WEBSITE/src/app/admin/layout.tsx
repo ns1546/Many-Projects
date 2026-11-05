@@ -17,6 +17,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   const navItems = [
     { iconName: "LayoutDashboard", label: "ওভারভিউ",               href: "/admin" },
+    { iconName: "BarChart3",       label: "অ্যানালিটিক্স ও ট্র্যাকিং", href: "/admin/analytics" },
     { iconName: "Users",           label: "ইউজার ম্যানেজমেন্ট",       href: "/admin/users" },
     { iconName: "ShoppingCart",    label: "অর্ডারসমূহ",            href: "/admin/orders" },
     { iconName: "BookOpen",        label: "কোর্স ম্যানেজমেন্ট",       href: "/admin/courses" },
