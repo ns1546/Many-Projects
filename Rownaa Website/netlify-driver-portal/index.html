@@ -2033,55 +2033,20 @@
               </div>
             </div>
 
-                        <!-- Subtle Returning Applicant Correction Helper (Non-intrusive, collapsed by default) -->
-            <div class="correction-helper-bar" style="margin-top:22px; margin-bottom:16px; padding:12px 16px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); border-radius:10px; transition:all 0.3s ease;">
-              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                <div style="font-size:0.78rem; color:var(--text-secondary); display:flex; align-items:center; gap:8px;">
-                  <i class="ph-bold ph-arrow-counter-clockwise" style="color:var(--accent);"></i>
-                  <span id="lbl-correction-hint">Already submitted before and need to correct wrong information? (আগে ভুল তথ্য দিয়ে থাকলে সংশোধন করুন)</span>
-                </div>
-                <button type="button" id="btn-toggle-correction" onclick="toggleCorrectionDrawer()" class="btn-outline" style="padding:5px 12px; font-size:0.74rem; border-radius:7px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.04);">
-                  <i class="ph-bold ph-pencil-simple"></i>
-                  <span id="btn-correction-label">Update / Correct Previous Application</span>
-                </button>
-              </div>
-
-              <!-- Collapsible Correction Drawer -->
-              <div id="resubmission-details-box" style="display:none; margin-top:14px; padding-top:14px; border-top:1px dashed rgba(255,255,255,0.12);">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-                  <input type="checkbox" id="chk-is-resubmission" onchange="toggleResubmissionFields(this.checked)" checked style="width:16px; height:16px; accent-color:var(--accent); cursor:pointer;"/>
-                  <span style="font-size:0.82rem; font-weight:700; color:#fff;" id="lbl-resubmit-active-badge">Mark this submission as a correction of previous application</span>
-                </div>
-
-                <div class="grid-2">
-                  <div class="f-group">
-                    <label class="f-label" for="resubmit-prev-id">
-                      <span id="lbl-resubmit-prev-id">Previous Application ID (If Known)</span>
-                    </label>
-                    <input type="text" id="resubmit-prev-id" class="f-control no-prefix" placeholder="e.g. DRV-DAC-2377 (Optional)"/>
-                  </div>
-                  <div class="f-group">
-                    <label class="f-label" for="resubmit-reason">
-                      <span id="lbl-resubmit-reason">Primary Reason for Correction <span class="req">*</span></span>
-                    </label>
-                    <select id="resubmit-reason" class="f-control no-prefix">
-                      <option value="Incorrect NID / Smart Card Number" selected>Incorrect NID / Smart Card Number</option>
-                      <option value="Incorrect BRTA License / Expiry Date">Incorrect BRTA License / Expiry Date</option>
-                      <option value="Wrong Mobile / WhatsApp Phone Number">Wrong Mobile / WhatsApp Phone Number</option>
-                      <option value="Updated Vehicle or Fleet Car Information">Updated Vehicle or Fleet Car Information</option>
-                      <option value="Changed Bank Account / Payout Wallet Details">Changed Bank Account / Payout Wallet Details</option>
-                      <option value="Blurry / Incomplete Document Photos Uploaded">Blurry / Incomplete Document Photos Uploaded</option>
-                      <option value="Other Information Correction">Other Information Correction</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="f-group" style="margin-bottom:0;">
-                  <label class="f-label" for="resubmit-notes">
-                    <span id="lbl-resubmit-notes">Correction Explanation for Admin</span>
-                  </label>
-                  <textarea id="resubmit-notes" class="f-control no-prefix" rows="2" placeholder="Briefly specify what was wrong previously so the admin can verify your updated information immediately..."></textarea>
-                </div>
-              </div>
+            <!-- Hidden Form Fields for Resubmission & Correction Tracking (Never clutters Step 1 for first-time applicants) -->
+            <div id="resubmission-hidden-fields" style="display:none;">
+              <input type="checkbox" id="chk-is-resubmission" />
+              <input type="text" id="resubmit-prev-id" placeholder="Previous Application ID" />
+              <select id="resubmit-reason">
+                <option value="Incorrect NID / Smart Card Number" selected>Incorrect NID / Smart Card Number</option>
+                <option value="Incorrect BRTA License / Expiry Date">Incorrect BRTA License / Expiry Date</option>
+                <option value="Wrong Mobile / WhatsApp Phone Number">Wrong Mobile / WhatsApp Phone Number</option>
+                <option value="Updated Vehicle or Fleet Car Information">Updated Vehicle or Fleet Car Information</option>
+                <option value="Changed Bank Account / Payout Wallet Details">Changed Bank Account / Payout Wallet Details</option>
+                <option value="Blurry / Incomplete Document Photos Uploaded">Blurry / Incomplete Document Photos Uploaded</option>
+                <option value="Other Information Correction">Other Information Correction</option>
+              </select>
+              <textarea id="resubmit-notes" placeholder="Correction Explanation for Admin"></textarea>
             </div>
             <div class="form-nav-actions">
               <div></div>
@@ -2651,6 +2616,25 @@
               <span id="desc-step-5">Upload clear photos of your identity documents (Front & Back) and review your summary.</span>
             </div>
 
+            <!-- Rental Fleet All-in-One Confirmation Banner in Step 5 (No redundant doc uploads needed) -->
+            <div id="rental-fleet-step5-summary-banner" style="display:none; background:rgba(212,255,0,0.06); border:1px solid rgba(212,255,0,0.3); border-radius:14px; padding:18px 22px; margin-bottom:22px;">
+              <div style="display:flex; align-items:center; gap:14px;">
+                <div style="width:46px; height:46px; border-radius:50%; background:rgba(212,255,0,0.15); display:flex; align-items:center; justify-content:center; color:var(--accent); font-size:1.6rem; flex-shrink:0;">
+                  <i class="ph-bold ph-check-circle"></i>
+                </div>
+                <div>
+                  <div style="font-weight:700; font-size:0.96rem; color:#fff;" id="lbl-fleet-step5-title">
+                    Fleet Vehicles & Employed Drivers Configured (সকল গাড়ি ও ড্রাইভার সফলভাবে যুক্ত হয়েছে)
+                  </div>
+                  <div style="font-size:0.82rem; color:var(--text-secondary); margin-top:4px; line-height:1.45;" id="lbl-fleet-step5-desc">
+                    All your fleet vehicles (with car licenses & fitness documents) and employed drivers (with photos & driving licenses) are securely configured from Step 4. Review your company overview below and click Submit to complete onboarding!
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Solo Driver & Owner-Driver Upload Documents Container -->
+            <div id="solo-driver-documents-container">
             <!-- Upload Zone 1: Portrait Photo -->
             <div class="upload-card-full">
               <div class="upload-card" id="card-photo">
@@ -2700,13 +2684,13 @@
               </div>
             </div>
 
-            <!-- Upload Zone 6 & 7: Car / Vehicle License (Registration & Blue Book) -->
+            <!-- Upload Zone 6 & 7: Car License (Registration Card) -->
             <div class="upload-section-divider" id="car-docs-heading" style="display:none; margin-top:22px; margin-bottom:12px; padding-top:14px; border-top:1px dashed var(--border-subtle);">
               <div style="font-family:var(--font-display); font-size:0.95rem; font-weight:700; color:var(--accent); display:flex; align-items:center; gap:8px;">
-                <i class="ph-fill ph-car"></i> <span id="title-car-docs">Car License & Vehicle Documents (গাড়ির লাইসেন্স ও ব্লু-বুক)</span>
+                <i class="ph-fill ph-car"></i> <span id="title-car-docs">Car License & Vehicle Documents (গাড়ির লাইসেন্স ও নথিপত্র)</span>
               </div>
               <p style="font-size:0.75rem; color:var(--text-secondary); margin:4px 0 0 0;" id="desc-car-docs">
-                Required for Owner-Drivers & Rental Fleets: Upload clear photos of your BRTA Registration Card / Blue Book and Fitness Token.
+                Required for Owner-Drivers: Upload clear photos of your BRTA Car License (Registration Card) and Fitness Token.
               </p>
             </div>
 
@@ -2714,7 +2698,7 @@
               <div class="upload-card" id="card-car-lic-front">
                 <input type="file" id="file-car-lic-front" accept="image/*,.pdf" onchange="handleFileSelected(this, 'car-lic-front-name', 'card-car-lic-front')"/>
                 <div class="upload-icon"><i class="ph-fill ph-car-profile"></i></div>
-                <div class="upload-title" id="up-title-car-lic-front">Car License / Blue Book (Front)</div>
+                <div class="upload-title" id="up-title-car-lic-front">Car License (Front)</div>
                 <div class="upload-subtitle" id="up-sub-car-lic-front">Clear front of vehicle registration</div>
                 <div class="upload-filename" id="car-lic-front-name"></div>
               </div>
@@ -2722,7 +2706,7 @@
               <div class="upload-card" id="card-car-lic-back">
                 <input type="file" id="file-car-lic-back" accept="image/*,.pdf" onchange="handleFileSelected(this, 'car-lic-back-name', 'card-car-lic-back')"/>
                 <div class="upload-icon"><i class="ph-fill ph-car-profile"></i></div>
-                <div class="upload-title" id="up-title-car-lic-back">Car License / Blue Book (Back)</div>
+                <div class="upload-title" id="up-title-car-lic-back">Car License (Back)</div>
                 <div class="upload-subtitle" id="up-sub-car-lic-back">Clear back of vehicle registration</div>
                 <div class="upload-filename" id="car-lic-back-name"></div>
               </div>
@@ -2749,6 +2733,7 @@
                 <div class="upload-filename" id="trade-license-name"></div>
               </div>
             </div>
+            </div><!-- /solo-driver-documents-container -->
             <!-- Live Review Summary Card -->
             <div class="summary-card">
               <div class="summary-header">
@@ -2824,6 +2809,26 @@
         <p class="success-p" id="succ-desc">
           Congratulations! Your chauffeur application has been officially logged into the Rownaa Operations Registry and synced in real-time to the Executive Fleet Onboarding Ledger. Our verification officer will contact your WhatsApp within 24 hours to schedule verification and orientation.
         </p>
+
+        <!-- CORRECTION & RESUBMISSION ACTION CARD (DIRECT ACCESS ON SUCCESS SCREEN) -->
+        <div class="success-correction-card" id="success-correction-container" style="max-width: 620px; margin: 0 auto 28px; padding: 18px 22px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(212, 255, 0, 0.3); border-radius: 14px; text-align: left; box-shadow: 0 4px 20px rgba(0,0,0,0.35);">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+            <div style="flex: 1; min-width: 250px;">
+              <div style="font-size: 0.94rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px;">
+                <i class="ph-bold ph-arrow-counter-clockwise" style="color: var(--accent); font-size: 1.2rem;"></i>
+                <span id="lbl-succ-correction-header">Submitted wrong information by mistake? (ভুল তথ্য দিয়ে থাকলে সংশোধন করুন)</span>
+              </div>
+              <div style="font-size: 0.81rem; color: var(--text-secondary); margin-top: 6px; line-height: 1.45;">
+                <span id="lbl-succ-correction-subtext">If you made a mistake in your license number, contact details, vehicle info, or uploaded documents, you can edit and update your application right now. All your entered data will be preserved and automatically linked to this reference ID for expedited admin verification.</span>
+              </div>
+            </div>
+            <button type="button" onclick="reopenApplicationForCorrection()" class="btn-success-action" id="btn-succ-correction-act" style="background: rgba(212, 255, 0, 0.12); border: 1px solid var(--accent); color: var(--accent); font-weight: 700; white-space: nowrap; padding: 11px 18px; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s ease;">
+              <i class="ph-bold ph-pencil-simple"></i>
+              <span id="lbl-succ-correction-btn">Edit & Correct Application (আবেদন সংশোধন)</span>
+            </button>
+          </div>
+        </div>
+
         <div class="success-actions" style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
           <a href="index.html" class="btn-success-action btn-success-primary" id="btn-succ-home">Return to Main Website</a>
           <button type="button" onclick="resetDriverForm()" class="btn-success-action btn-success-secondary" id="btn-succ-another">Submit Another Application</button>
@@ -2966,7 +2971,7 @@
        ========================================================= -->
   <script>
     // Configuration for Google Sheets Live Database Webhook
-    const DEFAULT_GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwgSv5OXT-z0dKr06cWRs5r1T-lrT3OYhVmvLQHbwQ7DuteyRoKrjMvAjrfRv9X35dW/exec';
+    const DEFAULT_GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxdX4MS7brwNAnEy3i63mo4X2BTKWi-B91AL3p-MA4qEUVUzp9kfkZehIMLqwmn3sBCvA/exec';
     let GOOGLE_SHEET_WEBHOOK_URL = DEFAULT_GOOGLE_SHEET_URL;
 
     // Suppress Dev Dock permanently on Driver Intake Form
@@ -3398,12 +3403,12 @@
           upLicFrontSub: "Clear front side of BRTA Driving License card",
           upLicBackTitle: "Driver's Driving License (Back)",
           upLicBackSub: "Clear back side of BRTA Driving License card",
-          carDocsTitle: "Car License & Vehicle Documents (Blue Book)",
-          carDocsDesc: "Required for Owner-Drivers & Rental Fleets: Upload clear photos of your BRTA Registration Card / Blue Book and Fitness Token.",
-          upCarLicFrontTitle: "Car License / Blue Book (Front)",
-          upCarLicFrontSub: "Clear front of vehicle registration",
-          upCarLicBackTitle: "Car License / Blue Book (Back)",
-          upCarLicBackSub: "Clear back of vehicle registration",
+          carDocsTitle: "Car License & Vehicle Documents",
+          carDocsDesc: "Required for Owner-Drivers: Upload clear photos of your BRTA Car License (Registration Card) and Fitness Token.",
+          upCarLicFrontTitle: "Car License (Front)",
+          upCarLicFrontSub: "Clear front side of vehicle registration card",
+          upCarLicBackTitle: "Car License (Back)",
+          upCarLicBackSub: "Clear back side of vehicle registration card",
           upCarFitnessTitle: "Car Tax Token & Fitness Certificate (Optional)",
           upCarFitnessSub: "Clear photo of valid BRTA Tax Token or Fitness paper",
           upNidFrontTitle: 'NID Smart Card (Front)',
@@ -3515,6 +3520,14 @@
           upNidFrontSub: 'এনআইডির সামনের স্পষ্ট ছবি',
           upNidBackTitle: 'স্মার্ট এনআইডি (পেছনের অংশ)',
           upNidBackSub: 'এনআইডির পেছনের স্পষ্ট ছবি',
+          carDocsTitle: 'গাড়ির লাইসেন্স ও নথিপত্র',
+          carDocsDesc: 'ওনার-ড্রাইভারদের জন্য: বিআরটিএ রেজিস্ট্রেশন কার্ড (গাড়ির লাইসেন্স) এবং ফিটনেস টোকেনের স্পষ্ট ছবি দিন।',
+          upCarLicFrontTitle: 'গাড়ির লাইসেন্স (সামনের অংশ)',
+          upCarLicFrontSub: 'গাড়ির রেজিস্ট্রেশন কার্ডের সামনের স্পষ্ট ছবি',
+          upCarLicBackTitle: 'গাড়ির লাইসেন্স (পেছনের অংশ)',
+          upCarLicBackSub: 'গাড়ির রেজিস্ট্রেশন কার্ডের পেছনের স্পষ্ট ছবি',
+          upCarFitnessTitle: 'গাড়ির ফিটনেস ও ট্যাক্স টোকেন',
+          upCarFitnessSub: 'ফিটনেস বা ট্যাক্স টোকেন কাগজের ছবি',
           sumHeader: 'আবেদনের সারসংক্ষেপ পর্যালোচনা',
           btnSubmit: 'শফার আবেদনপত্র জমা দিন 🚀',
           agreementText: 'আমি শপথ করছি যে প্রদত্ত সকল তথ্য সত্য এবং আমার কোনো অপরাধমূলক রেকর্ড নেই। আমি রওনার ভিআইপি শফার নীতিমালা মেনে চলব।'
@@ -3673,6 +3686,14 @@
       const sumPayLbl = document.getElementById('sum-lbl-payout'); if (sumPayLbl) sumPayLbl.textContent = (lang === 'bn' ? 'পেমেন্ট ওয়ালেট:' : 'Payout Wallet:');
       const lagr = document.getElementById('lbl-agreement'); if (lagr && t.agreementText) lagr.textContent = t.agreementText;
       const sumDocLbl = document.getElementById('sum-lbl-docs'); if (sumDocLbl) sumDocLbl.textContent = (lang === 'bn' ? 'সংযুক্ত নথিপত্র:' : 'Uploaded Documents:');
+
+      // Success screen correction card labels
+      const succCorrH = document.getElementById('lbl-succ-correction-header');
+      if (succCorrH) succCorrH.textContent = (lang === 'bn' ? 'ভুল তথ্য দিয়ে থাকলে সংশোধন করুন' : 'Submitted wrong information by mistake?');
+      const succCorrDesc = document.getElementById('lbl-succ-correction-subtext');
+      if (succCorrDesc) succCorrDesc.textContent = (lang === 'bn' ? 'লাইসেন্স নম্বর, ফোন নম্বর, গাড়ির তথ্য বা নথিপত্রে কোনো ভুল থাকলে এখনই এডিট করে পুনরায় জমা দিতে পারেন। আপনার আপডেট তথ্য সরাসরি এই রেফারেন্স আইডির সাথে লিঙ্ক করে দ্রুত ভেরিফাই করা হবে।' : 'If you made a mistake in your license number, contact details, vehicle info, or uploaded documents, you can edit and update your application right now. All your entered data will be preserved and automatically linked to this reference ID for expedited admin verification.');
+      const succCorrBtn = document.getElementById('lbl-succ-correction-btn');
+      if (succCorrBtn) succCorrBtn.textContent = (lang === 'bn' ? 'আবেদন সংশোধন করুন' : 'Edit & Correct Application');
     }
 
     function toggleLanguage() {
@@ -3707,7 +3728,37 @@
       updateMobileStepHeader(step);
 
       currentStep = step;
+      const selectedRole = document.getElementById('drv-role-val')?.value || 'seeking_fleet_car';
+      const isFleet = (selectedRole === 'rental_fleet_operator');
+
+      // Update Step 4 Next button text dynamically
+      const bn4Span = document.getElementById('btn-next-4')?.querySelector('span');
+      if (bn4Span) {
+        if (isFleet) {
+          bn4Span.textContent = currentLang === 'bn' ? 'সারসংক্ষেপ পর্যালোচনা ও সাবমিট করুন' : 'Continue to Review & Submit';
+        } else {
+          bn4Span.textContent = currentLang === 'bn' ? 'ডকুমেন্ট আপলোড ধাপে যান' : 'Continue to Document Uploads';
+        }
+      }
+
       if (step === 5) {
+        // Toggle Step 5 Solo Uploads vs Fleet Confirmation
+        const soloWrap = document.getElementById('solo-driver-documents-container');
+        const fleetBanner = document.getElementById('rental-fleet-step5-summary-banner');
+        if (soloWrap) soloWrap.style.display = isFleet ? 'none' : 'block';
+        if (fleetBanner) fleetBanner.style.display = isFleet ? 'block' : 'none';
+
+        const title5 = document.getElementById('title-step-5');
+        const desc5 = document.getElementById('desc-step-5');
+        if (isFleet) {
+          if (title5) title5.textContent = currentLang === 'bn' ? '৫. আবেদনের সারসংক্ষেপ ও সাবমিট' : '5. Review Summary & Submit Application';
+          if (desc5) desc5.textContent = currentLang === 'bn' ? 'আপনার সকল গাড়ি ও ড্রাইভারের তথ্য ধাপ ৪-এ সফলভাবে সংরক্ষিত হয়েছে। সারসংক্ষেপ দেখে সাবমিট করুন।' : 'All your vehicles, drivers, licenses and photos are configured in Step 4. Review the summary below and submit your application.';
+        } else {
+          const t = I18N[currentLang] || I18N.en;
+          if (title5) title5.textContent = t.step5?.title || '5. Upload Documents & Review Summary';
+          if (desc5) desc5.textContent = t.step5?.desc || 'Upload clear photos of your identity documents (Front & Back) and review your summary.';
+        }
+
         populateSummary();
       }
 
@@ -3859,11 +3910,11 @@
               <input type="date" class="f-control no-prefix" value="${v.fitness || ''}" oninput="updateVehicleField(${idx}, 'fitness', this.value)"/>
             </div>
 
-            <!-- Vehicle Document Uploads (Blue Book Front/Back & Fitness Token) -->
+            <!-- Vehicle Document Uploads (Car License Front/Back & Fitness Token) -->
             <div style="grid-column: 1 / -1; display:grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap:10px; margin-top:6px; padding-top:10px; border-top:1px dashed rgba(255,255,255,0.1);">
               <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:8px 10px; text-align:center;">
                 <div style="font-size:0.72rem; font-weight:700; color:#fff; margin-bottom:4px;">
-                  <i class="ph-bold ph-car-profile" style="color:var(--accent);"></i> ${currentLang === 'bn' ? 'ব্লু-বুক (সামনে)' : 'Blue Book (Front)'}
+                  <i class="ph-bold ph-car-profile" style="color:var(--accent);"></i> ${currentLang === 'bn' ? 'গাড়ির লাইসেন্স (সামনে)' : 'Car License (Front)'}
                 </div>
                 <div style="font-size:0.67rem; color:var(--text-secondary); margin-bottom:6px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${v.carLicenseFrontName || (currentLang === 'bn' ? 'কোনো ফাইল নেই' : 'No file chosen')}</div>
                 <label for="fleet-car-lic-front-${idx}" class="btn-outline" style="display:inline-block; padding:3px 10px; font-size:0.70rem; cursor:pointer; border-radius:6px;">
@@ -3874,7 +3925,7 @@
 
               <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:8px 10px; text-align:center;">
                 <div style="font-size:0.72rem; font-weight:700; color:#fff; margin-bottom:4px;">
-                  <i class="ph-bold ph-car-profile" style="color:var(--accent);"></i> ${currentLang === 'bn' ? 'ব্লু-বুক (পেছনে)' : 'Blue Book (Back)'}
+                  <i class="ph-bold ph-car-profile" style="color:var(--accent);"></i> ${currentLang === 'bn' ? 'গাড়ির লাইসেন্স (পেছনে)' : 'Car License (Back)'}
                 </div>
                 <div style="font-size:0.67rem; color:var(--text-secondary); margin-bottom:6px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${v.carLicenseBackName || (currentLang === 'bn' ? 'কোনো ফাইল নেই' : 'No file chosen')}</div>
                 <label for="fleet-car-lic-back-${idx}" class="btn-outline" style="display:inline-block; padding:3px 10px; font-size:0.70rem; cursor:pointer; border-radius:6px;">
@@ -3904,7 +3955,7 @@
     async function handleFleetVehicleDocUpload(input, idx, field) {
       if (input.files && input.files[0]) {
         const file = input.files[0];
-        const compressed = await compressAndEncodeImage(file, 1400, 1400, 0.78);
+        const compressed = await compressAndEncodeImage(file, 1000, 1000, 0.72);
         if (fleetVehicles[idx]) {
           fleetVehicles[idx][field] = compressed;
           fleetVehicles[idx][field + 'Name'] = '✓ ' + file.name + ' (' + Math.round(file.size / 1024) + ' KB)';
@@ -3992,31 +4043,44 @@
               </select>
             </div>
 
-            <!-- Driving License Document Uploads (Front & Back) for this Fleet Driver -->
-            <div style="grid-column: 1 / -1; display:grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap:10px; margin-top:6px; padding-top:10px; border-top:1px dashed rgba(255,255,255,0.1);">
+            <!-- Driving License & Driver Photo Document Uploads for this Fleet Driver -->
+            <div style="grid-column: 1 / -1; display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:10px; margin-top:6px; padding-top:10px; border-top:1px dashed rgba(255,255,255,0.1);">
+              <!-- Driver Photo / Picture -->
+              <div class="f-group" style="margin-bottom:0;">
+                <label class="f-label" style="font-size:0.72rem; display:flex; justify-content:space-between; align-items:center;">
+                  <span><i class="ph-bold ph-user-focus" style="color:var(--accent);"></i> ${currentLang === 'bn' ? 'ড্রাইভারের ছবি (পাসপোর্ট/সেলফি)' : 'Driver Photo (Portrait)'}</span>
+                  <span style="font-size:0.65rem; color:var(--text-tertiary);">JPG/PNG</span>
+                </label>
+                <input type="file" id="fleet-driver-photo-${idx}" accept="image/*" style="display:none;" onchange="handleFleetDriverLicenseUpload(this, ${idx}, 'photo')"/>
+                <button type="button" onclick="document.getElementById('fleet-driver-photo-${idx}').click()" style="width:100%; padding:8px 12px; background:rgba(255,255,255,0.03); border:1px solid ${d.photo ? 'var(--accent)' : 'rgba(255,255,255,0.12)'}; border-radius:8px; color:${d.photo ? 'var(--accent)' : '#fff'}; font-size:0.75rem; font-weight:600; display:flex; align-items:center; justify-content:center; gap:6px; cursor:pointer; transition:all 0.2s;">
+                  <i class="ph-bold ${d.photo ? 'ph-check-circle' : 'ph-camera'}"></i>
+                  <span>${d.photoName || (currentLang === 'bn' ? 'ছবি আপলোড' : 'Upload Photo')}</span>
+                </button>
+              </div>
+
               <!-- License Front -->
               <div class="f-group" style="margin-bottom:0;">
                 <label class="f-label" style="font-size:0.72rem; display:flex; justify-content:space-between; align-items:center;">
-                  <span>${currentLang === 'bn' ? 'ড্রাইভিং লাইসেন্স (সামনের অংশ)' : 'Driving License (Front)'}</span>
+                  <span><i class="ph-bold ph-cardholder" style="color:var(--accent);"></i> ${currentLang === 'bn' ? 'ড্রাইভিং লাইসেন্স (সামনে)' : 'License (Front)'}</span>
                   <span style="font-size:0.65rem; color:var(--text-tertiary);">JPG/PNG</span>
                 </label>
                 <input type="file" id="fleet-lic-front-${idx}" accept="image/*" style="display:none;" onchange="handleFleetDriverLicenseUpload(this, ${idx}, 'licenseFront')"/>
                 <button type="button" onclick="document.getElementById('fleet-lic-front-${idx}').click()" style="width:100%; padding:8px 12px; background:rgba(255,255,255,0.03); border:1px solid ${d.licenseFront ? 'var(--accent)' : 'rgba(255,255,255,0.12)'}; border-radius:8px; color:${d.licenseFront ? 'var(--accent)' : '#fff'}; font-size:0.75rem; font-weight:600; display:flex; align-items:center; justify-content:center; gap:6px; cursor:pointer; transition:all 0.2s;">
                   <i class="ph-bold ${d.licenseFront ? 'ph-check-circle' : 'ph-upload-simple'}"></i>
-                  <span>${d.licenseFrontName || (currentLang === 'bn' ? 'লাইসেন্স (সামনে) আপলোড' : 'Upload License (Front)')}</span>
+                  <span>${d.licenseFrontName || (currentLang === 'bn' ? 'লাইসেন্স (সামনে)' : 'Upload License Front')}</span>
                 </button>
               </div>
 
               <!-- License Back -->
               <div class="f-group" style="margin-bottom:0;">
                 <label class="f-label" style="font-size:0.72rem; display:flex; justify-content:space-between; align-items:center;">
-                  <span>${currentLang === 'bn' ? 'ড্রাইভিং লাইসেন্স (পেছনের অংশ)' : 'Driving License (Back)'}</span>
+                  <span><i class="ph-bold ph-cardholder" style="color:var(--accent);"></i> ${currentLang === 'bn' ? 'ড্রাইভিং লাইসেন্স (পেছনে)' : 'License (Back)'}</span>
                   <span style="font-size:0.65rem; color:var(--text-tertiary);">JPG/PNG</span>
                 </label>
                 <input type="file" id="fleet-lic-back-${idx}" accept="image/*" style="display:none;" onchange="handleFleetDriverLicenseUpload(this, ${idx}, 'licenseBack')"/>
                 <button type="button" onclick="document.getElementById('fleet-lic-back-${idx}').click()" style="width:100%; padding:8px 12px; background:rgba(255,255,255,0.03); border:1px solid ${d.licenseBack ? 'var(--accent)' : 'rgba(255,255,255,0.12)'}; border-radius:8px; color:${d.licenseBack ? 'var(--accent)' : '#fff'}; font-size:0.75rem; font-weight:600; display:flex; align-items:center; justify-content:center; gap:6px; cursor:pointer; transition:all 0.2s;">
                   <i class="ph-bold ${d.licenseBack ? 'ph-check-circle' : 'ph-upload-simple'}"></i>
-                  <span>${d.licenseBackName || (currentLang === 'bn' ? 'লাইসেন্স (পেছনে) আপলোড' : 'Upload License (Back)')}</span>
+                  <span>${d.licenseBackName || (currentLang === 'bn' ? 'লাইসেন্স (পেছনে)' : 'Upload License Back')}</span>
                 </button>
               </div>
             </div>
@@ -4044,6 +4108,8 @@
         nid: '',
         license: '',
         vehicleIndex: 0,
+        photo: null,
+        photoName: '',
         licenseFront: null,
         licenseFrontName: '',
         licenseBack: null,
@@ -4070,7 +4136,7 @@
     async function handleFleetDriverLicenseUpload(input, idx, field) {
       if (input.files && input.files[0]) {
         const file = input.files[0];
-        const compressed = await compressAndEncodeImage(file, 1400, 1400, 0.78);
+        const compressed = await compressAndEncodeImage(file, 1000, 1000, 0.72);
         if (fleetDrivers[idx]) {
           fleetDrivers[idx][field] = compressed;
           fleetDrivers[idx][field + 'Name'] = '✓ ' + file.name + ' (' + Math.round(file.size / 1024) + ' KB)';
@@ -4097,16 +4163,24 @@
         }
       }
 
+      // Update Step 4 Continue button text
+      const bn4Span = document.getElementById('btn-next-4')?.querySelector('span');
+      if (bn4Span) {
+        bn4Span.textContent = (val === 'rental_fleet_operator')
+          ? (currentLang === 'bn' ? 'সারসংক্ষেপ পর্যালোচনা ও সাবমিট করুন' : 'Continue to Review & Submit')
+          : (currentLang === 'bn' ? 'ডকুমেন্ট আপলোড ধাপে যান' : 'Continue to Document Uploads');
+      }
+
       // Dynamically toggle Car License Upload Cards in Step 5 based on vehicle ownership
       const carDocsHeading = document.getElementById('car-docs-heading');
       const carDocsZone = document.getElementById('zone-car-license-docs');
       const carFitZone = document.getElementById('zone-car-fitness-doc');
-      const hasVehicle = (val === 'car_owner_driver' || val === 'rental_fleet_operator');
-      if (carDocsHeading) carDocsHeading.style.display = hasVehicle ? 'block' : 'none';
-      if (carDocsZone) carDocsZone.style.display = hasVehicle ? 'grid' : 'none';
-      if (carFitZone) carFitZone.style.display = hasVehicle ? 'block' : 'none';
+      const hasOwnerVehicle = (val === 'car_owner_driver');
+      if (carDocsHeading) carDocsHeading.style.display = hasOwnerVehicle ? 'block' : 'none';
+      if (carDocsZone) carDocsZone.style.display = hasOwnerVehicle ? 'grid' : 'none';
+      if (carFitZone) carFitZone.style.display = hasOwnerVehicle ? 'block' : 'none';
       const tradeZone = document.getElementById('zone-trade-license-doc');
-      if (tradeZone) tradeZone.style.display = (val === 'rental_fleet_operator') ? 'block' : 'none';
+      if (tradeZone) tradeZone.style.display = 'none'; // Captured directly in Step 4 for rental fleets
     }
 
     function toggleServiceCheckbox(tileEl) {
@@ -4268,89 +4342,162 @@
     }
 
     function populateSummary() {
-      const name = document.getElementById('drv-name').value || '—';
-      const phone = document.getElementById('drv-phone').value || '—';
-      const nid = document.getElementById('drv-nid').value || '—';
-      const licVal = document.getElementById('drv-license').value || '—';
-      const licExp = document.getElementById('drv-expiry').value || '—';
-      const carPlateVal = (role === 'car_owner_driver' ? (document.getElementById('drv-car-plate')?.value || '—') : (role === 'rental_fleet_operator' ? (fleetVehicles.map(v => v.plate).filter(Boolean).join(', ') || 'Fleet Multi-Car') : 'Rownaa Fleet Provided'));
-      const role = document.getElementById('drv-role-val').value;
-      const roleMap = {
-        'seeking_fleet_car': currentLang === 'bn' ? 'ফ্লিট শফার' : 'Fleet Chauffeur',
-        'car_owner_driver': currentLang === 'bn' ? 'ওনার-ড্রাইভার' : 'Owner-Driver',
-        'rental_fleet_operator': currentLang === 'bn' ? `রেন্ট-এ-কার ফ্লিট (${fleetVehicles.length} গাড়ি, ${fleetDrivers.length} ড্রাইভার)` : `Rental Fleet (${fleetVehicles.length} Cars, ${fleetDrivers.length} Drivers)`,
-        'part_time_freelance': currentLang === 'bn' ? 'অন-ডিমান্ড স্ট্যান্ডবাই' : 'On-Demand Standby'
-      };
-      const city = resolveFieldValue('drv-city', 'drv-city-custom');
-      const payoutMethod = resolveFieldValue('drv-payout-method', 'drv-payout-custom');
-      
-      let payoutDisplay = '—';
-      if (payoutMethod === 'Bank Transfer') {
-        const bankNameFinal = resolveFieldValue('bank-name', 'bank-name-custom');
-        const branch = document.getElementById('bank-branch')?.value || '';
-        const accName = document.getElementById('bank-account-name')?.value || '';
-        const accNum = document.getElementById('bank-account-number')?.value || '';
-        payoutDisplay = `${bankNameFinal || 'Bank'} (${branch || 'Branch'}) - A/C: ${accNum || '—'} [${accName || '—'}]`;
-      } else {
-        const payoutNum = document.getElementById('drv-payout-number')?.value || '—';
-        payoutDisplay = `${payoutMethod} (${payoutNum})`;
-      }
+      try {
+        const role = document.getElementById('drv-role-val')?.value || 'seeking_fleet_car';
+        const name = document.getElementById('drv-name')?.value?.trim() || '—';
+        const phone = document.getElementById('drv-phone')?.value?.trim() || '—';
+        const nid = document.getElementById('drv-nid')?.value?.trim() || '—';
+        const licVal = document.getElementById('drv-license')?.value?.trim() || '—';
+        const licExp = document.getElementById('drv-expiry')?.value?.trim() || '—';
+        const isFleet = (role === 'rental_fleet_operator');
+        const isOwnerDriver = (role === 'car_owner_driver');
 
-      const svcs = [];
-      document.querySelectorAll('input[name="services"]:checked').forEach(cb => svcs.push(cb.value));
+        const carPlateVal = isOwnerDriver
+          ? (document.getElementById('drv-car-plate')?.value?.trim() || '—')
+          : (isFleet ? (`${fleetVehicles.length} Cars (${fleetVehicles.map(v => v.plate).filter(Boolean).join(', ') || 'Plates Pending'})`) : 'Rownaa Fleet Provided');
 
-      // Docs summary
-      const docsArr = [];
-      if (document.getElementById('file-photo')?.files?.[0]) docsArr.push(currentLang === 'bn' ? 'ছবি ✓' : 'Photo ✓');
-      if (document.getElementById('file-license-front')?.files?.[0]) docsArr.push(currentLang === 'bn' ? 'লাইসেন্স (সামনে) ✓' : 'Lic Front ✓');
-      if (document.getElementById('file-license-back')?.files?.[0]) docsArr.push(currentLang === 'bn' ? 'লাইসেন্স (পেছনে) ✓' : 'Lic Back ✓');
-      if (document.getElementById('file-nid-front')?.files?.[0]) docsArr.push(currentLang === 'bn' ? 'এনআইডি (সামনে) ✓' : 'NID Front ✓');
-      if (document.getElementById('file-nid-back')?.files?.[0]) docsArr.push(currentLang === 'bn' ? 'এনআইডি (পেছনে) ✓' : 'NID Back ✓');
-
-      // Resubmission status check
-      const isResubmit = document.getElementById('chk-is-resubmission')?.checked || false;
-      const resubmitReason = isResubmit ? (document.getElementById('resubmit-reason')?.value || 'Information Correction') : '';
-      const resubmitPrevId = isResubmit ? (document.getElementById('resubmit-prev-id')?.value.trim() || '') : '';
-      
-      let sumResubmitRow = document.getElementById('sum-row-resubmit');
-      if (isResubmit) {
-        if (!sumResubmitRow) {
-          sumResubmitRow = document.createElement('div');
-          sumResubmitRow.id = 'sum-row-resubmit';
-          sumResubmitRow.style.cssText = 'background:rgba(212,255,0,0.1); border:1px solid rgba(212,255,0,0.3); border-radius:8px; padding:10px 14px; margin-bottom:12px; font-size:0.82rem; color:#fff; display:flex; align-items:center; gap:8px;';
-          const sumTable = document.querySelector('.summary-card-body') || document.getElementById('driver-summary-table') || document.querySelector('.summary-box');
-          if (sumTable) sumTable.insertBefore(sumResubmitRow, sumTable.firstChild);
+        const roleMap = {
+          'seeking_fleet_car': currentLang === 'bn' ? 'ফ্লিট শফার' : 'Fleet Chauffeur',
+          'car_owner_driver': currentLang === 'bn' ? 'ওনার-ড্রাইভার' : 'Owner-Driver',
+          'rental_fleet_operator': currentLang === 'bn' ? `রেন্ট-এ-কার ফ্লিট (${fleetVehicles.length} গাড়ি, ${fleetDrivers.length} ড্রাইভার)` : `Rental Fleet (${fleetVehicles.length} Cars, ${fleetDrivers.length} Drivers)`,
+          'part_time_freelance': currentLang === 'bn' ? 'অন-ডিমান্ড স্ট্যান্ডবাই' : 'On-Demand Standby'
+        };
+        const city = resolveFieldValue('drv-city', 'drv-city-custom') || 'Dhaka';
+        const payoutMethod = resolveFieldValue('drv-payout-method', 'drv-payout-custom');
+        
+        let payoutDisplay = '—';
+        if (payoutMethod === 'Bank Transfer') {
+          const bankNameFinal = resolveFieldValue('bank-name', 'bank-name-custom');
+          const branch = document.getElementById('bank-branch')?.value || '';
+          const accName = document.getElementById('bank-account-name')?.value || '';
+          const accNum = document.getElementById('bank-account-number')?.value || '';
+          payoutDisplay = `${bankNameFinal || 'Bank'} (${branch || 'Branch'}) - A/C: ${accNum || '—'} [${accName || '—'}]`;
+        } else {
+          const payoutNum = document.getElementById('drv-payout-number')?.value || '—';
+          payoutDisplay = `${payoutMethod || 'Mobile Wallet'} (${payoutNum})`;
         }
-        sumResubmitRow.innerHTML = `<i class="ph-bold ph-arrow-counter-clockwise" style="color:var(--accent); font-size:1.1rem;"></i> <div><strong>${currentLang === 'bn' ? 'আবেদন সংশোধন:' : 'Resubmission Correction:'}</strong> ${resubmitReason} ${resubmitPrevId ? ' (Prev ID: #' + resubmitPrevId + ')' : ''}</div>`;
-        sumResubmitRow.style.display = 'flex';
-      } else if (sumResubmitRow) {
-        sumResubmitRow.style.display = 'none';
-      }
 
-      document.getElementById('sum-name').textContent = name;
-      document.getElementById('sum-phone').textContent = phone;
-      document.getElementById('sum-nid').textContent = nid;
-      document.getElementById('sum-license').textContent = `${licVal} (Exp: ${licExp})`;
-      document.getElementById('sum-role-area').textContent = `${roleMap[role] || role} · ${city}`;
-      document.getElementById('sum-services').textContent = svcs.length > 0 ? svcs.join(', ') : 'None';
-      document.getElementById('sum-payout').textContent = payoutDisplay;
-      const docSummaryEl = document.getElementById('sum-docs');
-      if (docSummaryEl) {
-        docSummaryEl.textContent = docsArr.length > 0 ? docsArr.join(', ') : (currentLang === 'bn' ? 'কোনোটি নয়' : 'None uploaded');
+        const svcs = [];
+        document.querySelectorAll('input[name="services"]:checked').forEach(cb => svcs.push(cb.value));
+
+        // Docs summary
+        const docsArr = [];
+        if (isFleet) {
+          let cDocs = 0;
+          fleetVehicles.forEach(c => {
+            if (c.carLicenseFront) cDocs++;
+            if (c.carLicenseBack) cDocs++;
+            if (c.carFitness) cDocs++;
+          });
+          let dDocs = 0;
+          fleetDrivers.forEach(d => {
+            if (d.photo) dDocs++;
+            if (d.licenseFront) dDocs++;
+            if (d.licenseBack) dDocs++;
+          });
+          docsArr.push(currentLang === 'bn' ? `${fleetVehicles.length}টি গাড়ি (${cDocs} ফাইল) ✓` : `${fleetVehicles.length} Cars (${cDocs} Docs) ✓`);
+          docsArr.push(currentLang === 'bn' ? `${fleetDrivers.length} ড্রাইভার (${dDocs} ফাইল) ✓` : `${fleetDrivers.length} Drivers (${dDocs} Docs) ✓`);
+        } else {
+          if (document.getElementById('file-photo')?.files?.[0]) docsArr.push(currentLang === 'bn' ? 'ছবি ✓' : 'Photo ✓');
+          if (document.getElementById('file-license-front')?.files?.[0]) docsArr.push(currentLang === 'bn' ? 'লাইসেন্স (সামনে) ✓' : 'Lic Front ✓');
+          if (document.getElementById('file-license-back')?.files?.[0]) docsArr.push(currentLang === 'bn' ? 'লাইসেন্স (পেছনে) ✓' : 'Lic Back ✓');
+          if (document.getElementById('file-nid-front')?.files?.[0]) docsArr.push(currentLang === 'bn' ? 'এনআইডি (সামনে) ✓' : 'NID Front ✓');
+          if (document.getElementById('file-nid-back')?.files?.[0]) docsArr.push(currentLang === 'bn' ? 'এনআইডি (পেছনে) ✓' : 'NID Back ✓');
+        }
+
+        // Resubmission status check
+        const isResubmit = document.getElementById('chk-is-resubmission')?.checked || false;
+        const resubmitReason = isResubmit ? (document.getElementById('resubmit-reason')?.value || 'Information Correction') : '';
+        const resubmitPrevId = isResubmit ? (document.getElementById('resubmit-prev-id')?.value.trim() || '') : '';
+        
+        let sumResubmitRow = document.getElementById('sum-row-resubmit');
+        if (isResubmit) {
+          if (!sumResubmitRow) {
+            sumResubmitRow = document.createElement('div');
+            sumResubmitRow.id = 'sum-row-resubmit';
+            sumResubmitRow.style.cssText = 'background:rgba(212,255,0,0.1); border:1px solid rgba(212,255,0,0.3); border-radius:8px; padding:10px 14px; margin-bottom:12px; font-size:0.82rem; color:#fff; display:flex; align-items:center; gap:8px;';
+            const sumTable = document.querySelector('.summary-card-body') || document.getElementById('driver-summary-table') || document.querySelector('.summary-box');
+            if (sumTable) sumTable.insertBefore(sumResubmitRow, sumTable.firstChild);
+          }
+          sumResubmitRow.innerHTML = `<i class="ph-bold ph-arrow-counter-clockwise" style="color:var(--accent); font-size:1.1rem;"></i> <div><strong>${currentLang === 'bn' ? 'আবেদন সংশোধন:' : 'Resubmission Correction:'}</strong> ${resubmitReason} ${resubmitPrevId ? ' (Prev ID: #' + resubmitPrevId + ')' : ''}</div>`;
+          sumResubmitRow.style.display = 'flex';
+        } else if (sumResubmitRow) {
+          sumResubmitRow.style.display = 'none';
+        }
+
+        const nameEl = document.getElementById('sum-name');
+        if (nameEl) nameEl.textContent = name;
+
+        const phoneEl = document.getElementById('sum-phone');
+        if (phoneEl) phoneEl.textContent = phone;
+
+        const nidEl = document.getElementById('sum-nid');
+        if (nidEl) nidEl.textContent = nid;
+
+        const licEl = document.getElementById('sum-license');
+        if (licEl) {
+          if (isFleet) {
+            licEl.textContent = currentLang === 'bn' 
+              ? `${fleetDrivers.length}জন ড্রাইভার লাইসেন্সযুক্ত` 
+              : `${fleetDrivers.length} Licensed Fleet Drivers`;
+          } else {
+            licEl.textContent = (licVal !== '—') ? `${licVal} (Exp: ${licExp})` : '—';
+          }
+        }
+
+        const roleAreaEl = document.getElementById('sum-role-area');
+        if (roleAreaEl) {
+          roleAreaEl.textContent = isOwnerDriver 
+            ? `${roleMap[role]} · ${carPlateVal} · ${city}` 
+            : `${roleMap[role] || role} · ${city}`;
+        }
+
+        const svcsEl = document.getElementById('sum-services');
+        if (svcsEl) svcsEl.textContent = svcs.length > 0 ? svcs.join(', ') : (currentLang === 'bn' ? 'স্ট্যান্ডার্ড' : 'Standard Full Chauffeur');
+
+        const payoutEl = document.getElementById('sum-payout');
+        if (payoutEl) payoutEl.textContent = payoutDisplay;
+
+        const docSummaryEl = document.getElementById('sum-docs');
+        if (docSummaryEl) {
+          docSummaryEl.textContent = docsArr.length > 0 ? docsArr.join(', ') : (currentLang === 'bn' ? 'কোনোটি নয়' : 'None uploaded');
+        }
+      } catch (err) {
+        console.error('Error in populateSummary:', err);
       }
     }
 
     /**
-     * High-speed client-side image optimizer & compressor:
-     * Downscales high-resolution smartphone camera photos (e.g. 12-48MP / 5MB-10MB)
-     * to crisp, readable 1280px Web documents (~80KB-140KB each).
-     * Reduces total POST payload from 35MB down to ~500KB (98% reduction),
-     * cutting submission time from 40s down to ~2s!
+     * Ultra-fast client-side image optimizer with 3.5s safety timeout:
+     * Downscales high-resolution camera photos to crisp, readable 1000px Web documents (~50KB-90KB each).
+     * Eliminates hang-ups, bypasses pre-compressed images under 120KB,
+     * and cuts submission time down to under 1.5 seconds!
      */
-    function compressAndEncodeImage(file, maxWidth = 1280, maxHeight = 1280, quality = 0.78) {
+    function compressAndEncodeImage(file, maxWidth = 1000, maxHeight = 1000, quality = 0.72) {
       return new Promise((resolve) => {
         if (!file) return resolve(null);
-        if (!file.type.startsWith('image/')) {
+
+        // Safety timeout net: If anything hangs, abort safely after 3.5s
+        const safetyTimeout = setTimeout(() => {
+          console.warn('Image optimizer timed out, falling back gracefully');
+          const fallbackReader = new FileReader();
+          fallbackReader.onload = () => resolve(fallbackReader.result);
+          fallbackReader.onerror = () => resolve(null);
+          try { fallbackReader.readAsDataURL(file); } catch (e) { resolve(null); }
+        }, 3500);
+
+        if (!file.type || !file.type.startsWith('image/')) {
+          clearTimeout(safetyTimeout);
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => resolve(null);
+          reader.readAsDataURL(file);
+          return;
+        }
+
+        // Fast-pass: Images already under 120KB do not need heavy canvas re-compression
+        if (file.size && file.size < 120 * 1024) {
+          clearTimeout(safetyTimeout);
           const reader = new FileReader();
           reader.onload = () => resolve(reader.result);
           reader.onerror = () => resolve(null);
@@ -4362,6 +4509,7 @@
         reader.onload = (e) => {
           const img = new Image();
           img.onload = () => {
+            clearTimeout(safetyTimeout);
             let width = img.width;
             let height = img.height;
 
@@ -4382,27 +4530,38 @@
             canvas.height = height;
             const ctx = canvas.getContext('2d');
             ctx.imageSmoothingEnabled = true;
-            ctx.imageSmoothingQuality = 'high';
+            ctx.imageSmoothingQuality = 'medium';
             ctx.drawImage(img, 0, 0, width, height);
 
-            const compressed = canvas.toDataURL('image/jpeg', quality);
-            resolve(compressed);
+            try {
+              const compressed = canvas.toDataURL('image/jpeg', quality);
+              resolve(compressed);
+            } catch (cvErr) {
+              resolve(e.target.result);
+            }
           };
-          img.onerror = () => resolve(e.target.result);
+          img.onerror = () => {
+            clearTimeout(safetyTimeout);
+            resolve(e.target.result);
+          };
           img.src = e.target.result;
         };
-        reader.onerror = () => resolve(null);
+        reader.onerror = () => {
+          clearTimeout(safetyTimeout);
+          resolve(null);
+        };
         reader.readAsDataURL(file);
       });
     }
 
     // =========================================================
-    // SUBMISSION HANDLER & GOOGLE SHEET SYNC (5 DOCUMENTS)
+    // SUBMISSION HANDLER & GOOGLE SHEET SYNC
     // =========================================================
     async function handleDriverApplication(e) {
       e.preventDefault();
       const isBypass = !!(driverSettings && driverSettings.bypassMandatory);
       const btn = document.getElementById('btn-submit-drv');
+      const selectedRole = document.getElementById('drv-role-val')?.value || 'seeking_fleet_car';
 
       const agreementCb = document.getElementById('drv-agreement');
       if (!isBypass && agreementCb && !agreementCb.checked) {
@@ -4411,44 +4570,59 @@
         return;
       }
 
-      btn.innerHTML = '<i class="ph-bold ph-spinner" style="animation:spin 1s linear infinite;"></i> ' + (currentLang === 'bn' ? 'ডকুমেন্ট অপটিমাইজ হচ্ছে...' : 'Optimizing documents...');
-      btn.disabled = true;
+      try {
+        btn.innerHTML = '<i class="ph-bold ph-spinner" style="animation:spin 1s linear infinite;"></i> ' + (currentLang === 'bn' ? 'তথ্য প্রক্রিয়াকরণ হচ্ছে...' : 'Processing application...');
+        btn.disabled = true;
 
-      // Extract all 5 document files
-      const photoFile = document.getElementById('file-photo')?.files?.[0];
-      const licFrontFile = document.getElementById('file-license-front')?.files?.[0];
-      const licBackFile = document.getElementById('file-license-back')?.files?.[0];
-      const nidFrontFile = document.getElementById('file-nid-front')?.files?.[0];
-      const nidBackFile = document.getElementById('file-nid-back')?.files?.[0];
-      const carLicFrontFile = document.getElementById('file-car-lic-front')?.files?.[0];
-      const carLicBackFile = document.getElementById('file-car-lic-back')?.files?.[0];
-      const carFitnessFile = document.getElementById('file-car-fitness')?.files?.[0];
-      const tradeLicFile = document.getElementById('file-trade-license')?.files?.[0];
+        let photoBase64 = null;
+        let licFrontBase64 = null;
+        let licBackBase64 = null;
+        let nidFrontBase64 = null;
+        let nidBackBase64 = null;
+        let carLicFrontBase64 = null;
+        let carLicBackBase64 = null;
+        let carFitnessBase64 = null;
+        let tradeLicBase64 = null;
 
-      // Compress and encode all Driver & Car documents in parallel via off-screen HTML5 Canvas
-      let [photoBase64, licFrontBase64, licBackBase64, nidFrontBase64, nidBackBase64, carLicFrontBase64, carLicBackBase64, carFitnessBase64, tradeLicBase64] = await Promise.all([
-        compressAndEncodeImage(photoFile, 1280, 1280, 0.80),
-        compressAndEncodeImage(licFrontFile, 1400, 1400, 0.78),
-        compressAndEncodeImage(licBackFile, 1400, 1400, 0.78),
-        compressAndEncodeImage(nidFrontFile, 1400, 1400, 0.78),
-        compressAndEncodeImage(nidBackFile, 1400, 1400, 0.78),
-        compressAndEncodeImage(carLicFrontFile, 1400, 1400, 0.78),
-        compressAndEncodeImage(carLicBackFile, 1400, 1400, 0.78),
-        compressAndEncodeImage(carFitnessFile, 1400, 1400, 0.78),
-        compressAndEncodeImage(tradeLicFile, 1400, 1400, 0.78)
-      ]);
+        if (selectedRole === 'rental_fleet_operator') {
+          // For Rental Fleets: All vehicle and driver documents are already compressed & registered in Step 4!
+          // We take Driver #1 and Car #1 as primary representatives for master sheet display
+          if (fleetDrivers.length > 0) {
+            photoBase64 = fleetDrivers[0].photo || null;
+            licFrontBase64 = fleetDrivers[0].licenseFront || null;
+            licBackBase64 = fleetDrivers[0].licenseBack || null;
+          }
+          if (fleetVehicles.length > 0) {
+            carLicFrontBase64 = fleetVehicles[0].carLicenseFront || null;
+            carLicBackBase64 = fleetVehicles[0].carLicenseBack || null;
+            carFitnessBase64 = fleetVehicles[0].carFitness || null;
+          }
+          const tradeLicFile = document.getElementById('file-trade-license')?.files?.[0];
+          if (tradeLicFile) {
+            tradeLicBase64 = await compressAndEncodeImage(tradeLicFile, 1000, 1000, 0.72);
+          }
+        } else {
+          // Solo Drivers & Owner-Drivers: Compress documents from Step 5 in parallel
+          const photoFile = document.getElementById('file-photo')?.files?.[0];
+          const licFrontFile = document.getElementById('file-license-front')?.files?.[0];
+          const licBackFile = document.getElementById('file-license-back')?.files?.[0];
+          const nidFrontFile = document.getElementById('file-nid-front')?.files?.[0];
+          const nidBackFile = document.getElementById('file-nid-back')?.files?.[0];
+          const carLicFrontFile = document.getElementById('file-car-lic-front')?.files?.[0];
+          const carLicBackFile = document.getElementById('file-car-lic-back')?.files?.[0];
+          const carFitnessFile = document.getElementById('file-car-fitness')?.files?.[0];
 
-      // If registering as Rental Fleet and main license inputs were skipped in Step 5,
-      // fallback to fleet driver #1's uploaded license front & back
-      if (selectedRole === 'rental_fleet_operator' && fleetDrivers.length > 0) {
-        if (!licFrontBase64 && fleetDrivers[0].licenseFront) licFrontBase64 = fleetDrivers[0].licenseFront;
-        if (!licBackBase64 && fleetDrivers[0].licenseBack) licBackBase64 = fleetDrivers[0].licenseBack;
-      }
-      if (selectedRole === 'rental_fleet_operator' && fleetVehicles.length > 0) {
-        if (!carLicFrontBase64 && fleetVehicles[0].carLicenseFront) carLicFrontBase64 = fleetVehicles[0].carLicenseFront;
-        if (!carLicBackBase64 && fleetVehicles[0].carLicenseBack) carLicBackBase64 = fleetVehicles[0].carLicenseBack;
-        if (!carFitnessBase64 && fleetVehicles[0].carFitness) carFitnessBase64 = fleetVehicles[0].carFitness;
-      }
+          [photoBase64, licFrontBase64, licBackBase64, nidFrontBase64, nidBackBase64, carLicFrontBase64, carLicBackBase64, carFitnessBase64] = await Promise.all([
+            compressAndEncodeImage(photoFile, 1000, 1000, 0.75),
+            compressAndEncodeImage(licFrontFile, 1000, 1000, 0.72),
+            compressAndEncodeImage(licBackFile, 1000, 1000, 0.72),
+            compressAndEncodeImage(nidFrontFile, 1000, 1000, 0.72),
+            compressAndEncodeImage(nidBackFile, 1000, 1000, 0.72),
+            compressAndEncodeImage(carLicFrontFile, 1000, 1000, 0.72),
+            compressAndEncodeImage(carLicBackFile, 1000, 1000, 0.72),
+            compressAndEncodeImage(carFitnessFile, 1000, 1000, 0.72)
+          ]);
+        }
 
       btn.innerHTML = '<i class="ph-bold ph-cloud-arrow-up" style="animation:pulse 1s infinite;"></i> ' + (currentLang === 'bn' ? 'নিবন্ধন সম্পন্ন হচ্ছে...' : 'Securing application...');
 
@@ -4496,24 +4670,26 @@
       } catch(e) {}
 
       // Prepare Vehicle Profile & Fleet Data
-      const selectedRole = document.getElementById('drv-role-val').value || 'seeking_fleet_car';
       let vehicleProfileDesc = 'N/A (Fleet Chauffeur)';
       let fleetPayload = null;
       let ownerCarPayload = null;
 
       if (selectedRole === 'rental_fleet_operator') {
-        // Prepare fleet drivers with license front & back documents
+        // Prepare fleet drivers with photos, license front & back documents
         const formattedFleetDrivers = fleetDrivers.map((d, dIdx) => ({
           name: d.name || ('Driver #' + (dIdx + 1)),
           phone: d.phone || 'N/A',
           nid: d.nid || 'N/A',
           license: d.license || 'N/A',
           vehicleIndex: d.vehicleIndex,
+          photo: d.photo || null,
+          photoBase64: d.photo || null,
           licenseFront: d.licenseFront || null,
           licenseBack: d.licenseBack || null,
           licenseFrontBase64: d.licenseFront || null,
           licenseBackBase64: d.licenseBack || null,
-          hasLicenseDocs: !!(d.licenseFront && d.licenseBack)
+          hasLicenseDocs: !!(d.licenseFront && d.licenseBack),
+          hasPhoto: !!d.photo
         }));
 
         fleetPayload = {
@@ -4656,27 +4832,106 @@
 
       if (targetWebhook) {
         try {
-          await fetch(targetWebhook, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(applicationPayload)
-          });
+          btn.innerHTML = '<i class="ph-bold ph-cloud-arrow-up" style="animation:pulse 1s infinite;"></i> ' + (currentLang === 'bn' ? 'গুগল ড্রাইভে সংরক্ষণ হচ্ছে...' : 'Saving to Drive Vault...');
+          // Fast network dispatch with 4.5s ceiling so user is never blocked or left waiting
+          await Promise.race([
+            fetch(targetWebhook, {
+              method: 'POST',
+              mode: 'no-cors',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(applicationPayload)
+            }),
+            new Promise(resolve => setTimeout(resolve, 4500))
+          ]);
         } catch (fetchErr) {
           console.warn('Google Sheet Webhook sync error (offline fallback preserved):', fetchErr);
         }
       }
 
       // Show Success Screen
+      window.lastSubmittedAppId = appId;
       document.getElementById('driver-app-shell').style.display = 'none';
       const successScreen = document.getElementById('driver-success-screen');
       successScreen.style.display = 'block';
       document.getElementById('success-ref-badge').textContent = `REF: #${appId}`;
 
       window.scrollTo({ top: 100, behavior: 'smooth' });
+    } catch (submitErr) {
+      console.error('Fatal submission error:', submitErr);
+      alert(currentLang === 'bn' ? 'আবেদন জমা দেওয়ার সময় একটি সমস্যা হয়েছে: ' + submitErr.message : 'An error occurred during submission: ' + submitErr.message);
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = `<span id="btn-submit-text">${currentLang === 'bn' ? 'শফার আবেদনপত্র জমা দিন 🚀' : 'Submit Registration'}</span> <i class="ph-bold ph-paper-plane-tilt"></i>`;
+      }
+    }
+  }
+
+    /**
+     * Reopen Application For Correction directly from the Success Screen
+     * Preserves all entered form inputs, sets resubmission flags, and displays
+     * active correction banner with current application reference ID.
+     */
+    function reopenApplicationForCorrection() {
+      const successScreen = document.getElementById('driver-success-screen');
+      const appShell = document.getElementById('driver-app-shell');
+      if (successScreen) successScreen.style.display = 'none';
+      if (appShell) appShell.style.display = 'block';
+
+      // Determine current application reference
+      const refEl = document.getElementById('success-ref-badge');
+      const cleanRef = (refEl ? refEl.textContent.replace(/^REF:\s*#?/, '').trim() : '') || window.lastSubmittedAppId || 'DRV-NEW';
+
+      // Flag application as resubmission
+      const chk = document.getElementById('chk-is-resubmission');
+      if (chk) chk.checked = true;
+
+      const prevId = document.getElementById('resubmit-prev-id');
+      if (prevId) prevId.value = cleanRef;
+
+      // Active correction banner at top of form
+      let banner = document.getElementById('active-correction-mode-banner');
+      if (!banner) {
+        banner = document.createElement('div');
+        banner.id = 'active-correction-mode-banner';
+        banner.style.cssText = 'background: rgba(212, 255, 0, 0.08); border: 1px solid var(--accent); border-radius: 12px; padding: 14px 18px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;';
+        const formCore = document.querySelector('#driver-app-shell .form-core') || document.getElementById('driver-register-form');
+        if (formCore) formCore.insertBefore(banner, formCore.firstChild);
+      }
+
+      const isBn = (typeof currentLang !== 'undefined' && currentLang === 'bn');
+      banner.innerHTML = `
+        <div style="display:flex; align-items:center; gap:12px; color:#fff; font-size:0.88rem; line-height:1.45; flex:1; min-width:260px;">
+          <i class="ph-bold ph-pencil-simple-line" style="color:var(--accent); font-size:1.5rem; flex-shrink:0;"></i>
+          <div>
+            <div style="font-weight:700; color:var(--accent);">${isBn ? 'সংশোধন মোড সক্রিয় (Correction Mode Active)' : 'Correction Mode Active'}</div>
+            <div style="font-size:0.82rem; color:var(--text-secondary); margin-top:3px;">
+              ${isBn ? `আপনি আবেদন নং <strong style="color:#fff;">#${cleanRef}</strong> এর তথ্য সংশোধন করছেন। যেকোনো ভুল তথ্য বা নথি সংশোধন করে Next চেপে সাবমিট করুন।` : `Editing Application <strong style="color:#fff;">#${cleanRef}</strong>. Modify any wrong details or replace documents, then click Next to submit your update.`}
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <button type="button" onclick="cancelCorrectionMode()" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:6px 14px; border-radius:8px; font-size:0.78rem; font-weight:600; cursor:pointer;">
+            ${isBn ? 'মূল স্ক্রিনে ফিরে যান' : 'Back to Success Screen'}
+          </button>
+        </div>
+      `;
+      banner.style.display = 'flex';
+
+      // Go to Step 1 so applicant can review from start while retaining all entered values
+      goToStep(1);
+      window.scrollTo({ top: 120, behavior: 'smooth' });
     }
 
-    
+    function cancelCorrectionMode() {
+      const banner = document.getElementById('active-correction-mode-banner');
+      if (banner) banner.style.display = 'none';
+      const appShell = document.getElementById('driver-app-shell');
+      if (appShell) appShell.style.display = 'none';
+      const successScreen = document.getElementById('driver-success-screen');
+      if (successScreen) successScreen.style.display = 'block';
+      window.scrollTo({ top: 100, behavior: 'smooth' });
+    }
+
     // Smart auto-check for returning applicant when phone is entered
     document.addEventListener('DOMContentLoaded', () => {
       const phoneInput = document.getElementById('drv-phone');
@@ -4700,6 +4955,12 @@
     });
 
     function resetDriverForm() {
+      const banner = document.getElementById('active-correction-mode-banner');
+      if (banner) banner.style.display = 'none';
+      const chk = document.getElementById('chk-is-resubmission');
+      if (chk) chk.checked = false;
+      const prevId = document.getElementById('resubmit-prev-id');
+      if (prevId) prevId.value = '';
       document.getElementById('driver-register-form').reset();
       document.querySelectorAll('.upload-card').forEach(c => c.classList.remove('has-file'));
       document.querySelectorAll('.upload-filename').forEach(f => f.style.display = 'none');

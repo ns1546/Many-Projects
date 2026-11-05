@@ -89,10 +89,15 @@
   }
 
   /* ─── BOTTOM NAV CLEARANCE ───────────────────────────────── */
+  /* Remove excessive double padding from main and footer wrappers */
   main {
-    padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: 0 !important;
   }
   footer {
+    padding-bottom: 0 !important;
+  }
+  /* On pages without footer, ensure main content is not covered */
+  body:not(:has(footer)) main {
     padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px)) !important;
   }
 
@@ -235,7 +240,7 @@
     padding: 0 !important;
   }
   footer .footer-bottom-bar {
-    padding-bottom: calc(5.75rem + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px)) !important;
   }
 
   /* ─── DECORATIVE BLOBS — Hide on mobile ─────────────────── */

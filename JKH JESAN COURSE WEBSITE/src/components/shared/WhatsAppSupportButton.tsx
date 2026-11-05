@@ -23,7 +23,7 @@ export function WhatsAppSupportButton({
   const whatsappUrl = `https://wa.me/88${cleanNumber}?text=${encodeURIComponent(defaultMessage)}`;
 
   return (
-    <aside aria-label="WhatsApp Support" className="fixed bottom-[5.5rem] right-3.5 sm:bottom-6 sm:right-6 z-40 select-none">
+    <aside aria-label="WhatsApp Support" className="fixed bottom-[5.75rem] right-3.5 sm:bottom-6 sm:right-6 z-40 select-none">
       <a
         href={whatsappUrl}
         target="_blank"

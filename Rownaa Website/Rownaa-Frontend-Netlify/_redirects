@@ -1,1 +1,10 @@
-/*  /index.html  200
+/driver-register    /driver-register.html    200
+/driver             /driver-register.html    200
+/find-cars          /find-cars.html          200
+/customer-panel     /customer-panel.html     200
+/owner-panel        /owner-panel.html        200
+/admin-panel        /admin-panel.html        200
+/owner-register     /owner-register.html     200
+/login              /login-sliding.html      200
+/checkout           /checkout.html           200
+/*                  /index.html              200

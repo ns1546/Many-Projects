@@ -29,15 +29,17 @@ netlify deploy --prod
 
 ---
 
-## 📋 Google Apps Script Setup (Fixing 401 Unauthorized)
-If submissions show a 401 error:
-1. Open your Google Sheet -> **Extensions** -> **Apps Script**.
-2. Paste the contents of `google_sheet_webhook.gs`.
-3. In the toolbar, select `setupSheet` and click **Run** once.
-4. Click **Deploy** (top right) -> **Manage deployments**.
-5. Click the **Pencil (Edit)** icon:
-   - **Version:** Select **New version**
-   - **Who has access:** MUST be set to **Anyone** (so drivers can submit their application without signing into a Google account)
-6. Click **Deploy** and copy the **Web app URL**.
-7. The portal is already pre-configured with your latest Web App URL:
-   `https://script.google.com/macros/s/AKfycby8srbyj_WYsOeL3v8vX3yqmeHTNRHjuEH2nR8YI6sTxTN5DaV3LDQdT2VxVI5bGyJDlQ/exec`
+## 📋 Google Apps Script Webhook Configuration
+The portal is pre-configured and verified with your latest active Google Apps Script deployment URL (Version 7.0):
+```
+https://script.google.com/macros/s/AKfycbxdX4MS7brwNAnEy3i63mo4X2BTKWi-B91AL3p-MA4qEUVUzp9kfkZehIMLqwmn3sBCvA/exec
+```
+
+### Deployment Details:
+- **Architecture:** 2-Section Master Architecture (Dashboard & 38-Column Unified Registrations)
+- **Features Active:**
+  - Dedicated Multiple Cars & Multiple Drivers per Rental Fleet
+  - 1-Click WhatsApp Launcher (Column E)
+  - Google Drive Document Vault (Folder Links in Column AH)
+  - Duplicate detection & resubmission iteration tracker
+  - Zero-Freeze-Crash Defensive Engine

@@ -24,3 +24,4 @@ filesToUpdate.forEach(file => {
     }
   }
 });
+
