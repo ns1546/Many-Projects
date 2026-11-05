@@ -44,6 +44,7 @@ export default function GoogleAnalytics({ gaId }: { gaId?: string | null }) {
       <Script
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+        onError={() => { /* Silently handled when adblockers block third-party analytics */ }}
       />
       <Script
         id="google-analytics-tag"

@@ -82,6 +82,7 @@ export default function MetaPixel({ fbPixelId }: { fbPixelId?: string | null }) 
           `,
         }}
         onLoad={() => setLoaded(true)}
+        onError={() => { /* Silently handled when adblockers block third-party trackers */ }}
       />
     </>
   );
