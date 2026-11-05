@@ -214,14 +214,14 @@ export default function TestimonialsSlider() {
     <div className="w-full relative select-none">
       
       {/* ── Top Bar Controls: Prev/Next buttons & slide counter ── */}
-      <div className="flex items-center justify-end mb-6 px-2">
+      <div className="flex items-center justify-end mb-3 sm:mb-6 px-1 sm:px-2">
         {/* Direction Controls */}
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={prevSlide}
             aria-label="Previous Testimonial"
-            className="w-10 h-10 rounded-xl bg-surface border border-border hover:border-primary/50 text-foreground flex items-center justify-center hover:bg-surface-raised shadow-xs active:scale-95 transition-all cursor-pointer"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-surface border border-border hover:border-primary/50 text-foreground flex items-center justify-center hover:bg-surface-raised shadow-xs active:scale-95 transition-all cursor-pointer"
           >
             <ChevronLeft size={18} />
           </button>
@@ -234,7 +234,7 @@ export default function TestimonialsSlider() {
             type="button"
             onClick={nextSlide}
             aria-label="Next Testimonial"
-            className="w-10 h-10 rounded-xl bg-primary text-black font-black flex items-center justify-center hover:brightness-110 shadow-sm shadow-primary/20 active:scale-95 transition-all cursor-pointer"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-primary text-black font-black flex items-center justify-center hover:brightness-110 shadow-sm shadow-primary/20 active:scale-95 transition-all cursor-pointer"
           >
             <ChevronRight size={18} />
           </button>
@@ -271,9 +271,9 @@ export default function TestimonialsSlider() {
                   
                   {/* Top: Quote Badge & Star Rating */}
                   <div>
-                    <div className="flex items-center justify-between gap-2 mb-4">
+                    <div className="flex items-center justify-between gap-1.5 sm:gap-2 mb-2 sm:mb-4">
                       {/* Quote mark inside circular badge (Exact from user image) */}
-                      <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-[#f6edd9] dark:bg-amber-950/40 border border-amber-300/40 dark:border-amber-700/40 flex items-center justify-center text-amber-700 dark:text-amber-400 font-serif font-black text-sm sm:text-lg select-none">
+                      <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-full bg-[#f6edd9] dark:bg-amber-950/40 border border-amber-300/40 dark:border-amber-700/40 flex items-center justify-center text-amber-700 dark:text-amber-400 font-serif font-black text-xs sm:text-lg select-none">
                         ❝
                       </div>
 
@@ -288,25 +288,25 @@ export default function TestimonialsSlider() {
                     </div>
 
                     {/* 5 Stars */}
-                    <div className="flex items-center gap-1 mb-4">
+                    <div className="flex items-center gap-1 mb-2 sm:mb-4">
                       {[...Array(t.rating)].map((_, si) => (
                         <Star 
                           key={si} 
-                          size={14} 
-                          className="text-[#C8900A] fill-[#C8900A]" 
+                          size={12}
+                          className="text-[#C8900A] fill-[#C8900A] sm:w-3.5 sm:h-3.5"
                         />
                       ))}
                       <span className="text-[11px] font-bold text-foreground/50 ml-1.5">{t.date}</span>
                     </div>
 
                     {/* Realistic Review Quote */}
-                    <p className="text-xs sm:text-sm leading-relaxed text-foreground/85 font-medium mb-3 sm:mb-5 line-clamp-4 sm:line-clamp-none">
+                    <p className="text-xs sm:text-sm leading-relaxed text-foreground/85 font-medium mb-2 sm:mb-4 line-clamp-3 sm:line-clamp-none">
                       “{t.text}”
                     </p>
                   </div>
 
                   {/* Bottom: Divider & Authentic Student Profile (No AI Look) */}
-                  <div className="pt-4 border-t border-border flex items-center justify-between gap-3">
+                  <div className="pt-2.5 sm:pt-4 border-t border-border flex items-center justify-between gap-2 sm:gap-3">
                     <div className="flex items-center gap-3 min-w-0">
                       
                       {/* Authentic Bengali Monogram Badge with Gradient Border */}
@@ -348,7 +348,7 @@ export default function TestimonialsSlider() {
       </div>
 
       {/* ── Dot Indicators at Bottom ── */}
-      <div className="flex items-center justify-center gap-1.5 mt-8">
+      <div className="hidden sm:flex items-center justify-center gap-1.5 mt-6 sm:mt-8">
         {TESTIMONIALS_DATA.map((_, dotIdx) => (
           <button
             key={dotIdx}

@@ -142,7 +142,7 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
                       {/* Thumbnail — SN 8: photo size proper aspect ratio without cropping */}
                       <Link
                         href={`/courses/${course.slug}#purchase`}
-                        className="aspect-video relative overflow-hidden bg-zinc-950 shrink-0 block"
+                        className="aspect-[16/9] max-h-36 xs:max-h-40 sm:max-h-none relative overflow-hidden bg-zinc-950 shrink-0 block"
                         title="কোর্স প্রিভিউ ও পারচেজ করুন"
                       >
                         {/* Ambient backdrop */}
@@ -159,7 +159,7 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
                         <img
                           src={course.thumbnail || "/images/vocal-processing-course.jpg"}
                           alt={course.title}
-                          className="w-full h-full object-contain relative z-1 transition-transform duration-500 group-hover:scale-105"
+                          className="w-full h-full object-cover sm:object-contain relative z-1 transition-transform duration-500 group-hover:scale-105"
                         />
 
                         {/* Play button on hover */}
@@ -183,11 +183,11 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
                       {/* Content */}
                       <div className="p-3.5 sm:p-5 flex flex-col grow">
                         <Link href={`/courses/${course.slug}`}>
-                          <h2 className="font-bold text-foreground text-sm sm:text-base leading-snug mb-1 sm:mb-2 hover:text-primary transition-colors line-clamp-2">
+                          <h2 className="font-bold text-foreground text-xs sm:text-base leading-snug mb-1 hover:text-primary transition-colors line-clamp-1 sm:line-clamp-2">
                             {course.title}
                           </h2>
                         </Link>
-                        <p className="text-xs sm:text-sm text-foreground/80 leading-relaxed line-clamp-2 mb-2.5 sm:mb-4 font-medium">
+                        <p className="hidden sm:block text-xs sm:text-sm text-foreground/80 leading-relaxed line-clamp-2 mb-2.5 sm:mb-4 font-medium">
                           {course.description || "প্রফেশনাল মিউজিক প্রোডাকশনের সম্পূর্ণ গাইড।"}
                         </p>
 

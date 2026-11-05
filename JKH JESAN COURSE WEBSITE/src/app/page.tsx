@@ -89,23 +89,23 @@ export default async function Home() {
         <div className="container-max">
 
           {/* Section header */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-6 sm:mb-10 lg:mb-14">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-6 mb-4 sm:mb-8 lg:mb-12">
             <div>
               <h2 style={{ color: "var(--ink-900)" }}>
                 জনপ্রিয় <span style={{ color: "var(--primary)" }}>কোর্সসমূহ</span>
               </h2>
-              <p className="mt-2 sm:mt-3 text-xs sm:text-base font-medium" style={{ color: "var(--foreground-muted)", maxWidth: "44ch" }}>
+              <p className="mt-1 sm:mt-2 text-xs sm:text-base font-medium" style={{ color: "var(--foreground-muted)", maxWidth: "44ch" }}>
                 প্রফেশনাল ইন্সট্রাক্টরের হাতে-কলমে শিক্ষায় সংগীতে দক্ষতা অর্জন করুন।
               </p>
             </div>
-            <Link href="/courses" className="btn-outline self-start md:self-auto text-xs sm:text-sm py-2 px-3.5 sm:py-2.5 sm:px-4">
+            <Link href="/courses" className="btn-outline self-start md:self-auto text-xs sm:text-sm py-1.5 px-3 sm:py-2.5 sm:px-4">
               সব কোর্স দেখুন
-              <IconArrowUpRight size={15} strokeWidth={2} />
+              <IconArrowUpRight size={14} strokeWidth={2} />
             </Link>
           </div>
 
-          {/* Course cards grid — Pro, compact responsive sizing for all phones & tablets */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          {/* Course cards grid — Compact, beautifully proportioned on all smartphones */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-6">
             {courses.length > 0 ? courses.map((course: any) => {
               const totalLessons = course.modules?.reduce((acc: number, m: any) => acc + (m.lessons?.length || 0), 0) || 0;
               const hasDiscount = course.discountPrice && course.discountPrice < course.price;
@@ -114,14 +114,13 @@ export default async function Home() {
                 : 0;
 
               return (
-                <div key={course.id} className="card group flex flex-col hover:shadow-xl hover:border-primary/60 transition-all duration-300 relative">
+                <div key={course.id} className="card group flex flex-col hover:shadow-xl hover:border-primary/60 transition-all duration-300 relative overflow-hidden bg-surface">
                   <Link href={`/courses/${course.slug}#purchase`} className="absolute inset-0 z-0" aria-label={course.title} />
 
-                  {/* Thumbnail */}
+                  {/* Thumbnail — Capped max-height on mobile so it never dominates screen */}
                   <Link
                     href={`/courses/${course.slug}#purchase`}
-                    className="relative aspect-video overflow-hidden block bg-zinc-950"
-                    style={{ borderRadius: "1rem 1rem 0 0" }}
+                    className="relative w-full aspect-[16/9] max-h-36 xs:max-h-40 sm:max-h-none overflow-hidden block bg-zinc-950 shrink-0"
                     title="কোর্স প্রিভিউ ও পারচেজ করুন"
                   >
                     {/* Ambient backdrop */}
@@ -136,92 +135,88 @@ export default async function Home() {
                     <img
                       src={course.thumbnail || "/images/vocal-processing-course.jpg"}
                       alt={course.title}
-                      className="w-full h-full object-contain relative z-10 transition-transform duration-500 group-hover:scale-105"
+                      className="w-full h-full object-cover sm:object-contain relative z-10 transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-20 pointer-events-none" />
 
                     {/* Level badge */}
-                    <div className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 z-30 pointer-events-none">
-                      <span className="badge badge-accent text-[10px] sm:text-xs py-0.5 px-2">
+                    <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-30 pointer-events-none">
+                      <span className="badge badge-accent text-[9.5px] sm:text-xs py-0.5 px-2">
                         {course.level === "BEGINNER" ? "বিগিনার" : course.level === "INTERMEDIATE" ? "মিডিয়াম" : "অ্যাডভান্সড"}
                       </span>
                     </div>
 
                     {/* Discount badge */}
                     {hasDiscount && (
-                      <div className="absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 z-30 pointer-events-none">
-                        <span className="badge bg-red-600 text-white font-bold text-[10px] sm:text-xs py-0.5 px-2 shadow-sm">
+                      <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-30 pointer-events-none">
+                        <span className="badge bg-red-600 text-white font-bold text-[9.5px] sm:text-xs py-0.5 px-2 shadow-sm">
                           {discountPercent}% ছাড়
                         </span>
                       </div>
                     )}
                   </Link>
 
-                  {/* Body — Tight padding on mobile */}
-                  <div className="p-3.5 sm:p-5 lg:p-6 flex flex-col grow">
-                    {/* Meta strip */}
-                    <div className="flex items-center gap-2 sm:gap-3 text-[11px] sm:text-xs mb-2 sm:mb-2.5" style={{ color: "var(--foreground-muted)" }}>
-                      <span className="flex items-center gap-1">
-                        <IconBook size={12} strokeWidth={2} /> {totalLessons} লেসন
-                      </span>
-                      {course.duration && (
-                        <>
-                          <span>•</span>
-                          <span>{course.duration}</span>
-                        </>
-                      )}
-                      <span>•</span>
-                      <span className="flex items-center gap-1 font-semibold text-primary truncate">
-                        <IconHeadphones size={12} strokeWidth={2} /> প্রজেক্ট ফাইলস
-                      </span>
+                  {/* Body — Tight, clean padding on mobile */}
+                  <div className="p-3 sm:p-5 flex flex-col grow justify-between">
+                    <div>
+                      {/* Meta strip */}
+                      <div className="flex items-center gap-2 text-[10.5px] sm:text-xs mb-1 sm:mb-2" style={{ color: "var(--foreground-muted)" }}>
+                        <span className="flex items-center gap-1">
+                          <IconBook size={11} strokeWidth={2} /> {totalLessons} লেসন
+                        </span>
+                        <span>•</span>
+                        <span className="flex items-center gap-1 font-semibold text-primary truncate">
+                          <IconHeadphones size={11} strokeWidth={2} /> প্রজেক্ট ফাইলস
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="font-bold text-xs sm:text-base lg:text-lg mb-1 group-hover:text-primary transition-colors line-clamp-1 sm:line-clamp-2"
+                        style={{ color: "var(--ink-900)" }}>
+                        {course.title}
+                      </h3>
+
+                      {/* Description (desktop/tablet only to keep mobile slim) */}
+                      <p className="hidden sm:block text-xs sm:text-sm mb-3 grow line-clamp-2" style={{ color: "var(--foreground-muted)" }}>
+                        {course.description}
+                      </p>
                     </div>
 
-                    {/* Title */}
-                    <h3 className="font-bold text-sm sm:text-base lg:text-lg mb-1 sm:mb-1.5 group-hover:text-primary transition-colors line-clamp-2"
-                      style={{ color: "var(--ink-900)" }}>
-                      {course.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-xs sm:text-sm mb-3 sm:mb-4 grow line-clamp-2" style={{ color: "var(--foreground-muted)" }}>
-                      {course.description}
-                    </p>
-
                     {/* Instructor */}
-                    <div className="flex items-center gap-2 pb-2.5 mb-2.5 sm:pb-3.5 sm:mb-3.5 border-b border-border">
-                      <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-primary/20 flex items-center justify-center text-[11px] sm:text-xs font-bold text-primary">
+                    <div className="flex items-center gap-1.5 pb-2 mb-2 sm:pb-3 sm:mb-3 border-b border-border mt-1">
+                      <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-primary/20 flex items-center justify-center text-[10px] sm:text-xs font-bold text-primary">
                         {(course.instructor?.name || "J")[0]}
                       </div>
-                      <span className="text-xs font-medium" style={{ color: "var(--foreground-muted)" }}>
+                      <span className="text-[10.5px] sm:text-xs font-medium" style={{ color: "var(--foreground-muted)" }}>
                         {course.instructor?.name || "JKH Jesan"}
                       </span>
                     </div>
 
                     {/* Footer: Price + Button */}
-                    <div className="flex items-center justify-between mt-auto">
+                    <div className="flex items-center justify-between mt-auto pt-0.5">
                       <div>
                         {hasDiscount ? (
                           <div className="flex items-baseline gap-1.5">
-                            <span className="text-lg sm:text-xl font-black text-primary">
+                            <span className="text-base sm:text-xl font-black text-primary">
                               ৳{course.discountPrice?.toLocaleString()}
                             </span>
-                            <span className="text-[11px] sm:text-xs line-through" style={{ color: "var(--foreground-muted)" }}>
+                            <span className="text-[10px] sm:text-xs line-through" style={{ color: "var(--foreground-muted)" }}>
                               ৳{course.price?.toLocaleString()}
                             </span>
                           </div>
                         ) : (
-                          <span className="text-lg sm:text-xl font-black text-primary">
+                          <span className="text-base sm:text-xl font-black text-primary">
                             ৳{course.price?.toLocaleString()}
                           </span>
                         )}
                       </div>
                       <Link
                         href={`/courses/${course.slug}#purchase`}
-                        className="btn-primary text-xs py-1.5 px-3 sm:py-2 sm:px-3.5 relative z-10"
+                        className="btn-primary text-xs py-1 px-2.5 sm:py-2 sm:px-3.5 relative z-10"
                         title="কোর্স এনরোল ও পেমেন্ট করুন"
                       >
                         এনরোল করুন
-                        <IconArrowUpRight size={13} strokeWidth={2.5} />
+                        <IconArrowUpRight size={12} strokeWidth={2.5} />
                       </Link>
                     </div>
                   </div>
@@ -407,41 +402,44 @@ export default async function Home() {
             </div>
 
             {/* Text column */}
-            <div className="order-1 lg:order-2 space-y-4 sm:space-y-6 lg:space-y-8">
+            <div className="order-1 lg:order-2 space-y-3 sm:space-y-6 lg:space-y-8">
               <div>
-                <p className="text-xs font-bold uppercase tracking-wider mb-2 sm:mb-3 text-primary">
+                <p className="text-xs font-bold uppercase tracking-wider mb-1.5 sm:mb-3 text-primary">
                   EVORISE MEDIA LEAD MENTOR
                 </p>
                 <h2 style={{ color: "var(--ink-900)" }}>
                   EvoRise Media-র<br />
                   <span style={{ color: "var(--primary)" }}>চিফ মিউজিক ইন্সট্রাক্টর</span>
                 </h2>
-                <p className="mt-2.5 sm:mt-5 text-xs sm:text-base leading-relaxed" style={{ color: "var(--foreground-muted)" }}>
+                <p className="mt-2 sm:mt-5 text-xs sm:text-base leading-relaxed line-clamp-3 sm:line-clamp-none" style={{ color: "var(--foreground-muted)" }}>
                   EvoRise Media-র সবচেয়ে অভিজ্ঞ ও বিশ্বস্ত প্রশিক্ষক JKH Jesan — যিনি সাধারণ কোনো টিউটর নন, বরং অডিও ইন্ডাস্ট্রির একজন রিয়েল-ওয়ার্ল্ড মিউজিক প্রডিউসার ও সাউন্ড ইঞ্জিনিয়ার। শতাধিক সফল শিক্ষার্থীকে তিনি FL Studio ও Ableton Live-এ কমার্শিয়াল-গ্রেড মিউজিক মেকিং শিখিয়েছেন।
                 </p>
               </div>
 
-              <div className="space-y-2.5 sm:space-y-3">
+              {/* 3 Features — compact on mobile */}
+              <div className="space-y-2 sm:space-y-3">
                 {instructorFeatures.map((f, i) => (
                   <div key={i}
-                    className="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 cursor-default group hover:border-[rgba(200,144,10,0.30)] hover:shadow-sm"
+                    className="flex items-center gap-2.5 sm:gap-4 p-2.5 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 cursor-default group hover:border-[rgba(200,144,10,0.30)] hover:shadow-sm"
                     style={{ background: "var(--surface)", border: "1px solid var(--border)" }}>
                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center shrink-0 transition-all duration-300"
                       style={{ background: "var(--gold-100)", border: "1px solid var(--gold-200)" }}>
                       <f.Icon size={16} strokeWidth={1.75} className="text-primary" />
                     </div>
-                    <div>
-                      <h3 className="font-bold text-xs sm:text-sm mb-0.5" style={{ color: "var(--ink-900)" }}>{f.title}</h3>
-                      <p className="text-[11px] sm:text-xs leading-relaxed" style={{ color: "var(--foreground-muted)" }}>{f.desc}</p>
+                    <div className="min-w-0">
+                      <h3 className="font-bold text-xs sm:text-sm" style={{ color: "var(--ink-900)" }}>{f.title}</h3>
+                      <p className="text-[10.5px] sm:text-xs leading-tight text-foreground/70 truncate">{f.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <Link href="/about" className="btn-outline inline-flex text-xs sm:text-sm py-2 px-3.5 sm:py-2.5 sm:px-4">
-                আরও বিস্তারিত জানুন
-                <IconArrowUpRight size={15} strokeWidth={2} />
-              </Link>
+              <div className="pt-1 pb-4 sm:pb-0">
+                <Link href="/about" className="btn-outline inline-flex text-xs sm:text-sm py-2 px-3.5 sm:py-2.5 sm:px-4">
+                  আরও বিস্তারিত জানুন
+                  <IconArrowUpRight size={14} strokeWidth={2} />
+                </Link>
+              </div>
             </div>
           </div>
         </div>

@@ -74,21 +74,22 @@
   }
 
   /* ─── BOTTOM NAV CLEARANCE ────────────────────────────── */
-  /* Main has no bottom void on normal pages; footer handles the elevation */
+  /* Both main and footer must safely clear the 64px fixed bottom navigation bar */
   main {
-    padding-bottom: 0 !important;
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)) !important;
   }
   footer {
-    padding-bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px)) !important;
-  }
-  /* On pages with no footer (e.g. /learn, /dashboard without footer), main clears bottom nav */
-  body:not(:has(footer)) main {
-    padding-bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)) !important;
   }
 
   /* ─── COMPACT MOBILE CARDS & UI SURFACES ──────────────── */
-  /* Prevents cards from blowing up and filling entire mobile viewports */
-  .card, .feature-card {
+  /* Zero wrapper padding on course cards so thumbnail sits flush at top */
+  .card {
+    padding: 0 !important;
+    border-radius: 0.875rem !important;
+    overflow: hidden !important;
+  }
+  .feature-card {
     padding: 0.875rem !important;
     border-radius: 0.875rem !important;
   }
