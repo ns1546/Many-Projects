@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { usePathname, useSearchParams } from "next/navigation";
 import Script from "next/script";
@@ -32,20 +32,29 @@ function GoogleAnalyticsTracker({ gaId }: { gaId: string }) {
 }
 
 export default function GoogleAnalytics({ gaId }: { gaId?: string | null }) {
-  if (!gaId) {
-    return null;
-  }
+  const effectiveGaId = gaId || "G-ECQQD0F5XS";
+  const gtmId = "GTM-TKGGDS5HG";
 
   return (
     <>
       <Suspense fallback={null}>
-        <GoogleAnalyticsTracker gaId={gaId} />
+        <GoogleAnalyticsTracker gaId={effectiveGaId} />
       </Suspense>
+
+      {/* Google Tag Container Script (GTM) - Directly matches Google Tag Setup */}
       <Script
         strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+        src={`https://www.googletagmanager.com/gtm.js?id=${gtmId}`}
         onError={() => { /* Silently handled when adblockers block third-party analytics */ }}
       />
+
+      {/* Google Analytics 4 (gtag.js) */}
+      <Script
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${effectiveGaId}`}
+        onError={() => { /* Silently handled when adblockers block third-party analytics */ }}
+      />
+
       <Script
         id="google-analytics-tag"
         strategy="afterInteractive"
@@ -54,9 +63,10 @@ export default function GoogleAnalytics({ gaId }: { gaId?: string | null }) {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${gaId}', {
+            gtag('config', '${effectiveGaId}', {
               page_path: window.location.pathname,
             });
+            gtag('config', '${gtmId}');
           `,
         }}
       />
