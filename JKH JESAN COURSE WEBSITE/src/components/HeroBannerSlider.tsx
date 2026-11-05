@@ -225,9 +225,9 @@ export default function HeroBannerSlider({ banners }: HeroBannerSliderProps) {
             </>
           )}
 
-          {/* Slide Indicator Dots & Counter */}
+          {/* Slide Indicator Dots & Counter (Hidden on mobile phones as requested) */}
           {slides.length > 1 && (
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10">
+            <div className="hidden sm:flex absolute bottom-4 left-1/2 -translate-x-1/2 z-20 items-center gap-1 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10">
               {slides.map((_, idx) => (
                 <button
                   key={idx}

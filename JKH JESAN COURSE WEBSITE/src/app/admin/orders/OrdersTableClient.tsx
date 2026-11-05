@@ -120,14 +120,14 @@ export default function OrdersTableClient({ initialOrders }: { initialOrders: Or
       {/* Orders Table */}
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm text-foreground/80">
-          <thead className="bg-surface border-b border-border">
+          <thead className="bg-[#182010] border-b border-[#2A3319]">
             <tr>
-              <th className="px-6 py-4 font-black text-foreground">শিক্ষার্থী</th>
-              <th className="px-6 py-4 font-black text-foreground">কোর্স</th>
-              <th className="px-6 py-4 font-black text-foreground">পেমেন্ট বিবরণ</th>
-              <th className="px-6 py-4 font-black text-foreground">তারিখ</th>
-              <th className="px-6 py-4 font-black text-foreground">স্ট্যাটাস</th>
-              <th className="px-6 py-4 font-black text-foreground text-right">অ্যাকশন</th>
+              <th className="px-6 py-4 font-black text-white">শিক্ষার্থী</th>
+              <th className="px-6 py-4 font-black text-white">কোর্স</th>
+              <th className="px-6 py-4 font-black text-white">পেমেন্ট বিবরণ</th>
+              <th className="px-6 py-4 font-black text-white">তারিখ</th>
+              <th className="px-6 py-4 font-black text-white">স্ট্যাটাস</th>
+              <th className="px-6 py-4 font-black text-white text-right">অ্যাকশন</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/10">

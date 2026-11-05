@@ -272,14 +272,30 @@ export default async function Home() {
                 <span style={{ color: "var(--primary)" }}>পেশায়</span> পরিণত করুন
               </h1>
 
-              {/* Human-written, detailed professional copy */}
-              <div className="space-y-3 mb-6 sm:mb-8">
-                <p className="text-sm sm:text-base leading-relaxed text-foreground/85 font-medium">
-                  শুধুমাত্র বিচ্ছিন্ন ইউটিউব ভিডিও দেখে প্রফেশনাল মিউজিক প্রোডাকশন আয়ত্ত করা সম্ভব নয়। EvoRise Media-তে আমাদের চিফ মেন্টর <strong>JKH Jesan</strong>-এর বাস্তব কমার্শিয়াল স্টুডিও অভিজ্ঞতার আলোকে শিখুন পূর্ণাঙ্গ অডিও সিগন্যাল চেইন, প্রিসিশন ভোকাল টিউনিং, অ্যানালগ স্যাচুরেশন এবং রেডিও-রেডি মাস্টারিং।
+              {/* Human-written, detailed professional copy (Item 5) */}
+              <div className="space-y-3.5 mb-6 sm:mb-8">
+                <p className="text-sm sm:text-base leading-relaxed text-foreground/90 font-medium">
+                  শুধুমাত্র বিচ্ছিন্ন YouTube ভিডিও দেখে Professional Vocal Processing-এর পূর্ণাঙ্গ Workflow আয়ত্ত করা সম্ভব নয়।
                 </p>
-                <p className="text-xs sm:text-sm leading-relaxed text-foreground/70 font-normal">
-                  বেডরুম থেকে আন্তর্জাতিক ডিজিটাল প্ল্যাটফর্ম—প্রতিটি গানে কীভাবে স্পটিফাই ও অ্যাপল মিউজিকের -14 LUFS ইন্ডাস্ট্রি স্ট্যান্ডার্ড ও ট্রু-পিক হেডরুম বজায় রেখে বাণিজ্যিক লাউডনেস তৈরি করবেন, তা শিখুন সম্পূর্ণ প্র্যাকটিক্যাল বাংলা কারিকুলামে।
+                <p className="text-xs sm:text-sm leading-relaxed text-foreground/80 font-normal">
+                  EvoRise Media-তে আমাদের চিফ মেন্টর <strong>JKH Jesan</strong>-এর বাস্তব স্টুডিও অভিজ্ঞতায় শিখুন Professional Vocal Tuning, Advanced Compression, EQ, Saturation, Creative FX এবং Complete Vocal Processing Chain।
                 </p>
+                <p className="text-xs sm:text-sm leading-relaxed text-foreground/80 font-normal">
+                  বাস্তব গানের Vocal Processing Sessions-এর মাধ্যমে শিখুন প্রি-FX থেকে Final Vocal Mix পর্যন্ত সম্পূর্ণ Commercial Studio Workflow—সহজ বাংলা ভাষায়, হাতে-কলমে প্র্যাকটিক্যাল ক্লাসে।
+                </p>
+
+                {/* Official Credentials Strip */}
+                <div className="flex flex-wrap items-center gap-2 pt-2">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-foreground">
+                    🎙️ Mentor: <strong className="text-primary font-black ml-0.5">JKH Jesan</strong>
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-foreground">
+                    🎧 Online Partner: <strong className="text-foreground font-black ml-0.5">EvoRise Solutions</strong>
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-foreground">
+                    🎓 Presented by: <strong className="text-foreground font-black ml-0.5">EvoRise Media</strong>
+                  </span>
+                </div>
               </div>
 
               {/* CTAs with dedicated 'বিস্তারিত জানুন' button */}

@@ -49,13 +49,13 @@ export default async function AdminUsersPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm text-foreground/80">
-              <thead className="bg-surface border-b border-border">
+              <thead className="bg-[#182010] border-b border-[#2A3319]">
                 <tr>
-                  <th className="px-6 py-4 font-black text-foreground">ইউজার বিবরণ</th>
-                  <th className="px-6 py-4 font-black text-foreground">ভূমিকা</th>
-                  <th className="px-6 py-4 font-black text-foreground">ভর্তিকৃত কোর্সসমূহ</th>
-                  <th className="px-6 py-4 font-black text-foreground">যোগদানের তারিখ</th>
-                  <th className="px-6 py-4 font-black text-foreground text-right">অ্যাকশন</th>
+                  <th className="px-6 py-4 font-black text-white">ইউজার বিবরণ</th>
+                  <th className="px-6 py-4 font-black text-white">ভূমিকা</th>
+                  <th className="px-6 py-4 font-black text-white">ভর্তিকৃত কোর্সসমূহ</th>
+                  <th className="px-6 py-4 font-black text-white">যোগদানের তারিখ</th>
+                  <th className="px-6 py-4 font-black text-white text-right">অ্যাকশন</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/10">
@@ -67,10 +67,10 @@ export default async function AdminUsersPage() {
                           {(user.name || user.email || "U")[0].toUpperCase()}
                         </div>
                         <div>
-                          <div className="font-bold text-foreground">{user.name || "অজানা ইউজার"}</div>
-                          <div className="text-xs text-foreground/60 font-mono">{user.email}</div>
+                          <div className="font-bold text-white text-sm">{user.name || "অজানা ইউজার"}</div>
+                          <div className="text-xs text-[#B8B2A4] font-mono">{user.email}</div>
                           {user.phone && (
-                            <div className="text-[11px] text-foreground/50 font-mono mt-0.5">📞 {user.phone}</div>
+                            <div className="text-[11px] text-[#A8A296] font-mono mt-0.5">📞 {user.phone}</div>
                           )}
                         </div>
                       </div>
@@ -107,7 +107,7 @@ export default async function AdminUsersPage() {
                       )}
                     </td>
 
-                    <td className="px-6 py-4 text-foreground/70 font-medium text-xs">
+                    <td className="px-6 py-4 text-[#D5CEBC] font-medium text-xs">
                       {new Date(user.createdAt).toLocaleDateString('bn-BD', {
                         year: 'numeric',
                         month: 'short',

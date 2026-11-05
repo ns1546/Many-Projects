@@ -1101,3 +1101,74 @@ input::-ms-clear {
     opacity: 1;
   }
 }
+
+/* ════════════════════════════════════════════════════════════
+   DARK MODE & ADMIN PANEL THEME OVERRIDES (Item 2)
+   ════════════════════════════════════════════════════════════ */
+.dark,
+[data-theme="dark"],
+.dark :root {
+  --background:         #0E1208;
+  --surface:            #141A0D;
+  --surface-raised:     #1C2412;
+  --surface-sunken:     #0A0D06;
+  --surface-overlay:    rgba(14, 18, 8, 0.95);
+
+  --foreground:         #F8F4EC;
+  --foreground-muted:   #B8B2A4;
+  --foreground-subtle:  rgba(248, 244, 236, 0.45);
+
+  --primary:            #C8900A;
+  --primary-dark:       #A67408;
+  --primary-deeper:     #7A5605;
+  --primary-light:      #E4A20B;
+  --primary-foreground: #0E1208;
+
+  --accent:             #C8900A;
+  --accent-foreground:  #0E1208;
+
+  --muted:              #1A2210;
+  --muted-foreground:   #A8A296;
+
+  --border:             rgba(248, 244, 236, 0.12);
+  --border-strong:      rgba(248, 244, 236, 0.22);
+  --border-subtle:      rgba(248, 244, 236, 0.06);
+
+  --cream-50:           #0E1208;
+  --cream-100:          #12160A;
+  --cream-200:          #161D0C;
+  --cream-300:          #1C2410;
+  --cream-400:          #253016;
+  --cream-500:          #33401E;
+
+  --ink-900:            #F8F4EC;
+  --ink-800:            #EDE8DE;
+  --ink-700:            #E1DACE;
+  --ink-600:            #D5CEBC;
+  --ink-500:            #A8A296;
+  --ink-400:            #8C8675;
+}
+
+/* Explicit high-contrast table & card rules for Admin in Dark Theme */
+.dark table thead {
+  background-color: #171E0E !important;
+  border-bottom: 1px solid rgba(248, 244, 236, 0.15) !important;
+}
+.dark table thead th {
+  color: #F8F4EC !important;
+  font-weight: 800 !important;
+}
+.dark table tbody tr {
+  border-bottom: 1px solid rgba(248, 244, 236, 0.08) !important;
+}
+.dark table tbody tr:hover {
+  background-color: rgba(248, 244, 236, 0.04) !important;
+}
+.dark table tbody td {
+  color: #F8F4EC !important;
+}
+.dark .card,
+.dark [class*="bg-surface/5"] {
+  background-color: rgba(20, 26, 13, 0.75) !important;
+  border-color: rgba(248, 244, 236, 0.14) !important;
+}

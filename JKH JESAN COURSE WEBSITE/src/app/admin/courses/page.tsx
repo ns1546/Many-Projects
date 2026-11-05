@@ -51,14 +51,14 @@ export default async function AdminCoursesPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm text-foreground/80">
-              <thead className="bg-surface border-b border-border">
+              <thead className="bg-[#182010] border-b border-[#2A3319]">
                 <tr>
-                  <th className="px-6 py-4 font-black text-foreground">কোর্স</th>
-                  <th className="px-6 py-4 font-black text-foreground">মূল্য</th>
-                  <th className="px-6 py-4 font-black text-foreground">এনরোলমেন্ট</th>
-                  <th className="px-6 py-4 font-black text-foreground">কন্টেন্ট</th>
-                  <th className="px-6 py-4 font-black text-foreground">স্ট্যাটাস</th>
-                  <th className="px-6 py-4 font-black text-foreground text-right">অ্যাকশন</th>
+                  <th className="px-6 py-4 font-black text-white">কোর্স</th>
+                  <th className="px-6 py-4 font-black text-white">মূল্য</th>
+                  <th className="px-6 py-4 font-black text-white">এনরোলমেন্ট</th>
+                  <th className="px-6 py-4 font-black text-white">কন্টেন্ট</th>
+                  <th className="px-6 py-4 font-black text-white">স্ট্যাটাস</th>
+                  <th className="px-6 py-4 font-black text-white text-right">অ্যাকশন</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/10">
