@@ -132,6 +132,16 @@
     min-height: unset;
   }
 
+  /* ─── 2-COLUMN COURSE CARDS ON MOBILE ──────────────────── */
+  .course-card-btn,
+  .card .course-card-btn {
+    padding: 0.35rem 0.6rem !important;
+    font-size: 0.6875rem !important;
+    min-height: 28px !important;
+    gap: 0.2rem !important;
+    border-radius: 0.625rem !important;
+  }
+
   /* ─── CARDS ─────────────────────────────────────────────── */
   /*
      globals.css .feature-card = padding: 2rem = 32px

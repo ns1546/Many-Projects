@@ -105,7 +105,7 @@ export default async function Home() {
           </div>
 
           {/* Course cards grid — Pro, compact responsive sizing for all phones & tablets */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-6">
             {courses.length > 0 ? courses.map((course: any) => {
               const totalLessons = course.modules?.reduce((acc: number, m: any) => acc + (m.lessons?.length || 0), 0) || 0;
               const hasDiscount = course.discountPrice && course.discountPrice < course.price;
@@ -141,16 +141,16 @@ export default async function Home() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-20 pointer-events-none" />
 
                     {/* Level badge */}
-                    <div className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 z-30 pointer-events-none">
-                      <span className="badge badge-accent text-[10px] sm:text-xs py-0.5 px-2">
+                    <div className="absolute top-1.5 left-1.5 sm:top-3 sm:left-3 z-30 pointer-events-none">
+                      <span className="badge badge-accent text-[9px] sm:text-xs py-0.5 px-1.5 sm:px-2">
                         {course.level === "BEGINNER" ? "বিগিনার" : course.level === "INTERMEDIATE" ? "মিডিয়াম" : "অ্যাডভান্সড"}
                       </span>
                     </div>
 
                     {/* Discount badge */}
                     {hasDiscount && (
-                      <div className="absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 z-30 pointer-events-none">
-                        <span className="badge bg-red-600 text-white font-bold text-[10px] sm:text-xs py-0.5 px-2 shadow-sm">
+                      <div className="absolute top-1.5 right-1.5 sm:top-3 sm:right-3 z-30 pointer-events-none">
+                        <span className="badge bg-red-600 text-white font-bold text-[9px] sm:text-xs py-0.5 px-1.5 sm:px-2 shadow-xs">
                           {discountPercent}% ছাড়
                         </span>
                       </div>
@@ -158,70 +158,71 @@ export default async function Home() {
                   </Link>
 
                   {/* Body — Tight padding on mobile */}
-                  <div className="p-3.5 sm:p-5 lg:p-6 flex flex-col grow">
+                  <div className="p-2.5 sm:p-5 lg:p-6 flex flex-col grow">
                     {/* Meta strip */}
-                    <div className="flex items-center gap-2 sm:gap-3 text-[11px] sm:text-xs mb-2 sm:mb-2.5" style={{ color: "var(--foreground-muted)" }}>
-                      <span className="flex items-center gap-1">
-                        <IconBook size={12} strokeWidth={2} /> {totalLessons} লেসন
+                    <div className="flex items-center gap-1 sm:gap-3 text-[10px] sm:text-xs mb-1.5 sm:mb-2.5" style={{ color: "var(--foreground-muted)" }}>
+                      <span className="flex items-center gap-0.5 sm:gap-1">
+                        <IconBook size={11} strokeWidth={2} /> {totalLessons} লেসন
                       </span>
                       {course.duration && (
                         <>
-                          <span>•</span>
-                          <span>{course.duration}</span>
+                          <span className="hidden xs:inline">•</span>
+                          <span className="hidden xs:inline">{course.duration}</span>
                         </>
                       )}
-                      <span>•</span>
-                      <span className="flex items-center gap-1 font-semibold text-primary truncate">
+                      <span className="hidden sm:inline">•</span>
+                      <span className="hidden sm:flex items-center gap-1 font-semibold text-primary truncate">
                         <IconHeadphones size={12} strokeWidth={2} /> প্রজেক্ট ফাইলস
                       </span>
                     </div>
 
                     {/* Title */}
-                    <h3 className="font-bold text-sm sm:text-base lg:text-lg mb-1 sm:mb-1.5 group-hover:text-primary transition-colors line-clamp-2"
+                    <h3 className="font-bold text-xs sm:text-base lg:text-lg mb-1 sm:mb-1.5 group-hover:text-primary transition-colors line-clamp-2 leading-snug"
                       style={{ color: "var(--ink-900)" }}>
                       {course.title}
                     </h3>
 
                     {/* Description */}
-                    <p className="text-xs sm:text-sm mb-3 sm:mb-4 grow line-clamp-2" style={{ color: "var(--foreground-muted)" }}>
+                    <p className="hidden sm:block text-xs sm:text-sm mb-3 sm:mb-4 grow line-clamp-2" style={{ color: "var(--foreground-muted)" }}>
                       {course.description}
                     </p>
 
                     {/* Instructor */}
-                    <div className="flex items-center gap-2 pb-2.5 mb-2.5 sm:pb-3.5 sm:mb-3.5 border-b border-border">
-                      <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-primary/20 flex items-center justify-center text-[11px] sm:text-xs font-bold text-primary">
+                    <div className="flex items-center gap-1.5 pb-1.5 mb-1.5 sm:pb-3 sm:mb-3.5 border-b border-border">
+                      <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-primary/20 flex items-center justify-center text-[10px] sm:text-xs font-bold text-primary shrink-0">
                         {(course.instructor?.name || "J")[0]}
                       </div>
-                      <span className="text-xs font-medium" style={{ color: "var(--foreground-muted)" }}>
+                      <span className="text-[10px] sm:text-xs font-medium truncate" style={{ color: "var(--foreground-muted)" }}>
                         {course.instructor?.name || "JKH Jesan"}
                       </span>
                     </div>
 
                     {/* Footer: Price + Button */}
-                    <div className="flex items-center justify-between mt-auto">
+                    <div className="flex items-center justify-between mt-auto pt-1 gap-1">
                       <div>
                         {hasDiscount ? (
-                          <div className="flex items-baseline gap-1.5">
-                            <span className="text-lg sm:text-xl font-black text-primary">
+                          <div className="flex flex-col xs:flex-row xs:items-baseline gap-0.5 xs:gap-1">
+                            <span className="text-xs xs:text-sm sm:text-xl font-black text-primary">
                               ৳{course.discountPrice?.toLocaleString()}
                             </span>
-                            <span className="text-[11px] sm:text-xs line-through" style={{ color: "var(--foreground-muted)" }}>
+                            <span className="text-[9px] sm:text-xs line-through" style={{ color: "var(--foreground-muted)" }}>
                               ৳{course.price?.toLocaleString()}
                             </span>
                           </div>
                         ) : (
-                          <span className="text-lg sm:text-xl font-black text-primary">
+                          <span className="text-xs xs:text-sm sm:text-xl font-black text-primary">
                             ৳{course.price?.toLocaleString()}
                           </span>
                         )}
                       </div>
                       <Link
                         href={`/courses/${course.slug}#purchase`}
-                        className="btn-primary text-xs py-1.5 px-3 sm:py-2 sm:px-3.5 relative z-10"
+                        className="btn-primary course-card-btn text-[10px] sm:text-xs py-1 px-2 sm:py-2 sm:px-3.5 relative z-10 shrink-0 font-bold"
                         title="কোর্স এনরোল ও পেমেন্ট করুন"
                       >
-                        এনরোল করুন
-                        <IconArrowUpRight size={13} strokeWidth={2.5} />
+                        <span className="xs:hidden">এনরোল</span>
+                        <span className="hidden xs:inline">এনরোল করুন</span>
+                        <IconArrowUpRight size={11} strokeWidth={2.5} className="sm:w-3.5 sm:h-3.5" />
                       </Link>
                     </div>
                   </div>

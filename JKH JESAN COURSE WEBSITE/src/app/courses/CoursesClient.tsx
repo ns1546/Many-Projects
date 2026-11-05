@@ -119,7 +119,7 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
 
         {/* Grid */}
         {filteredCourses.length > 0 ? (
-          <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <motion.div layout className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-6">
             <AnimatePresence>
               {filteredCourses.map((course: any) => {
                 const totalLessons = course.modules?.reduce(
@@ -170,31 +170,31 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
                         </div>
 
                         {/* Badges */}
-                        <div className="absolute top-3 left-3">
+                        <div className="absolute top-1.5 left-1.5 sm:top-3 sm:left-3">
                           <span className="bg-surface border border-border text-foreground text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">
                             মিউজিক
                           </span>
                         </div>
-                        <div className="absolute top-3 right-3 flex items-center gap-1 bg-surface/90 backdrop-blur-md border border-border text-foreground text-xs font-bold px-2.5 py-1 rounded-md shadow-sm">
+                        <div className="absolute top-1.5 right-1.5 sm:top-3 sm:right-3 flex items-center gap-1 bg-surface/90 backdrop-blur-md border border-border text-foreground text-[10px] sm:text-xs font-bold px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-md shadow-xs">
                           <Star size={11} fill="#f59e0b" className="text-amber-400" /> {course.rating || "4.9"}
                         </div>
                       </Link>
 
                       {/* Content */}
-                      <div className="p-3.5 sm:p-5 flex flex-col grow">
+                      <div className="p-2.5 sm:p-5 flex flex-col grow">
                         <Link href={`/courses/${course.slug}`}>
-                          <h2 className="font-bold text-foreground text-xs sm:text-base leading-snug mb-1 hover:text-primary transition-colors line-clamp-1 sm:line-clamp-2">
+                          <h2 className="font-bold text-foreground text-xs sm:text-base leading-tight mb-1 hover:text-primary transition-colors line-clamp-2">
                             {course.title}
                           </h2>
                         </Link>
-                        <p className="hidden sm:block text-xs sm:text-sm text-foreground/80 leading-relaxed line-clamp-2 mb-2.5 sm:mb-4 font-medium">
+                        <p className="hidden sm:block text-xs sm:text-sm text-foreground/80 leading-relaxed line-clamp-2 mb-2 sm:mb-4 font-medium">
                           {course.description || "প্রফেশনাল মিউজিক প্রোডাকশনের সম্পূর্ণ গাইড।"}
                         </p>
 
                         <div className="mt-auto">
-                          <div className="flex items-center justify-between text-[11px] sm:text-xs text-foreground/80 font-bold mb-2.5 pb-2.5 sm:mb-4 sm:pb-4 border-b border-border">
+                          <div className="flex items-center justify-between text-[10px] sm:text-xs text-foreground/80 font-bold mb-1.5 pb-1.5 sm:mb-4 sm:pb-4 border-b border-border">
                             <span className="flex items-center gap-1.5">
-                              <Play size={13} className="text-primary" /> {totalLessons} লেসন
+                              <Play size={11} className="text-primary" /> {totalLessons} লেসন
                             </span>
                             <span className="flex items-center gap-1.5">
                               <Clock size={13} className="text-primary" /> লাইফটাইম
@@ -206,24 +206,24 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
                           
                           <div className="flex items-center justify-between gap-2 pt-1">
                             <div>
-                              <span className="block text-[11px] font-bold text-primary">চিফ মেন্টর: JKH Jesan</span>
-                              <span className="text-lg sm:text-xl font-black text-foreground tracking-tight">
+                              <span className="hidden sm:block text-[11px] font-bold text-primary">চিফ মেন্টর: JKH Jesan</span>
+                              <span className="text-xs xs:text-sm sm:text-xl font-black text-foreground tracking-tight">
                                 ৳{course.price}
                               </span>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1 sm:gap-2">
                               <Link
                                 href={`/courses/${course.slug}`}
-                                className="text-[11px] sm:text-xs font-bold text-foreground/80 hover:text-foreground bg-surface/20 hover:bg-surface/40 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl border border-border transition-all"
+                                className="hidden sm:inline-block text-[11px] sm:text-xs font-bold text-foreground/80 hover:text-foreground bg-surface/20 hover:bg-surface/40 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl border border-border transition-all"
                               >
                                 বিস্তারিত
                               </Link>
                               <Link
                                 href={`/checkout/${course.id}`}
-                                className="flex items-center gap-1 text-[11px] sm:text-xs font-black text-black bg-primary hover:brightness-110 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl shadow-md transition-all active:scale-95"
+                                className="course-card-btn flex items-center gap-0.5 text-[10px] sm:text-xs font-black text-black bg-primary hover:brightness-110 px-2 py-1 sm:px-3.5 sm:py-2 rounded-lg sm:rounded-xl shadow-md transition-all active:scale-95 shrink-0"
                               >
-                                <span>এখনই কিনুন</span>
-                                <ChevronRight size={14} />
+                                <span>কিনুন</span>
+                                <ChevronRight size={12} className="sm:w-3.5 sm:h-3.5" />
                               </Link>
                             </div>
                           </div>
