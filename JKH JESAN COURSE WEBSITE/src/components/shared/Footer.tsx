@@ -85,7 +85,7 @@ export function Footer() {
           </div>
 
           {/* 2 & 3. Navigation Links: 2 Columns on Mobile, distinct columns on Desktop */}
-          <div className="col-span-1 md:col-span-2 lg:col-span-4 grid grid-cols-2 gap-6">
+          <div className="col-span-1 md:col-span-2 lg:col-span-4 footer-nav-grid grid grid-cols-2 gap-6">
             
             {/* Platform Links */}
             <div className="space-y-3">
@@ -128,7 +128,7 @@ export function Footer() {
           </div>
 
           {/* 4. Contact Details (Col 10-12 on desktop) */}
-          <div className="lg:col-span-3 space-y-3 p-3 sm:p-0 rounded-xl sm:rounded-none bg-background/60 sm:bg-transparent border border-border/70 sm:border-0">
+          <div className="lg:col-span-3 footer-contact-box space-y-3 p-3 sm:p-0 rounded-xl sm:rounded-none bg-background/60 sm:bg-transparent border border-border/70 sm:border-0">
             <h3 className="text-xs font-bold uppercase tracking-wider text-primary">
               যোগাযোগ ও সহায়তা
             </h3>
@@ -168,7 +168,7 @@ export function Footer() {
 
       {/* ── Bottom Bar: elevated above mobile bottom navigation bar ── */}
       <div className="border-t border-border bg-background/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 pb-28 sm:pb-4 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-center sm:text-left">
+        <div className="footer-bottom-bar max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:pb-4 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-center sm:text-left">
           
           <div className="flex flex-col sm:flex-row items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-medium text-foreground/60">
             <span>© {year} EvoRise Media. All rights reserved.</span>

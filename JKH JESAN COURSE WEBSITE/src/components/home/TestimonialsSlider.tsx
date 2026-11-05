@@ -300,7 +300,7 @@ export default function TestimonialsSlider() {
                     </div>
 
                     {/* Realistic Review Quote */}
-                    <p className="text-xs sm:text-sm leading-relaxed text-foreground/85 font-medium mb-2 sm:mb-4 line-clamp-3 sm:line-clamp-none">
+                    <p className="text-xs sm:text-sm leading-relaxed text-foreground/85 font-medium mb-2 sm:mb-4 line-clamp-4 sm:line-clamp-none testimonial-quote">
                       “{t.text}”
                     </p>
                   </div>

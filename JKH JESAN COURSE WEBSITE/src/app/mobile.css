@@ -1,17 +1,19 @@
 /* ════════════════════════════════════════════════════════════
-   MOBILE.CSS — EVORISE MEDIA
-   Comprehensive responsive mobile engine for touch devices (≤768px)
-   Engineered for pixel-perfect balance across all mobile resolutions
+   MOBILE.CSS — EVORISE MEDIA v3
+   Professional responsive mobile engine for touch devices (≤768px)
+   Engineered for pixel-perfect, pleasant mobile UX across all resolutions.
+   Every section must feel like a digestible card, not a full-page wall.
    ════════════════════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
+
   /* ─── BASE RESET & NO HORIZONTAL OVERFLOW ─────────────── */
   html, body {
     max-width: 100vw;
     overflow-x: hidden;
   }
 
-  /* ─── COMFORTABLE TOUCH TARGETS (NO DISTORTION) ───────── */
+  /* ─── COMFORTABLE TOUCH TARGETS ───────────────────────── */
   button.btn-primary,
   button.btn-outline,
   .btn,
@@ -24,26 +26,25 @@
   select,
   textarea,
   .touch-target {
-    min-height: 40px;
+    min-height: 44px;
   }
 
   /* ─── HARMONIOUS MOBILE TYPOGRAPHY HIERARCHY ─────────── */
-  /* Eliminates bloated, multi-line titles that swamp small screens */
   h1 {
-    font-size: clamp(1.35rem, 5vw, 1.85rem) !important;
-    line-height: 1.22 !important;
+    font-size: clamp(1.4rem, 5.5vw, 1.9rem) !important;
+    line-height: 1.18 !important;
     letter-spacing: -0.025em !important;
     text-wrap: balance;
   }
   h2 {
-    font-size: clamp(1.15rem, 4vw, 1.45rem) !important;
-    line-height: 1.25 !important;
+    font-size: clamp(1.15rem, 4.5vw, 1.5rem) !important;
+    line-height: 1.22 !important;
     letter-spacing: -0.02em !important;
     text-wrap: balance;
   }
   h3 {
-    font-size: clamp(0.95rem, 3.2vw, 1.15rem) !important;
-    line-height: 1.3 !important;
+    font-size: clamp(0.9rem, 3.5vw, 1.1rem) !important;
+    line-height: 1.28 !important;
     text-wrap: balance;
   }
   body, p {
@@ -52,93 +53,162 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* ─── COMPACT, CONTINUOUS SECTION RHYTHM ──────────────── */
-  /* Top section comfortably clears the 56px fixed header */
+  /* ─── SECTION VERTICAL RHYTHM — Compact, Breathable ───── */
+  /*
+     Professional mobile layouts give sections 28–40px vertical
+     breathing room, NOT 56–80px. Each section should feel like
+     a digestible card, not a full-screen wall.
+  */
+  section {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  /* First section clears the fixed 56px mobile header */
   section:first-of-type,
   main > div > section:first-of-type {
-    padding-top: calc(4.25rem + env(safe-area-inset-top, 0px)) !important;
-    padding-bottom: 1.5rem !important;
-  }
-
-  section:not(:first-of-type) {
-    padding-top: 1.5rem !important;
-    padding-bottom: 1.5rem !important;
-  }
-
-  .section-lg, .section-xl {
-    padding-top: 1.75rem !important;
+    padding-top: calc(3.75rem + env(safe-area-inset-top, 0px)) !important;
     padding-bottom: 1.75rem !important;
   }
 
-  /* ─── CONTAINER PADDING FOR CLEAN SCREEN MARGINS ──────── */
+  /* Named size overrides — keep proportional, never blow out */
+  .section-lg {
+    padding-top: 2.25rem !important;
+    padding-bottom: 2.25rem !important;
+  }
+  .section-xl {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+
+  /* ─── CONTAINER HORIZONTAL PADDING ────────────────────── */
+  /* Gives content clean 14px edge breathing room on all phones */
   .container-max {
     padding-left: 0.875rem !important;
     padding-right: 0.875rem !important;
   }
 
-  /* ─── BOTTOM NAV CLEARANCE ────────────────────────────── */
-  /* Both main and footer must safely clear the 64px fixed bottom navigation bar */
+  /* ─── BOTTOM NAV CLEARANCE ─────────────────────────────── */
+  /* main & footer must clear the 64px fixed bottom nav bar */
   main {
-    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px)) !important;
   }
   footer {
-    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px)) !important;
   }
 
-  /* ─── COMPACT MOBILE CARDS & UI SURFACES ──────────────── */
-  /* Zero wrapper padding on course cards so thumbnail sits flush at top */
+  /* ─── CARD SYSTEM — Clean, proportionate mobile surfaces ─ */
   .card {
-    padding: 0 !important;
     border-radius: 0.875rem !important;
     overflow: hidden !important;
+  }
+  /* Course cards: zero wrapper padding so thumbnail is flush top */
+  div.card:not(.feature-card) {
+    padding: 0 !important;
   }
   .feature-card {
     padding: 0.875rem !important;
     border-radius: 0.875rem !important;
   }
 
-  /* ─── COMPACT MOBILE MEDIA & IMAGES ──────────────────── */
-  /* Prevents 500px tall photos from pushing content offscreen */
-  .instructor-image-frame {
+  /* ─── INSTRUCTOR IMAGE — Never full-screen portrait ────── */
+  /* 4:5 portrait at 100vw = taller than the entire phone screen.
+     Cap at a comfortable 220px with landscape crop. */
+  .instructor-image-frame,
+  .instructor-image-frame > img {
     max-height: 220px !important;
-    aspect-ratio: 16 / 9 !important;
+    aspect-ratio: unset !important;
     width: 100% !important;
-    max-width: 320px !important;
+    max-width: 100% !important;
+    object-fit: cover !important;
+    object-position: top center !important;
     margin: 0 auto !important;
+    border-radius: 0.875rem !important;
   }
 
-  /* ─── COMPACT BUTTONS & BADGES ON MOBILE ──────────────── */
+  /* ─── HERO SECTION — Comfortable screen-safe top padding ─ */
+  /* Hero uses inline padding — ensure it clears the header */
+  section.hero-section,
+  section[class*="pt-6"],
+  section[class*="pt-8"] {
+    padding-top: calc(3.75rem + env(safe-area-inset-top, 0px)) !important;
+  }
+
+  /* ─── BUTTONS — Proportionate, Tappable ───────────────── */
   .btn-primary, .btn-outline {
-    padding-top: 0.5rem !important;
-    padding-bottom: 0.5rem !important;
-    padding-left: 0.875rem !important;
-    padding-right: 0.875rem !important;
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
     font-size: 0.8125rem !important;
+    min-height: 44px;
   }
 
-  /* ─── TABLES & HORIZONTAL SCROLL UTILITY ──────────────── */
+  /* ─── GRIDS — Never let 2-column grids crush tiny phones ─ */
+  /* feature-card grids: allow wrapping below 400px */
+  .grid.grid-cols-2 .feature-card {
+    min-width: 0;
+    word-break: break-word;
+  }
+
+  /* ─── TABLES & HORIZONTAL SCROLL ───────────────────────── */
   table {
     display: block;
     width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
-
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
   }
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
 
-  /* ─── HIDE DECORATIVE AMBIENT BLOBS (GPU performance) ── */
+  /* ─── DECORATIVE BLOBS — Hide on mobile (GPU savings) ─── */
   .decorative-blob {
     display: none !important;
   }
 
-  /* ─── DEV OVERLAY BADGE POSITIONING ──────────────────── */
+  /* ─── TESTIMONIAL CARDS — Balanced mobile excerpt ──────── */
+  /* 3 lines was too truncated; 4 lines = much more readable */
+  .testimonial-quote {
+    -webkit-line-clamp: 4 !important;
+    line-clamp: 4 !important;
+  }
+
+  /* ─── FAQ SECTION SPACING — Tight, professional ─────────── */
+  #faq {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  /* ─── STATS STRIP — Compact multi-stat row ─────────────── */
+  /* Stats container: compress vertical rhythm */
+  .stats-strip-inner {
+    padding-top: 1.25rem !important;
+    padding-bottom: 1.25rem !important;
+  }
+
+  /* ─── FOOTER — Professional column stacking ─────────────── */
+  /* Footer nav grid: 2 clean side-by-side columns with more gap */
+  footer .footer-nav-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1.5rem !important;
+  }
+  /* Footer contact box: lighter treatment on mobile */
+  footer .footer-contact-box {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+  /* Footer bottom bar: sensible padding not pb-28 */
+  footer .footer-bottom-bar {
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* ─── NEXT.JS DEV OVERLAY BADGE POSITION ───────────────── */
   nextjs-portal,
   [data-nextjs-dev-tools-button],
   [data-next-badge] {
@@ -146,16 +216,43 @@
   }
 }
 
-/* ─── ULTRA COMPACT RESOLUTIONS (≤ 360px, iPhone SE, Galaxy A) ─── */
-@media (max-width: 360px) {
-  h1 { font-size: 1.25rem !important; }
-  h2 { font-size: 1.05rem !important; }
+/* ─── ULTRA-COMPACT RESOLUTIONS (≤ 390px: iPhone SE, Galaxy A) ─── */
+@media (max-width: 390px) {
+  h1 { font-size: clamp(1.25rem, 6vw, 1.5rem) !important; }
+  h2 { font-size: clamp(1.05rem, 5vw, 1.3rem) !important; }
+  h3 { font-size: clamp(0.875rem, 4vw, 1rem) !important; }
   body, p { font-size: 13px !important; }
+
   .container-max {
-    padding-left: 0.625rem !important;
-    padding-right: 0.625rem !important;
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
   }
-  .card, .feature-card {
-    padding: 0.75rem !important;
+
+  /* Further compress section padding on tiny screens */
+  section {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+  .section-lg, .section-xl {
+    padding-top: 1.75rem !important;
+    padding-bottom: 1.75rem !important;
+  }
+
+  .feature-card { padding: 0.75rem !important; }
+
+  /* On tiny phones, ensure 2-col feature grid is comfortable */
+  .feature-card h3 { font-size: 0.8rem !important; }
+  .feature-card p  { font-size: 0.7rem !important; }
+}
+
+/* ─── TABLET RANGE (769px – 1023px) — Fine-tune in-between ─── */
+@media (min-width: 769px) and (max-width: 1023px) {
+  .section-lg {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+  .container-max {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
   }
 }
