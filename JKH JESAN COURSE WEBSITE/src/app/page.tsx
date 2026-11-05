@@ -247,22 +247,19 @@ export default async function Home() {
       <section className="relative overflow-hidden pt-6 pb-10 sm:pt-10 sm:pb-14 lg:pt-12 lg:pb-16 border-b border-border"
         style={{ background: "var(--cream-100)" }}>
 
-        {/* Warm ambient background */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute right-0 top-0 w-[55%] h-full"
-            style={{ background: "linear-gradient(135deg, var(--cream-300) 0%, var(--cream-200) 100%)" }} />
-          <div className="absolute right-[45%] top-0 bottom-0 w-24"
-            style={{ background: "linear-gradient(90deg, var(--cream-100), transparent)" }} />
-          {/* Warm orb */}
-          <div className="absolute top-1/3 right-1/4 w-80 h-80 rounded-full opacity-40 pointer-events-none"
+        {/* Soft, seamless ambient background — zero vertical seams, borders or split lines */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-1/4 -right-10 w-96 h-96 rounded-full opacity-30"
+            style={{ background: "radial-gradient(circle, rgba(200, 144, 10, 0.20) 0%, transparent 70%)", filter: "blur(70px)" }} />
+          <div className="absolute -bottom-10 left-10 w-72 h-72 rounded-full opacity-20"
             style={{ background: "radial-gradient(circle, rgba(200, 144, 10, 0.15) 0%, transparent 70%)", filter: "blur(60px)" }} />
         </div>
 
         <div className="container-max relative z-10 w-full">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
 
-            {/* Left: Editorial text block (Top-aligned cleanly) */}
-            <div className="flex flex-col justify-start lg:pr-10 pt-1 sm:pt-2">
+            {/* Left: Editorial text block (Top-aligned cleanly with balanced padding) */}
+            <div className="flex flex-col justify-start pr-0 lg:pr-8 pt-1 sm:pt-2 max-w-2xl">
 
               {/* Eyebrow */}
               <div className="eyebrow mb-3 sm:mb-4">Music Production Academy</div>
@@ -275,7 +272,7 @@ export default async function Home() {
               </h1>
 
               {/* Human-written, detailed professional copy */}
-              <div className="space-y-3 mb-6 sm:mb-8 max-w-xl">
+              <div className="space-y-3 mb-6 sm:mb-8">
                 <p className="text-sm sm:text-base leading-relaxed text-foreground/85 font-medium">
                   শুধুমাত্র বিচ্ছিন্ন ইউটিউব ভিডিও দেখে প্রফেশনাল মিউজিক প্রোডাকশন আয়ত্ত করা সম্ভব নয়। EvoRise Media-তে আমাদের চিফ মেন্টর <strong>JKH Jesan</strong>-এর বাস্তব কমার্শিয়াল স্টুডিও অভিজ্ঞতার আলোকে শিখুন পূর্ণাঙ্গ অডিও সিগন্যাল চেইন, প্রিসিশন ভোকাল টিউনিং, অ্যানালগ স্যাচুরেশন এবং রেডিও-রেডি মাস্টারিং।
                 </p>
@@ -302,7 +299,7 @@ export default async function Home() {
                 </Link>
               </div>
 
-              {/* Trust pills — Practical skills, NO certificate */}
+              {/* Trust pills — Pro responsive scaling, perfectly fitted without edge-cut */}
               <div className="flex flex-wrap gap-2 sm:gap-2.5">
                 {[
                   "প্র্যাকটিক্যাল প্রজেক্টস",
@@ -310,9 +307,9 @@ export default async function Home() {
                   "বাংলায় শিখুন",
                 ].map((t) => (
                   <span key={t}
-                    className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold whitespace-nowrap px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full shadow-xs"
+                    className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs md:text-sm font-bold whitespace-nowrap px-3 py-1.5 sm:px-3.5 sm:py-1.5 md:px-4 md:py-2 rounded-full shadow-xs"
                     style={{ background: "var(--cream-300)", border: "1px solid var(--border-strong)", color: "var(--ink-900)" }}>
-                    <IconCircleCheck size={14} strokeWidth={2.5} className="text-primary shrink-0" />
+                    <IconCircleCheck size={13} strokeWidth={2.5} className="text-primary shrink-0" />
                     {t}
                   </span>
                 ))}
