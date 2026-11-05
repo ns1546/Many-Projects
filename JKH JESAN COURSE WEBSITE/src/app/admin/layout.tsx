@@ -64,7 +64,20 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <AdminNav items={navItems} />
 
         {/* Bottom actions */}
-        <div className="p-3 border-t border-[#2A3319] space-y-1">
+        <div className="p-3 border-t border-[#2A3319] space-y-1.5">
+          <a 
+            href="https://analytics.google.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold bg-[#EA4335]/15 border border-[#EA4335]/35 text-[#FFA494] hover:bg-[#EA4335]/25 hover:text-white transition-all duration-200 shadow-xs group"
+            title="গুগল অ্যানালিটিক্স লাইভ ড্যাশবোর্ড ওপেন করুন"
+          >
+            <div className="flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+              <span className="tracking-wide">Google Analytics</span>
+            </div>
+            <ExternalLink size={13} className="text-[#FFA494] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0" />
+          </a>
           <Link 
             href="/"
             className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#F2EDE4]/80 hover:bg-white/10 hover:text-white transition-all duration-150 group"

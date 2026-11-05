@@ -96,10 +96,22 @@ export default async function AdminDashboard() {
           <h1 className="text-2xl font-black text-foreground tracking-tight">ড্যাশবোর্ড</h1>
           <p className="text-foreground/80 text-sm font-medium mt-0.5">আপনার প্ল্যাটফর্মের সার্বিক অবস্থা</p>
         </div>
-        <Link href="/admin/courses/create"
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground text-sm font-bold rounded-lg hover:bg-primary-dark transition-colors shadow-[0_0_15px_rgba(200,144,10,0.35)]">
-          + নতুন কোর্স
-        </Link>
+        <div className="flex items-center gap-2.5">
+          <a
+            href="https://analytics.google.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold bg-[#EA4335]/15 border border-[#EA4335]/35 text-[#FFA494] hover:bg-[#EA4335]/25 hover:text-white transition-all duration-200 shadow-xs group"
+            title="গুগল অ্যানালিটিক্স লাইভ ড্যাশবোর্ড ওপেন করুন"
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+            <span>Google Analytics ↗</span>
+          </a>
+          <Link href="/admin/courses/create"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground text-sm font-bold rounded-lg hover:bg-primary-dark transition-colors shadow-[0_0_15px_rgba(200,144,10,0.35)]">
+            + নতুন কোর্স
+          </Link>
+        </div>
       </div>
 
       {/* Stats */}
