@@ -1,95 +1,94 @@
 /* ════════════════════════════════════════════════════════════
-   MOBILE.CSS — EVORISE MEDIA v3
-   Professional responsive mobile engine for touch devices (≤768px)
-   Engineered for pixel-perfect, pleasant mobile UX across all resolutions.
-   Every section must feel like a digestible card, not a full-page wall.
+   MOBILE.CSS — EVORISE MEDIA v4 — PROFESSIONAL GRADE
+   ════════════════════════════════════════════════════════════
+   
+   DESIGN PHILOSOPHY (what professional sites actually do):
+   ─────────────────────────────────────────────────────────
+   • Apple.com, Coursera, Udemy, Duolingo mobile:
+     - Sections have 32–48px padding max (not 128px)
+     - Text is 14–16px body, 22–28px headings
+     - Images are max 50–60% of viewport height
+     - Cards have 12–16px internal padding
+     - Touch targets are 44px minimum (Apple HIG)
+     - Buttons are full-width on small screens
+     - Single column layouts everywhere under 640px
+     - Feature cards stack vertically in a single column
+     - No decorative horizontal rules between every section
+   
    ════════════════════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════
+   MOBILE: max-width 768px
+   ═══════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
 
-  /* ─── BASE RESET & NO HORIZONTAL OVERFLOW ─────────────── */
+  /* ─── GLOBAL SAFETY ──────────────────────────────────────── */
   html, body {
     max-width: 100vw;
     overflow-x: hidden;
   }
 
-  /* ─── COMFORTABLE TOUCH TARGETS ───────────────────────── */
-  button.btn-primary,
-  button.btn-outline,
-  .btn,
-  .btn-primary,
-  .btn-outline,
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  input[type="tel"],
-  select,
-  textarea,
-  .touch-target {
-    min-height: 44px;
-  }
-
-  /* ─── HARMONIOUS MOBILE TYPOGRAPHY HIERARCHY ─────────── */
+  /* ─── TYPOGRAPHY — Scaled for mobile readability ─────────── */
+  /*
+     globals.css h1 = clamp(2.4rem, 5.5vw, 4rem) → at 390px = 38px WAY too big
+     globals.css h2 = clamp(1.75rem, 3.5vw, 2.75rem) → at 390px = 28px still large
+     globals.css h3 = clamp(1.25rem, 2.2vw, 1.75rem) → at 390px = 20px
+     
+     Professional mobile sites use:
+     h1: 24–28px, h2: 20–22px, h3: 16–18px, body: 14–15px
+  */
   h1 {
-    font-size: clamp(1.4rem, 5.5vw, 1.9rem) !important;
+    font-size: clamp(1.5rem, 6vw, 1.85rem) !important;
     line-height: 1.18 !important;
     letter-spacing: -0.025em !important;
     text-wrap: balance;
   }
   h2 {
-    font-size: clamp(1.15rem, 4.5vw, 1.5rem) !important;
-    line-height: 1.22 !important;
+    font-size: clamp(1.2rem, 5vw, 1.5rem) !important;
+    line-height: 1.2 !important;
     letter-spacing: -0.02em !important;
     text-wrap: balance;
   }
   h3 {
-    font-size: clamp(0.9rem, 3.5vw, 1.1rem) !important;
+    font-size: clamp(0.9rem, 3.8vw, 1.1rem) !important;
     line-height: 1.28 !important;
     text-wrap: balance;
   }
+  h4 {
+    font-size: 0.95rem !important;
+  }
   body, p {
-    font-size: 13.5px;
-    line-height: 1.6;
+    font-size: 14px;
+    line-height: 1.65;
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* ─── SECTION VERTICAL RHYTHM — Compact, Breathable ───── */
+  /* ─── SECTION VERTICAL RHYTHM ────────────────────────────── */
   /*
-     Professional mobile layouts give sections 28–40px vertical
-     breathing room, NOT 56–80px. Each section should feel like
-     a digestible card, not a full-screen wall.
+     globals.css section-lg = 8rem (128px) each side → 256px total whitespace
+     That's 38% of a 667px iPhone screen in PURE PADDING.
+     Professional websites: 32–48px section padding on mobile.
   */
   section {
-    padding-top: 2rem !important;
-    padding-bottom: 2rem !important;
-  }
-
-  /* First section clears the fixed 56px mobile header */
-  section:first-of-type,
-  main > div > section:first-of-type {
-    padding-top: calc(3.75rem + env(safe-area-inset-top, 0px)) !important;
-    padding-bottom: 1.75rem !important;
-  }
-
-  /* Named size overrides — keep proportional, never blow out */
-  .section-lg {
-    padding-top: 2.25rem !important;
-    padding-bottom: 2.25rem !important;
-  }
-  .section-xl {
     padding-top: 2.5rem !important;
     padding-bottom: 2.5rem !important;
   }
-
-  /* ─── CONTAINER HORIZONTAL PADDING ────────────────────── */
-  /* Gives content clean 14px edge breathing room on all phones */
-  .container-max {
-    padding-left: 0.875rem !important;
-    padding-right: 0.875rem !important;
+  .section-lg {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+  .section-xl {
+    padding-top: 2.75rem !important;
+    padding-bottom: 2.75rem !important;
   }
 
-  /* ─── BOTTOM NAV CLEARANCE ─────────────────────────────── */
-  /* main & footer must clear the 64px fixed bottom nav bar */
+  /* ─── CONTAINER HORIZONTAL PADDING ──────────────────────── */
+  .container-max {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* ─── BOTTOM NAV CLEARANCE ───────────────────────────────── */
   main {
     padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px)) !important;
   }
@@ -97,12 +96,48 @@
     padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px)) !important;
   }
 
-  /* ─── CARD SYSTEM — Clean, proportionate mobile surfaces ─ */
+  /* ─── BUTTONS ─────────────────────────────────────────────── */
+  /*
+     globals.css btn-primary = padding: 0.875rem 2rem = 14px 32px
+     On a 390px screen with two side-by-side buttons, 2rem = 32px side padding
+     is way too much. Professional: 10–12px v-pad, 16–20px h-pad.
+     Force full-width on tiny screens, side-by-side on 480px+.
+  */
+  .btn-primary {
+    padding: 0.65rem 1.25rem !important;
+    font-size: 0.8125rem !important;
+    min-height: 44px;
+  }
+  .btn-outline {
+    padding: 0.65rem 1.25rem !important;
+    font-size: 0.8125rem !important;
+    min-height: 44px;
+  }
+  .btn-ghost {
+    padding: 0.65rem 1.25rem !important;
+    font-size: 0.8125rem !important;
+  }
+
+  /* Touch targets: all interactive elements ≥ 44px */
+  button, a, input, select, textarea, .touch-target {
+    min-height: 44px;
+  }
+  /* But don't force 44px on inline text links */
+  nav a, footer a, p a {
+    min-height: unset;
+  }
+
+  /* ─── CARDS ─────────────────────────────────────────────── */
+  /*
+     globals.css .feature-card = padding: 2rem = 32px
+     That's desktop padding. Mobile: 12–14px is professional.
+     globals.css .card has no padding (uses inner div) — keep 0.
+  */
   .card {
     border-radius: 0.875rem !important;
     overflow: hidden !important;
   }
-  /* Course cards: zero wrapper padding so thumbnail is flush top */
+  /* Course cards: zero wrapper padding, thumbnail is flush top */
   div.card:not(.feature-card) {
     padding: 0 !important;
   }
@@ -111,47 +146,104 @@
     border-radius: 0.875rem !important;
   }
 
-  /* ─── INSTRUCTOR IMAGE — Never full-screen portrait ────── */
-  /* 4:5 portrait at 100vw = taller than the entire phone screen.
-     Cap at a comfortable 220px with landscape crop. */
-  .instructor-image-frame,
-  .instructor-image-frame > img {
-    max-height: 220px !important;
+  /* ─── INSTRUCTOR IMAGE — Critical fix ──────────────────────
+     The inline style={{ aspectRatio:"4/5" }} on the outer div
+     means at 100% mobile width: width=390px, height=390×1.25=488px
+     That's 73% of a 667px iPhone screen for ONE image.
+     
+     Solution: Override ALL aspect-ratio and height constraints
+     on this element. The parent div has class="instructor-image-frame"
+     so we need !important on BOTH the wrapper and all its children.
+  */
+  .instructor-image-frame {
     aspect-ratio: unset !important;
+    max-height: 240px !important;
+    height: 240px !important;
     width: 100% !important;
     max-width: 100% !important;
-    object-fit: cover !important;
-    object-position: top center !important;
     margin: 0 auto !important;
     border-radius: 0.875rem !important;
   }
-
-  /* ─── HERO SECTION — Comfortable screen-safe top padding ─ */
-  /* Hero uses inline padding — ensure it clears the header */
-  section.hero-section,
-  section[class*="pt-6"],
-  section[class*="pt-8"] {
-    padding-top: calc(3.75rem + env(safe-area-inset-top, 0px)) !important;
+  .instructor-image-frame img {
+    max-height: 240px !important;
+    height: 240px !important;
+    width: 100% !important;
+    object-fit: cover !important;
+    object-position: top center !important;
   }
 
-  /* ─── BUTTONS — Proportionate, Tappable ───────────────── */
-  .btn-primary, .btn-outline {
-    padding-top: 0.6rem !important;
-    padding-bottom: 0.6rem !important;
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-    font-size: 0.8125rem !important;
-    min-height: 44px;
+  /* ─── WHY CHOOSE US — Feature cards grid ──────────────────
+     On mobile: the dark "header" card + 6 feature cards should
+     NOT all be in 2-column. The header card should span full width,
+     then 2-column feature cards. Currently done in JSX correctly,
+     but feature card text overflows on tiny phones.
+  */
+  .feature-card h3 {
+    font-size: 0.8rem !important;
+    line-height: 1.3 !important;
+  }
+  .feature-card p {
+    font-size: 0.7rem !important;
+    line-height: 1.4 !important;
+  }
+  .feature-card .w-9, .feature-card .w-10 {
+    width: 2rem !important;
+    height: 2rem !important;
   }
 
-  /* ─── GRIDS — Never let 2-column grids crush tiny phones ─ */
-  /* feature-card grids: allow wrapping below 400px */
-  .grid.grid-cols-2 .feature-card {
-    min-width: 0;
-    word-break: break-word;
+  /* ─── HERO SECTION CONTENT ───────────────────────────────── */
+  /* The hero `<h1>` has a hardcoded inline style that bypasses h1 mobile rule.
+     We override it via its containing section. */
+  section h1[style] {
+    font-size: clamp(1.5rem, 6vw, 1.9rem) !important;
+    line-height: 1.18 !important;
   }
 
-  /* ─── TABLES & HORIZONTAL SCROLL ───────────────────────── */
+  /* ─── EYEBROW LABEL — reduce mb on mobile ───────────────── */
+  .eyebrow {
+    margin-bottom: 0.5rem !important;
+    font-size: 0.6875rem !important;
+  }
+
+  /* ─── TESTIMONIALS ───────────────────────────────────────── */
+  .testimonial-quote {
+    -webkit-line-clamp: 4 !important;
+    line-clamp: 4 !important;
+  }
+
+  /* ─── FAQ ────────────────────────────────────────────────── */
+  #faq {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  /* ─── STATS STRIP ────────────────────────────────────────── */
+  .stats-strip-inner {
+    padding-top: 1.25rem !important;
+    padding-bottom: 1.25rem !important;
+  }
+
+  /* ─── FOOTER — Professional column stacking ─────────────── */
+  footer .footer-nav-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1.5rem !important;
+  }
+  footer .footer-contact-box {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+  footer .footer-bottom-bar {
+    padding-bottom: calc(5.75rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* ─── DECORATIVE BLOBS — Hide on mobile ─────────────────── */
+  .decorative-blob {
+    display: none !important;
+  }
+
+  /* ─── TABLES ─────────────────────────────────────────────── */
   table {
     display: block;
     width: 100%;
@@ -165,50 +257,7 @@
   }
   .no-scrollbar::-webkit-scrollbar { display: none; }
 
-  /* ─── DECORATIVE BLOBS — Hide on mobile (GPU savings) ─── */
-  .decorative-blob {
-    display: none !important;
-  }
-
-  /* ─── TESTIMONIAL CARDS — Balanced mobile excerpt ──────── */
-  /* 3 lines was too truncated; 4 lines = much more readable */
-  .testimonial-quote {
-    -webkit-line-clamp: 4 !important;
-    line-clamp: 4 !important;
-  }
-
-  /* ─── FAQ SECTION SPACING — Tight, professional ─────────── */
-  #faq {
-    padding-top: 2rem !important;
-    padding-bottom: 2rem !important;
-  }
-
-  /* ─── STATS STRIP — Compact multi-stat row ─────────────── */
-  /* Stats container: compress vertical rhythm */
-  .stats-strip-inner {
-    padding-top: 1.25rem !important;
-    padding-bottom: 1.25rem !important;
-  }
-
-  /* ─── FOOTER — Professional column stacking ─────────────── */
-  /* Footer nav grid: 2 clean side-by-side columns with more gap */
-  footer .footer-nav-grid {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 1.5rem !important;
-  }
-  /* Footer contact box: lighter treatment on mobile */
-  footer .footer-contact-box {
-    background: transparent !important;
-    border: none !important;
-    padding: 0 !important;
-  }
-  /* Footer bottom bar: sensible padding not pb-28 */
-  footer .footer-bottom-bar {
-    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px)) !important;
-  }
-
-  /* ─── NEXT.JS DEV OVERLAY BADGE POSITION ───────────────── */
+  /* ─── NEXT.JS DEV BADGE ────────────────────────────────── */
   nextjs-portal,
   [data-nextjs-dev-tools-button],
   [data-next-badge] {
@@ -216,11 +265,30 @@
   }
 }
 
-/* ─── ULTRA-COMPACT RESOLUTIONS (≤ 390px: iPhone SE, Galaxy A) ─── */
+/* ════════════════════════════════════════════════════════════
+   TABLET UP (≥ 640px SM): Restore desktop aspect ratio for instructor
+   ════════════════════════════════════════════════════════════ */
+@media (min-width: 640px) {
+  .instructor-image-frame {
+    aspect-ratio: 4/5 !important;
+    height: unset !important;
+    max-height: unset !important;
+  }
+  .instructor-image-frame img {
+    height: 100% !important;
+    max-height: unset !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   ULTRA-COMPACT (≤ 390px: iPhone SE, Galaxy A series, A14, A54)
+   ════════════════════════════════════════════════════════════ */
 @media (max-width: 390px) {
-  h1 { font-size: clamp(1.25rem, 6vw, 1.5rem) !important; }
-  h2 { font-size: clamp(1.05rem, 5vw, 1.3rem) !important; }
-  h3 { font-size: clamp(0.875rem, 4vw, 1rem) !important; }
+  h1 { font-size: clamp(1.3rem, 7vw, 1.5rem) !important; }
+  h2 { font-size: clamp(1.1rem, 6vw, 1.3rem) !important; }
+  h3 { font-size: clamp(0.825rem, 4.5vw, 0.95rem) !important; }
+  section h1[style] { font-size: clamp(1.3rem, 7vw, 1.5rem) !important; }
+  
   body, p { font-size: 13px !important; }
 
   .container-max {
@@ -228,31 +296,46 @@
     padding-right: 0.75rem !important;
   }
 
-  /* Further compress section padding on tiny screens */
   section {
-    padding-top: 1.5rem !important;
-    padding-bottom: 1.5rem !important;
-  }
-  .section-lg, .section-xl {
     padding-top: 1.75rem !important;
     padding-bottom: 1.75rem !important;
   }
+  .section-lg, .section-xl {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
 
-  .feature-card { padding: 0.75rem !important; }
+  .btn-primary, .btn-outline {
+    padding: 0.6rem 1rem !important;
+    font-size: 0.75rem !important;
+  }
 
-  /* On tiny phones, ensure 2-col feature grid is comfortable */
-  .feature-card h3 { font-size: 0.8rem !important; }
-  .feature-card p  { font-size: 0.7rem !important; }
+  .feature-card {
+    padding: 0.75rem !important;
+  }
+  .feature-card h3 { font-size: 0.75rem !important; }
+  .feature-card p  { font-size: 0.675rem !important; }
+
+  .instructor-image-frame {
+    max-height: 200px !important;
+    height: 200px !important;
+  }
+  .instructor-image-frame img {
+    max-height: 200px !important;
+    height: 200px !important;
+  }
 }
 
-/* ─── TABLET RANGE (769px – 1023px) — Fine-tune in-between ─── */
+/* ════════════════════════════════════════════════════════════
+   TABLET (769px – 1023px): Fine-tune mid-range proportions
+   ════════════════════════════════════════════════════════════ */
 @media (min-width: 769px) and (max-width: 1023px) {
   .section-lg {
-    padding-top: 3rem !important;
-    padding-bottom: 3rem !important;
+    padding-top: 3.5rem !important;
+    padding-bottom: 3.5rem !important;
   }
   .container-max {
-    padding-left: 1.25rem !important;
-    padding-right: 1.25rem !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
   }
 }

@@ -84,9 +84,9 @@ export default function AboutPage() {
               <div className="inline-block text-xs font-bold uppercase tracking-wider text-primary">
                 আমাদের উদ্দেশ্য ও দর্শন
               </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-foreground tracking-tight leading-snug">
-                ইউটিউব টিউটোরিয়াল যেখানে শেষ হয়, <br className="hidden sm:inline" />
-                <span className="text-primary">আমাদের একাডেমি সেখান থেকেই শুরু করে</span>
+              <h2 className="text-xl sm:text-3xl lg:text-4xl font-black text-foreground tracking-tight leading-snug [text-wrap:balance]">
+                ইউটিউব টিউটোরিয়াল যেখানে শেষ হয়, <br className="hidden sm:inline" />
+                <span className="text-primary">আমাদের একাডেমি সেখান থেকেই শুরু করে</span>
               </h2>
               <p className="text-sm sm:text-base leading-relaxed text-foreground/80 font-medium">
                 ইন্টারনেটে হাজার হাজার ভিডিও আছে যা আপনাকে প্লাগইনের নব ঘোরানো শেখায়, কিন্তু <strong>“কেন ঘোরাবেন”</strong> এবং <strong>“কানের মাধ্যমে কীভাবে সঠিক ফ্রিকোয়েন্সি অনুভব করবেন”</strong> তা শেখায় না। ফলস্বরূপ বেশিরভাগ নতুন প্রডিউসারের গান ফাঁপা, মাডি (muddy), অথবা অতিরিক্ত তীক্ষ্ণ (harsh) শোনায়।
@@ -144,7 +144,7 @@ export default function AboutPage() {
             
             {/* Left: Mentor Portrait with Glass Card */}
             <div className="lg:col-span-5 relative">
-              <div className="aspect-4/5 rounded-3xl overflow-hidden border border-border shadow-2xl relative bg-zinc-950">
+              <div className="aspect-[4/5] max-h-72 sm:max-h-none rounded-2xl sm:rounded-3xl overflow-hidden border border-border shadow-xl relative bg-zinc-950 max-w-sm mx-auto lg:max-w-none">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src="/images/mentor-jjesan-accordion.jpg" 

@@ -244,7 +244,7 @@ export default async function Home() {
       {/* ════════════════════════════════════════════════════
           HERO — Asymmetric editorial split (Top-aligned, pro layout)
           ════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden pt-20 pb-8 sm:pt-10 sm:pb-14 lg:pt-12 lg:pb-16 border-b border-border"
+      <section className="relative overflow-hidden pt-14 pb-8 sm:pt-10 sm:pb-14 lg:pt-12 lg:pb-16 border-b border-border"
         style={{ background: "var(--cream-100)" }}>
 
         {/* Soft, seamless ambient background — zero vertical seams, borders or split lines */}
@@ -265,8 +265,8 @@ export default async function Home() {
               <div className="eyebrow mb-3 sm:mb-4">Music Production Academy</div>
 
               {/* Main headline */}
-              <h1 className="mb-4 sm:mb-5"
-                style={{ fontSize: "clamp(1.75rem, 4.2vw, 3rem)", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1.15, color: "var(--ink-900)" }}>
+              <h1 className="mb-3 sm:mb-5 text-[1.6rem] sm:text-[2.2rem] lg:text-[3rem] font-black"
+                style={{ letterSpacing: "-0.03em", lineHeight: 1.15, color: "var(--ink-900)" }}>
                 সংগীতকে<br />
                 <span style={{ color: "var(--primary)" }}>পেশায়</span> পরিণত করুন
               </h1>
@@ -382,8 +382,8 @@ export default async function Home() {
               <div className="hidden sm:block absolute -inset-3 rounded-3xl pointer-events-none"
                 style={{ background: "var(--cream-300)", border: "1px solid var(--border)" }} />
 
-              <div className="relative rounded-2xl overflow-hidden instructor-image-frame"
-                style={{ aspectRatio: "4/5", maxWidth: "420px", margin: "0 auto", boxShadow: "var(--shadow-xl)" }}>
+              <div className="relative rounded-2xl overflow-hidden instructor-image-frame sm:instructor-image-desktop"
+                style={{ maxWidth: "420px", margin: "0 auto", boxShadow: "var(--shadow-xl)" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={aboutMentorImage}

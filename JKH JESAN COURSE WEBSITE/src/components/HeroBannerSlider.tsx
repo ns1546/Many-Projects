@@ -113,7 +113,7 @@ export default function HeroBannerSlider({ banners }: HeroBannerSliderProps) {
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          style={{ minHeight: "220px" }}
+          style={{ minHeight: "160px" }}
         >
           {/* Slides Carousel */}
           <div className="relative w-full aspect-[16/10] sm:aspect-2/1 md:aspect-[2.35/1] max-h-130">

@@ -109,8 +109,8 @@ ${formData.message.trim()}
       {/* ── Compact & Responsive Hero ─────────────────────────── */}
       <section className="relative pt-20 sm:pt-28 pb-8 sm:pb-12 bg-background border-b border-border overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-80 h-80 opacity-10 bg-primary blur-3xl rounded-full" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 opacity-5 bg-primary blur-2xl rounded-full" />
+          <div className="absolute top-0 right-0 w-40 h-40 sm:w-80 sm:h-80 opacity-10 bg-primary blur-3xl rounded-full" />
+          <div className="absolute bottom-0 left-0 w-32 h-32 sm:w-64 sm:h-64 opacity-5 bg-primary blur-2xl rounded-full" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
