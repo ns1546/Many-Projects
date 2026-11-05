@@ -165,7 +165,7 @@ model Setting {
   nagadNumber       String?  @default("01700000000")
   rocketNumber      String?
   whatsappNumber    String?  @default("01700000000")
-  supportEmail      String?  @default("support@jkhjesan.com")
+  supportEmail      String?  @default("helloevorisesolutions@gmail.com")
   noticeText        String?
   updatedAt         DateTime @updatedAt
 }

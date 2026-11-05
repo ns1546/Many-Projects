@@ -30,7 +30,7 @@ export default function SettingsForm({ initialSettings }: { initialSettings: Set
     nagadNumber: initialSettings.nagadNumber || "01700000000",
     rocketNumber: initialSettings.rocketNumber || "",
     whatsappNumber: initialSettings.whatsappNumber || "01700000000",
-    supportEmail: initialSettings.supportEmail || "support@evorisemedia.com",
+    supportEmail: initialSettings.supportEmail || "helloevorisesolutions@gmail.com",
     noticeText: initialSettings.noticeText || "",
   });
 

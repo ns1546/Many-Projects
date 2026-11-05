@@ -30,9 +30,9 @@ export function Footer() {
   ];
 
   const socials = [
-    { href: "https://facebook.com/jkhjesan",  label: "Facebook",  Icon: IconBrandFacebook },
-    { href: "https://youtube.com/@jkhjesan",  label: "YouTube",   Icon: IconBrandYoutube },
-    { href: "https://instagram.com/jkhjesan", label: "Instagram", Icon: IconBrandInstagram },
+    { href: "https://www.facebook.com/EvoRiseMedia",  label: "Facebook",  Icon: IconBrandFacebook },
+    { href: "https://youtube.com/@evorisemarketingagency?si=hnaFk7EdXswma_8N",  label: "YouTube",   Icon: IconBrandYoutube },
+    { href: "https://www.instagram.com/evorise.solutions?mdxt=MTEya2I0b2l3cHM=", label: "Instagram", Icon: IconBrandInstagram },
   ];
 
   return (
