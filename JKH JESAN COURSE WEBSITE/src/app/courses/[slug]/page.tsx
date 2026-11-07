@@ -418,23 +418,26 @@ export default async function CourseDetails({ params }: { params: Promise<{ slug
                 <div className="border border-border bg-surface rounded-2xl overflow-hidden shadow-sm">
                   {course.modules.map((module: any, i: number) => (
                     <details key={module.id} className="group border-b border-border last:border-0" open={i === 0}>
-                      <summary className="font-bold cursor-pointer list-none hover:bg-muted px-6 py-5 flex justify-between items-center transition-colors">
-                        <div className="flex items-center gap-3">
-                          <span className="text-primary text-sm bg-primary/10 px-2 py-1 rounded-md">মডিউল {i + 1}</span>
-                          <span className="text-lg text-foreground">{module.title}</span>
+                      <summary className="font-bold cursor-pointer list-none hover:bg-muted/60 px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center transition-colors gap-3">
+                        <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-primary/15 text-primary border border-primary/30 shrink-0 whitespace-nowrap shadow-xs">
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                            মডিউল {i + 1}
+                          </span>
+                          <span className="text-sm sm:text-base font-bold text-foreground line-clamp-1">{module.title}</span>
                         </div>
-                        <div className="flex items-center gap-4">
-                          <span className="text-xs font-bold bg-muted text-foreground/60 px-2 py-1 rounded hidden sm:block">
+                        <div className="flex items-center gap-2.5 sm:gap-4 shrink-0">
+                          <span className="text-[11px] sm:text-xs font-bold bg-muted text-foreground/70 px-2.5 py-1 rounded-full border border-border/60">
                             {module.lessons.length} ক্লাস
                           </span>
-                          <ChevronRight size={18} className="text-foreground/40 group-open:rotate-90 transition-transform" />
+                          <ChevronRight size={16} className="text-foreground/40 group-open:rotate-90 transition-transform shrink-0" />
                         </div>
                       </summary>
                       <div className="bg-surface flex flex-col border-t border-border">
                         {module.lessons.map((lesson: any, j: number) => (
-                          <div key={lesson.id} className="flex items-center gap-4 px-8 py-4 hover:bg-muted transition-colors border-b border-border last:border-0">
-                            <PlayCircle size={18} className="text-primary/70 shrink-0" />
-                            <span className="text-sm font-bold text-foreground/80">{lesson.title}</span>
+                          <div key={lesson.id} className="flex items-center gap-3 sm:gap-4 px-4 sm:px-8 py-3 sm:py-4 hover:bg-muted transition-colors border-b border-border last:border-0">
+                            <PlayCircle size={16} className="text-primary/70 shrink-0" />
+                            <span className="text-xs sm:text-sm font-bold text-foreground/80 line-clamp-1">{lesson.title}</span>
                           </div>
                         ))}
                       </div>

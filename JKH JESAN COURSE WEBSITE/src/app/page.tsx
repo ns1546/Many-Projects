@@ -11,6 +11,7 @@ import HeroBannerSlider from "@/components/HeroBannerSlider";
 import AnimatedStatsCounter from "@/components/home/AnimatedStatsCounter";
 import TestimonialsSlider from "@/components/home/TestimonialsSlider";
 import HomeFAQ from "@/components/home/HomeFAQ";
+import InstructorFeaturesMobile from "@/components/home/InstructorFeaturesMobile";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -284,8 +285,8 @@ export default async function Home() {
                   বাস্তব গানের Vocal Processing Sessions-এর মাধ্যমে শিখুন প্রি-FX থেকে Final Vocal Mix পর্যন্ত সম্পূর্ণ Commercial Studio Workflow—সহজ বাংলা ভাষায়, হাতে-কলমে প্র্যাকটিক্যাল ক্লাসে।
                 </p>
 
-                {/* Official Credentials Strip */}
-                <div className="flex flex-wrap items-center gap-2 pt-2">
+                {/* Official Credentials Strip - Hidden on mobile per user instruction */}
+                <div className="hidden sm:flex flex-wrap items-center gap-2 pt-2">
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-foreground">
                     🎙️ Mentor: <strong className="text-primary font-black ml-0.5">JKH Jesan</strong>
                   </span>
@@ -316,15 +317,15 @@ export default async function Home() {
                 </Link>
               </div>
 
-              {/* Trust pills — Pro responsive scaling, perfectly fitted without edge-cut */}
-              <div className="flex flex-wrap gap-2 sm:gap-2.5">
+              {/* Trust pills — Guaranteed Single Row on mobile per user instruction */}
+              <div className="flex items-center flex-nowrap overflow-x-auto scrollbar-none gap-2 sm:gap-2.5 py-1 -mx-0.5 px-0.5">
                 {[
                   "প্র্যাকটিক্যাল প্রজেক্টস",
                   "লাইফটাইম অ্যাক্সেস",
                   "বাংলায় শিখুন",
                 ].map((t) => (
                   <span key={t}
-                    className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs md:text-sm font-bold whitespace-nowrap px-3 py-1.5 sm:px-3.5 sm:py-1.5 md:px-4 md:py-2 rounded-full shadow-xs"
+                    className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs md:text-sm font-bold whitespace-nowrap px-2.5 py-1.5 sm:px-3.5 sm:py-1.5 md:px-4 md:py-2 rounded-full shadow-xs shrink-0"
                     style={{ background: "var(--cream-300)", border: "1px solid var(--border-strong)", color: "var(--ink-900)" }}>
                     <IconCircleCheck size={13} strokeWidth={2.5} className="text-primary shrink-0" />
                     {t}
@@ -438,7 +439,11 @@ export default async function Home() {
                 </p>
               </div>
 
-              <div className="space-y-2.5 sm:space-y-3">
+              {/* Mobile: 1 Row with Interactive Click Trigger to See Details (per user instruction) */}
+              <InstructorFeaturesMobile />
+
+              {/* Desktop & Tablet: Clean 3-Card Vertical Stack */}
+              <div className="hidden md:block space-y-2.5 sm:space-y-3">
                 {instructorFeatures.map((f, i) => (
                   <div key={i}
                     className="flex items-start gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 cursor-default group hover:border-[rgba(200,144,10,0.30)] hover:shadow-sm"
