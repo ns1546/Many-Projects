@@ -50,7 +50,7 @@ const FAQS_LIST: FAQItem[] = [
 ];
 
 export default function HomeFAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0); // First item open by default
+  const [openIndex, setOpenIndex] = useState<number | null>(null); // Closed by default for clean 2-in-a-row mobile grid
 
   const toggle = (idx: number) => {
     setOpenIndex((prev) => (prev === idx ? null : idx));
@@ -74,59 +74,75 @@ export default function HomeFAQ() {
           </p>
         </div>
 
-        {/* Accordion Container */}
-        <div className="space-y-3 sm:space-y-4">
+        {/* 2-In-A-Row Responsive FAQ Grid Container (per user instruction) */}
+        <div className="grid grid-cols-2 gap-2 sm:gap-4 items-start">
           {FAQS_LIST.map((faq, index) => {
             const isOpen = openIndex === index;
             return (
               <div
                 key={faq.id}
-                className={`border rounded-2xl overflow-hidden transition-all duration-300 ${
+                className={`border rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300 ${
                   isOpen
-                    ? "border-primary/50 bg-surface shadow-md"
-                    : "border-border bg-surface/70 hover:border-primary/30 hover:bg-surface"
+                    ? "col-span-2 border-primary/50 bg-surface shadow-md ring-1 ring-primary/25"
+                    : "col-span-1 border-border bg-surface/80 hover:border-primary/40 hover:bg-surface cursor-pointer shadow-xs"
                 }`}
               >
                 <button
                   type="button"
                   onClick={() => toggle(index)}
-                  className="w-full flex items-center justify-between gap-4 px-4 sm:px-6 py-4 sm:py-5 text-left cursor-pointer transition-colors"
+                  className={`w-full flex items-start justify-between text-left cursor-pointer transition-colors ${
+                    isOpen ? "p-3.5 sm:p-5 pb-2" : "p-3 sm:p-4"
+                  }`}
                   aria-expanded={isOpen}
                 >
-                  <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
+                  <div className="flex items-start gap-2 sm:gap-3.5 min-w-0 pr-1">
                     <span
-                      className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black shrink-0 transition-colors ${
+                      className={`w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl flex items-center justify-center text-[10px] sm:text-xs font-black shrink-0 transition-colors mt-0.5 ${
                         isOpen
-                          ? "bg-primary text-black shadow-xs font-black"
-                          : "bg-surface border border-border text-foreground/70"
+                          ? "bg-primary text-black shadow-xs"
+                          : "bg-surface-raised border border-border text-foreground/70"
                       }`}
                     >
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <span className="font-bold text-sm sm:text-base text-foreground leading-snug">
-                      {faq.question}
-                    </span>
+                    <div className="min-w-0">
+                      <span className="inline-block text-[9px] sm:text-[10px] font-bold px-1.5 py-0.2 rounded bg-primary/10 text-primary border border-primary/20 mb-1">
+                        {faq.tag}
+                      </span>
+                      <p className={`font-bold text-xs sm:text-base text-foreground leading-snug ${
+                        isOpen ? "" : "line-clamp-2"
+                      }`}>
+                        {faq.question}
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span className="hidden sm:inline-block text-[10px] font-bold px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20">
-                      {faq.tag}
-                    </span>
-                    <div
-                      className={`w-7 h-7 rounded-lg flex items-center justify-center transition-transform duration-300 ${
-                        isOpen ? "rotate-180 text-primary bg-primary/10" : "text-foreground/50"
-                      }`}
-                    >
-                      <ChevronDown size={18} />
-                    </div>
+                  <div
+                    className={`w-6 h-6 sm:w-7 sm:h-7 rounded-lg flex items-center justify-center shrink-0 transition-transform duration-300 ${
+                      isOpen ? "rotate-180 text-primary bg-primary/10" : "text-foreground/50"
+                    }`}
+                  >
+                    <ChevronDown size={15} />
                   </div>
                 </button>
 
                 {isOpen && (
-                  <div className="px-4 sm:px-6 pb-5 pt-1 sm:pl-16 sm:pr-8 border-t border-border/40 animate-in fade-in slide-in-from-top-1 duration-200">
-                    <p className="text-xs sm:text-sm font-medium leading-relaxed text-foreground/80">
+                  <div className="px-3.5 sm:px-6 pb-4 pt-2 border-t border-border/40 animate-in fade-in slide-in-from-top-1 duration-200">
+                    <p className="text-xs sm:text-sm font-medium leading-relaxed text-foreground/85">
                       {faq.answer}
                     </p>
+                    <div className="mt-2.5 flex justify-end">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggle(index);
+                        }}
+                        className="text-[11px] font-bold text-primary hover:underline cursor-pointer"
+                      >
+                        বন্ধ করুন ▴
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>

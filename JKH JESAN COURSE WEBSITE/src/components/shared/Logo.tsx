@@ -15,7 +15,7 @@ export function Logo({
 }: LogoProps) {
   // Dimensions calibrated to preserve perfect 832x609 aspect ratio of the original logo
   const dimensions = {
-    sm: { width: 44, height: 32, mark: 28 },
+    sm: { width: 38, height: 26, mark: 24 },
     md: { width: 55, height: 40, mark: 34 },
     lg: { width: 78, height: 56, mark: 48 },
   };

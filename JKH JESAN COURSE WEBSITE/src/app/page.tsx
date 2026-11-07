@@ -12,6 +12,8 @@ import AnimatedStatsCounter from "@/components/home/AnimatedStatsCounter";
 import TestimonialsSlider from "@/components/home/TestimonialsSlider";
 import HomeFAQ from "@/components/home/HomeFAQ";
 import InstructorFeaturesMobile from "@/components/home/InstructorFeaturesMobile";
+import HeroCredentialsMobile from "@/components/home/HeroCredentialsMobile";
+import { getSafeMediaUrl } from "@/lib/mediaUtils";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -129,13 +131,13 @@ export default async function Home() {
                     <div
                       className="absolute inset-0 bg-cover bg-center blur-md opacity-40 scale-110"
                       style={{
-                        backgroundImage: `url(${course.thumbnail || "/images/vocal-processing-course.jpg"})`
+                        backgroundImage: `url(${getSafeMediaUrl(course.thumbnail)})`
                       }}
                     />
 
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={course.thumbnail || "/images/vocal-processing-course.jpg"}
+                      src={getSafeMediaUrl(course.thumbnail)}
                       alt={course.title}
                       className="w-full h-full object-contain relative z-10 transition-transform duration-500 group-hover:scale-105"
                     />
@@ -285,7 +287,8 @@ export default async function Home() {
                   বাস্তব গানের Vocal Processing Sessions-এর মাধ্যমে শিখুন প্রি-FX থেকে Final Vocal Mix পর্যন্ত সম্পূর্ণ Commercial Studio Workflow—সহজ বাংলা ভাষায়, হাতে-কলমে প্র্যাকটিক্যাল ক্লাসে।
                 </p>
 
-                {/* Official Credentials Strip - Hidden on mobile per user instruction */}
+                {/* Official Credentials Strip - 1-Row Interactive Accordion on mobile, horizontal strip on desktop */}
+                <HeroCredentialsMobile />
                 <div className="hidden sm:flex flex-wrap items-center gap-2 pt-2">
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-foreground">
                     🎙️ Mentor: <strong className="text-primary font-black ml-0.5">JKH Jesan</strong>

@@ -69,9 +69,14 @@
      That's 38% of a 667px iPhone screen in PURE PADDING.
      Professional websites: 32–48px section padding on mobile.
   */
-  section {
+  section:not(.hero-banner-section) {
     padding-top: 2.5rem !important;
     padding-bottom: 2.5rem !important;
+  }
+  section.hero-banner-section,
+  .hero-banner-section {
+    padding-top: calc(4.75rem + env(safe-area-inset-top, 0px)) !important;
+    padding-bottom: 1.25rem !important;
   }
   .section-lg {
     padding-top: 2.5rem !important;
@@ -238,11 +243,11 @@
     padding-bottom: 1.25rem !important;
   }
 
-  /* ─── FOOTER — Professional column stacking ─────────────── */
+  /* ─── FOOTER — 3 Sections in Exactly 1 Line on mobile (per user instruction) ─── */
   footer .footer-nav-grid {
     display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 1.5rem !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.625rem !important;
   }
   footer .footer-contact-box {
     background: transparent !important;

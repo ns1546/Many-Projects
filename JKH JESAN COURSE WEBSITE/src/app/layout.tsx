@@ -26,6 +26,7 @@ const notoSansBengali = Noto_Sans_Bengali({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXTAUTH_URL || "https://media.evorise.agency"),
   title: {
     default: "EvoRise Media | ক্রিয়েটিভ মিডিয়া ও মিউজিক একাডেমি",
     template: "%s | EvoRise Media",

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, ArrowUpRight, Sparkles } from "lucide-react";
+import { getSafeMediaUrl } from "@/lib/mediaUtils";
 
 export interface Banner {
   id: string;
@@ -101,9 +102,9 @@ export default function HeroBannerSlider({ banners }: HeroBannerSliderProps) {
 
   return (
     <section
-      className="relative w-full pb-4 sm:pb-8 overflow-hidden bg-background"
+      className="hero-banner-section relative w-full pb-4 sm:pb-8 overflow-hidden bg-background"
       style={{
-        paddingTop: "calc(4.25rem + env(safe-area-inset-top, 0px))",
+        paddingTop: "calc(4.5rem + env(safe-area-inset-top, 0px))",
       }}
     >
       {/* Ambient background glow */}
@@ -129,12 +130,15 @@ export default function HeroBannerSlider({ banners }: HeroBannerSliderProps) {
                   {/* Banner Image */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={banner.imageUrl}
+                    src={getSafeMediaUrl(banner.imageUrl, "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=2000&auto=format&fit=crop")}
                     alt={banner.title || `ব্যানার ${index + 1}`}
                     className={`w-full h-full object-cover transition-transform duration-1000 ease-out ${
                       banner.targetUrl ? "group-hover:scale-[1.02]" : ""
                     }`}
                     loading={index === 0 ? "eager" : "lazy"}
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=2000&auto=format&fit=crop";
+                    }}
                   />
 
                   {/* Gradient overlay for legibility */}

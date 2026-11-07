@@ -11,6 +11,7 @@ import { db } from "@/lib/prisma";
 import { getCachedCourseBySlug } from "@/lib/cache";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { getSafeMediaUrl } from "@/lib/mediaUtils";
 import type { Metadata } from "next";
 
 export const revalidate = 60;
@@ -200,11 +201,7 @@ export default async function CourseDetails({ params }: { params: Promise<{ slug
                     className="aspect-video relative bg-muted border-b border-border flex items-center justify-center group cursor-pointer block"
                     title={!isEnrolled ? "ক্লিক করে এখনই কোর্সটি কিনুন" : "কোর্স কন্টিনিউ করুন"}
                   >
-                    {course.thumbnail ? (
-                      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${course.thumbnail})` }}></div>
-                    ) : (
-                      <div className="absolute inset-0 bg-[url('/images/vocal-processing-course.jpg')] bg-cover bg-center opacity-80 group-hover:opacity-100 transition-opacity"></div>
-                    )}
+                    <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${getSafeMediaUrl(course.thumbnail)})` }}></div>
                     <div className="absolute inset-0 bg-background/25 group-hover:bg-background/10 transition-colors"></div>
                     <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center z-10 group-hover:scale-110 transition-transform shadow-lg shadow-primary/30">
                       <Play size={24} className="text-primary-foreground ml-1" fill="currentColor" />
@@ -303,11 +300,7 @@ export default async function CourseDetails({ params }: { params: Promise<{ slug
                   className="aspect-video relative bg-muted border-b border-border flex items-center justify-center group cursor-pointer block"
                   title={!isEnrolled ? "ক্লিক করে এখনই কোর্সটি কিনুন" : "কোর্স কন্টিনিউ করুন"}
                 >
-                  {course.thumbnail ? (
-                      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${course.thumbnail})`}}></div>
-                  ) : (
-                      <div className="absolute inset-0 bg-[url('/images/vocal-processing-course.jpg')] bg-cover bg-center opacity-80 group-hover:opacity-100 transition-opacity"></div>
-                  )}
+                  <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${getSafeMediaUrl(course.thumbnail)})`}}></div>
                   <div className="absolute inset-0 bg-background/20 group-hover:bg-background/10 transition-colors"></div>
                   <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center z-10 group-hover:scale-110 transition-transform shadow-lg shadow-primary/30">
                     <Play size={24} className="text-primary-foreground ml-1" fill="currentColor" />

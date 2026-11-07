@@ -96,35 +96,37 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="lg:col-span-6 grid sm:grid-cols-2 gap-4">
+            <div className="lg:col-span-6 grid grid-cols-2 gap-2.5 sm:gap-4">
               {[
                 {
                   icon: Layers,
                   title: "01. অডিও সিগন্যাল চেইন সায়েন্স",
-                  desc: "Clip Gain, Pre-FX Automation, EQ, Compression, Saturation ও Limiting-এর সঠিক ব্যবহার এবং একটি কার্যকর Vocal Processing Chain তৈরি করার কৌশল।"
+                  desc: "Clip Gain, Pre-FX Automation, EQ, Compression, Saturation ও Limiting-এর সঠিক ব্যবহার।"
                 },
                 {
                   icon: Mic2,
                   title: "02. প্রিসিশন ভোকাল টিউনিং",
-                  desc: "Pitch Correction, Vocal Tuning ও Automation ব্যবহার করে Natural Vocal Character বজায় রেখে Clean ও Balanced Vocal তৈরি করার পদ্ধতি।"
+                  desc: "Pitch Correction, Vocal Tuning ও Automation ব্যবহার করে Natural Vocal Character তৈরি করা।"
                 },
                 {
                   icon: Volume2,
                   title: "03. প্রফেশনাল ভোকাল FX",
-                  desc: "Reverb, Delay, Long Reverb, Multiband Processing ও Sidechain ব্যবহার করে Vocal-এর Depth, Space, Presence ও Creative Sound তৈরি করা।"
+                  desc: "Reverb, Delay, Multiband Processing ও Sidechain ব্যবহার করে Vocal-এর Depth ও Creative Sound।"
                 },
                 {
                   icon: Radio,
                   title: "04. রিয়েল-ওয়ার্ল্ড ভোকাল প্রসেসিং",
-                  desc: "Abanti Sithi, Mahtim Shakib, Masha ও Porshi-এর Vocal নিয়ে সম্পূর্ণ Practical Processing Session এবং Professional Workflow শেখা।"
+                  desc: "Abanti Sithi, Mahtim Shakib, Masha ও Porshi-এর Vocal নিয়ে Complete Practical Session।"
                 }
               ].map((card, i) => (
-                <div key={i} className="p-5 rounded-2xl bg-surface border border-border hover:border-primary/40 transition-all shadow-xs">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-3 text-primary">
-                    <card.icon size={20} />
+                <div key={i} className="p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-surface border border-border hover:border-primary/40 transition-all shadow-xs flex flex-col justify-between">
+                  <div>
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-2.5 text-primary">
+                      <card.icon size={16} className="sm:w-5 sm:h-5" />
+                    </div>
+                    <h3 className="font-extrabold text-xs sm:text-sm text-foreground mb-1 line-clamp-1">{card.title}</h3>
                   </div>
-                  <h3 className="font-extrabold text-sm text-foreground mb-1.5">{card.title}</h3>
-                  <p className="text-xs text-foreground/70 leading-relaxed font-medium">{card.desc}</p>
+                  <p className="text-[11px] sm:text-xs text-foreground/70 leading-relaxed font-medium line-clamp-3 sm:line-clamp-none">{card.desc}</p>
                 </div>
               ))}
             </div>
@@ -182,18 +184,18 @@ export default function AboutPage() {
                 ১০০+ গুরুত্বপূর্ণ প্রজেক্ট এবং ২০+ মিলিয়ন স্ট্রিমের অভিজ্ঞতায় তাঁর কাজ পৌঁছেছে শ্রোতাদের কাছে বিভিন্ন ডিজিটাল প্ল্যাটফর্মে।
               </p>
 
-              <div className="grid sm:grid-cols-3 gap-3 pt-3">
-                <div className="p-3.5 rounded-xl bg-background border border-border">
-                  <p className="text-lg font-black text-primary">১৩+ বছর</p>
-                  <p className="text-[11px] font-semibold text-foreground/70">ইন্ডাস্ট্রি অভিজ্ঞতা</p>
+              <div className="grid grid-cols-3 gap-2 sm:gap-3 pt-3">
+                <div className="p-2.5 sm:p-3.5 rounded-xl bg-background border border-border text-center sm:text-left">
+                  <p className="text-sm sm:text-lg font-black text-primary">১৩+ বছর</p>
+                  <p className="text-[10px] sm:text-[11px] font-semibold text-foreground/70 truncate">ইন্ডাস্ট্রি অভিজ্ঞতা</p>
                 </div>
-                <div className="p-3.5 rounded-xl bg-background border border-border">
-                  <p className="text-lg font-black text-primary">৫০০+ শিক্ষার্থী</p>
-                  <p className="text-[11px] font-semibold text-foreground/70">সরাসরি প্রশিক্ষিত</p>
+                <div className="p-2.5 sm:p-3.5 rounded-xl bg-background border border-border text-center sm:text-left">
+                  <p className="text-sm sm:text-lg font-black text-primary">৫০০+ শিক্ষার্থী</p>
+                  <p className="text-[10px] sm:text-[11px] font-semibold text-foreground/70 truncate">সরাসরি প্রশিক্ষিত</p>
                 </div>
-                <div className="p-3.5 rounded-xl bg-background border border-border">
-                  <p className="text-lg font-black text-primary">১০০% লাইফটাইম</p>
-                  <p className="text-[11px] font-semibold text-foreground/70">কমিউনিটি সাপোর্ট</p>
+                <div className="p-2.5 sm:p-3.5 rounded-xl bg-background border border-border text-center sm:text-left">
+                  <p className="text-sm sm:text-lg font-black text-primary">১০০% লাইফটাইম</p>
+                  <p className="text-[10px] sm:text-[11px] font-semibold text-foreground/70 truncate">কমিউনিটি সাপোর্ট</p>
                 </div>
               </div>
 
@@ -266,15 +268,15 @@ export default function AboutPage() {
             ].map((p, i) => (
               <div 
                 key={i} 
-                className="p-6 sm:p-8 rounded-2xl bg-surface border border-border hover:border-primary/50 transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xs"
+                className="p-3.5 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl bg-surface border border-border hover:border-primary/50 transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-3 sm:gap-6 shadow-xs"
               >
-                <div className="flex items-start gap-5">
-                  <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 text-primary font-black text-xl flex items-center justify-center shrink-0">
+                <div className="flex items-start gap-3 sm:gap-5">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-primary/10 border border-primary/20 text-primary font-black text-base sm:text-xl flex items-center justify-center shrink-0">
                     {p.step}
                   </div>
                   <div>
                     <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <h3 className="text-base sm:text-lg font-black text-foreground">{p.title}</h3>
+                      <h3 className="text-sm sm:text-lg font-black text-foreground">{p.title}</h3>
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-primary/15 text-primary">
                         {p.tools}
                       </span>
@@ -286,7 +288,7 @@ export default function AboutPage() {
                 </div>
                 <Link 
                   href="/courses" 
-                  className="shrink-0 px-4 py-2 rounded-xl bg-background border border-border text-xs font-bold text-foreground hover:bg-primary hover:text-black hover:border-primary transition-all self-end md:self-auto"
+                  className="w-full sm:w-auto text-center shrink-0 px-4 py-2 rounded-xl bg-background border border-border text-xs font-bold text-foreground hover:bg-primary hover:text-black hover:border-primary transition-all self-stretch sm:self-end md:self-auto"
                 >
                   কোর্স মডিউল দেখুন
                 </Link>

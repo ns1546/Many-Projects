@@ -65,18 +65,19 @@ export function Header() {
       <header
         className="md:hidden fixed top-0 inset-x-0 z-50 bg-background/95 backdrop-blur-md border-b border-border shadow-xs"
         style={{
-          paddingTop: "env(safe-area-inset-top, 0px)",
+          paddingTop: "max(0.375rem, env(safe-area-inset-top, 0px))",
+          paddingBottom: "0.25rem",
         }}
       >
-        <div className="h-14 w-full flex items-center justify-between px-3 sm:px-4">
-          <Link href="/" aria-label="EvoRise Media home" className="shrink-0 flex items-center py-1">
+        <div className="h-12 w-full flex items-center justify-between px-3 sm:px-4">
+          <Link href="/" aria-label="EvoRise Media home" className="shrink-0 flex items-center py-0.5">
             <Logo size="sm" />
           </Link>
           <div className="flex items-center gap-1.5 sm:gap-2">
             {session ? (
               <Link
                 href="/dashboard"
-                className="w-[34px] h-[34px] rounded-full bg-primary text-primary-foreground font-black text-xs flex items-center justify-center shadow-xs shrink-0"
+                className="w-[32px] h-[32px] rounded-full bg-primary text-primary-foreground font-black text-xs flex items-center justify-center shadow-xs shrink-0"
                 aria-label="Dashboard"
               >
                 {initials(session.user?.name)}
@@ -85,20 +86,20 @@ export function Header() {
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <Link
                   href="/login"
-                  className="h-[34px] px-3 sm:px-3.5 rounded-full text-xs font-bold text-foreground/80 hover:text-foreground hover:bg-surface border border-border/80 flex items-center justify-center transition-all shrink-0"
+                  className="h-[32px] px-3 sm:px-3.5 rounded-full text-xs font-bold text-foreground bg-surface/80 hover:bg-surface border border-border/80 flex items-center justify-center transition-all shrink-0"
                 >
                   লগইন
                 </Link>
                 <Link
                   href="/register"
-                  className="h-[34px] px-3.5 sm:px-4 rounded-full text-xs font-bold bg-primary hover:bg-primary-dark text-black shadow-xs flex items-center justify-center gap-1 transition-all active:scale-95 shrink-0"
+                  className="h-[32px] px-3.5 sm:px-4 rounded-full text-xs font-bold bg-primary hover:bg-primary-dark text-black shadow-xs flex items-center justify-center gap-1 transition-all active:scale-95 shrink-0"
                 >
                   <span>রেজিস্ট্রেশন</span>
                 </Link>
               </div>
             )}
             <button
-              className="w-[34px] h-[34px] rounded-full flex items-center justify-center text-foreground hover:bg-surface border border-border/70 transition-colors shrink-0"
+              className="w-[32px] h-[32px] rounded-full flex items-center justify-center text-foreground hover:bg-surface border border-border/70 transition-colors shrink-0"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle menu"
             >
