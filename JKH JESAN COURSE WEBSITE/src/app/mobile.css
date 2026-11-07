@@ -128,7 +128,7 @@
     min-height: 44px;
   }
   /* But don't force 44px on inline text links and compact header action buttons */
-  nav a, footer a, p a, header a, header button {
+  nav a, footer a, p a, header a, header button, .breadcrumb a, [aria-label="Breadcrumb"] a {
     min-height: unset;
   }
 

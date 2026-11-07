@@ -62,52 +62,59 @@ export function Header() {
     <>
       {/* ── Desktop Header ────────────────────────────────────── */}
       {/* ── Dedicated Mobile Header (Solid/frosted edge-to-edge app bar) ── */}
-      <header className="md:hidden fixed top-0 inset-x-0 h-14 z-50 bg-background/95 backdrop-blur-md border-b border-border flex items-center justify-between px-4 shadow-xs">
-        <Link href="/" aria-label="EvoRise Media home" className="shrink-0">
-          <Logo size="sm" />
-        </Link>
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          {session ? (
-            <Link
-              href="/dashboard"
-              className="w-8 h-8 rounded-full bg-primary text-primary-foreground font-black text-xs flex items-center justify-center shadow-xs"
-              aria-label="Dashboard"
+      <header
+        className="md:hidden fixed top-0 inset-x-0 z-50 bg-background/95 backdrop-blur-md border-b border-border shadow-xs"
+        style={{
+          paddingTop: "env(safe-area-inset-top, 0px)",
+        }}
+      >
+        <div className="h-14 w-full flex items-center justify-between px-3 sm:px-4">
+          <Link href="/" aria-label="EvoRise Media home" className="shrink-0 flex items-center py-1">
+            <Logo size="sm" />
+          </Link>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {session ? (
+              <Link
+                href="/dashboard"
+                className="w-[34px] h-[34px] rounded-full bg-primary text-primary-foreground font-black text-xs flex items-center justify-center shadow-xs shrink-0"
+                aria-label="Dashboard"
+              >
+                {initials(session.user?.name)}
+              </Link>
+            ) : (
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <Link
+                  href="/login"
+                  className="h-[34px] px-3 sm:px-3.5 rounded-full text-xs font-bold text-foreground/80 hover:text-foreground hover:bg-surface border border-border/80 flex items-center justify-center transition-all shrink-0"
+                >
+                  লগইন
+                </Link>
+                <Link
+                  href="/register"
+                  className="h-[34px] px-3.5 sm:px-4 rounded-full text-xs font-bold bg-primary hover:bg-primary-dark text-black shadow-xs flex items-center justify-center gap-1 transition-all active:scale-95 shrink-0"
+                >
+                  <span>রেজিস্ট্রেশন</span>
+                </Link>
+              </div>
+            )}
+            <button
+              className="w-[34px] h-[34px] rounded-full flex items-center justify-center text-foreground hover:bg-surface border border-border/70 transition-colors shrink-0"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Toggle menu"
             >
-              {initials(session.user?.name)}
-            </Link>
-          ) : (
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <Link
-                href="/login"
-                className="h-8 px-2.5 sm:px-3 rounded-full text-xs font-bold text-foreground/80 hover:text-foreground hover:bg-foreground/6 border border-border flex items-center justify-center transition-colors shrink-0"
-              >
-                লগইন
-              </Link>
-              <Link
-                href="/register"
-                className="h-8 px-3 sm:px-3.5 rounded-full text-xs font-bold bg-primary hover:bg-primary-dark text-black shadow-xs flex items-center justify-center gap-1 transition-all active:scale-95 shrink-0"
-              >
-                <span>রেজিস্ট্রেশন</span>
-              </Link>
-            </div>
-          )}
-          <button
-            className="w-8 h-8 rounded-full flex items-center justify-center text-foreground hover:bg-foreground/8 transition-colors shrink-0"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
-          >
-            <AnimatePresence mode="wait">
-              {mobileOpen ? (
-                <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.18 }}>
-                  <IconX size={20} strokeWidth={2} />
-                </motion.div>
-              ) : (
-                <motion.div key="open" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.18 }}>
-                  <IconMenu2 size={20} strokeWidth={2} />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </button>
+              <AnimatePresence mode="wait">
+                {mobileOpen ? (
+                  <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.18 }}>
+                    <IconX size={18} strokeWidth={2} />
+                  </motion.div>
+                ) : (
+                  <motion.div key="open" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.18 }}>
+                    <IconMenu2 size={18} strokeWidth={2} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -277,7 +284,13 @@ export function Header() {
               className="fixed top-0 right-0 h-full w-80 max-w-[88vw] z-50 md:hidden flex flex-col"
               style={{ background: "var(--surface-raised)", borderLeft: "1px solid var(--border)", boxShadow: "var(--shadow-xl)" }}
             >
-              <div className="flex items-center justify-between px-5 h-16 border-b border-border">
+              <div
+                className="flex items-center justify-between px-5 border-b border-border"
+                style={{
+                  paddingTop: "env(safe-area-inset-top, 0px)",
+                  minHeight: "calc(3.75rem + env(safe-area-inset-top, 0px))",
+                }}
+              >
                 <Logo size="sm" />
                 <button onClick={() => setMobileOpen(false)}
                   className="p-2 rounded-xl text-foreground/70 hover:text-foreground hover:bg-foreground/8 transition-colors">

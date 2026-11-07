@@ -100,7 +100,12 @@ export default function HeroBannerSlider({ banners }: HeroBannerSliderProps) {
   const currentSlide = slides[currentIndex] || slides[0];
 
   return (
-    <section className="relative w-full pt-16 sm:pt-20 md:pt-24 pb-4 sm:pb-8 overflow-hidden bg-background">
+    <section
+      className="relative w-full pb-4 sm:pb-8 overflow-hidden bg-background"
+      style={{
+        paddingTop: "calc(4.25rem + env(safe-area-inset-top, 0px))",
+      }}
+    >
       {/* Ambient background glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-5xl h-80 bg-primary/10 blur-[130px] rounded-full pointer-events-none" />
 

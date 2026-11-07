@@ -127,7 +127,12 @@ export default async function CourseDetails({ params }: { params: Promise<{ slug
     <div className="flex flex-col min-h-screen bg-background relative pb-40 md:pb-0">
 
       {/* Course Header/Hero — Dark Studio Style */}
-      <section className="relative bg-background text-foreground pt-24 pb-20 md:pb-44">
+      <section
+        className="relative bg-background text-foreground pb-20 md:pb-44"
+        style={{
+          paddingTop: "calc(5.25rem + env(safe-area-inset-top, 0px))",
+        }}
+      >
         {/* BG glows */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute top-0 right-0 w-125 h-125 opacity-10 bg-primary blur-3xl rounded-full" />
@@ -137,13 +142,17 @@ export default async function CourseDetails({ params }: { params: Promise<{ slug
         <div className="relative z-10 container mx-auto px-4 max-w-6xl">
 
           {/* Breadcrumbs */}
-          <div className="flex items-center text-xs font-bold tracking-widest uppercase text-foreground/80 mb-8">
-            <Link href="/" className="hover:text-foreground/80 transition-colors">হোম</Link>
-            <ChevronRight size={14} className="mx-2" />
-            <Link href="/courses" className="hover:text-foreground/80 transition-colors">সব কোর্স</Link>
-            <ChevronRight size={14} className="mx-2" />
-            <span className="text-foreground/80">কোর্স বিস্তারিত</span>
-          </div>
+          <nav aria-label="Breadcrumb" className="flex items-center flex-wrap gap-1.5 text-xs font-bold text-foreground/70 mb-6">
+            <Link href="/" className="text-foreground/70 hover:text-foreground transition-colors py-1">
+              হোম
+            </Link>
+            <ChevronRight size={13} className="text-foreground/40 shrink-0" />
+            <Link href="/courses" className="text-foreground/70 hover:text-foreground transition-colors py-1">
+              সব কোর্স
+            </Link>
+            <ChevronRight size={13} className="text-foreground/40 shrink-0" />
+            <span className="text-foreground font-extrabold">{course.title || "কোর্স বিস্তারিত"}</span>
+          </nav>
 
           <div className="grid lg:grid-cols-[2fr_1fr] gap-12 lg:gap-20">
             <div className="space-y-6">
