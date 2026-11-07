@@ -76,23 +76,23 @@ export function Header() {
               {initials(session.user?.name)}
             </Link>
           ) : (
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <Link
                 href="/login"
-                className="text-xs font-bold text-foreground/80 hover:text-foreground px-2 py-1.5 rounded-lg border border-border"
+                className="h-8 px-2.5 sm:px-3 rounded-full text-xs font-bold text-foreground/80 hover:text-foreground hover:bg-foreground/6 border border-border flex items-center justify-center transition-colors shrink-0"
               >
                 লগইন
               </Link>
               <Link
                 href="/register"
-                className="btn-primary text-[11px] sm:text-xs py-1.5 px-2.5 rounded-lg font-bold shadow-xs flex items-center gap-1"
+                className="h-8 px-3 sm:px-3.5 rounded-full text-xs font-bold bg-primary hover:bg-primary-dark text-black shadow-xs flex items-center justify-center gap-1 transition-all active:scale-95 shrink-0"
               >
                 <span>রেজিস্ট্রেশন</span>
               </Link>
             </div>
           )}
           <button
-            className="p-1.5 rounded-xl text-foreground hover:bg-foreground/8 transition-colors"
+            className="w-8 h-8 rounded-full flex items-center justify-center text-foreground hover:bg-foreground/8 transition-colors shrink-0"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >
@@ -348,7 +348,7 @@ export function Header() {
                         লগইন করুন
                       </Link>
                       <Link href="/register"
-                        className="block text-center w-full px-4 py-3.5 rounded-xl font-bold text-sm btn-primary">
+                        className="block text-center w-full px-4 py-3.5 rounded-xl font-bold text-sm bg-primary hover:bg-primary-dark text-black transition-colors shadow-sm">
                         রেজিস্ট্রেশন করুন →
                       </Link>
                     </>
