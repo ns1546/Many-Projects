@@ -240,7 +240,7 @@ export default function LearnClient({
             </div>
 
             {/* Video Player Box */}
-            <div className="w-full aspect-video bg-black rounded-2xl overflow-hidden border border-border shadow-xl relative select-none">
+            <div className="learn-video-container w-full aspect-video bg-black rounded-2xl overflow-hidden border border-border shadow-xl relative select-none">
               {/* Switching Video Loading Animation */}
               {isSwitchingVideo && (
                 <div className="absolute inset-0 bg-black/85 backdrop-blur-xs flex flex-col items-center justify-center z-30 select-none animate-fadeIn">
@@ -272,7 +272,9 @@ export default function LearnClient({
                       className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary hover:brightness-110 text-black font-black text-sm shadow-lg shadow-primary/30 active:scale-95 transition-all"
                     >
                       <ShoppingBag size={16} className="stroke-[2.5]" />
-                      <span>কোর্স কিনুন (৳{course.price})</span>
+                      <span>
+                        কোর্স কিনুন (৳{course.discountPrice && course.discountPrice < course.price ? course.discountPrice : course.price})
+                      </span>
                     </Link>
                     {currentPrevLesson && (
                       <button

@@ -177,9 +177,7 @@ export default function SecureVideoPlayer({
     "hd1080", "hd720", "large", "medium", "auto"
   ]);
   const [showQualityMenu, setShowQualityMenu] = useState(false);
-  const [showBottomQualityMenu, setShowBottomQualityMenu] = useState(false);
   const qualityMenuRef = useRef<HTMLDivElement>(null);
-  const bottomQualityMenuRef = useRef<HTMLDivElement>(null);
   const [hudToast, setHudToast] = useState<string | null>(null);
   const hudTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -194,39 +192,40 @@ export default function SecureVideoPlayer({
     } catch (_) {}
   }, []);
 
-  // Top Privacy Bar Auto-Hide State (hides after 3s while playing, reveals on activity)
+  // Top Privacy Bar Auto-Hide Controller (hides after 3s while playing, reveals on activity)
   const [showTopBar, setShowTopBar] = useState(true);
   const topBarTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleMouseMoveOrHover = useCallback(() => {
+  const handleUserInteraction = useCallback(() => {
     setShowTopBar(true);
     if (topBarTimerRef.current) clearTimeout(topBarTimerRef.current);
-    if (isPlaying && !showQualityMenu && !showBottomQualityMenu) {
+    if (isPlaying && !showQualityMenu) {
       topBarTimerRef.current = setTimeout(() => {
         setShowTopBar(false);
-      }, 3500);
+      }, 3000);
     }
-  }, [isPlaying, showQualityMenu, showBottomQualityMenu]);
+  }, [isPlaying, showQualityMenu]);
 
   useEffect(() => {
-    handleMouseMoveOrHover();
-  }, [isPlaying, showQualityMenu, showBottomQualityMenu, handleMouseMoveOrHover]);
+    handleUserInteraction();
+  }, [isPlaying, showQualityMenu, handleUserInteraction]);
 
-  // Click outside to close quality menus
+  // Click / touch outside to close quality menu
   useEffect(() => {
-    if (!showQualityMenu && !showBottomQualityMenu) return;
-    const handleClickOutside = (e: MouseEvent) => {
+    if (!showQualityMenu) return;
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
       const target = e.target as Node;
       if (qualityMenuRef.current && !qualityMenuRef.current.contains(target)) {
         setShowQualityMenu(false);
       }
-      if (bottomQualityMenuRef.current && !bottomQualityMenuRef.current.contains(target)) {
-        setShowBottomQualityMenu(false);
-      }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [showQualityMenu, showBottomQualityMenu]);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [showQualityMenu]);
 
   const showHud = useCallback((msg: string) => {
     setHudToast(msg);
@@ -238,7 +237,6 @@ export default function SecureVideoPlayer({
     setSelectedQuality(quality);
     setActualQuality(quality);
     setShowQualityMenu(false);
-    setShowBottomQualityMenu(false);
 
     try {
       localStorage.setItem("evorise_preferred_quality", quality);
@@ -286,7 +284,7 @@ export default function SecureVideoPlayer({
     }
   }, [youtubeId, showHud]);
 
-  const toggleFullscreen = useCallback(() => {
+  const toggleFullscreen = useCallback(async () => {
     const container = containerRef.current;
     if (!container) return;
     try {
@@ -299,7 +297,7 @@ export default function SecureVideoPlayer({
 
       if (!isCurrentlyFs) {
         if (container.requestFullscreen) {
-          container.requestFullscreen().catch(() => {});
+          await container.requestFullscreen().catch(() => {});
         } else if ((container as any).webkitRequestFullscreen) {
           (container as any).webkitRequestFullscreen();
         } else if ((container as any).mozRequestFullScreen) {
@@ -307,10 +305,17 @@ export default function SecureVideoPlayer({
         } else if ((container as any).msRequestFullscreen) {
           (container as any).msRequestFullscreen();
         }
+
+        try {
+          if (typeof screen !== "undefined" && (screen.orientation as any)?.lock) {
+            await (screen.orientation as any).lock("landscape").catch(() => {});
+          }
+        } catch (_) {}
+
         setIsFullscreen(true);
       } else {
         if (document.exitFullscreen) {
-          document.exitFullscreen().catch(() => {});
+          await document.exitFullscreen().catch(() => {});
         } else if ((document as any).webkitExitFullscreen) {
           (document as any).webkitExitFullscreen();
         } else if ((document as any).mozCancelFullScreen) {
@@ -318,6 +323,13 @@ export default function SecureVideoPlayer({
         } else if ((document as any).msExitFullscreen) {
           (document as any).msExitFullscreen();
         }
+
+        try {
+          if (typeof screen !== "undefined" && (screen.orientation as any)?.unlock) {
+            (screen.orientation as any).unlock();
+          }
+        } catch (_) {}
+
         setIsFullscreen(false);
       }
     } catch (err) {
@@ -417,9 +429,18 @@ export default function SecureVideoPlayer({
         return Promise.resolve();
       };
 
-      player.on("play", () => {
+      const markPlaying = () => {
         setIsPlaying(true);
         setHasStarted(true);
+      };
+
+      player.on("play", markPlaying);
+      player.on("playing", markPlaying);
+      player.on("timeupdate", () => {
+        if (!player.paused()) {
+          setIsPlaying(prev => (prev ? prev : true));
+          setHasStarted(true);
+        }
       });
 
       player.on("playbackqualitychange", (e: any) => {
@@ -440,6 +461,18 @@ export default function SecureVideoPlayer({
       player.on("fullscreenchange", () => {
         setIsFullscreen(!!player.isFullscreen());
       });
+
+      const handleOrientationOrResize = () => {
+        setTimeout(() => {
+          if (playerRef.current && !playerRef.current.isDisposed()) {
+            try {
+              playerRef.current.trigger("resize");
+            } catch (_) {}
+          }
+        }, 150);
+      };
+      window.addEventListener("resize", handleOrientationOrResize);
+      window.addEventListener("orientationchange", handleOrientationOrResize);
     } catch (err) {
       console.warn("Video.js initialization notice:", err);
     }
@@ -649,17 +682,26 @@ export default function SecureVideoPlayer({
   }, [isMounted]);
 
   const handlePlayerAreaClick = useCallback(() => {
+    handleUserInteraction();
+
     const player = playerRef.current;
     if (player && !player.isDisposed()) {
       try {
         if (player.paused()) {
           player.play();
         } else {
-          player.pause();
+          const isTouchDevice = typeof window !== "undefined" && (
+            "ontouchstart" in window || navigator.maxTouchPoints > 0
+          );
+          if (isTouchDevice && !showTopBar) {
+            setShowTopBar(true);
+          } else {
+            player.pause();
+          }
         }
       } catch (_) {}
     }
-  }, []);
+  }, [handleUserInteraction, showTopBar]);
 
   // Keyboard navigation shortcuts
   useEffect(() => {
@@ -742,8 +784,11 @@ export default function SecureVideoPlayer({
       onCopy={e => { e.preventDefault(); e.stopPropagation(); return false; }}
       onCut={e => { e.preventDefault(); e.stopPropagation(); return false; }}
       onDragStart={e => { e.preventDefault(); e.stopPropagation(); return false; }}
-      onMouseMove={handleMouseMoveOrHover}
-      onMouseEnter={handleMouseMoveOrHover}
+      onMouseMove={handleUserInteraction}
+      onMouseEnter={handleUserInteraction}
+      onTouchStart={handleUserInteraction}
+      onTouchMove={handleUserInteraction}
+      onClick={handleUserInteraction}
       className="w-full h-full relative aspect-video bg-black overflow-hidden select-none rounded-xl md:rounded-2xl border border-[#2A3319] shadow-2xl"
       style={{ WebkitTouchCallout: "none", WebkitUserSelect: "none", userSelect: "none", touchAction: "manipulation" }}
     >
@@ -793,13 +838,7 @@ export default function SecureVideoPlayer({
         </div>
       )}
 
-      {/* ── PERMANENT TOP MASK (PREVENTS YOUTUBE HEADER & CHANNEL INFO FROM FLASHING) ──── */}
-      {isYouTube && (
-        <div
-          className="absolute top-0 left-0 right-0 h-14 bg-[#0A0D06] pointer-events-none z-22 select-none"
-          aria-hidden="true"
-        />
-      )}
+
 
       {/* ── PERMANENT BOTTOM-RIGHT WATERMARK SHIELD (TOTALLY CONCEALS "WATCH ON YOUTUBE" / LOGO) ──── */}
       {isYouTube && (
@@ -931,56 +970,7 @@ export default function SecureVideoPlayer({
         </div>
       )}
 
-      {/* ── BOTTOM CONTROL BAR INTERACTIVE RESOLUTION SELECTOR ────────── */}
-      <div className="absolute bottom-2 right-14 z-36 flex items-center" ref={bottomQualityMenuRef}>
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            setShowBottomQualityMenu(prev => !prev);
-          }}
-          className="flex items-center gap-1 px-2 py-1 rounded-md bg-[#12160A]/95 hover:bg-[#1E2412] active:scale-95 border border-[#C8900A]/60 text-[#C8900A] text-[10px] sm:text-[11px] font-bold font-mono shadow-md transition-all cursor-pointer"
-          title="ভিডিও রেজোলিউশন (কোয়ালিটি) পরিবর্তন করুন"
-        >
-          <Sparkles size={11} className="text-[#C8900A] shrink-0 animate-pulse" />
-          <span>{getQualityLabel(selectedQuality, true)}</span>
-          <ChevronDown size={11} className={`transition-transform duration-200 ${showBottomQualityMenu ? "rotate-180" : ""}`} />
-        </button>
 
-        {/* Upward-opening Quality Dropdown Menu */}
-        {showBottomQualityMenu && (
-          <div
-            className="absolute bottom-full right-0 mb-2 bg-[#0D1007]/98 backdrop-blur-xl border border-[#2A3319] rounded-xl p-1.5 shadow-2xl flex flex-col gap-0.5 min-w-[190px] z-50 animate-in fade-in zoom-in-95"
-            onClick={e => e.stopPropagation()}
-          >
-            <div className="px-2.5 py-1 text-[9px] font-mono text-white/40 uppercase tracking-widest border-b border-[#2A3319]/60 mb-1 flex items-center justify-between">
-              <span>রেজোলিউশন নির্বাচন</span>
-              <Sliders size={10} className="text-[#C8900A]" />
-            </div>
-
-            {availableQualities.map((q) => {
-              const isSelected = selectedQuality === q;
-              return (
-                <button
-                  key={q}
-                  type="button"
-                  onClick={() => handleQualitySelect(q)}
-                  className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[11px] font-mono transition-all text-left cursor-pointer ${
-                    isSelected
-                      ? "bg-[#C8900A] text-black font-extrabold shadow-sm"
-                      : "text-white/80 hover:bg-[#1E2412] hover:text-[#C8900A]"
-                  }`}
-                >
-                  <span className="flex items-center gap-1.5">
-                    {getQualityLabel(q, false)}
-                  </span>
-                  {isSelected && <Check size={12} className="stroke-[3]" />}
-                </button>
-              );
-            })}
-          </div>
-        )}
-      </div>
 
       {/* ── SCREENSHOT LOCKOUT ────────────────────────────────────────── */}
       {isScreenshotAttempt && (

@@ -1172,3 +1172,14 @@ input::-ms-clear {
   background-color: rgba(20, 26, 13, 0.75) !important;
   border-color: rgba(248, 244, 236, 0.14) !important;
 }
+
+/* Mobile Landscape Optimization: ensure video player fits entirely in screen height */
+@media screen and (orientation: landscape) and (max-height: 550px) {
+  .learn-video-container {
+    max-height: calc(100vh - 1rem) !important;
+    max-width: calc((100vh - 1rem) * 16 / 9) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    aspect-ratio: 16 / 9 !important;
+  }
+}
