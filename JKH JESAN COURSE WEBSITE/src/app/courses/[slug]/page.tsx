@@ -223,24 +223,24 @@ export default async function CourseDetails({ params }: { params: Promise<{ slug
                       </>
                     ) : !isEnrolled ? (
                       <>
-                        <div className="flex items-baseline justify-between mb-5">
-                          <div>
-                            <span className="text-xs text-foreground/60 block font-bold mb-1">কোর্স ফি</span>
-                            {hasDiscount ? (
-                              <div className="flex items-baseline gap-2">
-                                <span className="text-3xl font-black tracking-tight text-primary">৳{course.discountPrice}</span>
-                                <span className="text-base text-foreground/50 line-through font-bold">৳{course.price}</span>
-                                <span className="bg-red-600/10 text-red-600 text-xs font-black px-2 py-0.5 rounded-md border border-red-600/20">
-                                  {discountPercent}% ছাড়
-                                </span>
-                              </div>
-                            ) : (
-                              <span className="text-3xl font-black tracking-tight text-accent">৳{course.price}</span>
-                            )}
+                        <div className="mb-5">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-xs text-foreground/60 font-bold">কোর্স ফি</span>
+                            <span className="text-[11px] font-bold text-primary bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20 whitespace-nowrap">
+                              লাইফটাইম অ্যাক্সেস
+                            </span>
                           </div>
-                          <span className="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
-                            লাইফটাইম অ্যাক্সেস
-                          </span>
+                          {hasDiscount ? (
+                            <div className="flex items-baseline gap-2.5">
+                              <span className="text-3xl font-black tracking-tight text-primary">৳{course.discountPrice}</span>
+                              <span className="text-base text-foreground/50 line-through font-bold">৳{course.price}</span>
+                              <span className="bg-red-600 text-white text-xs font-black px-2.5 py-0.5 rounded-full shadow-xs whitespace-nowrap">
+                                {discountPercent}% ছাড়
+                              </span>
+                            </div>
+                          ) : (
+                            <span className="text-3xl font-black tracking-tight text-accent">৳{course.price}</span>
+                          )}
                         </div>
                         <div className="space-y-2 mb-3">
                           <Link href={`/checkout/${course.id}`} className="block">
@@ -327,12 +327,17 @@ export default async function CourseDetails({ params }: { params: Promise<{ slug
                   ) : !isEnrolled ? (
                     <>
                       <div className="mb-6">
-                        <span className="text-xs text-foreground/60 block font-bold mb-1">কোর্স ফি</span>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs text-foreground/60 font-bold">কোর্স ফি</span>
+                          <span className="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20 whitespace-nowrap">
+                            লাইফটাইম অ্যাক্সেস
+                          </span>
+                        </div>
                         {hasDiscount ? (
                           <div className="flex items-baseline gap-3">
                             <span className="text-4xl font-extrabold tracking-tight text-primary">৳{course.discountPrice}</span>
                             <span className="text-xl text-foreground/50 line-through font-bold">৳{course.price}</span>
-                            <span className="bg-red-600 text-white text-xs font-black px-2.5 py-1 rounded-full shadow-sm ml-auto">
+                            <span className="bg-red-600 text-white text-xs font-black px-2.5 py-1 rounded-full shadow-sm ml-auto whitespace-nowrap">
                               {discountPercent}% ছাড়
                             </span>
                           </div>
@@ -556,7 +561,7 @@ export default async function CourseDetails({ params }: { params: Promise<{ slug
               <div className="flex items-baseline gap-2">
                 <span className="text-xl font-black text-primary">৳{course.discountPrice}</span>
                 <span className="text-xs text-foreground/50 line-through">৳{course.price}</span>
-                <span className="bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded shadow-xs">
+                <span className="bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full shadow-xs whitespace-nowrap">
                   {discountPercent}% ছাড়
                 </span>
               </div>
