@@ -139,13 +139,13 @@ export default async function Home() {
                     <img
                       src={getSafeMediaUrl(course.thumbnail)}
                       alt={course.title}
-                      className="w-full h-full object-contain relative z-10 transition-transform duration-500 group-hover:scale-105"
+                      className="w-full h-full object-cover relative z-10 transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-20 pointer-events-none" />
 
                     {/* Level badge */}
                     <div className="absolute top-1.5 left-1.5 sm:top-3 sm:left-3 z-30 pointer-events-none">
-                      <span className="badge badge-accent text-[9px] sm:text-xs py-0.5 px-1.5 sm:px-2">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] sm:text-xs font-black bg-black/75 backdrop-blur-md text-amber-300 border border-amber-400/40 shadow-xs">
                         {course.level === "BEGINNER" ? "বিগিনার" : course.level === "INTERMEDIATE" ? "মিডিয়াম" : "অ্যাডভান্সড"}
                       </span>
                     </div>
@@ -153,7 +153,7 @@ export default async function Home() {
                     {/* Discount badge */}
                     {hasDiscount && (
                       <div className="absolute top-1.5 right-1.5 sm:top-3 sm:right-3 z-30 pointer-events-none">
-                        <span className="badge bg-red-600 text-white font-bold text-[9px] sm:text-xs py-0.5 px-1.5 sm:px-2 shadow-xs">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] sm:text-xs font-black bg-red-600 text-white shadow-xs">
                           {discountPercent}% ছাড়
                         </span>
                       </div>
@@ -320,18 +320,18 @@ export default async function Home() {
                 </Link>
               </div>
 
-              {/* Trust pills — Guaranteed Single Row on mobile per user instruction */}
-              <div className="flex items-center flex-nowrap overflow-x-auto scrollbar-none gap-2 sm:gap-2.5 py-1 -mx-0.5 px-0.5">
+              {/* Trust badges — Perfectly responsive 3-column grid on mobile, zero overflow */}
+              <div className="grid grid-cols-3 gap-1.5 sm:flex sm:flex-wrap sm:gap-2.5 py-1 w-full">
                 {[
-                  "প্র্যাকটিক্যাল প্রজেক্টস",
-                  "লাইফটাইম অ্যাক্সেস",
-                  "বাংলায় শিখুন",
-                ].map((t) => (
-                  <span key={t}
-                    className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs md:text-sm font-bold whitespace-nowrap px-2.5 py-1.5 sm:px-3.5 sm:py-1.5 md:px-4 md:py-2 rounded-full shadow-xs shrink-0"
+                  { label: "প্র্যাকটিক্যাল" },
+                  { label: "লাইফটাইম" },
+                  { label: "বাংলায় শিখুন" },
+                ].map((item) => (
+                  <span key={item.label}
+                    className="inline-flex items-center justify-center gap-1 text-[10px] sm:text-xs md:text-sm font-bold text-center px-1.5 py-1.5 sm:px-3.5 sm:py-1.5 rounded-full shadow-2xs truncate"
                     style={{ background: "var(--cream-300)", border: "1px solid var(--border-strong)", color: "var(--ink-900)" }}>
-                    <IconCircleCheck size={13} strokeWidth={2.5} className="text-primary shrink-0" />
-                    {t}
+                    <IconCircleCheck size={12} strokeWidth={2.5} className="text-primary shrink-0" />
+                    <span className="truncate">{item.label}</span>
                   </span>
                 ))}
               </div>

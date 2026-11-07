@@ -53,7 +53,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#1A1F0F",
+  themeColor: "#F2EDE4",
+  viewportFit: "cover",
 };
 
 import { getCachedGlobalSettings } from "@/lib/cache";

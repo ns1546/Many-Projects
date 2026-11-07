@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ChevronDown, HelpCircle, MessageCircle, ArrowRight } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
 interface FAQItem {
   id: string;
@@ -14,7 +15,7 @@ const FAQS_LIST: FAQItem[] = [
   {
     id: "faq-1",
     question: "এই মিউজিক প্রোডাকশন কোর্সটি কাদের জন্য প্রযোজ্য?",
-    answer: "যারা মিউজিক প্রোডাকশন, সাউন্ড ডিজাইন বা অডিও ইঞ্জিনিয়ারিং একদম শূন্য থেকে শিখতে চান—যেমন নতুন মিউজিশিয়ান, ভোকালিস্ট, গীতিকার কিংবা যারা ইতোমধ্যে FL Studio/Ableton-এ কিছু কাজ করেন কিন্তু প্রফেশনাল মিক্সিং ও রেডিও-রেডি কমার্শিয়াল মাস্টারিং আয়ত্ত করতে পারছেন না। বিগিনার থেকে ইন্টারমিডিয়েট যেকোনো লেভেলের শিক্ষার্থীর জন্য এটি একটি পূর্ণাঙ্গ রোডম্যাপ।",
+    answer: "যারা মিউজিক প্রোডাকশন, সাউন্ড ডিজাইন বা অডিও ইঞ্জিনিয়ারিং একদম শূন্য থেকে শিখতে চান—যেমন নতুন মিউজিশিয়ান, ভোকালিস্ট, গীতিকার কিংবা যারা ইতোমধ্যে FL Studio/Ableton-এ কিছু কাজ করেন কিন্তু প্রফেশনাল মিক্সিং ও রেডিও-রেডি কমার্শিয়াল মাস্টারিং আয়ত্ত করতে পারছেন না। বিগিনার থেকে ইন্টারমিডিয়েট যেকোনো লেভেলের শিক্ষার্থীর জন্য এটি একটি পূর্ণাঙ্গ প্র্যাকটিক্যাল রোডম্যাপ।",
     tag: "কারিকুলাম",
   },
   {
@@ -50,18 +51,18 @@ const FAQS_LIST: FAQItem[] = [
 ];
 
 export default function HomeFAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null); // Closed by default for clean 2-in-a-row mobile grid
+  const [openIndex, setOpenIndex] = useState<number | null>(0); // First item open by default for premium look
 
   const toggle = (idx: number) => {
     setOpenIndex((prev) => (prev === idx ? null : idx));
   };
 
   return (
-    <section id="faq" className="py-14 sm:py-20 bg-surface/40 border-t border-border relative overflow-hidden scroll-mt-16">
-      <div className="container-max relative z-10 max-w-4xl mx-auto">
+    <section id="faq" className="py-12 sm:py-20 bg-surface/40 border-t border-border relative overflow-hidden scroll-mt-16">
+      <div className="container-max relative z-10 max-w-3xl mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
-        <div className="text-center mb-10 sm:mb-14">
+        <div className="text-center mb-8 sm:mb-12">
           <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/25 px-3.5 py-1.5 rounded-full text-xs font-bold text-primary mb-3 shadow-xs">
             <HelpCircle size={14} className="text-primary" />
             <span>সচরাচর জিজ্ঞাসা • FAQ</span>
@@ -69,35 +70,33 @@ export default function HomeFAQ() {
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight" style={{ color: "var(--ink-900)", letterSpacing: "-0.03em" }}>
             আপনার মনে কি কোনো <span style={{ color: "var(--primary)" }}>প্রশ্ন আছে?</span>
           </h2>
-          <p className="mt-2.5 text-sm sm:text-base font-medium max-w-xl mx-auto" style={{ color: "var(--foreground-muted)" }}>
+          <p className="mt-2 text-xs sm:text-base font-medium max-w-xl mx-auto" style={{ color: "var(--foreground-muted)" }}>
             কোর্সে যোগদানের আগে শিক্ষার্থীরা সচরাচর যে প্রশ্নগুলো করেন—এক নজরে সব বাস্তবসম্মত উত্তর।
           </p>
         </div>
 
-        {/* 2-In-A-Row Responsive FAQ Grid Container (per user instruction) */}
-        <div className="grid grid-cols-2 gap-2 sm:gap-4 items-start">
+        {/* Clean, Full-Width Single-Column Accordion (Guaranteed 100% Professional) */}
+        <div className="space-y-3 sm:space-y-3.5">
           {FAQS_LIST.map((faq, index) => {
             const isOpen = openIndex === index;
             return (
               <div
                 key={faq.id}
-                className={`border rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300 ${
+                className={`border rounded-2xl overflow-hidden transition-all duration-300 ${
                   isOpen
-                    ? "col-span-2 border-primary/50 bg-surface shadow-md ring-1 ring-primary/25"
-                    : "col-span-1 border-border bg-surface/80 hover:border-primary/40 hover:bg-surface cursor-pointer shadow-xs"
+                    ? "border-primary/50 bg-surface shadow-md ring-1 ring-primary/25"
+                    : "border-border bg-surface/80 hover:border-primary/40 hover:bg-surface cursor-pointer shadow-xs"
                 }`}
               >
                 <button
                   type="button"
                   onClick={() => toggle(index)}
-                  className={`w-full flex items-start justify-between text-left cursor-pointer transition-colors ${
-                    isOpen ? "p-3.5 sm:p-5 pb-2" : "p-3 sm:p-4"
-                  }`}
+                  className="w-full flex items-center justify-between text-left cursor-pointer p-4 sm:p-5 gap-3"
                   aria-expanded={isOpen}
                 >
-                  <div className="flex items-start gap-2 sm:gap-3.5 min-w-0 pr-1">
+                  <div className="flex items-center gap-3 min-w-0 pr-1">
                     <span
-                      className={`w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl flex items-center justify-center text-[10px] sm:text-xs font-black shrink-0 transition-colors mt-0.5 ${
+                      className={`w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center text-xs font-black shrink-0 transition-colors ${
                         isOpen
                           ? "bg-primary text-black shadow-xs"
                           : "bg-surface-raised border border-border text-foreground/70"
@@ -105,46 +104,57 @@ export default function HomeFAQ() {
                     >
                       {String(index + 1).padStart(2, "0")}
                     </span>
+
                     <div className="min-w-0">
-                      <span className="inline-block text-[9px] sm:text-[10px] font-bold px-1.5 py-0.2 rounded bg-primary/10 text-primary border border-primary/20 mb-1">
-                        {faq.tag}
-                      </span>
-                      <p className={`font-bold text-xs sm:text-base text-foreground leading-snug ${
-                        isOpen ? "" : "line-clamp-2"
-                      }`}>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="inline-block text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                          {faq.tag}
+                        </span>
+                      </div>
+                      <h3 className="font-bold text-sm sm:text-base text-foreground leading-snug">
                         {faq.question}
-                      </p>
+                      </h3>
                     </div>
                   </div>
 
                   <div
-                    className={`w-6 h-6 sm:w-7 sm:h-7 rounded-lg flex items-center justify-center shrink-0 transition-transform duration-300 ${
-                      isOpen ? "rotate-180 text-primary bg-primary/10" : "text-foreground/50"
+                    className={`w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 ${
+                      isOpen ? "rotate-180 text-primary bg-primary/15" : "text-foreground/50 bg-background/50 border border-border/60"
                     }`}
                   >
-                    <ChevronDown size={15} />
+                    <ChevronDown size={16} />
                   </div>
                 </button>
 
-                {isOpen && (
-                  <div className="px-3.5 sm:px-6 pb-4 pt-2 border-t border-border/40 animate-in fade-in slide-in-from-top-1 duration-200">
-                    <p className="text-xs sm:text-sm font-medium leading-relaxed text-foreground/85">
-                      {faq.answer}
-                    </p>
-                    <div className="mt-2.5 flex justify-end">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggle(index);
-                        }}
-                        className="text-[11px] font-bold text-primary hover:underline cursor-pointer"
-                      >
-                        বন্ধ করুন ▴
-                      </button>
-                    </div>
-                  </div>
-                )}
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-4 sm:px-6 pb-4 sm:pb-5 pt-1 border-t border-border/40">
+                        <p className="text-xs sm:text-sm font-medium leading-relaxed text-foreground/85 pt-2">
+                          {faq.answer}
+                        </p>
+                        <div className="mt-3 flex justify-end">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggle(index);
+                            }}
+                            className="text-[11px] font-bold text-primary hover:underline cursor-pointer"
+                          >
+                            সংক্ষেপ করুন ▴
+                          </button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             );
           })}
@@ -170,7 +180,7 @@ export default function HomeFAQ() {
             href="https://wa.me/8801607084155?text=Hello%20EvoRise%20Media%2C%20I%20have%20questions%20about%20the%20music%20production%20course"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-primary text-xs font-bold py-2.5 px-4.5 shrink-0 flex items-center gap-1.5 whitespace-nowrap cursor-pointer shadow-xs"
+            className="btn-primary text-xs font-bold py-2.5 px-4.5 shrink-0 flex items-center gap-1.5 whitespace-nowrap cursor-pointer shadow-xs w-full sm:w-auto justify-center"
           >
             <span>WhatsApp-এ চ্যাট করুন</span>
             <ArrowRight size={13} />
@@ -181,4 +191,3 @@ export default function HomeFAQ() {
     </section>
   );
 }
-

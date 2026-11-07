@@ -102,10 +102,7 @@ export default function HeroBannerSlider({ banners }: HeroBannerSliderProps) {
 
   return (
     <section
-      className="hero-banner-section relative w-full pb-4 sm:pb-8 overflow-hidden bg-background"
-      style={{
-        paddingTop: "calc(4.5rem + env(safe-area-inset-top, 0px))",
-      }}
+      className="hero-banner-section relative w-full pt-2 sm:pt-6 pb-4 sm:pb-8 overflow-hidden bg-background"
     >
       {/* Ambient background glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-5xl h-80 bg-primary/10 blur-[130px] rounded-full pointer-events-none" />

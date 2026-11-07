@@ -157,9 +157,11 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
 }
 
 body {
+  overflow-x: clip;
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-body), 'Noto Sans Bengali', ui-sans-serif, system-ui, sans-serif;

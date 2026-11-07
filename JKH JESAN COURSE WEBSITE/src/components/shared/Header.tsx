@@ -65,12 +65,12 @@ export function Header() {
       <header
         className="md:hidden fixed top-0 inset-x-0 z-50 bg-background/95 backdrop-blur-md border-b border-border shadow-xs"
         style={{
-          paddingTop: "max(0.375rem, env(safe-area-inset-top, 0px))",
-          paddingBottom: "0.25rem",
+          paddingTop: "max(0.625rem, env(safe-area-inset-top, 0px))",
+          paddingBottom: "0.5rem",
         }}
       >
-        <div className="h-12 w-full flex items-center justify-between px-3 sm:px-4">
-          <Link href="/" aria-label="EvoRise Media home" className="shrink-0 flex items-center py-0.5">
+        <div className="h-11 w-full flex items-center justify-between px-3 sm:px-4">
+          <Link href="/" aria-label="EvoRise Media home" className="shrink-0 flex items-center">
             <Logo size="sm" />
           </Link>
           <div className="flex items-center gap-1.5 sm:gap-2">
@@ -86,31 +86,31 @@ export function Header() {
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <Link
                   href="/login"
-                  className="h-[32px] px-3 sm:px-3.5 rounded-full text-xs font-bold text-foreground bg-surface/80 hover:bg-surface border border-border/80 flex items-center justify-center transition-all shrink-0"
+                  className="h-[30px] px-2.5 rounded-full text-xs font-bold text-foreground/80 hover:text-foreground hover:bg-foreground/5 transition-all flex items-center justify-center shrink-0"
                 >
                   লগইন
                 </Link>
                 <Link
                   href="/register"
-                  className="h-[32px] px-3.5 sm:px-4 rounded-full text-xs font-bold bg-primary hover:bg-primary-dark text-black shadow-xs flex items-center justify-center gap-1 transition-all active:scale-95 shrink-0"
+                  className="h-[30px] px-3.5 rounded-full text-xs font-black bg-primary hover:bg-primary-dark text-black shadow-xs flex items-center justify-center gap-1 transition-all active:scale-95 shrink-0"
                 >
                   <span>রেজিস্ট্রেশন</span>
                 </Link>
               </div>
             )}
             <button
-              className="w-[32px] h-[32px] rounded-full flex items-center justify-center text-foreground hover:bg-surface border border-border/70 transition-colors shrink-0"
+              className="w-[30px] h-[30px] rounded-full flex items-center justify-center text-foreground hover:bg-surface border border-border/70 transition-colors shrink-0"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle menu"
             >
               <AnimatePresence mode="wait">
                 {mobileOpen ? (
                   <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.18 }}>
-                    <IconX size={18} strokeWidth={2} />
+                    <IconX size={17} strokeWidth={2} />
                   </motion.div>
                 ) : (
                   <motion.div key="open" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.18 }}>
-                    <IconMenu2 size={18} strokeWidth={2} />
+                    <IconMenu2 size={17} strokeWidth={2} />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -118,6 +118,15 @@ export function Header() {
           </div>
         </div>
       </header>
+
+      {/* Mobile Header Spacer — Guarantees every page content cleanly clears the fixed header */}
+      <div
+        className="md:hidden w-full pointer-events-none"
+        style={{
+          height: "calc(3.875rem + max(0.625rem, env(safe-area-inset-top, 0px)))",
+        }}
+        aria-hidden="true"
+      />
 
       {/* ── Desktop Header ────────────────────────────────────── */}
       <header
