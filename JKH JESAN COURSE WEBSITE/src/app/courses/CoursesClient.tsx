@@ -126,6 +126,10 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
                 const totalLessons = course.modules?.reduce(
                   (a: number, m: any) => a + (m.lessons?.length || 0), 0
                 ) || 0;
+                const hasDiscount = course.discountPrice && course.discountPrice < course.price;
+                const discountPercent = hasDiscount
+                  ? Math.round(((course.price - course.discountPrice) / course.price) * 100)
+                  : 0;
                 
                 return (
                   <motion.div
@@ -171,13 +175,20 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
                         </div>
 
                         {/* Badges */}
-                        <div className="absolute top-1.5 left-1.5 sm:top-3 sm:left-3">
+                        <div className="absolute top-1.5 left-1.5 sm:top-3 sm:left-3 flex items-center gap-1.5">
                           <span className="bg-surface border border-border text-foreground text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">
                             মিউজিক
                           </span>
                         </div>
-                        <div className="absolute top-1.5 right-1.5 sm:top-3 sm:right-3 flex items-center gap-1 bg-surface/90 backdrop-blur-md border border-border text-foreground text-[10px] sm:text-xs font-bold px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-md shadow-xs">
-                          <Star size={11} fill="#f59e0b" className="text-amber-400" /> {course.rating || "4.9"}
+                        <div className="absolute top-1.5 right-1.5 sm:top-3 sm:right-3 flex items-center gap-1.5">
+                          {hasDiscount && (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] sm:text-xs font-black bg-red-600 text-white shadow-xs">
+                              {discountPercent}% ছাড়
+                            </span>
+                          )}
+                          <div className="flex items-center gap-1 bg-surface/90 backdrop-blur-md border border-border text-foreground text-[10px] sm:text-xs font-bold px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-md shadow-xs">
+                            <Star size={11} fill="#f59e0b" className="text-amber-400" /> {course.rating || "4.9"}
+                          </div>
                         </div>
                       </Link>
 
@@ -208,9 +219,20 @@ export default function CoursesClient({ initialCourses }: CoursesClientProps) {
                           <div className="flex items-center justify-between gap-2 pt-1">
                             <div>
                               <span className="hidden sm:block text-[11px] font-bold text-primary">চিফ মেন্টর: JKH Jesan</span>
-                              <span className="text-xs xs:text-sm sm:text-xl font-black text-foreground tracking-tight">
-                                ৳{course.price}
-                              </span>
+                              {hasDiscount ? (
+                                <div className="flex items-baseline gap-1.5 sm:gap-2">
+                                  <span className="text-sm xs:text-base sm:text-xl font-black text-foreground tracking-tight">
+                                    ৳{course.discountPrice?.toLocaleString()}
+                                  </span>
+                                  <span className="text-[10px] sm:text-xs text-foreground/50 line-through font-semibold">
+                                    ৳{course.price?.toLocaleString()}
+                                  </span>
+                                </div>
+                              ) : (
+                                <span className="text-xs xs:text-sm sm:text-xl font-black text-foreground tracking-tight">
+                                  ৳{course.price?.toLocaleString()}
+                                </span>
+                              )}
                             </div>
                             <div className="flex items-center gap-1 sm:gap-2">
                               <Link

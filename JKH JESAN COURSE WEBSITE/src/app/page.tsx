@@ -70,9 +70,9 @@ export default async function Home() {
     const heroMentorBanner = allBanners.find((b: any) => b.targetUrl === "section:hero-mentor" && b.isActive);
     const aboutMentorBanner = allBanners.find((b: any) => b.targetUrl === "section:about-mentor" && b.isActive);
 
-    if (whyChooseUsBanner?.imageUrl) whyChooseUsImage = whyChooseUsBanner.imageUrl;
-    if (heroMentorBanner?.imageUrl) heroMentorImage = heroMentorBanner.imageUrl;
-    if (aboutMentorBanner?.imageUrl) aboutMentorImage = aboutMentorBanner.imageUrl;
+    if (whyChooseUsBanner?.imageUrl) whyChooseUsImage = getSafeMediaUrl(whyChooseUsBanner.imageUrl, "/images/why-choose-us.jpg");
+    if (heroMentorBanner?.imageUrl) heroMentorImage = getSafeMediaUrl(heroMentorBanner.imageUrl, "/images/mentor-jjesan-mandolin.jpg");
+    if (aboutMentorBanner?.imageUrl) aboutMentorImage = getSafeMediaUrl(aboutMentorBanner.imageUrl, "/images/mentor-jjesan-accordion.jpg");
   } catch (error) {
     console.warn("Could not fetch database records for Home page (using fallback):", error);
   }
@@ -350,7 +350,7 @@ export default async function Home() {
                 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={heroMentorImage}
+                  src={getSafeMediaUrl(heroMentorImage, "/images/mentor-jjesan-mandolin.jpg")}
                   alt="JKH Jesan — Music Producer & Instructor"
                   className="w-full h-full object-cover object-center"
                 />
@@ -407,7 +407,7 @@ export default async function Home() {
                 style={{ maxWidth: "420px", margin: "0 auto", boxShadow: "var(--shadow-xl)" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={aboutMentorImage}
+                  src={getSafeMediaUrl(aboutMentorImage, "/images/mentor-jjesan-accordion.jpg")}
                   alt="JKH Jesan — Lead Music Producer & Instructor"
                   className="w-full h-full object-cover object-top"
                 />
