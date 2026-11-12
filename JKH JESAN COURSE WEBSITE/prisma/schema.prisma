@@ -167,6 +167,12 @@ model Setting {
   whatsappNumber    String?  @default("01700000000")
   supportEmail      String?  @default("helloevorisesolutions@gmail.com")
   noticeText        String?
+  bankName          String?  @default("BRAC Bank PLC")
+  bankAccountName   String?  @default("MD. NAJMUSH SHAKIB")
+  bankAccountNumber String?  @default("1079368670001")
+  bankBranch        String?  @default("MIRPUR SECTION-1 BRANCH")
+  bankRouting       String?  @default("060261997")
+  bankSwift         String?  @default("BRAKBDDH")
   updatedAt         DateTime @updatedAt
 }
 

@@ -16,6 +16,12 @@ export async function GET() {
         whatsappNumber: "01607084155",
         supportEmail: "helloevorisesolutions@gmail.com",
         noticeText: null,
+        bankName: "BRAC Bank PLC",
+        bankAccountName: "MD. NAJMUSH SHAKIB",
+        bankAccountNumber: "1079368670001",
+        bankBranch: "MIRPUR SECTION-1 BRANCH",
+        bankRouting: "060261997",
+        bankSwift: "BRAKBDDH",
       }
     );
 

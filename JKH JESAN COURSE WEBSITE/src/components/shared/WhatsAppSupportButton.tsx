@@ -19,11 +19,18 @@ export function WhatsAppSupportButton({
     return null;
   }
 
+  const isCourseDetailPage = pathname?.startsWith("/courses/") && pathname !== "/courses";
+  const isAuthPage = pathname === "/login" || pathname === "/register" || pathname === "/forgot-password" || pathname?.startsWith("/reset-password");
+  const hasBottomNav = !(pathname?.startsWith("/learn") || pathname?.startsWith("/admin") || pathname?.startsWith("/checkout") || isCourseDetailPage || isAuthPage);
+
   const cleanNumber = (phoneNumber || "01607084155").replace(/[^0-9]/g, "").replace(/^88/, "");
   const whatsappUrl = `https://wa.me/88${cleanNumber}?text=${encodeURIComponent(defaultMessage)}`;
 
   return (
-    <aside aria-label="WhatsApp Support" className="fixed bottom-[5.75rem] right-3.5 sm:bottom-6 sm:right-6 z-40 select-none">
+    <aside
+      aria-label="WhatsApp Support"
+      className={`fixed ${hasBottomNav ? "bottom-[5.25rem]" : "bottom-4"} right-3.5 sm:bottom-6 sm:right-6 z-40 select-none`}
+    >
       <a
         href={whatsappUrl}
         target="_blank"

@@ -10,7 +10,7 @@ import {
   CheckCircle2, AlertCircle, Lock, ShieldCheck,
   ArrowRight, Loader2, MessageCircle, ChevronDown, ChevronUp,
   Sparkles, Award, Zap, Copy, Check, Clock, Phone, Hash, 
-  ExternalLink, RotateCcw, HelpCircle
+  ExternalLink, RotateCcw, HelpCircle, Landmark, Building2
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -26,12 +26,13 @@ export default function CheckoutPage({ params }: { params: Promise<{ courseId: s
   const [successMessage, setSuccessMessage] = useState("");
   const [mobileSummaryOpen, setMobileSummaryOpen] = useState(false);
 
-  // Semi-automatic Gateway State
-  const [paymentMethod, setPaymentMethod] = useState<"bKash" | "Nagad">("bKash");
+  // Semi-automatic Gateway State (bKash, Nagad & Bank Transfer)
+  const [paymentMethod, setPaymentMethod] = useState<"bKash" | "Nagad" | "Bank">("bKash");
   const [trxId, setTrxId] = useState("");
   const [senderPhone, setSenderPhone] = useState("");
   const [copiedNumber, setCopiedNumber] = useState(false);
   const [copiedAmount, setCopiedAmount] = useState(false);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
   const [showSmsHelper, setShowSmsHelper] = useState(false);
   const [rawSmsInput, setRawSmsInput] = useState("");
 
@@ -97,10 +98,20 @@ export default function CheckoutPage({ params }: { params: Promise<{ courseId: s
     ? (course.price - course.discountPrice) 
     : 0;
 
-  // Dedicated gateway recipient number
+  // Dedicated gateway recipient number (for mobile banking)
   const gatewayNumber = (paymentMethod === "bKash" 
     ? settings?.bkashNumber 
     : settings?.nagadNumber) || "01841411474";
+
+  // Official Bank Account Details (BRAC Bank PLC)
+  const bankDetails = {
+    bankName: settings?.bankName || "BRAC Bank PLC",
+    accountName: settings?.bankAccountName || "MD. NAJMUSH SHAKIB",
+    accountNumber: settings?.bankAccountNumber || "1079368670001",
+    branchName: settings?.bankBranch || "MIRPUR SECTION-1 BRANCH",
+    routingNumber: settings?.bankRouting || "060261997",
+    swiftCode: settings?.bankSwift || "BRAKBDDH",
+  };
 
   const handleCopyNumber = () => {
     navigator.clipboard.writeText(gatewayNumber);
@@ -116,13 +127,20 @@ export default function CheckoutPage({ params }: { params: Promise<{ courseId: s
     setTimeout(() => setCopiedAmount(false), 2500);
   };
 
+  const handleCopyText = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(label);
+    toast.success(`${label} কপি করা হয়েছে!`);
+    setTimeout(() => setCopiedField(null), 2500);
+  };
+
   // Smart SMS Parser & TrxID Extractor
   const handleParseSms = (text: string) => {
     setRawSmsInput(text);
     if (!text.trim()) return;
 
-    // Pattern 1: Look for TrxID / TxnId / Trx Id
-    const trxMatch = text.match(/(?:TrxID|TxnId|Trx Id|Txn ID|Transaction ID|TxnID)[:\s]*([A-Za-z0-9]{8,12})/i);
+    // Pattern 1: Look for TrxID / TxnId / Trx Id / Ref
+    const trxMatch = text.match(/(?:TrxID|TxnId|Trx Id|Txn ID|Transaction ID|TxnID|Ref|Reference)[:\s]*([A-Za-z0-9\-_]{6,20})/i);
     if (trxMatch && trxMatch[1]) {
       setTrxId(trxMatch[1].toUpperCase());
     }
@@ -139,8 +157,10 @@ export default function CheckoutPage({ params }: { params: Promise<{ courseId: s
     }
   };
 
-  // Live TrxID validation
+  // Live validation helpers
   const isBkash = paymentMethod === "bKash";
+  const isNagad = paymentMethod === "Nagad";
+  const isBank = paymentMethod === "Bank";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -150,7 +170,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ courseId: s
     const cleanTrx = trxId.trim().toUpperCase();
     const cleanPhone = senderPhone.trim();
 
-    // ── 1. STRICT BKASH VS NAGAD TRXID VALIDATION ──
+    // ── 1. STRICT STRUCTURAL VALIDATION ACCORDING TO PAYMENT METHOD ──
     if (isBkash) {
       if (cleanTrx.length !== 10) {
         setError(`ভুল TrxID! বিকাশ (bKash) Transaction ID অবশ্যই ১০ অক্ষরের হতে হবে (আপনার দেওয়া TrxID ${cleanTrx.length} অক্ষরের)।`);
@@ -164,7 +184,17 @@ export default function CheckoutPage({ params }: { params: Promise<{ courseId: s
         setError("ভুয়া বা ডামি TrxID দেওয়া যাবে না। অনুগ্রহ করে বিকাশ অ্যাপ বা SMS থেকে আসল TrxID দিন।");
         return;
       }
-    } else {
+
+      const validBdPhoneRegex = /^01[3-9]\d{8}$/;
+      if (!validBdPhoneRegex.test(cleanPhone)) {
+        setError("ভুল মোবাইল নম্বর! অনুগ্রহ করে সঠিক ১১ ডিজিটের বিকাশ মোবাইল নম্বর দিন (যেমন: 01841411474)।");
+        return;
+      }
+      if (/^01[3-9](\d)\1{7}$/.test(cleanPhone) || cleanPhone === "01234567890") {
+        setError("অকার্যকর বা ডামি মোবাইল নম্বর! আপনার ব্যবহৃত আসল ১১ ডিজিটের বিকাশ নম্বর দিন।");
+        return;
+      }
+    } else if (isNagad) {
       // Nagad TrxID
       if (cleanTrx.length !== 8) {
         setError(`ভুল TrxID! নগদ (Nagad) Transaction ID অবশ্যই ৮ অক্ষরের হতে হবে (আপনার দেওয়া TrxID ${cleanTrx.length} অক্ষরের)।`);
@@ -178,17 +208,30 @@ export default function CheckoutPage({ params }: { params: Promise<{ courseId: s
         setError("ভুয়া বা ডামি TrxID দেওয়া যাবে না। অনুগ্রহ করে নগদ অ্যাপ বা SMS থেকে আসল TrxID দিন।");
         return;
       }
-    }
 
-    // ── 2. STRICT SENDER PHONE VALIDATION ──
-    const validBdPhoneRegex = /^01[3-9]\d{8}$/;
-    if (!validBdPhoneRegex.test(cleanPhone)) {
-      setError("ভুল মোবাইল নম্বর! অনুগ্রহ করে সঠিক ১১ ডিজিটের বাংলাদেশী মোবাইল নম্বর দিন (যেমন: 01841411474)।");
-      return;
-    }
-    if (/^01[3-9](\d)\1{7}$/.test(cleanPhone) || cleanPhone === "01234567890") {
-      setError("অকার্যকর বা ডামি মোবাইল নম্বর! আপনার ব্যবহৃত আসল ১১ ডিজিটের মোবাইল নম্বর দিন।");
-      return;
+      const validBdPhoneRegex = /^01[3-9]\d{8}$/;
+      if (!validBdPhoneRegex.test(cleanPhone)) {
+        setError("ভুল মোবাইল নম্বর! অনুগ্রহ করে সঠিক ১১ ডিজিটের নগদ মোবাইল নম্বর দিন (যেমন: 01841411474)।");
+        return;
+      }
+      if (/^01[3-9](\d)\1{7}$/.test(cleanPhone) || cleanPhone === "01234567890") {
+        setError("অকার্যকর বা ডামি মোবাইল নম্বর! আপনার ব্যবহৃত আসল ১১ ডিজিটের নগদ নম্বর দিন।");
+        return;
+      }
+    } else {
+      // ── BANK TRANSFER VALIDATION (BRAC Bank PLC) ──
+      if (cleanTrx.length < 4) {
+        setError("ভুল ব্যাংক রেফারেন্স! ব্যাংক ট্রান্সফার রেফারেন্স বা ডিপোজিট স্লিপ নম্বর প্রদান করুন (কমপক্ষে ৪ অক্ষরের)।");
+        return;
+      }
+      if (/^(.)\1{3,}$/.test(cleanTrx) || cleanTrx === "1234" || cleanTrx === "0000" || cleanTrx === "TEST") {
+        setError("ভুয়া বা ডামি রেফারেন্স দেওয়া যাবে না। অনুগ্রহ করে ব্যাংক থেকে পাওয়া আসল ট্রানজেকশন রেফারেন্স দিন।");
+        return;
+      }
+      if (cleanPhone.length < 3) {
+        setError("প্রেরকের বিবরণ দিন! যে ব্যাংক একাউন্ট বা নম্বর থেকে টাকা পাঠিয়েছেন তার বিবরণ লিখুন।");
+        return;
+      }
     }
 
     setIsSubmitting(true);
@@ -362,8 +405,8 @@ export default function CheckoutPage({ params }: { params: Promise<{ courseId: s
 
               <div className="p-6 space-y-6">
 
-                {/* Gateway Selector Cards (bKash vs Nagad) */}
-                <div className="grid grid-cols-2 gap-4">
+                {/* Gateway Selector Cards (bKash, Nagad, Bank Transfer) */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                   {/* bKash Card */}
                   <button
                     type="button"
@@ -371,7 +414,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ courseId: s
                       setPaymentMethod("bKash");
                       setError("");
                     }}
-                    className={`relative p-4 rounded-2xl border-2 transition-all flex flex-col items-center justify-center gap-2 cursor-pointer ${
+                    className={`relative p-3.5 sm:p-4 rounded-2xl border-2 transition-all flex flex-col items-center justify-center gap-1.5 sm:gap-2 cursor-pointer ${
                       paymentMethod === "bKash"
                         ? "border-[#e2136e] bg-[#e2136e]/10 shadow-[0_0_20px_rgba(226,19,110,0.15)]"
                         : "border-border bg-surface/50 hover:border-[#e2136e]/40 hover:bg-[#e2136e]/5"
@@ -382,10 +425,10 @@ export default function CheckoutPage({ params }: { params: Promise<{ courseId: s
                         <Check size={12} strokeWidth={3} />
                       </span>
                     )}
-                    <div className="w-12 h-12 rounded-xl bg-white p-1.5 shadow-sm flex items-center justify-center">
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white p-1.5 shadow-sm flex items-center justify-center">
                       <span className="font-black text-[#e2136e] text-sm tracking-tight">bKash</span>
                     </div>
-                    <span className="font-extrabold text-sm text-foreground">বিকাশ (bKash)</span>
+                    <span className="font-extrabold text-xs sm:text-sm text-foreground">বিকাশ (bKash)</span>
                     <span className="text-[10px] font-bold text-foreground/60 bg-surface px-2 py-0.5 rounded-full border border-border">
                       সেন্ড মানি
                     </span>
@@ -398,7 +441,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ courseId: s
                       setPaymentMethod("Nagad");
                       setError("");
                     }}
-                    className={`relative p-4 rounded-2xl border-2 transition-all flex flex-col items-center justify-center gap-2 cursor-pointer ${
+                    className={`relative p-3.5 sm:p-4 rounded-2xl border-2 transition-all flex flex-col items-center justify-center gap-1.5 sm:gap-2 cursor-pointer ${
                       paymentMethod === "Nagad"
                         ? "border-[#f7931e] bg-[#f7931e]/10 shadow-[0_0_20px_rgba(247,147,30,0.15)]"
                         : "border-border bg-surface/50 hover:border-[#f7931e]/40 hover:bg-[#f7931e]/5"
@@ -409,147 +452,368 @@ export default function CheckoutPage({ params }: { params: Promise<{ courseId: s
                         <Check size={12} strokeWidth={3} />
                       </span>
                     )}
-                    <div className="w-12 h-12 rounded-xl bg-white p-1.5 shadow-sm flex items-center justify-center">
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white p-1.5 shadow-sm flex items-center justify-center">
                       <span className="font-black text-[#f7931e] text-sm tracking-tight">Nagad</span>
                     </div>
-                    <span className="font-extrabold text-sm text-foreground">নগদ (Nagad)</span>
+                    <span className="font-extrabold text-xs sm:text-sm text-foreground">নগদ (Nagad)</span>
                     <span className="text-[10px] font-bold text-foreground/60 bg-surface px-2 py-0.5 rounded-full border border-border">
                       সেন্ড মানি
                     </span>
                   </button>
+
+                  {/* Bank Transfer Card (BRAC Bank PLC) */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPaymentMethod("Bank");
+                      setError("");
+                    }}
+                    className={`relative p-3.5 sm:p-4 rounded-2xl border-2 transition-all flex flex-col items-center justify-center gap-1.5 sm:gap-2 cursor-pointer ${
+                      paymentMethod === "Bank"
+                        ? "border-[#00539C] bg-[#00539C]/10 shadow-[0_0_20px_rgba(0,83,156,0.22)]"
+                        : "border-border bg-surface/50 hover:border-[#00539C]/50 hover:bg-[#00539C]/5"
+                    }`}
+                  >
+                    {paymentMethod === "Bank" && (
+                      <span className="absolute top-2 right-2 w-5 h-5 rounded-full bg-[#00539C] text-white flex items-center justify-center text-xs">
+                        <Check size={12} strokeWidth={3} />
+                      </span>
+                    )}
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#00539C] p-1.5 shadow-sm flex items-center justify-center text-white">
+                      <Landmark size={22} />
+                    </div>
+                    <span className="font-extrabold text-xs sm:text-sm text-foreground">ব্যাংক ট্রান্সফার</span>
+                    <span className="text-[10px] font-bold text-foreground/75 bg-blue-500/15 text-blue-500 dark:text-blue-400 px-2 py-0.5 rounded-full border border-blue-500/20">
+                      BRAC Bank PLC
+                    </span>
+                  </button>
                 </div>
 
-                {/* Highlighted Gateway Number & Amount Details */}
-                <div className={`p-5 rounded-2xl border transition-colors space-y-4 ${
-                  paymentMethod === "bKash" 
-                    ? "bg-[#e2136e]/5 border-[#e2136e]/25" 
-                    : "bg-[#f7931e]/5 border-[#f7931e]/25"
-                }`}>
-                  <div className="flex items-center justify-between border-b border-border/60 pb-3">
-                    <span className="text-xs font-bold text-foreground/80 flex items-center gap-1.5">
-                      <Phone size={14} className={paymentMethod === "bKash" ? "text-[#e2136e]" : "text-[#f7931e]"} />
-                      নির্ধারিত {paymentMethod} পার্সোনাল নম্বর:
-                    </span>
-                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-surface border border-border text-foreground/70">
-                      Personal Account
-                    </span>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    {/* The Number */}
-                    <div>
-                      <div className="font-mono text-2xl sm:text-3xl font-black text-foreground tracking-wider select-all">
-                        {gatewayNumber}
+                {/* ── DETAILS ACCORDING TO SELECTED PAYMENT METHOD ── */}
+                {isBank ? (
+                  /* ══════════════════════════════════════════════════════
+                      EXECUTIVE BANK TRANSFER CARD (BRAC Bank PLC)
+                      ══════════════════════════════════════════════════════ */
+                  <div className="relative overflow-hidden rounded-2xl border border-blue-500/30 bg-gradient-to-b from-[#0A3B75]/15 via-blue-950/5 to-surface/80 p-5 sm:p-6 shadow-xl space-y-5">
+                    
+                    {/* Header Badge */}
+                    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/80 pb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-11 h-11 rounded-xl bg-[#00539C] text-white flex items-center justify-center font-black shadow-md shrink-0">
+                          <Landmark size={22} />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h4 className="text-base font-black text-foreground tracking-tight">{bankDetails.bankName}</h4>
+                            <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                              Official Account
+                            </span>
+                          </div>
+                          <p className="text-xs text-foreground/70 font-medium">ব্র্যাক ব্যাংক পিএলসি • যেকোনো ব্যাংক অ্যাপ বা ব্রাঞ্চ থেকে ফান্ড ট্রান্সফার করুন</p>
+                        </div>
                       </div>
-                      <p className="text-xs text-foreground/70 font-medium mt-0.5">
-                        {paymentMethod} অ্যাপ থেকে <strong>&apos;Send Money&apos; (সেন্ড মানি)</strong> করুন
-                      </p>
+
+                      {/* Supported Channels */}
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          NPSB (Instant)
+                        </span>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-surface border border-border text-foreground/75">
+                          BEFTN
+                        </span>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-surface border border-border text-foreground/75">
+                          RTGS
+                        </span>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-surface border border-border text-foreground/75">
+                          Branch Deposit
+                        </span>
+                      </div>
                     </div>
 
-                    {/* Copy Number Action */}
-                    <button
-                      type="button"
-                      onClick={handleCopyNumber}
-                      className={`h-11 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer ${
-                        copiedNumber 
-                          ? "bg-emerald-600 text-white" 
-                          : paymentMethod === "bKash"
-                            ? "bg-[#e2136e] text-white hover:opacity-90"
-                            : "bg-[#f7931e] text-white hover:opacity-90"
-                      }`}
-                    >
-                      {copiedNumber ? (
-                        <>
-                          <Check size={16} />
-                          <span>নম্বর কপি হয়েছে!</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy size={16} />
-                          <span>নম্বর কপি করুন</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
+                    {/* Primary Highlight: Account Number (Largest & Clickable Copy) */}
+                    <div className="bg-surface/90 border border-blue-500/30 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
+                      <div className="space-y-1">
+                        <span className="text-xs font-bold text-foreground/70 uppercase tracking-wider block">
+                          একাউন্ট নম্বর (Account Number)
+                        </span>
+                        <div className="font-mono text-2xl sm:text-3xl font-black text-foreground tracking-widest select-all">
+                          {bankDetails.accountNumber}
+                        </div>
+                        <p className="text-xs text-foreground/60 font-medium">
+                          যেকোনো ব্যাংক অ্যাপের &apos;Fund Transfer&apos; অথবা ব্রাঞ্চ ডিপোজিটের প্রাপক একাউন্ট নম্বর
+                        </p>
+                      </div>
 
-                  {/* Amount to send box */}
-                  <div className="pt-2 border-t border-border/60 flex items-center justify-between text-xs">
-                    <span className="text-foreground/80 font-medium">পাঠাতে হবে মোট:</span>
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono font-black text-base text-primary">৳{effectivePrice}</span>
                       <button
                         type="button"
-                        onClick={handleCopyAmount}
-                        className="p-1 text-foreground/60 hover:text-foreground hover:bg-surface rounded-md transition-colors"
-                        title="টাকার পরিমাণ কপি করুন"
+                        onClick={() => handleCopyText(bankDetails.accountNumber, "একাউন্ট নম্বর")}
+                        className={`h-11 px-5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer shrink-0 ${
+                          copiedField === "একাউন্ট নম্বর"
+                            ? "bg-emerald-600 text-white"
+                            : "bg-[#00539C] hover:bg-[#00427c] text-white active:scale-95"
+                        }`}
                       >
-                        {copiedAmount ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                        {copiedField === "একাউন্ট নম্বর" ? (
+                          <>
+                            <Check size={16} />
+                            <span>কপি হয়েছে!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy size={16} />
+                            <span>একাউন্ট নম্বর কপি</span>
+                          </>
+                        )}
                       </button>
                     </div>
+
+                    {/* 4 Essential Bank Specification Cards */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                      {/* Account Name */}
+                      <div className="p-3.5 rounded-xl bg-surface/80 border border-border flex items-center justify-between gap-3 shadow-2xs">
+                        <div className="min-w-0">
+                          <span className="text-[10px] font-bold text-foreground/60 uppercase tracking-wide block">একাউন্টের নাম (Account Name)</span>
+                          <p className="font-mono font-black text-sm text-foreground truncate">{bankDetails.accountName}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleCopyText(bankDetails.accountName, "একাউন্টের নাম")}
+                          className="p-1.5 text-foreground/60 hover:text-foreground hover:bg-surface rounded-lg border border-border/60 transition-colors shrink-0 cursor-pointer"
+                          title="একাউন্ট নাম কপি করুন"
+                        >
+                          {copiedField === "একাউন্টের নাম" ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                        </button>
+                      </div>
+
+                      {/* Branch Name */}
+                      <div className="p-3.5 rounded-xl bg-surface/80 border border-border flex items-center justify-between gap-3 shadow-2xs">
+                        <div className="min-w-0">
+                          <span className="text-[10px] font-bold text-foreground/60 uppercase tracking-wide block">শাখার নাম (Branch Name)</span>
+                          <p className="font-black text-sm text-foreground truncate">{bankDetails.branchName}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleCopyText(bankDetails.branchName, "শাখার নাম")}
+                          className="p-1.5 text-foreground/60 hover:text-foreground hover:bg-surface rounded-lg border border-border/60 transition-colors shrink-0 cursor-pointer"
+                          title="শাখা কপি করুন"
+                        >
+                          {copiedField === "শাখার নাম" ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                        </button>
+                      </div>
+
+                      {/* Routing Number */}
+                      <div className="p-3.5 rounded-xl bg-surface/80 border border-border flex items-center justify-between gap-3 shadow-2xs">
+                        <div className="min-w-0">
+                          <span className="text-[10px] font-bold text-foreground/60 uppercase tracking-wide block">রাউটিং নম্বর (Routing Number)</span>
+                          <p className="font-mono font-black text-sm text-foreground truncate">{bankDetails.routingNumber}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleCopyText(bankDetails.routingNumber, "রাউটিং নম্বর")}
+                          className="p-1.5 text-foreground/60 hover:text-foreground hover:bg-surface rounded-lg border border-border/60 transition-colors shrink-0 cursor-pointer"
+                          title="রাউটিং নম্বর কপি করুন"
+                        >
+                          {copiedField === "রাউটিং নম্বর" ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                        </button>
+                      </div>
+
+                      {/* SWIFT Code */}
+                      <div className="p-3.5 rounded-xl bg-surface/80 border border-border flex items-center justify-between gap-3 shadow-2xs">
+                        <div className="min-w-0">
+                          <span className="text-[10px] font-bold text-foreground/60 uppercase tracking-wide block">সুইফট কোড (SWIFT Code - International)</span>
+                          <p className="font-mono font-black text-sm text-foreground truncate">{bankDetails.swiftCode}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleCopyText(bankDetails.swiftCode, "সুইফট কোড")}
+                          className="p-1.5 text-foreground/60 hover:text-foreground hover:bg-surface rounded-lg border border-border/60 transition-colors shrink-0 cursor-pointer"
+                          title="সুইফট কোড কপি করুন"
+                        >
+                          {copiedField === "সুইফট কোড" ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Amount to send box */}
+                    <div className="pt-3 border-t border-border/80 flex items-center justify-between text-xs">
+                      <span className="text-foreground/80 font-bold">পাঠাতে হবে মোট কোর্স ফি:</span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono font-black text-lg text-primary">৳{effectivePrice}</span>
+                        <button
+                          type="button"
+                          onClick={handleCopyAmount}
+                          className="p-1 text-foreground/60 hover:text-foreground hover:bg-surface rounded-md transition-colors cursor-pointer"
+                          title="টাকার পরিমাণ কপি করুন"
+                        >
+                          {copiedAmount ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  /* ══════════════════════════════════════════════════════
+                      MOBILE BANKING DETAILS CARD (bKash & Nagad)
+                      ══════════════════════════════════════════════════════ */
+                  <div className={`p-5 rounded-2xl border transition-colors space-y-4 ${
+                    paymentMethod === "bKash" 
+                      ? "bg-[#e2136e]/5 border-[#e2136e]/25" 
+                      : "bg-[#f7931e]/5 border-[#f7931e]/25"
+                  }`}>
+                    <div className="flex items-center justify-between border-b border-border/60 pb-3">
+                      <span className="text-xs font-bold text-foreground/80 flex items-center gap-1.5">
+                        <Phone size={14} className={paymentMethod === "bKash" ? "text-[#e2136e]" : "text-[#f7931e]"} />
+                        নির্ধারিত {paymentMethod} পার্সোনাল নম্বর:
+                      </span>
+                      <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-surface border border-border text-foreground/70">
+                        Personal Account
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      {/* The Number */}
+                      <div>
+                        <div className="font-mono text-2xl sm:text-3xl font-black text-foreground tracking-wider select-all">
+                          {gatewayNumber}
+                        </div>
+                        <p className="text-xs text-foreground/70 font-medium mt-0.5">
+                          {paymentMethod} অ্যাপ থেকে <strong>&apos;Send Money&apos; (সেন্ড মানি)</strong> করুন
+                        </p>
+                      </div>
+
+                      {/* Copy Number Action */}
+                      <button
+                        type="button"
+                        onClick={handleCopyNumber}
+                        className={`h-11 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer ${
+                          copiedNumber 
+                            ? "bg-emerald-600 text-white" 
+                            : paymentMethod === "bKash"
+                              ? "bg-[#e2136e] text-white hover:opacity-90"
+                              : "bg-[#f7931e] text-white hover:opacity-90"
+                        }`}
+                      >
+                        {copiedNumber ? (
+                          <>
+                            <Check size={16} />
+                            <span>নম্বর কপি হয়েছে!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy size={16} />
+                            <span>নম্বর কপি করুন</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+
+                    {/* Amount to send box */}
+                    <div className="pt-2 border-t border-border/60 flex items-center justify-between text-xs">
+                      <span className="text-foreground/80 font-medium">পাঠাতে হবে মোট:</span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono font-black text-base text-primary">৳{effectivePrice}</span>
+                        <button
+                          type="button"
+                          onClick={handleCopyAmount}
+                          className="p-1 text-foreground/60 hover:text-foreground hover:bg-surface rounded-md transition-colors cursor-pointer"
+                          title="টাকার পরিমাণ কপি করুন"
+                        >
+                          {copiedAmount ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Step by Step Instructions in Bengali */}
                 <div className="bg-surface/60 border border-border rounded-xl p-4 space-y-2 text-xs">
-                  <span className="font-bold text-foreground block">কীভাবে পেমেন্ট করবেন:</span>
-                  <ol className="list-decimal list-inside space-y-1.5 text-foreground/75 leading-relaxed">
-                    <li>আপনার <strong>{paymentMethod}</strong> মোবাইল অ্যাপ খুলুন অথবা ইউএসএসডি ডায়াল করুন।</li>
-                    <li><strong>&apos;Send Money&apos; (সেন্ড মানি)</strong> অপশন বেছে নিন।</li>
-                    <li>প্রাপক নম্বর হিসেবে <strong className="font-mono text-foreground select-all">{gatewayNumber}</strong> লিখুন।</li>
-                    <li>টাকার পরিমাণ লিখুন <strong className="font-mono text-foreground">৳{effectivePrice}</strong>।</li>
-                    <li>পাসওয়ার্ড দিয়ে সেন্ড মানি কনফার্ম করে প্রাপ্ত <strong>Transaction ID (TrxID)</strong> টি কপি করুন।</li>
-                  </ol>
+                  <span className="font-bold text-foreground block">
+                    {isBank ? "কীভাবে ব্যাংক ট্রান্সফার করবেন:" : "কীভাবে পেমেন্ট করবেন:"}
+                  </span>
+                  {isBank ? (
+                    <ol className="list-decimal list-inside space-y-1.5 text-foreground/75 leading-relaxed">
+                      <li>যেকোনো ব্যাংক মোবাইল অ্যাপ (যেমন: <strong>BRAC Astha</strong>, <strong>Citytouch</strong>, <strong>EBL SKYBANKING</strong>, <strong>Cellfin</strong> ইত্যাদি) অথবা সরাসরি ব্যাংকে যান।</li>
+                      <li><strong>&apos;Fund Transfer&apos; (ফান্ড ট্রান্সফার)</strong> অপশন বেছে নিয়ে <strong>NPSB (তাত্ক্ষণিক)</strong> বা <strong>BEFTN</strong> সিলেক্ট করুন।</li>
+                      <li>প্রাপক ব্যাংক হিসেবে <strong>BRAC Bank PLC</strong> এবং একাউন্ট নম্বর হিসেবে <strong className="font-mono text-foreground select-all">{bankDetails.accountNumber}</strong> দিন।</li>
+                      <li>টাকার পরিমাণ লিখুন <strong className="font-mono text-foreground">৳{effectivePrice}</strong>।</li>
+                      <li>ট্রান্সফার সম্পন্ন করে প্রাপ্ত <strong>Transaction Reference / FT Number</strong> অথবা ডিপোজিট স্লিপ নম্বরটি নিচে প্রদান করুন।</li>
+                    </ol>
+                  ) : (
+                    <ol className="list-decimal list-inside space-y-1.5 text-foreground/75 leading-relaxed">
+                      <li>আপনার <strong>{paymentMethod}</strong> মোবাইল অ্যাপ খুলুন অথবা ইউএসএসডি ডায়াল করুন।</li>
+                      <li><strong>&apos;Send Money&apos; (সেন্ড মানি)</strong> অপশন বেছে নিন।</li>
+                      <li>প্রাপক নম্বর হিসেবে <strong className="font-mono text-foreground select-all">{gatewayNumber}</strong> লিখুন।</li>
+                      <li>টাকার পরিমাণ লিখুন <strong className="font-mono text-foreground">৳{effectivePrice}</strong>।</li>
+                      <li>পাসওয়ার্ড দিয়ে সেন্ড মানি কনফার্ম করে প্রাপ্ত <strong>Transaction ID (TrxID)</strong> টি কপি করুন।</li>
+                    </ol>
+                  )}
                 </div>
 
                 {/* Smart TrxID Taking Engine */}
                 <form onSubmit={handleSubmit} className="space-y-5 pt-2">
                   
-                  {/* Smart SMS Parser / Paste Helper Trigger */}
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-black text-foreground flex items-center gap-1.5 uppercase tracking-wide">
-                      <Hash size={15} className="text-primary" />
-                      Transaction ID (TrxID) দিন *
-                    </label>
+                  {/* Smart SMS Parser / Paste Helper Trigger (for mobile banking) */}
+                  {!isBank && (
+                    <>
+                      <div className="flex items-center justify-between">
+                        <label className="text-xs font-black text-foreground flex items-center gap-1.5 uppercase tracking-wide">
+                          <Hash size={15} className="text-primary" />
+                          Transaction ID (TrxID) দিন *
+                        </label>
 
-                    <button
-                      type="button"
-                      onClick={() => setShowSmsHelper(!showSmsHelper)}
-                      className="text-[11px] font-bold text-primary hover:underline flex items-center gap-1"
-                    >
-                      <Sparkles size={12} />
-                      {showSmsHelper ? "ইনপুট মোডে ফিরুন" : "পুরো SMS পেস্ট করে অটো-এক্সট্রাক্ট"}
-                    </button>
-                  </div>
+                        <button
+                          type="button"
+                          onClick={() => setShowSmsHelper(!showSmsHelper)}
+                          className="text-[11px] font-bold text-primary hover:underline flex items-center gap-1 cursor-pointer"
+                        >
+                          <Sparkles size={12} />
+                          {showSmsHelper ? "ইনপুট মোডে ফিরুন" : "পুরো SMS পেস্ট করে অটো-এক্সট্রাক্ট"}
+                        </button>
+                      </div>
 
-                  {/* Expandable Smart SMS Parser Input */}
-                  {showSmsHelper && (
-                    <div className="p-3.5 rounded-xl bg-primary/5 border border-primary/25 space-y-2 animate-in fade-in duration-150">
-                      <p className="text-[11px] text-foreground/80 font-medium">
-                        বিকাশ বা নগদ থেকে পাওয়া পুরো কনফার্মেশন SMS টি নিচে পেস্ট করুন—সিস্টেম নিজে থেকেই TrxID ও নম্বর আলাদা করে নেবে:
-                      </p>
-                      <textarea
-                        value={rawSmsInput}
-                        onChange={(e) => handleParseSms(e.target.value)}
-                        placeholder="বিকাশ বা নগদ থেকে আসা কনফার্মেশন SMS টি এখানে পেস্ট করুন..."
-                        rows={2}
-                        className="w-full bg-surface border border-border rounded-lg p-2.5 text-xs text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-primary"
-                      />
-                    </div>
+                      {/* Expandable Smart SMS Parser Input */}
+                      {showSmsHelper && (
+                        <div className="p-3.5 rounded-xl bg-primary/5 border border-primary/25 space-y-2 animate-in fade-in duration-150">
+                          <p className="text-[11px] text-foreground/80 font-medium">
+                            বিকাশ বা নগদ থেকে পাওয়া পুরো কনফার্মেশন SMS টি নিচে পেস্ট করুন—সিস্টেম নিজে থেকেই TrxID ও নম্বর আলাদা করে নেবে:
+                          </p>
+                          <textarea
+                            value={rawSmsInput}
+                            onChange={(e) => handleParseSms(e.target.value)}
+                            placeholder="বিকাশ বা নগদ থেকে আসা কনফার্মেশন SMS টি এখানে পেস্ট করুন..."
+                            rows={2}
+                            className="w-full bg-surface border border-border rounded-lg p-2.5 text-xs text-foreground placeholder:text-foreground/40 focus:outline-none focus:border-primary"
+                          />
+                        </div>
+                      )}
+                    </>
                   )}
 
-                  {/* TrxID Input Field */}
+                  {/* TrxID / Bank Reference Input Field */}
                   <div className="space-y-1.5">
+                    {isBank && (
+                      <label className="text-xs font-black text-foreground flex items-center gap-1.5 uppercase tracking-wide">
+                        <Hash size={15} className="text-blue-500" />
+                        Transaction Reference / ডিপোজিট স্লিপ নম্বর দিন *
+                      </label>
+                    )}
                     <input
                       type="text"
                       value={trxId}
                       onChange={(e) => {
-                        const clean = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+                        const clean = e.target.value.toUpperCase().replace(/[^A-Z0-9\-_]/g, "");
                         setTrxId(clean);
                         setError("");
                       }}
-                      maxLength={isBkash ? 10 : 8}
-                      placeholder={isBkash ? "১০ অক্ষরের বিকাশ TrxID দিন (যেমন: BL79A2K49Q)" : "৮ অক্ষরের নগদ TrxID দিন"}
-                      className="w-full h-13 bg-surface border border-border rounded-xl px-4 font-mono font-bold text-base tracking-wider text-foreground placeholder:text-foreground/30 focus:outline-none focus:border-primary transition-colors"
+                      maxLength={isBkash ? 10 : isNagad ? 8 : 35}
+                      placeholder={
+                        isBkash 
+                          ? "১০ অক্ষরের বিকাশ TrxID দিন (যেমন: BL79A2K49Q)" 
+                          : isNagad 
+                          ? "৮ অক্ষরের নগদ TrxID দিন (যেমন: 7B92A1K9)" 
+                          : "ব্যাংক অ্যাপের রেফারেন্স বা স্লিপ নম্বর (যেমন: FT2409... বা স্লিপ নং)"
+                      }
+                      className="w-full h-13 bg-surface border border-border rounded-xl px-4 font-mono font-bold text-sm sm:text-base tracking-wider text-foreground placeholder:text-foreground/30 focus:outline-none focus:border-primary transition-colors"
                       required
                     />
                   </div>
@@ -557,20 +821,25 @@ export default function CheckoutPage({ params }: { params: Promise<{ courseId: s
                   {/* Sender Phone Input Field */}
                   <div className="space-y-1.5">
                     <label className="text-xs font-black text-foreground flex items-center gap-1.5 uppercase tracking-wide">
-                      <Phone size={14} className="text-primary" />
-                      যে নম্বর থেকে টাকা পাঠিয়েছেন (Sender Number) *
+                      <Phone size={14} className={isBank ? "text-blue-500" : "text-primary"} />
+                      {isBank 
+                        ? "প্রেরকের বিবরণ (নাম / একাউন্ট / মোবাইল নম্বর) *" 
+                        : "যে নম্বর থেকে টাকা পাঠিয়েছেন (Sender Number) *"}
                     </label>
                     <input
-                      type="tel"
+                      type="text"
                       value={senderPhone}
                       onChange={(e) => {
-                        const val = e.target.value.replace(/[^0-9]/g, "");
-                        setSenderPhone(val);
+                        setSenderPhone(e.target.value);
                         setError("");
                       }}
-                      maxLength={11}
-                      placeholder="01XXXXXXXXX"
-                      className="w-full h-12 bg-surface border border-border rounded-xl px-4 font-mono font-bold text-base text-foreground placeholder:text-foreground/30 focus:outline-none focus:border-primary transition-colors"
+                      maxLength={isBank ? 50 : 11}
+                      placeholder={
+                        isBank 
+                          ? "যে ব্যাংক একাউন্ট বা নম্বর থেকে টাকা পাঠিয়েছেন (যেমন: MD. KAMAL বা 017...)" 
+                          : "01XXXXXXXXX"
+                      }
+                      className="w-full h-12 bg-surface border border-border rounded-xl px-4 font-bold text-sm sm:text-base text-foreground placeholder:text-foreground/30 focus:outline-none focus:border-primary transition-colors"
                       required
                     />
                   </div>
@@ -612,7 +881,11 @@ export default function CheckoutPage({ params }: { params: Promise<{ courseId: s
 
                   <div className="flex items-center justify-center gap-2 text-xs text-foreground/65 font-medium">
                     <Lock size={13} className="text-primary" />
-                    <span>অ্যাডমিন বিকাশ/নগদ পেমেন্ট ও TrxID স্টেটমেন্ট চেক করে কোর্স আনলক করবেন</span>
+                    <span>
+                      {isBank 
+                        ? "অ্যাডমিন ব্র্যাক ব্যাংক স্টেটমেন্ট বা স্লিপ রেফারেন্স চেক করে কোর্স অনুমোদন করবেন" 
+                        : "অ্যাডমিন বিকাশ/নগদ পেমেন্ট ও TrxID স্টেটমেন্ট চেক করে কোর্স আনলক করবেন"}
+                    </span>
                   </div>
                 </form>
 

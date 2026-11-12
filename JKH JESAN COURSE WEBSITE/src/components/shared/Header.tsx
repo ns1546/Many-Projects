@@ -119,11 +119,11 @@ export function Header() {
         </div>
       </header>
 
-      {/* Mobile Header Spacer — Guarantees every page content cleanly clears the fixed header */}
+      {/* Mobile Header Spacer — Guarantees every page content cleanly clears the fixed header without phantom gap */}
       <div
         className="md:hidden w-full pointer-events-none"
         style={{
-          height: "calc(3.875rem + max(0.625rem, env(safe-area-inset-top, 0px)))",
+          height: "calc(3.25rem + max(0.625rem, env(safe-area-inset-top, 0px)))",
         }}
         aria-hidden="true"
       />

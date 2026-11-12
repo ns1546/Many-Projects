@@ -15,6 +15,12 @@ const settingsSchema = z.object({
   whatsappNumber: z.string().optional().nullable(),
   supportEmail: z.string().optional().nullable(),
   noticeText: z.string().optional().nullable(),
+  bankName: z.string().optional().nullable(),
+  bankAccountName: z.string().optional().nullable(),
+  bankAccountNumber: z.string().optional().nullable(),
+  bankBranch: z.string().optional().nullable(),
+  bankRouting: z.string().optional().nullable(),
+  bankSwift: z.string().optional().nullable(),
 });
 
 export async function GET() {
@@ -71,6 +77,12 @@ export async function PATCH(req: Request) {
       whatsappNumber,
       supportEmail,
       noticeText,
+      bankName,
+      bankAccountName,
+      bankAccountNumber,
+      bankBranch,
+      bankRouting,
+      bankSwift,
     } = validatedData.data;
 
     const updated = await db.setting.upsert({
@@ -84,6 +96,12 @@ export async function PATCH(req: Request) {
         whatsappNumber: whatsappNumber || null,
         supportEmail: supportEmail || null,
         noticeText: noticeText || null,
+        bankName: bankName || "BRAC Bank PLC",
+        bankAccountName: bankAccountName || "MD. NAJMUSH SHAKIB",
+        bankAccountNumber: bankAccountNumber || "1079368670001",
+        bankBranch: bankBranch || "MIRPUR SECTION-1 BRANCH",
+        bankRouting: bankRouting || "060261997",
+        bankSwift: bankSwift || "BRAKBDDH",
         updatedAt: new Date(),
       },
       create: {
@@ -96,6 +114,12 @@ export async function PATCH(req: Request) {
         whatsappNumber: whatsappNumber || null,
         supportEmail: supportEmail || null,
         noticeText: noticeText || null,
+        bankName: bankName || "BRAC Bank PLC",
+        bankAccountName: bankAccountName || "MD. NAJMUSH SHAKIB",
+        bankAccountNumber: bankAccountNumber || "1079368670001",
+        bankBranch: bankBranch || "MIRPUR SECTION-1 BRANCH",
+        bankRouting: bankRouting || "060261997",
+        bankSwift: bankSwift || "BRAKBDDH",
         updatedAt: new Date(),
       },
     });

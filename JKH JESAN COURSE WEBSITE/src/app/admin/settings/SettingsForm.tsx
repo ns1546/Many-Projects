@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { 
   Settings, Save, Smartphone, MessageSquare, 
   Mail, Bell, Activity, CheckCircle2, Loader2, Info,
-  ShieldCheck, Globe, Copy, Check
+  ShieldCheck, Globe, Copy, Check, Landmark
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -18,6 +18,12 @@ interface SettingsData {
   whatsappNumber?: string | null;
   supportEmail?: string | null;
   noticeText?: string | null;
+  bankName?: string | null;
+  bankAccountName?: string | null;
+  bankAccountNumber?: string | null;
+  bankBranch?: string | null;
+  bankRouting?: string | null;
+  bankSwift?: string | null;
 }
 
 export default function SettingsForm({ initialSettings }: { initialSettings: SettingsData }) {
@@ -26,12 +32,18 @@ export default function SettingsForm({ initialSettings }: { initialSettings: Set
   const [formData, setFormData] = useState<SettingsData>({
     facebookPixelId: initialSettings.facebookPixelId || "",
     googleAnalyticsId: initialSettings.googleAnalyticsId || "",
-    bkashNumber: initialSettings.bkashNumber || "01700000000",
-    nagadNumber: initialSettings.nagadNumber || "01700000000",
+    bkashNumber: initialSettings.bkashNumber || "01841411474",
+    nagadNumber: initialSettings.nagadNumber || "01841411474",
     rocketNumber: initialSettings.rocketNumber || "",
-    whatsappNumber: initialSettings.whatsappNumber || "01700000000",
+    whatsappNumber: initialSettings.whatsappNumber || "01607084155",
     supportEmail: initialSettings.supportEmail || "helloevorisesolutions@gmail.com",
     noticeText: initialSettings.noticeText || "",
+    bankName: initialSettings.bankName || "BRAC Bank PLC",
+    bankAccountName: initialSettings.bankAccountName || "MD. NAJMUSH SHAKIB",
+    bankAccountNumber: initialSettings.bankAccountNumber || "1079368670001",
+    bankBranch: initialSettings.bankBranch || "MIRPUR SECTION-1 BRANCH",
+    bankRouting: initialSettings.bankRouting || "060261997",
+    bankSwift: initialSettings.bankSwift || "BRAKBDDH",
   });
 
   const handleChange = (field: keyof SettingsData, value: string) => {
@@ -87,7 +99,7 @@ export default function SettingsForm({ initialSettings }: { initialSettings: Set
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-4 text-xs">
+        <div className="grid sm:grid-cols-3 gap-3 text-xs">
           <div className="bg-surface/80 border border-[#e2136e]/30 rounded-xl p-3.5 space-y-1">
             <span className="font-bold text-[#e2136e]">বিকাশ (bKash) পার্সোনাল:</span>
             <p className="font-mono font-bold text-foreground text-sm">{formData.bkashNumber || "01841411474"}</p>
@@ -95,6 +107,11 @@ export default function SettingsForm({ initialSettings }: { initialSettings: Set
           <div className="bg-surface/80 border border-[#f7931e]/30 rounded-xl p-3.5 space-y-1">
             <span className="font-bold text-[#f7931e]">নগদ (Nagad) পার্সোনাল:</span>
             <p className="font-mono font-bold text-foreground text-sm">{formData.nagadNumber || "01841411474"}</p>
+          </div>
+          <div className="bg-surface/80 border border-blue-500/30 rounded-xl p-3.5 space-y-1">
+            <span className="font-bold text-blue-500">ব্যাংক ট্রান্সফার (BRAC Bank):</span>
+            <p className="font-mono font-bold text-foreground text-sm">{formData.bankAccountNumber || "1079368670001"}</p>
+            <p className="text-[10px] text-foreground/60 truncate">{formData.bankAccountName || "MD. NAJMUSH SHAKIB"}</p>
           </div>
         </div>
       </div>
@@ -106,9 +123,9 @@ export default function SettingsForm({ initialSettings }: { initialSettings: Set
             <Smartphone size={20} />
           </div>
           <div>
-            <h2 className="text-lg font-black text-foreground">পেমেন্ট গেটওয়ে ও একাউন্ট নম্বর</h2>
+            <h2 className="text-lg font-black text-foreground">মোবাইল ব্যাংকিং গেটওয়ে ও নম্বর</h2>
             <p className="text-xs text-foreground/70 font-medium">
-              চেকআউট পেইজে শিক্ষার্থীরা যে নম্বরে সেন্ড মানি (Send Money) করবে তা এখান থেকে সরাসরি নিয়ন্ত্রণ করুন।
+              চেকআউট পেইজে শিক্ষার্থীরা যে নম্বরে বিকাশ বা নগদ সেন্ড মানি (Send Money) করবে তা এখান থেকে সরাসরি নিয়ন্ত্রণ করুন।
             </p>
           </div>
         </div>
@@ -154,6 +171,101 @@ export default function SettingsForm({ initialSettings }: { initialSettings: Set
               onChange={(e) => handleChange("rocketNumber", e.target.value)}
               placeholder="01XXXXXXXXX"
               className="w-full bg-surface/50 border border-border rounded-xl px-4 py-3 text-foreground font-mono focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all text-base"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Official Bank Account Section (BRAC Bank PLC) */}
+      <div className="bg-surface/5 border border-border rounded-2xl p-6 md:p-8 backdrop-blur-sm shadow-xl">
+        <div className="flex items-center gap-3 border-b border-border pb-4 mb-6">
+          <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500">
+            <Landmark size={20} />
+          </div>
+          <div>
+            <h2 className="text-lg font-black text-foreground">অফিশিয়াল ব্যাংক একাউন্ট বিবরণ (Bank Transfer)</h2>
+            <p className="text-xs text-foreground/70 font-medium">
+              চেকআউটে ব্যাংক ট্রান্সফার (NPSB, BEFTN, RTGS বা ব্রাঞ্চ ডিপোজিট) সিলেক্ট করলে এই তথ্যগুলো প্রদর্শিত হবে।
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-foreground">
+              ব্যাংকের নাম (Bank Name) <span className="text-blue-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={formData.bankName || ""}
+              onChange={(e) => handleChange("bankName", e.target.value)}
+              placeholder="BRAC Bank PLC"
+              className="w-full bg-surface/50 border border-border rounded-xl px-4 py-3 text-foreground font-bold focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/60 transition-all text-sm"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-foreground">
+              একাউন্টের নাম (Account Name) <span className="text-blue-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={formData.bankAccountName || ""}
+              onChange={(e) => handleChange("bankAccountName", e.target.value)}
+              placeholder="MD. NAJMUSH SHAKIB"
+              className="w-full bg-surface/50 border border-border rounded-xl px-4 py-3 text-foreground font-mono font-bold focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/60 transition-all text-sm"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-foreground">
+              একাউন্ট নম্বর (Account Number) <span className="text-blue-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={formData.bankAccountNumber || ""}
+              onChange={(e) => handleChange("bankAccountNumber", e.target.value)}
+              placeholder="1079368670001"
+              className="w-full bg-surface/50 border border-border rounded-xl px-4 py-3 text-foreground font-mono font-black focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/60 transition-all text-base"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-foreground">
+              শাখার নাম (Branch Name) <span className="text-blue-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={formData.bankBranch || ""}
+              onChange={(e) => handleChange("bankBranch", e.target.value)}
+              placeholder="MIRPUR SECTION-1 BRANCH"
+              className="w-full bg-surface/50 border border-border rounded-xl px-4 py-3 text-foreground font-bold focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/60 transition-all text-sm"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-foreground">
+              রাউটিং নম্বর (Routing Number) <span className="text-blue-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={formData.bankRouting || ""}
+              onChange={(e) => handleChange("bankRouting", e.target.value)}
+              placeholder="060261997"
+              className="w-full bg-surface/50 border border-border rounded-xl px-4 py-3 text-foreground font-mono font-bold focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/60 transition-all text-sm"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-foreground">
+              সুইফট কোড (SWIFT Code - আন্তর্জাতিক ট্রান্সফার) <span className="text-blue-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={formData.bankSwift || ""}
+              onChange={(e) => handleChange("bankSwift", e.target.value)}
+              placeholder="BRAKBDDH"
+              className="w-full bg-surface/50 border border-border rounded-xl px-4 py-3 text-foreground font-mono font-bold focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/60 transition-all text-sm"
             />
           </div>
         </div>

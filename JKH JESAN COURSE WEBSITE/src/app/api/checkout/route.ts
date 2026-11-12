@@ -6,12 +6,15 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { checkRateLimit } from "@/lib/rate-limit";
 
-// Zod Validation Schema for Semi-Automatic bKash & Nagad Checkout
+// Zod Validation Schema for Semi-Automatic Checkout (bKash, Nagad & BRAC Bank Transfer)
 const checkoutSchema = z.object({
   courseId: z.string().min(1, "Course ID required"),
-  paymentMethod: z.enum(["bKash", "Nagad", "bkash", "nagad"]),
-  trxId: z.string().min(6, "সঠিক Transaction ID (TrxID) প্রদান করুন").max(30),
-  senderPhone: z.string().regex(/^(?:\+88|88)?(01[3-9]\d{8})$/, "সঠিক মোবাইল নম্বর প্রদান করুন (যেমন: 01841411474)"),
+  paymentMethod: z.enum([
+    "bKash", "Nagad", "Bank", "BankTransfer", "BRAC Bank",
+    "bkash", "nagad", "bank", "banktransfer", "bank_transfer"
+  ]),
+  trxId: z.string().min(4, "সঠিক Transaction ID বা ব্যাংক রেফারেন্স প্রদান করুন").max(50),
+  senderPhone: z.string().min(3, "সঠিক মোবাইল নম্বর বা ব্যাংক একাউন্ট বিবরণ প্রদান করুন").max(80),
 });
 
 export async function POST(req: Request) {
@@ -43,16 +46,24 @@ export async function POST(req: Request) {
     let { courseId, paymentMethod, trxId, senderPhone } = validatedData.data;
 
     // Normalize TrxID: uppercase, remove any extraneous spaces/characters
-    trxId = trxId.toUpperCase().trim().replace(/[^A-Z0-9]/g, "");
-    const normalizedMethod = paymentMethod.toLowerCase() === "bkash" ? "bKash" : "Nagad";
+    trxId = trxId.toUpperCase().trim().replace(/[^A-Z0-9\-_]/g, "");
+    
+    const lowerMethod = paymentMethod.toLowerCase();
+    const normalizedMethod = lowerMethod.includes("bkash")
+      ? "bKash"
+      : lowerMethod.includes("nagad")
+      ? "Nagad"
+      : "Bank Transfer";
 
-    // Clean sender phone to standard 11-digit local format: 01XXXXXXXXX
-    const match = senderPhone.match(/(01[3-9]\d{8})$/);
-    if (match) {
-      senderPhone = match[1];
+    // Clean sender phone / account info
+    const phoneMatch = senderPhone.match(/(01[3-9]\d{8})$/);
+    if (phoneMatch) {
+      senderPhone = phoneMatch[1];
+    } else {
+      senderPhone = senderPhone.trim();
     }
 
-    // ── 1. STRICT STRUCTURAL VALIDATION FOR BKASH VS NAGAD TRXID ──
+    // ── 1. STRICT STRUCTURAL VALIDATION FOR PAYMENT METHOD ──
     if (normalizedMethod === "bKash") {
       // bKash TrxID is ALWAYS exactly 10 alphanumeric characters
       if (trxId.length !== 10) {
@@ -76,7 +87,19 @@ export async function POST(req: Request) {
           message: "অকার্যকর বা ডামি TrxID! অনুগ্রহ করে পেমেন্ট করার পর বিকাশ থেকে পাওয়া আসল TrxID দিন।"
         }, { status: 400 });
       }
-    } else {
+
+      // Sender Phone validation for bKash
+      if (!/^01[3-9]\d{8}$/.test(senderPhone)) {
+        return NextResponse.json({
+          message: "ভুল প্রেরক নম্বর! অনুগ্রহ করে সঠিক ১১ ডিজিটের বিকাশ মোবাইল নম্বর দিন (যেমন: 01841411474)।"
+        }, { status: 400 });
+      }
+      if (/^01[3-9](\d)\1{7}$/.test(senderPhone) || senderPhone === "01234567890") {
+        return NextResponse.json({
+          message: "অকার্যকর মোবাইল নম্বর! আপনার ব্যবহৃত আসল ১১ ডিজিটের বিকাশ নম্বর দিন।"
+        }, { status: 400 });
+      }
+    } else if (normalizedMethod === "Nagad") {
       // Nagad TrxID is ALWAYS exactly 8 alphanumeric characters
       if (trxId.length !== 8) {
         return NextResponse.json({
@@ -90,20 +113,39 @@ export async function POST(req: Request) {
           message: "অকার্যকর বা ডামি TrxID! অনুগ্রহ করে পেমেন্ট করার পর নগদ থেকে পাওয়া আসল TrxID দিন।"
         }, { status: 400 });
       }
-    }
 
-    // ── 2. STRICT SENDER PHONE VALIDATION ──
-    if (!/^01[3-9]\d{8}$/.test(senderPhone)) {
-      return NextResponse.json({
-        message: "ভুল প্রেরক নম্বর! অনুগ্রহ করে সঠিক ১১ ডিজিটের বাংলাদেশী মোবাইল নম্বর দিন (যেমন: 01841411474)।"
-      }, { status: 400 });
-    }
+      // Sender Phone validation for Nagad
+      if (!/^01[3-9]\d{8}$/.test(senderPhone)) {
+        return NextResponse.json({
+          message: "ভুল প্রেরক নম্বর! অনুগ্রহ করে সঠিক ১১ ডিজিটের নগদ মোবাইল নম্বর দিন (যেমন: 01841411474)।"
+        }, { status: 400 });
+      }
+      if (/^01[3-9](\d)\1{7}$/.test(senderPhone) || senderPhone === "01234567890") {
+        return NextResponse.json({
+          message: "অকার্যকর মোবাইল নম্বর! আপনার ব্যবহৃত আসল ১১ ডিজিটের নগদ নম্বর দিন।"
+        }, { status: 400 });
+      }
+    } else {
+      // ── BANK TRANSFER VALIDATION (BRAC Bank PLC) ──
+      if (trxId.length < 4 || trxId.length > 40) {
+        return NextResponse.json({
+          message: "ভুল ব্যাংক রেফারেন্স! ব্যাংক ট্রান্সফার রেফারেন্স বা ডিপোজিট স্লিপ নম্বর কমপক্ষে ৪ অক্ষরের হতে হবে।"
+        }, { status: 400 });
+      }
 
-    // Reject dummy/repetitive numbers (e.g. 01700000000, 01811111111, 01234567890)
-    if (/^01[3-9](\d)\1{7}$/.test(senderPhone) || senderPhone === "01234567890") {
-      return NextResponse.json({
-        message: "অকার্যকর মোবাইল নম্বর! আপনার ব্যবহৃত আসল ১১ ডিজিটের মোবাইল নম্বর দিন।"
-      }, { status: 400 });
+      // Reject repetitive dummy inputs
+      if (/^(.)\1{3,}$/.test(trxId) || trxId === "1234" || trxId === "12345" || trxId === "0000" || trxId === "TEST") {
+        return NextResponse.json({
+          message: "অকার্যকর বা ডামি রেফারেন্স! ব্যাংক থেকে প্রাপ্ত আসল Transaction Ref বা ডিপোজিট স্লিপ নম্বর দিন।"
+        }, { status: 400 });
+      }
+
+      // Sender info for Bank: can be sender's bank account name, account number, or contact phone
+      if (senderPhone.length < 3) {
+        return NextResponse.json({
+          message: "প্রেরকের বিবরণ প্রয়োজন! প্রেরকের একাউন্ট নাম, একাউন্ট নম্বর বা মোবাইল নম্বর দিন।"
+        }, { status: 400 });
+      }
     }
 
     const userEmail = session.user.email;
