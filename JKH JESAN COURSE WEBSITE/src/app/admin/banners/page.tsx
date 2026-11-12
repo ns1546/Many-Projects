@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import {
   Plus, Trash2, Edit3, Save, X, Image as ImageIcon, Link as LinkIcon,
   ExternalLink, Eye, EyeOff, Loader2, ArrowUpDown, CheckCircle, Upload,
-  Layers, Sparkles, RefreshCw, Check
+  Layers, Sparkles, RefreshCw, Check, AlertTriangle, ChevronDown, ChevronUp,
+  Info, HelpCircle, Copy, BookOpen
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,6 +30,8 @@ interface SectionMediaConfig {
   defaultImage: string;
   aspectClass: string;
   recommendedSize: string;
+  exactDimensions: string;
+  ratio: string;
 }
 
 const SECTION_MEDIA_LIST: SectionMediaConfig[] = [
@@ -39,7 +42,9 @@ const SECTION_MEDIA_LIST: SectionMediaConfig[] = [
     description: "হোমপেজের 'একটি প্ল্যাটফর্ম, অসীম সম্ভাবনা' বেন্টো গ্রিড কার্ডের ব্যাকগ্রাউন্ড ও শোকেস ইমেজ।",
     defaultImage: "/images/why-choose-us.jpg",
     aspectClass: "aspect-4/3",
-    recommendedSize: "800 x 600 বা 4:3 অনুপাত",
+    recommendedSize: "800 × 600 px",
+    exactDimensions: "800 × 600 পিক্সেল",
+    ratio: "4:3 (স্ট্যান্ডার্ড)",
   },
   {
     key: "section:hero-mentor",
@@ -48,7 +53,9 @@ const SECTION_MEDIA_LIST: SectionMediaConfig[] = [
     description: "হোমপেজের একদম উপরে ডানপাশের প্রধান ইন্সট্রাক্টর পোর্ট্রেট ছবি।",
     defaultImage: "/images/mentor-jjesan-mandolin.jpg",
     aspectClass: "aspect-4/5",
-    recommendedSize: "800 x 1000 বা 4:5 পোর্ট্রেট অনুপাত",
+    recommendedSize: "800 × 1000 px",
+    exactDimensions: "800 × 1000 পিক্সেল",
+    ratio: "4:5 (পোর্ট্রেট)",
   },
   {
     key: "section:about-mentor",
@@ -57,7 +64,62 @@ const SECTION_MEDIA_LIST: SectionMediaConfig[] = [
     description: "হোমপেজের 'চিফ মিউজিক ইন্সট্রাক্টর' সেকশন এবং অ্যাবাউট পেজের মূল ছবি।",
     defaultImage: "/images/mentor-jjesan-accordion.jpg",
     aspectClass: "aspect-4/5",
-    recommendedSize: "800 x 1000 বা 4:5 পোর্ট্রেট অনুপাত",
+    recommendedSize: "800 × 1000 px",
+    exactDimensions: "800 × 1000 পিক্সেল",
+    ratio: "4:5 (পোর্ট্রেট)",
+  },
+];
+
+const SIZE_MATRIX = [
+  {
+    title: "হিরো প্রমোশনাল স্লাইডার ব্যানার",
+    location: "হোমপেজ টপ স্লাইডার (Hero Carousel)",
+    dimensions: "১৯২০ × ৮০০ px",
+    minDimensions: "১৬০০ × ৬৫০ px",
+    ratio: "১৬:৯ বা ২.৪:১",
+    format: "WebP / JPG / PNG (সর্বোচ্চ ২ MB)",
+    badge: "স্লাইডার",
+    tips: "ব্যানারের গুরুত্বপূর্ণ লেখা বা সাবজেক্ট মাঝখানে বা বামে রাখুন।"
+  },
+  {
+    title: "হিরো মেন্টর ফটো",
+    location: "হোমপেজ হেডারে ডানপাশের কার্ড (Hero Mentor)",
+    dimensions: "৮০০ × ১০০০ px",
+    minDimensions: "৬০০ × ৭৫০ px",
+    ratio: "৪:৫ (Portrait)",
+    format: "WebP / PNG / JPG",
+    badge: "হিরো কার্ড",
+    tips: "ইন্সট্রাক্টরের কোমর বা বুক পর্যন্ত পোর্ট্রেট ছবি সবচেয়ে ভালো মানায়।"
+  },
+  {
+    title: "প্রশিক্ষক পরিচিতি ও অ্যাবাউট ফটো",
+    location: "হোমপেজ 'চিফ মেন্টর' ও অ্যাবাউট পেজ",
+    dimensions: "৮০০ × ১০০০ px",
+    minDimensions: "৬০০ × ৭৫০ px",
+    ratio: "৪:৫ (Portrait)",
+    format: "WebP / PNG / JPG",
+    badge: "অ্যাবাউট",
+    tips: "স্টুডিও ব্যাকগ্রাউন্ডে ইনস্ট্রুমেন্ট সহ প্রফেশনাল ছবি।"
+  },
+  {
+    title: "কেন আমাদের বেছে নেবেন (ফিচার কার্ড)",
+    location: "হোমপেজ বেন্টো গ্রিড (Why Choose Us)",
+    dimensions: "৮০০ × ৬০০ px",
+    minDimensions: "৬৪০ × ৪৮০ px",
+    ratio: "৪:৩ (Standard)",
+    format: "WebP / JPG",
+    badge: "বেন্টো গ্রিড",
+    tips: "স্টুডিও ইকুইপমেন্ট বা মিউজিক ওয়ার্কস্টেশনের অনুভূমিক ছবি।"
+  },
+  {
+    title: "কোর্স থাম্বনেইল / কভার পোস্টার",
+    location: "কোর্স ক্যাটালগ কার্ড ও কোর্স ডিটেইলস ব্যানার",
+    dimensions: "১২৮০ × ৭২০ px (HD)",
+    minDimensions: "৮০০ × ৪৫০ px",
+    ratio: "১৬:৯ (Landscape)",
+    format: "WebP / JPG / PNG",
+    badge: "কোর্স পোস্টার",
+    tips: "কোর্সের নাম ও আকর্ষক গ্রাফিক্স সহ ১৬:৯ অনুপাতের পোস্টার।"
   },
 ];
 
@@ -73,6 +135,10 @@ export default function AdminBannersPage() {
   const [activeTab, setActiveTab] = useState<"sections" | "sliders">("sections");
   const [banners, setBanners] = useState<BannerItem[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Guide expand/tab states
+  const [showGuide, setShowGuide] = useState(true);
+  const [guideTab, setGuideTab] = useState<"sizes" | "permanent">("sizes");
 
   // Section media states
   const [uploadingSectionKey, setUploadingSectionKey] = useState<string | null>(null);
@@ -401,6 +467,210 @@ export default function AdminBannersPage() {
         </div>
       )}
 
+      {/* ─── Image Dimensions & Permanent Upload Guidelines Card ─── */}
+      <Card className="rounded-2xl border-primary/30 bg-surface/80 backdrop-blur-md shadow-xl overflow-hidden transition-all">
+        <div className="p-4 md:p-5 border-b border-border bg-primary/5 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/20 text-primary flex items-center justify-center shrink-0 border border-primary/30">
+              <ImageIcon size={20} />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="font-bold text-base text-foreground">
+                  ইমেজ সাইজ ও স্থায়ী আপলোড গাইডলাইন
+                </h3>
+                <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                  জরুরি নির্দেশিকা
+                </span>
+              </div>
+              <p className="text-xs text-foreground/70 mt-0.5">
+                কোন সেকশনে কত সাইজের ছবি প্রয়োজন এবং কীভাবে আজীবন স্থায়ী ইমেজ লিঙ্ক ব্যবহার করবেন তা জানুন।
+              </p>
+            </div>
+          </div>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowGuide(!showGuide)}
+            className="text-xs font-bold gap-1.5 border-border shrink-0"
+          >
+            {showGuide ? (
+              <>
+                সংক্ষেপ করুন <ChevronUp size={14} />
+              </>
+            ) : (
+              <>
+                গাইডলাইন দেখুন <ChevronDown size={14} />
+              </>
+            )}
+          </Button>
+        </div>
+
+        {showGuide && (
+          <div className="p-4 md:p-6 space-y-5 animate-in fade-in duration-300">
+            {/* Guide Sub-Tabs */}
+            <div className="flex items-center gap-2 border-b border-border pb-3">
+              <button
+                type="button"
+                onClick={() => setGuideTab("sizes")}
+                className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+                  guideTab === "sizes"
+                    ? "bg-primary text-foreground shadow-sm"
+                    : "bg-surface hover:bg-surface-raised text-foreground/70"
+                }`}
+              >
+                <BookOpen size={13} /> সকল সেকশনের সাইজ ও অনুপাত ({SIZE_MATRIX.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setGuideTab("permanent")}
+                className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+                  guideTab === "permanent"
+                    ? "bg-primary text-foreground shadow-sm"
+                    : "bg-surface hover:bg-surface-raised text-foreground/70"
+                }`}
+              >
+                <AlertTriangle size={13} className={guideTab === "permanent" ? "" : "text-amber-400"} /> স্থায়ী লিঙ্ক (ImgBB) পাওয়ার উপায়
+              </button>
+            </div>
+
+            {/* Sub-Tab 1: Sizes Table & Cards */}
+            {guideTab === "sizes" && (
+              <div className="space-y-4">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                  {SIZE_MATRIX.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="p-3.5 rounded-xl border border-border bg-background/50 hover:border-primary/40 transition-all flex flex-col justify-between space-y-2.5"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-primary/20 text-primary border border-primary/30">
+                            {item.badge}
+                          </span>
+                          <span className="text-[10px] font-semibold text-foreground/50 font-mono">
+                            {item.ratio}
+                          </span>
+                        </div>
+                        <h4 className="font-bold text-sm text-foreground mt-2">
+                          {item.title}
+                        </h4>
+                        <p className="text-[11px] text-foreground/60 mt-0.5">
+                          {item.location}
+                        </p>
+                      </div>
+
+                      <div className="pt-2 border-t border-border/60 space-y-1">
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-foreground/70 font-medium">সুপারিশকৃত সাইজ:</span>
+                          <span className="font-black text-primary font-mono">{item.dimensions}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-[11px]">
+                          <span className="text-foreground/50">সর্বনিম্ন সাইজ:</span>
+                          <span className="font-semibold text-foreground/70 font-mono">{item.minDimensions}</span>
+                        </div>
+                        <p className="text-[11px] text-foreground/60 italic pt-1 leading-snug">
+                          💡 {item.tips}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Sub-Tab 2: Permanent URL Guide */}
+            {guideTab === "permanent" && (
+              <div className="space-y-4">
+                {/* Warning Alert */}
+                <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/25 flex items-start gap-3">
+                  <AlertTriangle size={18} className="text-red-400 shrink-0 mt-0.5" />
+                  <div className="text-xs text-foreground/85 leading-relaxed">
+                    <p className="font-bold text-red-400">
+                      ⚠️ ফেসবুক ও হোয়াটসঅ্যাপের ইমেজ লিঙ্ক ব্যবহারের ঝুঁকি:
+                    </p>
+                    <p className="mt-0.5">
+                      ফেসবুক বা ইনস্টাগ্রাম সিডিএন (<code className="text-red-300 font-mono">scontent.fbcdn.net</code>)-এর লিংকে <code className="text-red-300 font-mono">?oe=...</code> সিকিউরিটি টোকেন যুক্ত থাকে, যা ২-৩ দিন পর স্বয়ংক্রিয়ভাবে অকেজো বা এক্সপায়ার হয়ে যায়। ফলে ওয়েবসাইট বা নেটলিফাইতে ছবি কালো/অদৃশ্য হয়ে যায়।
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  {/* ImgBB Method */}
+                  <div className="p-4 rounded-xl border border-primary/30 bg-primary/5 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-primary text-black">
+                        ১০০% রিকমেন্ডেড ও ফ্রি
+                      </span>
+                      <a
+                        href="https://imgbb.com"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs text-primary font-bold inline-flex items-center gap-1 hover:underline"
+                      >
+                        ImgBB খুলুন <ExternalLink size={12} />
+                      </a>
+                    </div>
+                    <h4 className="font-bold text-sm text-foreground">
+                      পদ্ধতি ১: ImgBB থেকে চিরস্থায়ী ডিরেক্ট লিঙ্ক
+                    </h4>
+                    <ol className="text-xs text-foreground/80 space-y-2 list-decimal list-inside leading-relaxed">
+                      <li>
+                        <a href="https://imgbb.com" target="_blank" rel="noreferrer" className="text-primary underline font-bold">imgbb.com</a>-এ প্রবেশ করে <strong>&quot;Start Uploading&quot;</strong> ক্লিক করুন।
+                      </li>
+                      <li>
+                        Auto-delete ড্রপডাউনে <strong>&quot;Don&apos;t autodelete&quot;</strong> নির্বাচন করে <strong>Upload</strong> বাটনে চাপ দিন।
+                      </li>
+                      <li>
+                        আপলোড সম্পন্ন হলে <em>Embed codes</em> ড্রপডাউন থেকে <strong>&quot;Direct links&quot;</strong> সিলেক্ট করুন।
+                      </li>
+                      <li>
+                        প্রাপ্ত লিঙ্কটি (যেমন: <code className="text-primary font-mono text-[11px]">https://i.ibb.co/xyz/image.jpg</code>) কপি করে অ্যাডমিন প্যানেলে পেস্ট করুন।
+                      </li>
+                    </ol>
+                    <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[11px] text-emerald-400 font-medium">
+                      ✅ এটি ক্লাউডফ্লেয়ার গ্লোবাল সিডিএনে চিরদিনের জন্য সংরক্ষিত থাকে এবং দ্রুততম গতিতে লোড হয়।
+                    </div>
+                  </div>
+
+                  {/* Postimages & Direct Upload Method */}
+                  <div className="p-4 rounded-xl border border-border bg-surface/50 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-foreground/10 text-foreground/80 border border-border">
+                        বিকল্প পদ্ধতিসমূহ
+                      </span>
+                      <a
+                        href="https://postimages.org"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs text-foreground/70 font-bold inline-flex items-center gap-1 hover:underline"
+                      >
+                        Postimages খুলুন <ExternalLink size={12} />
+                      </a>
+                    </div>
+                    <h4 className="font-bold text-sm text-foreground">
+                      পদ্ধতি ২: পোস্ট-ইমেজেস বা সরাসরি লোকাল আপলোড
+                    </h4>
+                    <ul className="text-xs text-foreground/80 space-y-2 list-disc list-inside leading-relaxed">
+                      <li>
+                        <strong>Postimages.org:</strong> <a href="https://postimages.org" target="_blank" rel="noreferrer" className="text-primary underline">postimages.org</a>-এ গিয়ে &quot;No expiration&quot; দিয়ে ছবি আপলোড করুন এবং <strong>&quot;Direct link&quot;</strong> কপি করুন।
+                      </li>
+                      <li>
+                        <strong>সরাসরি ফাইল আপলোড:</strong> প্রতিটি সেকশনে থাকা <strong>&quot;আপলোড&quot;</strong> বাটনে ক্লিক করে ফাইল দিলে তা সরাসরি সার্ভারে জমা হবে।
+                      </li>
+                      <li>
+                        <strong>ফাইল ফরম্যাট:</strong> উন্নত মানের জন্য <span className="text-primary font-mono font-bold">.webp</span>, <span className="text-primary font-mono font-bold">.jpg</span> অথবা <span className="text-primary font-mono font-bold">.png</span> ফরম্যাট ব্যবহার করুন।
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </Card>
+
       {/* ─── TAB 1: SECTION IMAGES ─────────────────────────────── */}
       {activeTab === "sections" && (
         <div className="space-y-6">
@@ -442,9 +712,14 @@ export default function AdminBannersPage() {
                     {/* Header bar */}
                     <div className="p-4 border-b border-border/80 flex items-center justify-between bg-black/10">
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-primary/20 text-primary border border-primary/30">
-                          {cfg.sectionBadge}
-                        </span>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-primary/20 text-primary border border-primary/30">
+                            {cfg.sectionBadge}
+                          </span>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/25 font-mono">
+                            {cfg.recommendedSize}
+                          </span>
+                        </div>
                         <h3 className="font-bold text-sm text-foreground mt-1.5 line-clamp-1">
                           {cfg.title}
                         </h3>
@@ -501,8 +776,8 @@ export default function AdminBannersPage() {
                               }}
                             />
                           </label>
-                          <span className="text-[10px] text-white/80 font-medium">
-                            {cfg.recommendedSize}
+                          <span className="text-[11px] text-white font-bold bg-black/60 px-2 py-0.5 rounded-md border border-white/20">
+                            সাইজ: {cfg.recommendedSize}
                           </span>
                         </div>
 
@@ -514,7 +789,16 @@ export default function AdminBannersPage() {
                         )}
                       </div>
 
-                      <p className="text-xs text-foreground/70 mt-3 leading-relaxed">
+                      <div className="flex items-center justify-between gap-2 mt-2.5">
+                        <span className="text-[11px] font-semibold text-foreground/75 flex items-center gap-1">
+                          📐 অনুপাত: <strong className="text-foreground">{cfg.ratio}</strong>
+                        </span>
+                        <span className="text-[11px] font-bold text-primary font-mono">
+                          {cfg.exactDimensions}
+                        </span>
+                      </div>
+
+                      <p className="text-xs text-foreground/70 mt-2 leading-relaxed">
                         {cfg.description}
                       </p>
                     </div>
@@ -522,13 +806,16 @@ export default function AdminBannersPage() {
                     {/* URL Input Form (if toggled) */}
                     {isEditingUrl && (
                       <div className="px-4 pb-3 space-y-2 animate-in fade-in">
-                        <Label className="text-xs font-bold text-foreground">ইমেজ ইউআরএল (URL):</Label>
+                        <div className="flex items-center justify-between">
+                          <Label className="text-xs font-bold text-foreground">ইমেজ ইউআরএল (Permanent URL):</Label>
+                          <span className="text-[10px] text-primary font-bold">{cfg.recommendedSize}</span>
+                        </div>
                         <div className="flex gap-2">
                           <Input
                             value={tempUrlInput}
                             onChange={(e) => setTempUrlInput(e.target.value)}
-                            placeholder="https://..."
-                            className="text-xs h-8 bg-background border-border"
+                            placeholder="https://i.ibb.co/... বা ডিরেক্ট ইমেজ URL"
+                            className="text-xs h-8 bg-background border-border font-mono"
                           />
                           <Button
                             size="sm"
@@ -551,6 +838,10 @@ export default function AdminBannersPage() {
                             <X size={14} />
                           </Button>
                         </div>
+                        <p className="text-[11px] text-amber-400/90 flex items-center gap-1 pt-0.5">
+                          <AlertTriangle size={12} className="shrink-0" />
+                          ফেসবুক লিংক মেয়াদোত্তীর্ণ হয়ে যায়। চিরস্থায়ী লিঙ্কের জন্য ImgBB ডিরেক্ট লিঙ্ক দিন।
+                        </p>
                       </div>
                     )}
                   </div>
@@ -848,8 +1139,11 @@ export default function AdminBannersPage() {
                                 <p className="text-sm font-bold text-foreground">
                                   ক্লিক করে ব্যানার আপলোড করুন
                                 </p>
-                                <p className="text-xs text-foreground/50 mt-1">
-                                  অনুমোদিত সাইজ: ১৯২০ x ৬৫০ বা ১৬:৯ অনুপাত (PNG, JPG, WebP)
+                                <p className="text-xs text-primary font-bold mt-1">
+                                  সুপারিশকৃত সাইজ: ১৯২০ × ৮০০ px বা ১৬:৯ অনুপাত (সর্বোচ্চ ৫ MB)
+                                </p>
+                                <p className="text-[11px] text-foreground/50 mt-0.5">
+                                  অনুমোদিত ফরম্যাট: WebP, PNG, JPG
                                 </p>
                               </>
                             )}
@@ -865,12 +1159,26 @@ export default function AdminBannersPage() {
                       )
                     ) : (
                       <div className="space-y-3">
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="font-bold text-foreground">স্থায়ী ইমেজ ইউআরএল (Permanent URL):</span>
+                          <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-primary/20 text-primary border border-primary/30">
+                            সাইজ: ১৯২০ × ৮০০ px (১৬:৯)
+                          </span>
+                        </div>
                         <Input
                           value={imageUrl}
                           onChange={(e) => setImageUrl(e.target.value)}
-                          placeholder="https://images.unsplash.com/photo-..."
+                          placeholder="https://i.ibb.co/.../banner.jpg বা ডিরেক্ট ক্লাউড লিংক"
                           className="bg-background border-border text-foreground font-mono text-sm"
                         />
+                        <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/25 text-xs text-amber-300 space-y-1.5">
+                          <p className="font-bold flex items-center gap-1.5">
+                            <AlertTriangle size={13} className="shrink-0" /> চিরস্থায়ী ইমেজ ব্যবহারের সতর্কতা:
+                          </p>
+                          <p className="text-[11px] text-foreground/80 leading-relaxed">
+                            ফেসবুক বা সোশ্যাল মিডিয়া লিঙ্ক ব্যবহার করবেন না (কয়েকদিন পর মেয়াদ শেষ হয়ে নষ্ট হয়ে যায়)। চিরস্থায়ী ফ্রি লিঙ্কের জন্য <a href="https://imgbb.com" target="_blank" rel="noreferrer" className="text-primary underline font-bold inline-flex items-center gap-0.5">ImgBB.com <ExternalLink size={10} /></a>-এ ছবি আপলোড করে <strong>&quot;Direct links&quot;</strong> কপি করে এখানে পেস্ট করুন।
+                          </p>
+                        </div>
                       </div>
                     )}
                   </div>

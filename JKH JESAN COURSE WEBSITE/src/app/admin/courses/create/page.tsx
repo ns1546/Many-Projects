@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { BookOpen, Upload, Link as LinkIcon, Loader2 } from "lucide-react";
+import { BookOpen, Upload, Link as LinkIcon, Loader2, AlertTriangle, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 
 export default function CreateCoursePage() {
@@ -270,10 +270,15 @@ export default function CreateCoursePage() {
 
             {/* Thumbnail Upload or URL */}
             <div className="space-y-3 pt-2">
-              <div className="flex items-center justify-between">
-                <Label className="text-foreground font-bold text-sm">
-                  কোর্স থাম্বনেইল (Poster / Cover)
-                </Label>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <Label className="text-foreground font-bold text-sm">
+                    কোর্স থাম্বনেইল (Poster / Cover)
+                  </Label>
+                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-primary/20 text-primary border border-primary/30">
+                    সাইজ: ১২৮০ × ৭২০ px (১৬:৯)
+                  </span>
+                </div>
                 <button
                   type="button"
                   onClick={() => setUseUrlForImage(!useUrlForImage)}
@@ -285,23 +290,36 @@ export default function CreateCoursePage() {
               </div>
 
               {useUrlForImage ? (
-                <Input
-                  placeholder="https://images.unsplash.com/... বা ক্লাউড ইমেজ URL"
-                  value={formData.thumbnail}
-                  onChange={(e) => {
-                    setFormData({ ...formData, thumbnail: e.target.value });
-                    setImagePreview(e.target.value);
-                  }}
-                  className="h-11 border-border bg-surface/50 text-foreground font-mono text-sm"
-                />
+                <div className="space-y-2">
+                  <Input
+                    placeholder="https://i.ibb.co/.../thumbnail.jpg বা ডিরেক্ট ক্লাউড লিংক"
+                    value={formData.thumbnail}
+                    onChange={(e) => {
+                      setFormData({ ...formData, thumbnail: e.target.value });
+                      setImagePreview(e.target.value);
+                    }}
+                    className="h-11 border-border bg-surface/50 text-foreground font-mono text-sm"
+                  />
+                  <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 flex items-start gap-2">
+                    <AlertTriangle size={14} className="shrink-0 mt-0.5" />
+                    <p className="text-[11px] text-foreground/80 leading-relaxed">
+                      ফেসবুক লিঙ্ক ব্যবহার করবেন না (কয়েকদিন পর নষ্ট হয়ে যায়)। চিরস্থায়ী ফ্রি লিঙ্কের জন্য <a href="https://imgbb.com" target="_blank" rel="noreferrer" className="text-primary underline font-bold inline-flex items-center gap-0.5">ImgBB.com <ExternalLink size={10} /></a>-এ আপলোড করে <strong>&quot;Direct links&quot;</strong> পেস্ট করুন।
+                    </p>
+                  </div>
+                </div>
               ) : (
-                <Input
-                  id="thumbnail"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="h-11 border-border bg-surface/50 text-foreground file:text-primary file:font-bold file:bg-primary/10 file:border-0 file:mr-4 file:h-full file:px-4 cursor-pointer text-sm"
-                />
+                <div className="space-y-1">
+                  <Input
+                    id="thumbnail"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="h-11 border-border bg-surface/50 text-foreground file:text-primary file:font-bold file:bg-primary/10 file:border-0 file:mr-4 file:h-full file:px-4 cursor-pointer text-sm"
+                  />
+                  <p className="text-[11px] text-foreground/60">
+                    অনুমোদিত সাইজ: ১২৮০ × ৭২০ পিক্সেল (১৬:৯ এইচডি ফরম্যাট, সর্বোচ্চ ৫ MB)
+                  </p>
+                </div>
               )}
 
               {/* Preview */}
