@@ -37,6 +37,8 @@ const nextConfig: NextConfig = {
 
   // ── Experimental optimizations ─────────────────────────────────────────
   experimental: {
+    workerThreads: false,
+    cpus: 1,
     staleTimes: {
       dynamic: 30,
       static: 300,
